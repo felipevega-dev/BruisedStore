@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { ShoppingCart, User, LogOut, Shield, Bell } from "lucide-react";
+import { useWishlist } from "@/contexts/WishlistContext";
+import { ShoppingCart, User, LogOut, Shield, Bell, Settings, Heart } from "lucide-react";
 import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -11,6 +12,7 @@ import { db } from "@/lib/firebase";
 export default function Header() {
   const { getItemCount } = useCart();
   const { user, isAdmin, signOut } = useAuth();
+  const { wishlistCount } = useWishlist();
   const itemCount = getItemCount();
   const [showMenu, setShowMenu] = useState(false);
   const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
@@ -84,6 +86,17 @@ export default function Header() {
               Obra a Pedido
             </Link>
             <Link
+              href="/wishlist"
+              className="relative flex items-center space-x-1 text-sm font-medium text-gray-700 transition-colors hover:text-red-600 sm:text-base"
+            >
+              <Heart className="h-5 w-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white shadow-lg">
+                  {wishlistCount}
+                </span>
+              )}
+            </Link>
+            <Link
               href="/carrito"
               className="relative flex items-center space-x-1 text-sm font-medium text-gray-700 transition-colors hover:text-red-600 sm:text-base"
             >
@@ -131,28 +144,41 @@ export default function Header() {
                       className="fixed inset-0 z-40"
                       onClick={() => setShowMenu(false)}
                     />
-                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg border-2 border-gray-200 bg-white py-2 shadow-lg z-50">
-                      <div className="border-b border-gray-200 px-4 py-2">
-                        <p className="text-xs font-semibold text-gray-500">
-                          Conectado como
-                        </p>
-                        <p className="truncate text-sm font-medium text-gray-900">
-                          {user.email}
-                        </p>
-                        {isAdmin && (
-                          <span className="mt-1 inline-block rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
-                            Admin
-                          </span>
-                        )}
-                      </div>
-                      <button
-                        onClick={handleSignOut}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
-                      >
-                        <LogOut className="h-4 w-4" />
-                        Cerrar Sesión
-                      </button>
+                                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                  <div className="p-2">
+                    <div className="border-b-2 border-gray-200 px-3 py-2">
+                      <p className="text-sm font-bold text-gray-900">
+                        {user.displayName || "Usuario"}
+                      </p>
+                      <p className="text-xs text-gray-600">{user.email}</p>
                     </div>
+                    <Link
+                      href="/profile"
+                      className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-100"
+                      onClick={() => setShowMenu(false)}
+                    >
+                      <User className="h-4 w-4" />
+                      <span>Mi Perfil</span>
+                    </Link>
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-100"
+                        onClick={() => setShowMenu(false)}
+                      >
+                        <Settings className="h-4 w-4" />
+                        <span>Panel Admin</span>
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleSignOut}
+                      className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-bold text-red-600 transition-colors hover:bg-gray-100"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      <span>Cerrar Sesión</span>
+                    </button>
+                  </div>
+                </div>
                   </>
                 )}
               </div>

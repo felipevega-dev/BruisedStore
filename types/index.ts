@@ -41,15 +41,33 @@ export const PAINTING_CATEGORIES: { value: PaintingCategory; label: string }[] =
 ];
 
 export interface FilterOptions {
-  category?: PaintingCategory | 'all';
-  minPrice?: number;
-  maxPrice?: number;
-  minWidth?: number;
-  maxWidth?: number;
-  minHeight?: number;
-  maxHeight?: number;
-  sortBy?: 'recent' | 'price-asc' | 'price-desc' | 'title-asc' | 'title-desc';
-  searchQuery?: string;
+  search: string;
+  category: PaintingCategory | "all";
+  minPrice: number;
+  maxPrice: number;
+  sortBy: "recent" | "price-asc" | "price-desc" | "title-asc" | "title-desc";
+}
+
+// Review/Rating System
+export interface Review {
+  id: string;
+  paintingId: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  rating: number; // 1-5 stars
+  comment: string;
+  createdAt: Date;
+  approved: boolean; // Para moderación
+}
+
+// Wishlist
+export interface WishlistItem {
+  id: string;
+  userId: string;
+  paintingId: string;
+  painting: Painting; // Incluimos la info de la pintura para mostrarla
+  addedAt: Date;
 }
 
 // ========== CUSTOM ORDERS (Obras a Pedido) ==========

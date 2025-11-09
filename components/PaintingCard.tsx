@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Painting } from "@/types";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart } from "lucide-react";
+import { useWishlist } from "@/contexts/WishlistContext";
+import { ShoppingCart, Heart } from "lucide-react";
 
 interface PaintingCardProps {
   painting: Painting;
@@ -12,6 +13,20 @@ interface PaintingCardProps {
 
 export default function PaintingCard({ painting }: PaintingCardProps) {
   const { addToCart } = useCart();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  
+  const inWishlist = isInWishlist(painting.id);
+
+  const handleWishlistToggle = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (inWishlist) {
+      await removeFromWishlist(painting.id);
+    } else {
+      await addToWishlist(painting.id);
+    }
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("es-CL", {
@@ -41,6 +56,22 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
+          {/* Wishlist button */}
+          <button
+            onClick={handleWishlistToggle}
+            className={`absolute right-2 top-2 z-10 rounded-full border-2 p-2 transition-all ${
+              inWishlist
+                ? "border-red-600 bg-red-600 text-white hover:bg-red-700"
+                : "border-white bg-white/90 text-gray-700 hover:bg-white"
+            }`}
+            aria-label={inWishlist ? "Quitar de favoritos" : "Agregar a favoritos"}
+          >
+            <Heart
+              className={`h-5 w-5 transition-transform hover:scale-110 ${
+                inWishlist ? "fill-current" : ""
+              }`}
+            />
+          </button>
           {!painting.available && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/80">
               <span className="border-4 border-white bg-red-600 px-4 py-2 text-sm font-bold text-white">

@@ -47,5 +47,34 @@ service cloud.firestore {
       // Solo administradores pueden actualizar/eliminar
       allow update, delete: if isAdmin();
     }
+
+    // Reglas para reviews (comentarios y calificaciones)
+    match /reviews/{reviewId} {
+      // Cualquiera puede leer las reseñas aprobadas
+      allow read: if resource.data.approved == true || isAdmin();
+
+      // Usuarios autenticados pueden crear reseñas
+      allow create: if request.auth != null && 
+                       request.resource.data.userId == request.auth.uid &&
+                       request.resource.data.approved == false; // Siempre empiezan sin aprobar
+
+      // Solo administradores pueden actualizar/eliminar (para moderar)
+      allow update, delete: if isAdmin();
+    }
+
+    // Reglas para wishlist (lista de deseos)
+    match /wishlist/{wishlistId} {
+      // Usuarios pueden leer su propia wishlist
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+
+      // Usuarios pueden crear items en su wishlist
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+
+      // Usuarios pueden eliminar items de su wishlist
+      allow delete: if request.auth != null && resource.data.userId == request.auth.uid;
+
+      // Admins pueden ver y gestionar todas las wishlists
+      allow read, update, delete: if isAdmin();
+    }
   }
 }

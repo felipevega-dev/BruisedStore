@@ -52,20 +52,52 @@ bruisedstore/
 
 ## Características Principales
 
-### 1. Galería de Pinturas (Página Principal)
-- Lista de todas las pinturas disponibles
+### ✅ 1. Galería de Pinturas (Página Principal)
+- Lista de todas las pinturas disponibles con filtros y búsqueda
 - Grid responsivo (1-4 columnas según el dispositivo)
 - Cards con imagen, título, dimensiones, precio
-- Botón "Agregar al carrito"
+- Botón "Agregar al carrito" y botón de favoritos (❤️)
 - Indicador de "No disponible" para obras vendidas
+- **Barra de búsqueda en tiempo real** (por título, descripción, categoría)
+- **Filtros por categoría** (9 categorías predefinidas)
+- **Filtros por rango de precio** (mín/máx)
+- **Ordenamiento** (reciente, precio, título)
+- Contador de resultados
 
-### 2. Detalle de Pintura
-- Imagen grande de la obra
+### ✅ 2. Detalle de Pintura
+- Imagen grande de la obra con zoom
 - Información completa (título, descripción, dimensiones, precio, categoría)
 - Botón para agregar al carrito
 - Confirmación visual al agregar
+- **Sección de reseñas y calificaciones** (estrellas 1-5)
+- **Formulario para dejar comentarios** (solo usuarios autenticados)
+- Promedio de calificaciones visible
 
-### 3. Obra a Pedido
+### ✅ 3. Sistema de Reseñas y Comentarios
+- Calificación con estrellas (1-5)
+- Comentarios de texto (mínimo 10 caracteres)
+- **Moderación por admin** (reseñas requieren aprobación)
+- Solo usuarios autenticados pueden dejar reseñas
+- Promedio de calificaciones por obra
+- Fecha de publicación
+
+### ✅ 4. Lista de Deseos (Wishlist)
+- Botón de corazón en cada obra
+- Página `/wishlist` con todas las obras guardadas
+- Contador en el header
+- Persistencia en Firestore por usuario
+- Agregar/quitar obras con un click
+- Agregar al carrito desde wishlist
+
+### ✅ 5. Sistema de Usuarios
+- **Registro** con email y contraseña
+- **Login** con email/contraseña o Google OAuth
+- Página `/profile` con información del usuario
+- **Historial de pedidos** (compras normales y obras a pedido)
+- Edición de perfil
+- Estadísticas personales (total de pedidos, total gastado)
+
+### ✅ 6. Obra a Pedido
 - Formulario para solicitar pinturas personalizadas
 - Upload de imagen de referencia
 - Selector de tamaños con preview
@@ -74,7 +106,15 @@ bruisedstore/
 - Campos: nombre, email, teléfono, notas adicionales
 - Confirmación de envío exitoso
 
-### 4. Carrito de Compras
+### ✅ 7. Sistema de Órdenes de Compra
+- **Checkout completo** con formulario de envío
+- Información de contacto y dirección
+- Selección de método de pago
+- Generación de número de orden único
+- Guardado en Firestore
+- **Integración con WhatsApp** (mensaje pre-formateado con detalles del pedido)
+
+### ✅ 8. Carrito de Compras
 - Lista de items agregados
 - Control de cantidad (+/-)
 - Eliminar items individuales
@@ -82,26 +122,44 @@ bruisedstore/
 - Cálculo de total
 - Resumen del pedido
 - Persistencia en localStorage
+- Link a checkout
 
-### 5. Panel de Administración
+### ✅ 9. Panel de Administración
 
 #### Login
 - Autenticación con Firebase Authentication
 - Email y contraseña
-- Protección de rutas
+- Protección de rutas con Custom Claims
 
 #### Gestión de Pinturas
 - Ver todas las pinturas
 - Crear nueva pintura (con upload de imagen)
 - Editar pinturas existentes
 - Eliminar pinturas
-- Campos: título, descripción, precio, dimensiones (ancho x alto), categoría, disponibilidad
+- Campos: título, descripción, precio, dimensiones (ancho x alto), **categoría (dropdown)**, disponibilidad
 
 #### Gestión de Pedidos Personalizados
 - Ver todos los pedidos
 - Detalles completos de cada pedido
 - Actualizar estado (Pendiente, En Progreso, Completado, Cancelado)
 - Eliminar pedidos
+
+#### Gestión de Órdenes de Compra
+- Ver todas las órdenes de compra
+- **Notificaciones en tiempo real** (badge con contador en header)
+- Detalles de cada orden
+- Actualizar estado del pedido
+- Actualizar estado de envío
+- Información del cliente y productos
+
+#### Moderación de Reseñas
+- Ver todas las reseñas (pendientes y aprobadas)
+- Filtros por estado
+- **Aprobar reseñas** pendientes
+- **Ocultar reseñas** aprobadas
+- **Eliminar reseñas** definitivamente
+- Ver calificación y comentario completo
+- Link a la obra asociada
 - Vista de imagen de referencia
 - Información del cliente
 
@@ -426,11 +484,85 @@ Todos los componentes están optimizados para móvil y desktop.
 
 ## Próximas Integraciones Recomendadas
 
-### 🔥 BACKLOG DE MEJORAS Y NUEVAS FEATURES
+## � BACKLOG DE MEJORAS Y NUEVAS FEATURES
 
-#### **PRIORIDAD ALTA - Features Core** 🔴
+### **SPRINT 1 - COMPLETADO ✅**
 
-##### 1. Sistema de Registro y Login para Usuarios
+#### ✅ 1. WhatsApp Integration Post-Compra
+- [x] Botón "Contactar por WhatsApp" en confirmación de pedido
+- [x] Mensaje pre-formateado con info del pedido
+- [x] Enlace directo a chat con el vendedor
+- [x] Variables: número de orden, total, items
+- **Implementado:** Botón en `/checkout` que redirige a WhatsApp con mensaje completo
+
+#### ✅ 2. Sistema de Categorías y Filtros
+- [x] 9 categorías predefinidas (abstracto, retrato, paisaje, etc.)
+- [x] Filtro por categoría en galería
+- [x] Filtro por rango de precio (mín/máx)
+- [x] Ordenar por: Recientes, Precio (mayor/menor), Título (A-Z/Z-A)
+- [x] Contador de resultados
+- [x] Componente `FilterBar` colapsable
+- [x] Dropdown de categorías en admin/paintings
+
+#### ✅ 3. Barra de Búsqueda
+- [x] Búsqueda en tiempo real integrada en FilterBar
+- [x] Búsqueda por título de obra
+- [x] Búsqueda por descripción
+- [x] Búsqueda por categoría
+- [x] Actualización instantánea de resultados
+
+#### ✅ 4. Sistema de Registro y Login
+- [x] Página `/register` con formulario completo
+- [x] Página `/login` para usuarios existentes
+- [x] Integración con Firebase Auth (email/password)
+- [x] Login con Google OAuth
+- [x] Validación de contraseñas
+- [x] Mensajes de error en español
+
+---
+
+### **SPRINT 2 - COMPLETADO ✅**
+
+#### ✅ 5. Perfil de Usuario
+- [x] Página `/profile` con datos del usuario
+- [x] Historial de pedidos (compras normales)
+- [x] Historial de obras a pedido
+- [x] Estadísticas personales (total pedidos, total gastado)
+- [x] Tabs para separar tipos de pedidos
+- [x] Cards de información con diseño brutalist
+- [x] Protección de ruta (solo usuarios autenticados)
+
+#### ✅ 6. Sistema de Comentarios y Reseñas
+- [x] Componente `ReviewSection` en detalle de obra
+- [x] Calificación con estrellas (1-5)
+- [x] Comentarios de texto (mínimo 10 caracteres)
+- [x] Solo usuarios autenticados pueden comentar
+- [x] **Moderación por admin** (reseñas requieren aprobación)
+- [x] Promedio de calificaciones visible
+- [x] Panel admin `/admin/reviews` para moderar
+- [x] Aprobar/rechazar/eliminar reseñas
+- [x] Filtros por estado (todas/pendientes/aprobadas)
+- [x] Colección `reviews` en Firestore
+- [x] Reglas de seguridad actualizadas
+
+#### ✅ 7. Wishlist / Lista de Deseos
+- [x] Contexto `WishlistContext` con hooks
+- [x] Botón de corazón (❤️) en cada `PaintingCard`
+- [x] Persistencia en Firestore por usuario
+- [x] Página `/wishlist` con obras guardadas
+- [x] Contador en Header con badge
+- [x] Agregar/quitar con un click
+- [x] Botón "Agregar al carrito" desde wishlist
+- [x] Colección `wishlist` en Firestore
+- [x] Reglas de seguridad para wishlist
+
+---
+
+### **SPRINT 3 - PRÓXIMO** 🔜
+
+#### **PRIORIDAD MEDIA - Mejoras de Negocio** 🟡
+
+##### 8. Sistema de Cupones y Descuentos
 - [ ] Página `/register` con formulario de registro
 - [ ] Página `/login` para usuarios existentes
 - [ ] Integración con Firebase Auth (email/password)

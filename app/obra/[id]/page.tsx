@@ -9,6 +9,7 @@ import { useCart } from "@/contexts/CartContext";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Loader2, ShoppingCart, CheckCircle2, X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import ReviewSection from "@/components/ReviewSection";
 
 export default function PaintingDetailPage() {
   const params = useParams();
@@ -335,6 +336,11 @@ export default function PaintingDetailPage() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-12">
+          <ReviewSection paintingId={painting.id} />
         </div>
       </div>
 
