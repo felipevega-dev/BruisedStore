@@ -6,6 +6,7 @@ import { Painting } from "@/types";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { ShoppingCart, Heart, Images } from "lucide-react";
+import { useToast } from "@/hooks/useToast";
 
 interface PaintingCardProps {
   painting: Painting;
@@ -14,18 +15,27 @@ interface PaintingCardProps {
 export default function PaintingCard({ painting }: PaintingCardProps) {
   const { addToCart } = useCart();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  
+  const { showToast, ToastContainer } = useToast();
+
   const inWishlist = isInWishlist(painting.id);
 
   const handleWishlistToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (inWishlist) {
       await removeFromWishlist(painting.id);
+      showToast("Quitado de favoritos", "info");
     } else {
       await addToWishlist(painting.id);
+      showToast("Agregado a favoritos ❤️", "success");
     }
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToCart(painting);
+    showToast(`"${painting.title}" agregado al carrito 🛒`, "success");
   };
 
   const formatPrice = (price: number) => {
@@ -106,10 +116,7 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
           </p>
           {painting.available && (
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                addToCart(painting);
-              }}
+              onClick={handleAddToCart}
               className="group/btn flex items-center justify-center gap-2 border-4 border-black bg-red-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
             >
               <ShoppingCart className="h-4 w-4 transition-transform group-hover/btn:scale-110" />
@@ -118,6 +125,7 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
           )}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

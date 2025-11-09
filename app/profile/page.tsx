@@ -17,6 +17,7 @@ import {
   ArrowLeft,
   Calendar,
   DollarSign,
+  Edit,
 } from "lucide-react";
 
 export default function ProfilePage() {
@@ -163,13 +164,22 @@ export default function ProfilePage() {
                   <div className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-red-600">
                     <User className="h-8 w-8 text-white" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h2 className="text-xl font-bold text-gray-900">
                       {user.displayName || "Usuario"}
                     </h2>
                     <p className="text-sm text-gray-600">{user.email}</p>
                   </div>
                 </div>
+
+                {/* Botón Editar Perfil */}
+                <Link
+                  href="/profile/edit"
+                  className="mb-4 flex w-full items-center justify-center gap-2 border-4 border-black bg-white px-4 py-3 font-bold text-black transition-all hover:bg-gray-100 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                >
+                  <Edit className="h-4 w-4" />
+                  Editar Perfil
+                </Link>
 
                 <div className="space-y-4 border-t-2 border-gray-200 pt-4">
                   <div className="flex items-center gap-3 text-gray-700">

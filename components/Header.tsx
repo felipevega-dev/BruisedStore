@@ -8,6 +8,7 @@ import { ShoppingCart, User, LogOut, Shield, Settings, Heart, Menu, X, Home, Pal
 import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { useToast } from "@/hooks/useToast";
 
 export default function Header() {
   const { getItemCount } = useCart();
@@ -17,6 +18,7 @@ export default function Header() {
   const [showMenu, setShowMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
+  const { showToast, ToastContainer } = useToast();
 
   // Listener para órdenes pendientes (solo para admins)
   useEffect(() => {
@@ -60,6 +62,7 @@ export default function Header() {
     await signOut();
     setShowMenu(false);
     setShowMobileMenu(false);
+    showToast("Sesión cerrada exitosamente", "success");
   };
 
   const closeMobileMenu = () => {
@@ -225,7 +228,7 @@ export default function Header() {
             className="fixed inset-0 z-40 bg-black/50 lg:hidden"
             onClick={closeMobileMenu}
           />
-          <div className="fixed right-0 top-0 z-40 h-full w-[280px] overflow-y-auto border-l-4 border-black bg-white shadow-2xl lg:hidden">
+          <div className="fixed right-0 top-0 z-50 h-full w-[280px] overflow-y-auto border-l-4 border-black bg-white shadow-2xl lg:hidden">
             <div className="flex flex-col p-6 pt-20">
               {/* User Info (if logged in) */}
               {user && (
@@ -347,6 +350,7 @@ export default function Header() {
           </div>
         </>
       )}
+      <ToastContainer />
     </header>
   );
 }
