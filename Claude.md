@@ -350,9 +350,9 @@ Todos los componentes están optimizados para móvil y desktop.
 - Persistencia del carrito en localStorage
 - Navegación intuitiva
 
-## Mejoras Implementadas / En Progreso
+## Mejoras Implementadas
 
-### 🔴 PRIORIDAD ALTA (Funcionalidad Core)
+### 🔴 FUNCIONALIDAD CORE - COMPLETADO ✅
 
 #### ✅ 1. Sistema de Órdenes Normales
 - [x] Crear tipo `Order` para compras de pinturas existentes
@@ -373,93 +373,321 @@ Todos los componentes están optimizados para móvil y desktop.
 - [x] Actualizar estado de pago y envío
 - [x] Separación entre órdenes normales y obras a pedido
 
-### 🟡 PRIORIDAD MEDIA (Mejoras Importantes)
-
 #### ✅ 4. Sistema de Notificaciones en Tiempo Real
 - [x] Listener de Firestore en panel admin
 - [x] Badge con contador de pedidos pendientes
 - [x] Actualización automática sin refresh
 - [x] Sonido de notificación opcional
 
-#### ✅ 5. Reglas de Firestore Actualizadas
-- [x] Seguridad para colección `orders`
-- [x] Usuarios solo ven sus propias órdenes
-- [x] Admins tienen acceso completo
+---
 
-#### ✅ 6. Tipos TypeScript Mejorados
-- [x] Interface `Order` completa
-- [x] Tipos `OrderStatus`, `PaymentStatus`, `ShippingStatus`
-- [x] Interfaces `ShippingInfo` y `PaymentInfo`
+## 🎯 SPRINTS COMPLETADOS
 
-### 🟢 PRIORIDAD BAJA (Nice to Have)
+### **SPRINT 1 - COMPLETADO ✅**
 
-#### 🔄 7. Sistema de Emails Automáticos
-- [ ] Firebase Cloud Functions
-- [ ] Email de confirmación al cliente
-- [ ] Notificación por email al admin
+#### ✅ 1. WhatsApp Integration Post-Compra
+- [x] Botón "Contactar por WhatsApp" en confirmación de pedido
+- [x] Mensaje pre-formateado con info del pedido
+- [x] Enlace directo a chat con el vendedor
+- [x] Variables: número de orden, total, items
+
+#### ✅ 2. Sistema de Categorías y Filtros
+- [x] 9 categorías predefinidas (abstracto, retrato, paisaje, etc.)
+- [x] Filtro por categoría en galería
+- [x] Filtro por rango de precio (mín/máx)
+- [x] Ordenar por: Recientes, Precio (mayor/menor), Título (A-Z/Z-A)
+- [x] Contador de resultados
+- [x] Componente `FilterBar` colapsable
+
+#### ✅ 3. Barra de Búsqueda
+- [x] Búsqueda en tiempo real integrada en FilterBar
+- [x] Búsqueda por título, descripción y categoría
+- [x] Actualización instantánea de resultados
+
+#### ✅ 4. Sistema de Registro y Login
+- [x] Páginas `/register` y `/login`
+- [x] Firebase Auth (email/password)
+- [x] Login con Google OAuth
+- [x] Validación de contraseñas
+
+---
+
+### **SPRINT 2 - COMPLETADO ✅**
+
+#### ✅ 5. Perfil de Usuario
+- [x] Página `/profile` con datos del usuario
+- [x] Historial de pedidos (compras normales + obras a pedido)
+- [x] Estadísticas personales
+- [x] Tabs para separar tipos de pedidos
+
+#### ✅ 6. Sistema de Comentarios y Reseñas
+- [x] Componente `ReviewSection` en detalle de obra
+- [x] Calificación con estrellas (1-5)
+- [x] Moderación por admin en `/admin/reviews`
+- [x] Aprobar/rechazar/eliminar reseñas
+- [x] Promedio de calificaciones visible
+
+#### ✅ 7. Wishlist / Lista de Deseos
+- [x] Contexto `WishlistContext` con hooks
+- [x] Botón de corazón en cada obra
+- [x] Página `/wishlist` con obras guardadas
+- [x] Contador en Header con badge
+- [x] Persistencia en Firestore por usuario
+
+---
+
+### **SPRINT 3 - COMPLETADO ✅**
+
+#### ✅ 8. Sistema de Cupones y Descuentos
+- [x] Colección `coupons` en Firestore
+- [x] Página `/admin/coupons` para gestión completa
+- [x] Tipos: percentage/fixed
+- [x] Validación en checkout
+- [x] Restricciones: minPurchase, maxDiscount, expiryDate
+- [x] Límite de usos
+
+#### ✅ 9. Galería de Imágenes Múltiples
+- [x] Interface `Painting` con `images: string[]`
+- [x] Componente `ImageGallery` con thumbnails
+- [x] Upload múltiple en admin
+- [x] Drag & drop para subir imágenes
+- [x] Preview y eliminación individual
+
+#### ✅ 10. Dashboard con Analytics
+- [x] Página `/admin/analytics`
+- [x] Métricas: Ventas totales, pedidos, obras, reseñas
+- [x] Gráfico de órdenes por estado (recharts)
+- [x] Top 5 obras más vendidas
+- [x] Cards con iconos y diseño brutalist
+
+---
+
+### **SPRINT 4 - COMPLETADO ✅**
+
+#### ✅ 11. SEO y Performance
+- [x] Sistema completo en `lib/metadata.ts`
+- [x] Metadata dinámica con Open Graph y Twitter Cards
+- [x] JSON-LD Schema.org (Product + ArtGallery)
+- [x] Sitemap.xml dinámico (`app/sitemap.ts`)
+- [x] Robots.txt (`app/robots.ts`)
+- [x] Viewport optimization
+- [x] Font display swap
+- [x] Documentación en `SEO_IMPLEMENTATION.md`
+
+#### ✅ 12. Bug Fixes y UX
+- [x] Fix dimensiones intuitivas (vertical: 25x20)
+- [x] Redesign obra-a-pedido (fondo blanco, preview 8x)
+- [x] Fix filtros (searchQuery → search)
+- [x] Fix build TypeScript
+- [x] Fix lógica de precio en filtros (0 no filtra)
+
+---
+
+## 🚀 SPRINT 5 - PRÓXIMAS OPCIONES
+
+### **Opción A: PWA (Progressive Web App) 📱**
+- [ ] Manifest.json con iconos y configuración
+- [ ] Service Worker para funcionar offline
+- [ ] Instalable en móviles y escritorio
+- [ ] Caché inteligente de imágenes
+- [ ] Notificaciones push (opcional)
+- **Beneficio:** App instalable, funciona offline, experiencia nativa
+
+### **Opción B: Sistema de Notificaciones por Email 📧**
+- [ ] Firebase Cloud Functions + Nodemailer/SendGrid
+- [ ] Email al cliente cuando se aprueba su pedido
+- [ ] Email al admin cuando hay nuevo pedido
+- [ ] Confirmación de registro
 - [ ] Template HTML profesional
+- **Beneficio:** Comunicación automática, profesionalismo
 
-#### 🔄 8. Dashboard con Estadísticas
-- [ ] Métricas de ventas totales
-- [ ] Pedidos por estado (gráfico)
-- [ ] Obras más vendidas
-- [ ] Gráfico de ventas mensuales
-- [ ] Revenue tracking
+### **Opción C: Sistema de Descuentos Avanzado 🎯**
+- [ ] Cupones de "primera compra" automáticos
+- [ ] Descuentos por categoría específica
+- [ ] Cupones de envío gratis
+- [ ] Códigos acumulables
+- [ ] Sistema de puntos de fidelidad
+- **Beneficio:** Marketing avanzado, retención de clientes
 
-## Próximos Pasos Sugeridos
+### **Opción D: Chat en Vivo / WhatsApp Widget 💬**
+- [ ] Widget de WhatsApp flotante mejorado
+- [ ] Mensajes predefinidos por página
+- [ ] Horario de atención visible
+- [ ] Chat history en Firebase
+- [ ] Respuestas automáticas
+- **Beneficio:** Comunicación directa, mejor conversión
 
-1. ~~Integrar pasarela de pago (Mercado Pago, WebPay, etc.)~~ ✅ IMPLEMENTADO
-2. Sistema de envío de emails (Firebase Functions + Nodemailer)
-3. Dashboard de analytics para el admin
-4. Sistema de categorías/filtros en la galería
-5. Wishlist/favoritos
-6. Comentarios/reviews de clientes
-7. SEO optimization con metadata dinámica
-8. PWA para instalación en móvil
+### **Opción E: Sistema de Blog/Noticias 📝**
+- [ ] Blog posts con editor rich text
+- [ ] Categorías y tags
+- [ ] Comentarios en posts
+- [ ] Compartir en redes sociales
+- [ ] RSS feed
+- **Beneficio:** SEO, engagement, comunidad
 
-## Notas Importantes
+---
 
-- El `.env.local` NO debe subirse a git (ya está en .gitignore)
-- Las imágenes se almacenan en Firebase Storage
-- El carrito persiste en localStorage del navegador
-- El admin requiere autenticación
-- Todas las imágenes pasan por Next/Image para optimización
-- **serviceAccountKey.json** está en .gitignore y nunca debe subirse
+## 📊 ESTADO ACTUAL DEL PROYECTO
 
-## Sistema de Órdenes Implementado ✨
+### ✅ Features Implementados (Total: 12/16 base features)
+1. ✅ Galería de pinturas con filtros y búsqueda
+2. ✅ Sistema de autenticación completo
+3. ✅ Carrito de compras funcional
+4. ✅ Checkout y órdenes de compra
+5. ✅ Obras a pedido personalizadas
+6. ✅ Panel de administración completo
+7. ✅ Sistema de reseñas con moderación
+8. ✅ Wishlist/favoritos
+9. ✅ Sistema de cupones
+10. ✅ Galería múltiple de imágenes
+11. ✅ Dashboard analytics
+12. ✅ SEO completo
 
-### Flujo de Compra para Clientes:
+### 🔄 En Progreso
+- Ninguno - Todo funcionando correctamente
 
-1. **Navegar** → El cliente ve la galería de pinturas
-2. **Agregar al carrito** → Puede agregar múltiples obras
-3. **Ver carrito** → Revisar items, ajustar cantidades
-4. **Checkout** → Completar formulario de envío
-5. **Confirmar pedido** → Se crea orden en Firestore
-6. **Confirmación** → Recibe número de orden
+### 📝 Próximo Sprint
+- Elegir entre opciones A, B, C, D o E arriba
 
-### Panel Admin - Gestión de Órdenes:
+---
 
-#### Órdenes de Compra (`/admin/orders-store`)
-- Vista en tiempo real de todas las órdenes
-- Badge con contador de pendientes en Header
-- Detalles completos de cliente y productos
-- Actualizar estado del pedido y envío
-- Eliminar órdenes si es necesario
+## 🐛 BUGS CONOCIDOS Y FIXES RECIENTES
 
-#### Pedidos Personalizados (`/admin/orders`)
-- Gestión de obras a pedido
-- Ver imagen de referencia
-- Actualizar estado de producción
-- Información del cliente
+### Resueltos ✅
+- ✅ **Fix filtros no mostraban pinturas** (Nov 9, 2025)
+  - Problema: `maxPrice: 0` filtraba todas las pinturas
+  - Solución: Cambiar lógica a `if (minPrice > 0)` y `if (maxPrice > 0)`
+  
+- ✅ **Fix build TypeScript** (Nov 9, 2025)
+  - Problema: `searchQuery` vs `search` en FilterOptions
+  - Solución: Unificar a `search` en todos los componentes
+  
+- ✅ **Fix dimensiones intuitivas** (Nov 9, 2025)
+  - Problema: Vertical mostraba 20x25 (confuso)
+  - Solución: Mostrar 25x20 (alto x ancho) para vertical
 
-### Notificaciones en Tiempo Real:
+### Pendientes 🔄
+- Ninguno reportado
 
-- **Badge amarillo animado** en botón Admin del Header
-- Cuenta total de órdenes pendientes (compras + personalizadas)
-- Actualización automática sin refresh
-- Visible solo para usuarios con rol admin
+---
 
-### Estados de Órdenes:
+## 📚 ARCHIVOS CLAVE PARA SIGUIENTE SESIÓN
+
+### Configuración
+- `lib/firebase.ts` - Configuración de Firebase
+- `.env.local` - Variables de entorno
+- `firestore.rules` - Reglas de seguridad Firestore
+- `storage.rules` - Reglas de Storage
+
+### Tipos
+- `types/index.ts` - Todas las interfaces TypeScript
+
+### Contextos
+- `contexts/AuthContext.tsx` - Autenticación y admin claims
+- `contexts/CartContext.tsx` - Carrito de compras
+- `contexts/WishlistContext.tsx` - Lista de deseos
+
+### Componentes Principales
+- `components/Header.tsx` - Navegación y notificaciones
+- `components/FilterBar.tsx` - Filtros y búsqueda
+- `components/PaintingCard.tsx` - Card de obra
+- `components/ImageGallery.tsx` - Galería múltiple
+- `components/ReviewSection.tsx` - Reseñas
+
+### Páginas Admin
+- `app/admin/page.tsx` - Dashboard admin
+- `app/admin/paintings/page.tsx` - Gestión de obras
+- `app/admin/orders/page.tsx` - Pedidos personalizados
+- `app/admin/orders-store/page.tsx` - Órdenes de compra
+- `app/admin/reviews/page.tsx` - Moderación de reseñas
+- `app/admin/coupons/page.tsx` - Gestión de cupones
+- `app/admin/analytics/page.tsx` - Dashboard analytics
+
+### Páginas Cliente
+- `app/page.tsx` - Galería principal
+- `app/obra/[id]/page.tsx` - Detalle de obra
+- `app/obra-a-pedido/page.tsx` - Obras personalizadas
+- `app/carrito/page.tsx` - Carrito
+- `app/checkout/page.tsx` - Checkout
+- `app/profile/page.tsx` - Perfil de usuario
+- `app/wishlist/page.tsx` - Lista de deseos
+
+### SEO
+- `lib/metadata.ts` - Sistema de metadata
+- `app/sitemap.ts` - Generación de sitemap
+- `app/robots.ts` - Configuración robots.txt
+- `SEO_IMPLEMENTATION.md` - Documentación SEO
+
+---
+
+## 🎨 DISEÑO Y TEMA
+
+### Estilo: Brutalist Design
+- Bordes negros gruesos (4px)
+- Sombras pronunciadas (`shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`)
+- Contraste alto (negro sobre blanco)
+- Acentos en rojo (#dc2626) y amarillo (#fef3c7)
+- Sin gradientes suaves, solo bloques sólidos
+- Tipografía bold y black
+
+### Colores Principales
+- **Negro:** `#000000` - Bordes y texto
+- **Blanco:** `#FFFFFF` - Fondos
+- **Rojo:** `#dc2626` (red-600) - CTAs y acentos
+- **Amarillo:** `#fef3c7` (yellow-50) - Highlights
+- **Gris:** `#6b7280` (gray-500) - Texto secundario
+
+---
+
+## 🔐 SEGURIDAD Y AUTENTICACIÓN
+
+### Firebase Custom Claims
+- **Admin:** Acceso completo al panel
+- Script: `set-admin-role.js`
+- Comando: `node set-admin-role.js`
+
+### Reglas de Firestore
+- `paintings`: Read público, Write solo admin
+- `customOrders`: Read/Write usuario autenticado
+- `orders`: Read/Write usuario autenticado (solo propias)
+- `reviews`: Read todos, Write autenticados, Update solo admin
+- `wishlist`: Read/Write solo propietario
+- `coupons`: Read todos, Write solo admin
+
+---
+
+## 🚀 COMANDOS ÚTILES
+
+```bash
+# Desarrollo
+npm run dev              # http://localhost:3000
+
+# Build y Deploy
+npm run build           # Compilar producción
+npm start               # Servidor producción
+
+# Admin
+node set-admin-role.js  # Asignar rol admin
+
+# Git
+git add .
+git commit -m "mensaje"
+git push origin main
+```
+
+---
+
+## 📞 CONTACTO Y SOPORTE
+
+- WhatsApp: Configurado en `.env.local`
+- Firebase Project: bruisedartrash
+- GitHub: felipevega-dev/BruisedStore
+
+---
+
+**ÚLTIMA ACTUALIZACIÓN:** 9 de Noviembre 2025
+**ESTADO:** ✅ 4 Sprints completados - Listo para Sprint 5
+**BUILD:** ✅ Compilación exitosa sin errores
 
 **Order Status:**
 - `pending` → Pendiente (recién creada)
@@ -558,218 +786,117 @@ Todos los componentes están optimizados para móvil y desktop.
 
 ---
 
-### **SPRINT 3 - PRÓXIMO** 🔜
+### **SPRINT 3 - COMPLETADO ✅**
 
-#### **PRIORIDAD MEDIA - Mejoras de Negocio** 🟡
+#### ✅ 8. Sistema de Cupones y Descuentos
+- [x] Colección `coupons` en Firestore
+- [x] Página `/admin/coupons` para gestión completa
+- [x] Tipos: percentage/fixed
+- [x] Validación en checkout con feedback visual
+- [x] Restricciones: minPurchase, maxDiscount, expiryDate
+- [x] Límite de usos con contador automático
 
-##### 8. Sistema de Cupones y Descuentos
-- [ ] Página `/register` con formulario de registro
-- [ ] Página `/login` para usuarios existentes
-- [ ] Integración con Firebase Auth (email/password)
-- [ ] Opción de login con Google
-- [ ] Recuperación de contraseña
-- [ ] Perfil de usuario con historial de pedidos
-- [ ] Ver estado de mis pedidos
-- **Beneficio:** Usuarios pueden trackear sus compras, mejorar experiencia
+#### ✅ 9. Galería de Imágenes Múltiples
+- [x] Interface `Painting` con `images: string[]`
+- [x] Componente `ImageGallery` con thumbnails
+- [x] Upload múltiple en admin con drag & drop
+- [x] Preview y eliminación individual de imágenes
 
-##### 2. WhatsApp Integration Post-Compra
-- [ ] Botón "Contactar por WhatsApp" en confirmación de pedido
-- [ ] Mensaje pre-formateado con info del pedido
-- [ ] Enlace directo a chat con el vendedor
-- [ ] Variables: número de orden, total, items
-- **Formato:** `https://wa.me/56912345678?text=Hola...`
-- **Beneficio:** Comunicación directa e inmediata con el cliente
-
-##### 3. Sistema de Categorías y Filtros
-- [ ] Agregar categorías a pinturas (Abstracto, Retrato, Paisaje, etc.)
-- [ ] Filtro por categoría en galería
-- [ ] Filtro por rango de precio
-- [ ] Filtro por dimensiones
-- [ ] Ordenar por: Recientes, Precio (mayor/menor), Populares
-- [ ] Contador de resultados
-- **Beneficio:** Mejor navegación y UX
-
-##### 4. Barra de Búsqueda
-- [ ] Search bar en Header
-- [ ] Búsqueda por título de obra
-- [ ] Búsqueda por categoría
-- [ ] Sugerencias mientras escribe (typeahead)
-- [ ] Página de resultados `/search?q=...`
-- [ ] Resaltar términos encontrados
-- **Beneficio:** Encontrar obras rápidamente
-
-#### **PRIORIDAD MEDIA - Social Features** 🟡
-
-##### 5. Sistema de Comentarios y Reseñas
-- [ ] Comentarios en página de detalle de obra
-- [ ] Sistema de calificación (1-5 estrellas)
-- [ ] Solo usuarios registrados pueden comentar
-- [ ] Moderación de comentarios en admin panel
-- [ ] Respuestas del vendedor
-- [ ] Promedio de calificaciones visible
-- **Beneficio:** Social proof, confianza, engagement
-
-##### 6. Wishlist / Lista de Deseos
-- [ ] Botón "❤️ Guardar" en cada obra
-- [ ] Página `/wishlist` con obras guardadas
-- [ ] Persistencia por usuario (si está logueado)
-- [ ] Notificaciones de cambio de precio
-- [ ] Compartir wishlist
-- **Beneficio:** Aumentar conversión, retención
-
-##### 7. Sistema de Descuentos y Cupones
-- [ ] Códigos de descuento en checkout
-- [ ] Admin puede crear/gestionar cupones
-- [ ] Tipos: porcentaje, monto fijo
-- [ ] Fechas de validez
-- [ ] Límite de usos
-- [ ] Banner de promociones activas
-- **Beneficio:** Marketing, conversión
-
-#### **PRIORIDAD BAJA - Analytics y Optimización** 🟢
-
-##### 8. Dashboard con Analytics
-- [ ] Gráfico de ventas mensuales
-- [ ] Top 10 obras más vendidas
-- [ ] Revenue tracking
-- [ ] Tasa de conversión
-- [ ] Clientes recurrentes
-- [ ] Gráfico de órdenes por estado
-- **Librería:** recharts o chart.js
-
-##### 9. Galería de Imágenes Múltiples
-- [ ] Permitir múltiples imágenes por obra
-- [ ] Carrusel en página de detalle
-- [ ] Thumbnails navegables
-- [ ] Zoom en hover
-- **Beneficio:** Mostrar detalles de las obras
-
-##### 10. SEO y Performance
-- [ ] Metadata dinámica por página
-- [ ] Open Graph tags
-- [ ] Sitemap.xml automático
-- [ ] Schema.org markup para productos
-- [ ] Lazy loading optimizado
-- [ ] PWA configuration
-
-#### **INTEGRACIONES EXTERNAS** 🔌
-
-##### 11. Pasarela de Pago Real
-- [ ] WebPay Plus (Transbank) - Chile
-- [ ] Mercado Pago - LATAM
-- [ ] Manejo de callbacks
-- [ ] Actualización automática de estado
-- [ ] Webhook para confirmaciones
-
-##### 12. Sistema de Emails Automáticos
-- [ ] Confirmación de pedido al cliente
-- [ ] Notificación de nuevo pedido al admin
-- [ ] Actualización de estado de envío
-- [ ] Email de agradecimiento
-- [ ] Newsletter (opcional)
-- **Servicio:** SendGrid o Firebase Functions + Nodemailer
-
-##### 13. Integración con Redes Sociales
-- [ ] Botones de compartir en obras
-- [ ] Instagram feed en homepage
-- [ ] Pixel de Facebook para remarketing
-- [ ] Google Analytics
-
-#### **ADMIN PANEL ENHANCEMENTS** ⚙️
-
-##### 14. Gestión de Usuarios
-- [ ] Ver lista de todos los usuarios
-- [ ] Ver historial de compras por usuario
-- [ ] Bloquear/desbloquear usuarios
-- [ ] Enviar emails masivos
-- [ ] Exportar lista de clientes
-
-##### 15. Gestión de Inventario
-- [ ] Stock de obras (si aplica)
-- [ ] Alertas de stock bajo
-- [ ] Productos agotados automáticamente
-- [ ] Historial de cambios
-
-##### 16. Reportes y Exportación
-- [ ] Exportar órdenes a CSV/Excel
-- [ ] Reporte de ventas por período
-- [ ] Reporte de productos más vendidos
-- [ ] Reporte fiscal
+#### ✅ 10. Dashboard con Analytics
+- [x] Página `/admin/analytics` con métricas
+- [x] Ventas totales, pedidos, obras, reseñas pendientes
+- [x] Gráfico de órdenes por estado (recharts)
+- [x] Top 5 obras más vendidas con revenue
 
 ---
 
-### 🎯 PLAN DE IMPLEMENTACIÓN RECOMENDADO
+### **SPRINT 4 - COMPLETADO ✅**
 
-**SPRINT 1 (Esta sesión):**
-1. ✅ Sistema de órdenes y checkout
-2. ✅ Notificaciones en tiempo real
-3. 🔄 WhatsApp Integration
-4. 🔄 Sistema de categorías y filtros básicos
+#### ✅ 11. SEO y Performance
+- [x] Sistema `lib/metadata.ts` con Open Graph y Twitter Cards
+- [x] JSON-LD Schema.org (Product + ArtGallery)
+- [x] Sitemap.xml y robots.txt dinámicos
+- [x] Viewport optimization y font display swap
+- [x] Documentación en `SEO_IMPLEMENTATION.md`
 
-**SPRINT 2 (Siguiente):**
-1. Sistema de registro/login de usuarios
-2. Barra de búsqueda
-3. Perfil de usuario con historial
-
-**SPRINT 3:**
-1. Comentarios y reseñas
-2. Wishlist
-3. Dashboard analytics básico
-
-**SPRINT 4:**
-1. Pasarela de pago real
-2. Emails automáticos
-3. Sistema de cupones
+#### ✅ 12. Bug Fixes
+- [x] Fix filtros (maxPrice: 0 no filtra pinturas)
+- [x] Fix build TypeScript (searchQuery → search)
+- [x] Fix dimensiones intuitivas (vertical: 25x20)
+- [x] Redesign obra-a-pedido (blanco, preview 8x)
 
 ---
 
-### 1. Pasarela de Pago Real
+## 📋 TESTING CHECKLIST
 
-**WebPay Plus (Transbank):**
+### Cliente
+- [ ] Ver galería y filtrar por categoría/precio
+- [ ] Buscar obras por título
+- [ ] Agregar obras al carrito
+- [ ] Aplicar cupón de descuento en checkout
+- [ ] Completar compra y recibir confirmación
+- [ ] Ver historial en perfil
+- [ ] Agregar/quitar de wishlist
+- [ ] Dejar reseña en una obra
+
+### Admin
+- [ ] Login como admin
+- [ ] Ver notificaciones en tiempo real
+- [ ] Gestionar pinturas (CRUD + múltiples imágenes)
+- [ ] Ver y actualizar órdenes de compra
+- [ ] Ver y actualizar pedidos personalizados
+- [ ] Moderar reseñas (aprobar/ocultar/eliminar)
+- [ ] Crear y gestionar cupones
+- [ ] Ver analytics y métricas
+
+---
+
+## 🔧 TROUBLESHOOTING
+
+### Build Errors
 ```bash
-npm install transbank-sdk
+# Si hay errores de TypeScript
+npm run build
+
+# Verificar tipos
+npx tsc --noEmit
 ```
 
-Reemplazar la simulación en `/app/checkout/page.tsx` con:
-- Integración WebPay Plus
-- Redirección a pasarela
-- Callback de confirmación
-- Actualización automática de `paymentInfo.status`
-
-**Mercado Pago:**
+### Firebase Connection
 ```bash
-npm install mercadopago
+# Verificar variables de entorno
+echo $NEXT_PUBLIC_FIREBASE_API_KEY
+
+# Reiniciar servidor
+npm run dev
 ```
 
-### 2. Emails Automáticos
-
-**Opción A: Firebase Cloud Functions + Nodemailer**
+### Git Issues
 ```bash
-firebase init functions
-npm install nodemailer
+# Ver estado
+git status
+
+# Descartar cambios
+git checkout -- .
+
+# Pull latest
+git pull origin main
 ```
 
-**Opción B: SendGrid**
-```bash
-npm install @sendgrid/mail
-```
+---
 
-**Triggers recomendados:**
-- Orden creada → Email a cliente con confirmación
-- Orden creada → Email a admin con notificación
-- Estado cambiado → Email a cliente con actualización
+## 📚 RECURSOS Y DOCUMENTACIÓN
 
-### 3. Dashboard con Analytics
+- [Next.js 16 Docs](https://nextjs.org/docs)
+- [Firebase Docs](https://firebase.google.com/docs)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [React Hooks](https://react.dev/reference/react)
 
-Métricas a implementar:
-- Total de ventas (gráfico de línea mensual)
-- Órdenes por estado (gráfico de dona)
-- Productos más vendidos (tabla top 10)
-- Revenue tracking
-- Clientes recurrentes
+---
 
-Librerías recomendadas:
-```bash
+**FIN DEL DOCUMENTO**
+**Listo para continuar con SPRINT 5 en nuevo chat** 🚀
 npm install recharts # Para gráficos
 npm install date-fns # Para manejo de fechas
 ```
@@ -881,9 +1008,9 @@ npm run lint            # Verifica código
 node set-admin-role.js  # Asigna rol admin a usuario
 ```
 
-## Soporte
+---
 
-Para cualquier duda o problema, revisar:
-- Documentación de Next.js 16: https://nextjs.org/docs
-- Documentación de Firebase: https://firebase.google.com/docs
-- Documentación de Tailwind CSS: https://tailwindcss.com/docs
+**FIN DEL DOCUMENTO**
+**Última actualización: 9 de Noviembre 2025**
+**Estado: ✅ 4 Sprints completados - Listo para Sprint 5**
+**Build: ✅ Compilación exitosa sin errores**
