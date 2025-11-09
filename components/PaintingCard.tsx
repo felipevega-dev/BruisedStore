@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Painting } from "@/types";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Images } from "lucide-react";
 
 interface PaintingCardProps {
   painting: Painting;
@@ -40,6 +40,8 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
     ? painting.images[0] 
     : painting.imageUrl;
 
+  const hasMultipleImages = painting.images && painting.images.length > 1;
+
   return (
     <div className="group relative overflow-hidden border-4 border-black bg-white transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
       <Link href={`/obra/${painting.id}`}>
@@ -56,6 +58,13 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
+          {/* Multiple images indicator */}
+          {hasMultipleImages && (
+            <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full border-2 border-white bg-black/70 px-2 py-1 text-white">
+              <Images className="h-4 w-4" />
+              <span className="text-xs font-bold">{painting.images?.length}</span>
+            </div>
+          )}
           {/* Wishlist button */}
           <button
             onClick={handleWishlistToggle}

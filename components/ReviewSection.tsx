@@ -36,11 +36,10 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
 
   const fetchReviews = async () => {
     try {
-      // Obtener todas las reseñas (aprobadas para todos, todas para admin)
+      // Obtener todas las reseñas del painting
       const reviewsQuery = query(
         collection(db, "reviews"),
-        where("paintingId", "==", paintingId),
-        orderBy("createdAt", "desc")
+        where("paintingId", "==", paintingId)
       );
       const snapshot = await getDocs(reviewsQuery);
       const reviewsData = snapshot.docs.map((doc) => {
@@ -52,15 +51,17 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
         } as Review;
       });
       
-      // Filtrar solo aprobadas para usuarios normales (admin ve todas)
-      const filteredReviews = reviewsData.filter((review) => {
-        // Si el usuario es el autor, puede ver su propia reseña
-        if (user && review.userId === user.uid) {
-          return true;
-        }
-        // Todos pueden ver las aprobadas
-        return review.approved;
-      });
+      // Filtrar y ordenar en el cliente
+      const filteredReviews = reviewsData
+        .filter((review) => {
+          // Si el usuario es el autor, puede ver su propia reseña
+          if (user && review.userId === user.uid) {
+            return true;
+          }
+          // Todos pueden ver las aprobadas
+          return review.approved;
+        })
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
       
       setReviews(filteredReviews);
     } catch (error) {

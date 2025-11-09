@@ -8,8 +8,9 @@ import { Painting } from "@/types";
 import { useCart } from "@/contexts/CartContext";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Loader2, ShoppingCart, CheckCircle2, X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import { ArrowLeft, Loader2, ShoppingCart, CheckCircle2 } from "lucide-react";
 import ReviewSection from "@/components/ReviewSection";
+import ImageGallery from "@/components/ImageGallery";
 
 export default function PaintingDetailPage() {
   const params = useParams();
@@ -18,8 +19,6 @@ export default function PaintingDetailPage() {
   const [painting, setPainting] = useState<Painting | null>(null);
   const [loading, setLoading] = useState(true);
   const [addedToCart, setAddedToCart] = useState(false);
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
-  const [isZoomed, setIsZoomed] = useState(false);
 
   useEffect(() => {
     const fetchPainting = async () => {
@@ -72,35 +71,6 @@ export default function PaintingDetailPage() {
   };
 
   const images = painting ? getImages(painting) : [];
-  const currentImage = images[selectedImageIndex] || "";
-
-  // Calcular aspect ratio real basado en las dimensiones de la pintura
-  const getAspectRatio = () => {
-    if (!painting) return "3/4"; // Default
-    const { width, height } = painting.dimensions;
-    // Calcular el ratio más simple posible
-    const ratio = width / height;
-    return ratio;
-  };
-
-  const aspectRatio = painting ? getAspectRatio() : 0.75;
-
-  const handleImageClick = () => {
-    setIsZoomed(true);
-  };
-
-  const handleZoomClose = () => {
-    setIsZoomed(false);
-  };
-
-  const handleNextImage = () => {
-    setSelectedImageIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const handlePrevImage = () => {
-    setSelectedImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
 
   if (loading) {
     return (
@@ -145,108 +115,10 @@ export default function PaintingDetailPage() {
 
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Image Gallery */}
-          <div className="space-y-4">
-            {/* Main Image */}
-            <div 
-              className="relative w-full cursor-zoom-in overflow-hidden border-4 border-black bg-gray-50"
-              style={{
-                aspectRatio: `${painting.dimensions.width} / ${painting.dimensions.height}`,
-                minHeight: "400px",
-                maxHeight: "80vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "1rem",
-              }}
-              onClick={handleImageClick}
-            >
-              <div 
-                className="relative flex items-center justify-center"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                }}
-              >
-                <Image
-                  src={currentImage}
-                  alt={painting.title}
-                  width={painting.dimensions.width * 20}
-                  height={painting.dimensions.height * 20}
-                  className="object-contain"
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  style={{
-                    objectFit: "contain",
-                    width: "auto",
-                    height: "auto",
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                  }}
-                />
-              </div>
-              {images.length > 1 && (
-                <>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handlePrevImage();
-                    }}
-                    className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border-4 border-black bg-white p-2 text-black transition-all hover:bg-gray-100"
-                    aria-label="Imagen anterior"
-                  >
-                    <ChevronLeft className="h-6 w-6" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleNextImage();
-                    }}
-                    className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border-4 border-black bg-white p-2 text-black transition-all hover:bg-gray-100"
-                    aria-label="Siguiente imagen"
-                  >
-                    <ChevronRight className="h-6 w-6" />
-                  </button>
-                </>
-              )}
-              <div className="absolute bottom-2 right-2 rounded-full border-4 border-black bg-white p-2 text-black">
-                <ZoomIn className="h-5 w-5" />
-              </div>
-            </div>
-
-            {/* Thumbnail Gallery */}
-            {images.length > 1 && (
-              <div className="grid grid-cols-4 gap-2">
-                {images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    className={`relative aspect-square w-full overflow-hidden border-4 transition-all ${
-                      selectedImageIndex === index
-                        ? "border-red-600 shadow-lg"
-                        : "border-gray-300 hover:border-gray-400"
-                    }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${painting.title} - Vista ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="150px"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Image Counter */}
-            {images.length > 1 && (
-              <p className="text-center text-sm font-semibold text-gray-600">
-                Imagen {selectedImageIndex + 1} de {images.length}
-              </p>
-            )}
-          </div>
+          <ImageGallery 
+            images={images} 
+            title={painting.title} 
+          />
 
           {/* Details */}
           <div className="flex flex-col">
@@ -343,83 +215,6 @@ export default function PaintingDetailPage() {
           <ReviewSection paintingId={painting.id} />
         </div>
       </div>
-
-      {/* Zoom Modal */}
-      {isZoomed && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black p-4"
-          onClick={handleZoomClose}
-        >
-          <button
-            onClick={handleZoomClose}
-            className="absolute right-4 top-4 z-50 rounded-full border-4 border-white bg-white p-2 text-black transition-all hover:bg-gray-100"
-            aria-label="Cerrar zoom"
-          >
-            <X className="h-6 w-6" />
-          </button>
-
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handlePrevImage();
-                }}
-                className="absolute left-4 top-1/2 z-50 -translate-y-1/2 rounded-full border-4 border-white bg-white p-3 text-black transition-all hover:bg-gray-100"
-                aria-label="Imagen anterior"
-              >
-                <ChevronLeft className="h-8 w-8" />
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleNextImage();
-                }}
-                className="absolute right-4 top-1/2 z-50 -translate-y-1/2 rounded-full border-4 border-white bg-white p-3 text-black transition-all hover:bg-gray-100"
-                aria-label="Siguiente imagen"
-              >
-                <ChevronRight className="h-8 w-8" />
-              </button>
-            </>
-          )}
-
-          <div
-            className="flex h-full w-full items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              maxWidth: "90vw",
-              maxHeight: "90vh",
-              aspectRatio: painting ? `${painting.dimensions.width} / ${painting.dimensions.height}` : "3/4",
-              padding: "2rem",
-            }}
-          >
-            <div className="relative flex h-full w-full items-center justify-center">
-              <Image
-                src={currentImage}
-                alt={painting.title}
-                width={painting.dimensions.width * 20}
-                height={painting.dimensions.height * 20}
-                className="object-contain"
-                sizes="90vw"
-                style={{
-                  objectFit: "contain",
-                  width: "auto",
-                  height: "auto",
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                }}
-                priority
-              />
-            </div>
-          </div>
-
-          {images.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-full border-4 border-white bg-white px-4 py-2 font-bold text-black">
-              {selectedImageIndex + 1} / {images.length}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
