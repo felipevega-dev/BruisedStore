@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle } from "lucide-react";
+import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag } from "lucide-react";
 
 export default function AdminPage() {
   const { user, isAdmin, loading: authLoading, refreshUser } = useAuth();
@@ -194,6 +194,25 @@ export default function AdminPage() {
                 </h2>
                 <p className="text-gray-400">
                   Aprobar, rechazar y gestionar comentarios
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/coupons"
+            className="group rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+          >
+            <div className="flex items-center gap-4">
+              <div className="rounded-lg border-2 border-red-900 bg-red-950/30 p-4 transition-all group-hover:border-red-600 group-hover:bg-red-950/50">
+                <Tag className="h-8 w-8 text-red-400" />
+              </div>
+              <div>
+                <h2 className="mb-2 text-xl font-bold text-red-100">
+                  Cupones de Descuento
+                </h2>
+                <p className="text-gray-400">
+                  Crear y gestionar cupones promocionales
                 </p>
               </div>
             </div>

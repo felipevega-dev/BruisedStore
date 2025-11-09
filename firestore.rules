@@ -78,5 +78,14 @@ service cloud.firestore {
       // Admins pueden ver y gestionar todas las wishlists
       allow read, update, delete: if isAdmin();
     }
+
+    // Reglas para coupons (cupones de descuento)
+    match /coupons/{couponId} {
+      // Todos pueden leer cupones (para validar en checkout)
+      allow read: if true;
+
+      // Solo administradores pueden crear/actualizar/eliminar
+      allow create, update, delete: if isAdmin();
+    }
   }
 }

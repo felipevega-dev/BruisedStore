@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/contexts/CartContext";
-import { ShippingInfo, PaymentInfo, Order } from "@/types";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { ShippingInfo, PaymentInfo, Order, Coupon } from "@/types";
+import { collection, addDoc, serverTimestamp, query, where, getDocs, doc, updateDoc, increment } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CreditCard, Truck, Loader2, CheckCircle } from "lucide-react";
+import { ArrowLeft, CreditCard, Truck, Loader2, CheckCircle, Tag, X } from "lucide-react";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -16,6 +16,12 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
+
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
+  const [couponError, setCouponError] = useState("");
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
 
   // Shipping form state
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
@@ -56,6 +62,114 @@ export default function CheckoutPage() {
     setShippingInfo((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError("Ingresa un código de cupón");
+      return;
+    }
+
+    setValidatingCoupon(true);
+    setCouponError("");
+
+    try {
+      // Buscar cupón en Firestore
+      const couponsQuery = query(
+        collection(db, "coupons"),
+        where("code", "==", couponCode.toUpperCase().trim())
+      );
+      const snapshot = await getDocs(couponsQuery);
+
+      if (snapshot.empty) {
+        setCouponError("Cupón no válido");
+        setValidatingCoupon(false);
+        return;
+      }
+
+      const couponDoc = snapshot.docs[0];
+      const couponData = {
+        id: couponDoc.id,
+        ...couponDoc.data(),
+        validFrom: couponDoc.data().validFrom?.toDate() || new Date(),
+        validUntil: couponDoc.data().validUntil?.toDate() || new Date(),
+        createdAt: couponDoc.data().createdAt?.toDate() || new Date(),
+      } as Coupon;
+
+      // Validaciones
+      if (!couponData.isActive) {
+        setCouponError("Este cupón no está activo");
+        setValidatingCoupon(false);
+        return;
+      }
+
+      const now = new Date();
+      if (now < couponData.validFrom) {
+        setCouponError("Este cupón aún no es válido");
+        setValidatingCoupon(false);
+        return;
+      }
+
+      if (now > couponData.validUntil) {
+        setCouponError("Este cupón ha expirado");
+        setValidatingCoupon(false);
+        return;
+      }
+
+      if (couponData.usageLimit && couponData.usageCount >= couponData.usageLimit) {
+        setCouponError("Este cupón ha alcanzado su límite de usos");
+        setValidatingCoupon(false);
+        return;
+      }
+
+      const subtotal = getTotal();
+      if (couponData.minPurchase && subtotal < couponData.minPurchase) {
+        setCouponError(
+          `Compra mínima de ${formatPrice(couponData.minPurchase)} requerida`
+        );
+        setValidatingCoupon(false);
+        return;
+      }
+
+      // Cupón válido
+      setAppliedCoupon(couponData);
+      setCouponError("");
+    } catch (error) {
+      console.error("Error validating coupon:", error);
+      setCouponError("Error al validar el cupón");
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  };
+
+  const calculateDiscount = () => {
+    if (!appliedCoupon) return 0;
+
+    const subtotal = getTotal();
+
+    if (appliedCoupon.discountType === "fixed") {
+      return appliedCoupon.discountValue;
+    } else {
+      // Porcentaje
+      const discount = (subtotal * appliedCoupon.discountValue) / 100;
+      if (appliedCoupon.maxDiscount) {
+        return Math.min(discount, appliedCoupon.maxDiscount);
+      }
+      return discount;
+    }
+  };
+
+  const calculateTotal = () => {
+    const subtotal = getTotal();
+    const shippingCost = 5000;
+    const discount = calculateDiscount();
+    return subtotal + shippingCost - discount;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -68,14 +182,15 @@ export default function CheckoutPage() {
 
     try {
       const subtotal = getTotal();
-      const shippingCost = 5000; // $5.000 envío fijo (puedes calcularlo dinámicamente)
-      const total = subtotal + shippingCost;
+      const shippingCost = 5000;
+      const discount = calculateDiscount();
+      const total = subtotal + shippingCost - discount;
       const newOrderNumber = generateOrderNumber();
 
       const paymentInfo: PaymentInfo = {
         method: paymentMethod,
-        status: "pending", // En producción, esto se actualizará después del pago
-        transactionId: `TXN-${Date.now()}`, // Simulado, en producción viene de la pasarela
+        status: "pending",
+        transactionId: `TXN-${Date.now()}`,
       };
 
       const order: Omit<Order, "id"> = {
@@ -95,9 +210,18 @@ export default function CheckoutPage() {
       // Guardar en Firestore
       const docRef = await addDoc(collection(db, "orders"), {
         ...order,
+        discount: discount,
+        couponCode: appliedCoupon?.code || null,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
+
+      // Incrementar contador de uso del cupón
+      if (appliedCoupon) {
+        await updateDoc(doc(db, "coupons", appliedCoupon.id), {
+          usageCount: increment(1),
+        });
+      }
 
       console.log("Order created with ID:", docRef.id);
 
@@ -514,10 +638,72 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
+              {/* Sección de Cupón */}
+              <div className="border-b border-red-900/30 py-4">
+                <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-red-100">
+                  <Tag className="h-4 w-4" />
+                  Cupón de Descuento
+                </h3>
+                
+                {appliedCoupon ? (
+                  <div className="rounded-lg border-2 border-green-600 bg-green-950/30 p-3">
+                    <div className="mb-2 flex items-center justify-between">
+                      <div>
+                        <p className="font-mono text-sm font-bold text-green-400">
+                          {appliedCoupon.code}
+                        </p>
+                        <p className="text-xs text-green-300">
+                          {appliedCoupon.description}
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleRemoveCoupon}
+                        className="rounded-full border-2 border-red-600 bg-red-950/30 p-1 text-red-400 transition-colors hover:bg-red-950/50"
+                        aria-label="Quitar cupón"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <p className="text-sm font-semibold text-green-400">
+                      Descuento: - {formatPrice(calculateDiscount())}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                        placeholder="CÓDIGO"
+                        className="flex-1 rounded-lg border-2 border-red-900 bg-gray-900 px-3 py-2 font-mono text-sm font-bold uppercase text-red-100 transition-colors placeholder:text-gray-500 focus:border-red-600 focus:outline-none"
+                        disabled={validatingCoupon}
+                      />
+                      <button
+                        onClick={handleApplyCoupon}
+                        disabled={validatingCoupon || !couponCode.trim()}
+                        className="rounded-lg border-2 border-red-900 bg-red-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        {validatingCoupon ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          "Aplicar"
+                        )}
+                      </button>
+                    </div>
+                    {couponError && (
+                      <p className="text-xs font-semibold text-red-400">
+                        {couponError}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <div className="mt-4 flex justify-between text-xl font-bold">
                 <span className="text-red-100">Total</span>
                 <span className="text-red-500">
-                  {formatPrice(getTotal() + 5000)}
+                  {formatPrice(calculateTotal())}
                 </span>
               </div>
 

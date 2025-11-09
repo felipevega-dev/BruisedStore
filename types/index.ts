@@ -70,6 +70,23 @@ export interface WishlistItem {
   addedAt: Date;
 }
 
+// Coupon System
+export interface Coupon {
+  id: string;
+  code: string; // Ej: "VERANO2024", "PRIMERACOMPRA"
+  description: string;
+  discountType: "percentage" | "fixed"; // Porcentaje o monto fijo
+  discountValue: number; // 10 (para 10%) o 5000 (para $5.000)
+  minPurchase?: number; // Monto mínimo de compra para aplicar
+  maxDiscount?: number; // Descuento máximo (para porcentajes)
+  validFrom: Date;
+  validUntil: Date;
+  usageLimit?: number; // Límite de usos totales
+  usageCount: number; // Veces que se ha usado
+  isActive: boolean;
+  createdAt: Date;
+}
+
 // ========== CUSTOM ORDERS (Obras a Pedido) ==========
 
 export interface CustomOrderSize {
