@@ -59,11 +59,11 @@ export default function Home() {
     }
 
     // Filtro de precio
-    if (filters.minPrice !== undefined) {
-      result = result.filter(p => p.price >= filters.minPrice!);
+    if (filters.minPrice > 0) {
+      result = result.filter(p => p.price >= filters.minPrice);
     }
-    if (filters.maxPrice !== undefined) {
-      result = result.filter(p => p.price <= filters.maxPrice!);
+    if (filters.maxPrice > 0) {
+      result = result.filter(p => p.price <= filters.maxPrice);
     }
 
     // Filtro de búsqueda
