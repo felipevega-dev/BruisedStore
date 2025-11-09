@@ -11,6 +11,7 @@ import Link from "next/link";
 import { ArrowLeft, Loader2, ShoppingCart, CheckCircle2 } from "lucide-react";
 import ReviewSection from "@/components/ReviewSection";
 import ImageGallery from "@/components/ImageGallery";
+import { generateProductSchema } from "@/lib/metadata";
 
 export default function PaintingDetailPage() {
   const params = useParams();
@@ -104,6 +105,14 @@ export default function PaintingDetailPage() {
 
   return (
     <div className="min-h-screen bg-white py-8 sm:py-12">
+      {/* JSON-LD Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateProductSchema(painting)),
+        }}
+      />
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <button
           onClick={() => router.back()}
