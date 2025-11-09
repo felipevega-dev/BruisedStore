@@ -182,10 +182,10 @@ export default function CustomOrderPage() {
                   <div
                     className="relative overflow-hidden border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                     style={{
-                      width: `${Math.min(canvasWidth * 6, 500)}px`,
-                      height: `${Math.min(canvasHeight * 6, 500)}px`,
-                      maxWidth: "90vw",
-                      maxHeight: "80vh",
+                      width: `${Math.min(canvasWidth * 8, 500)}px`,
+                      height: `${Math.min(canvasHeight * 8, 500)}px`,
+                      maxWidth: "100vw",
+                      maxHeight: "90vh",
                     }}
                   >
                     {imagePreview ? (
