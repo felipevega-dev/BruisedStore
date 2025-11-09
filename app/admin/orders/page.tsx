@@ -108,10 +108,10 @@ export default function AdminOrdersPage() {
 
   const getStatusColor = (status: CustomOrder["status"]) => {
     const colors = {
-      pending: "bg-yellow-100 text-yellow-800",
-      "in-progress": "bg-blue-100 text-blue-800",
-      completed: "bg-green-100 text-green-800",
-      cancelled: "bg-red-100 text-red-800",
+      pending: "bg-yellow-900/30 border-yellow-900 text-yellow-300",
+      "in-progress": "bg-blue-900/30 border-blue-900 text-blue-300",
+      completed: "bg-green-900/30 border-green-900 text-green-300",
+      cancelled: "bg-red-900/30 border-red-900 text-red-300",
     };
     return colors[status];
   };
@@ -128,23 +128,25 @@ export default function AdminOrdersPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
+        <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
           <Link
             href="/admin"
-            className="text-gray-600 transition-colors hover:text-gray-900"
+            className="text-gray-300 transition-colors hover:text-red-400"
           >
             <ArrowLeft className="h-6 w-6" />
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">
             Pedidos Personalizados
           </h1>
         </div>
@@ -157,32 +159,32 @@ export default function AdminOrdersPage() {
                 <div
                   key={order.id}
                   onClick={() => setSelectedOrder(order)}
-                  className={`cursor-pointer rounded-lg border bg-white p-4 transition-all hover:shadow-md ${
+                  className={`cursor-pointer rounded-lg border-2 bg-black/60 p-4 backdrop-blur-sm transition-all hover:shadow-xl ${
                     selectedOrder?.id === order.id
-                      ? "border-gray-900 shadow-md"
-                      : "border-gray-200"
+                      ? "border-red-700 shadow-2xl shadow-red-900/40"
+                      : "border-red-900/30 hover:border-red-700 hover:shadow-red-900/20"
                   }`}
                 >
                   <div className="mb-2 flex items-start justify-between">
                     <div>
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-bold text-red-100">
                         {order.customerName}
                       </h3>
-                      <p className="text-sm text-gray-600">{order.email}</p>
+                      <p className="text-sm text-gray-400">{order.email}</p>
                     </div>
                     <span
-                      className={`rounded-full px-2 py-1 text-xs font-medium ${getStatusColor(
+                      className={`rounded-lg border-2 px-2 py-1 text-xs font-bold ${getStatusColor(
                         order.status
                       )}`}
                     >
                       {getStatusLabel(order.status)}
                     </span>
                   </div>
-                  <p className="mb-1 text-sm text-gray-600">
+                  <p className="mb-1 text-sm text-gray-400">
                     {order.selectedSize.name}
                   </p>
                   <div className="flex items-center justify-between">
-                    <p className="font-bold text-gray-900">
+                    <p className="font-bold text-red-500">
                       {formatPrice(order.totalPrice)}
                     </p>
                     <Eye className="h-4 w-4 text-gray-400" />
@@ -191,8 +193,10 @@ export default function AdminOrdersPage() {
               ))}
 
               {orders.length === 0 && (
-                <div className="py-12 text-center text-gray-500">
-                  No hay pedidos personalizados
+                <div className="rounded-lg border-2 border-red-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">
+                  <p className="text-xl font-semibold text-red-100">
+                    No hay pedidos personalizados
+                  </p>
                 </div>
               )}
             </div>
@@ -201,14 +205,14 @@ export default function AdminOrdersPage() {
           {/* Order Details */}
           <div className="lg:col-span-2">
             {selectedOrder ? (
-              <div className="rounded-lg bg-white p-6 shadow-md">
+              <div className="rounded-lg border-2 border-red-900 bg-black/60 p-6 shadow-2xl shadow-red-900/30 backdrop-blur-sm">
                 <div className="mb-6 flex items-start justify-between">
-                  <h2 className="text-2xl font-bold text-gray-900">
+                  <h2 className="text-2xl font-bold text-red-100">
                     Detalles del Pedido
                   </h2>
                   <button
                     onClick={() => handleDelete(selectedOrder.id!)}
-                    className="text-red-600 transition-colors hover:text-red-700"
+                    className="text-red-400 transition-colors hover:text-red-300"
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>
@@ -216,11 +220,11 @@ export default function AdminOrdersPage() {
 
                 {/* Image */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-semibold text-gray-900">
+                  <h3 className="mb-3 font-bold text-red-100">
                     Imagen de Referencia
                   </h3>
                   <div
-                    className="relative mx-auto overflow-hidden rounded-lg"
+                    className="relative mx-auto overflow-hidden rounded-lg border-2 border-red-900/30"
                     style={{
                       maxWidth: "400px",
                       aspectRatio: `${selectedOrder.selectedSize.width}/${selectedOrder.selectedSize.height}`,
@@ -238,31 +242,31 @@ export default function AdminOrdersPage() {
 
                 {/* Customer Info */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-semibold text-gray-900">
+                  <h3 className="mb-3 font-bold text-red-100">
                     Información del Cliente
                   </h3>
-                  <div className="space-y-2 rounded-lg bg-gray-50 p-4">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Nombre:</span>
-                      <span className="font-medium text-gray-900">
+                  <div className="space-y-2 rounded-lg border-2 border-red-900/30 bg-red-950/20 p-4 backdrop-blur-sm">
+                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                      <span className="text-gray-400">Nombre:</span>
+                      <span className="font-semibold text-red-100">
                         {selectedOrder.customerName}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Email:</span>
-                      <span className="font-medium text-gray-900">
+                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                      <span className="text-gray-400">Email:</span>
+                      <span className="font-semibold text-red-100">
                         {selectedOrder.email}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Teléfono:</span>
-                      <span className="font-medium text-gray-900">
+                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                      <span className="text-gray-400">Teléfono:</span>
+                      <span className="font-semibold text-red-100">
                         {selectedOrder.phone}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Fecha:</span>
-                      <span className="font-medium text-gray-900">
+                    <div className="flex justify-between pt-2">
+                      <span className="text-gray-400">Fecha:</span>
+                      <span className="font-semibold text-red-100">
                         {formatDate(selectedOrder.createdAt)}
                       </span>
                     </div>
@@ -271,26 +275,26 @@ export default function AdminOrdersPage() {
 
                 {/* Order Details */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-semibold text-gray-900">
+                  <h3 className="mb-3 font-bold text-red-100">
                     Detalles del Pedido
                   </h3>
-                  <div className="space-y-2 rounded-lg bg-gray-50 p-4">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Tamaño:</span>
-                      <span className="font-medium text-gray-900">
+                  <div className="space-y-2 rounded-lg border-2 border-red-900/30 bg-red-950/20 p-4 backdrop-blur-sm">
+                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                      <span className="text-gray-400">Tamaño:</span>
+                      <span className="font-semibold text-red-100">
                         {selectedOrder.selectedSize.name}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Dimensiones:</span>
-                      <span className="font-medium text-gray-900">
+                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                      <span className="text-gray-400">Dimensiones:</span>
+                      <span className="font-semibold text-red-100">
                         {selectedOrder.selectedSize.width} x{" "}
                         {selectedOrder.selectedSize.height} cm
                       </span>
                     </div>
-                    <div className="flex justify-between border-t pt-2">
-                      <span className="text-gray-600">Total:</span>
-                      <span className="text-xl font-bold text-gray-900">
+                    <div className="flex justify-between border-t border-red-900/30 pt-3">
+                      <span className="text-lg font-medium text-gray-300">Total:</span>
+                      <span className="text-2xl font-bold text-red-500">
                         {formatPrice(selectedOrder.totalPrice)}
                       </span>
                     </div>
@@ -300,18 +304,18 @@ export default function AdminOrdersPage() {
                 {/* Notes */}
                 {selectedOrder.notes && (
                   <div className="mb-6">
-                    <h3 className="mb-3 font-semibold text-gray-900">
+                    <h3 className="mb-3 font-bold text-red-100">
                       Notas del Cliente
                     </h3>
-                    <div className="rounded-lg bg-gray-50 p-4">
-                      <p className="text-gray-700">{selectedOrder.notes}</p>
+                    <div className="rounded-lg border-2 border-red-900/30 bg-red-950/20 p-4 backdrop-blur-sm">
+                      <p className="text-gray-300">{selectedOrder.notes}</p>
                     </div>
                   </div>
                 )}
 
                 {/* Status Update */}
                 <div>
-                  <h3 className="mb-3 font-semibold text-gray-900">
+                  <h3 className="mb-3 font-bold text-red-100">
                     Actualizar Estado
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -319,10 +323,10 @@ export default function AdminOrdersPage() {
                       onClick={() =>
                         handleStatusChange(selectedOrder.id!, "pending")
                       }
-                      className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
                         selectedOrder.status === "pending"
-                          ? "bg-yellow-600 text-white"
-                          : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+                          ? "border-yellow-600 bg-yellow-900/50 text-yellow-300 shadow-lg shadow-yellow-900/50"
+                          : "border-yellow-900 bg-yellow-900/20 text-yellow-400 hover:bg-yellow-900/40"
                       }`}
                     >
                       Pendiente
@@ -331,10 +335,10 @@ export default function AdminOrdersPage() {
                       onClick={() =>
                         handleStatusChange(selectedOrder.id!, "in-progress")
                       }
-                      className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
                         selectedOrder.status === "in-progress"
-                          ? "bg-blue-600 text-white"
-                          : "bg-blue-100 text-blue-800 hover:bg-blue-200"
+                          ? "border-blue-600 bg-blue-900/50 text-blue-300 shadow-lg shadow-blue-900/50"
+                          : "border-blue-900 bg-blue-900/20 text-blue-400 hover:bg-blue-900/40"
                       }`}
                     >
                       En Progreso
@@ -343,10 +347,10 @@ export default function AdminOrdersPage() {
                       onClick={() =>
                         handleStatusChange(selectedOrder.id!, "completed")
                       }
-                      className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
                         selectedOrder.status === "completed"
-                          ? "bg-green-600 text-white"
-                          : "bg-green-100 text-green-800 hover:bg-green-200"
+                          ? "border-green-600 bg-green-900/50 text-green-300 shadow-lg shadow-green-900/50"
+                          : "border-green-900 bg-green-900/20 text-green-400 hover:bg-green-900/40"
                       }`}
                     >
                       Completado
@@ -355,10 +359,10 @@ export default function AdminOrdersPage() {
                       onClick={() =>
                         handleStatusChange(selectedOrder.id!, "cancelled")
                       }
-                      className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
                         selectedOrder.status === "cancelled"
-                          ? "bg-red-600 text-white"
-                          : "bg-red-100 text-red-800 hover:bg-red-200"
+                          ? "border-red-600 bg-red-900/50 text-red-300 shadow-lg shadow-red-900/50"
+                          : "border-red-900 bg-red-900/20 text-red-400 hover:bg-red-900/40"
                       }`}
                     >
                       Cancelado
@@ -367,8 +371,8 @@ export default function AdminOrdersPage() {
                 </div>
               </div>
             ) : (
-              <div className="flex h-full items-center justify-center rounded-lg bg-white p-12 text-center shadow-md">
-                <p className="text-gray-500">
+              <div className="flex h-full items-center justify-center rounded-lg border-2 border-red-900/30 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">
+                <p className="text-xl font-semibold text-gray-400">
                   Selecciona un pedido para ver los detalles
                 </p>
               </div>

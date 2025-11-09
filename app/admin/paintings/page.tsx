@@ -211,31 +211,33 @@ export default function AdminPaintingsPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-gray-400" />
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
+        <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/admin"
-              className="text-gray-600 transition-colors hover:text-gray-900"
+              className="text-gray-300 transition-colors hover:text-red-400"
             >
               <ArrowLeft className="h-6 w-6" />
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900">Gestionar Pinturas</h1>
+            <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">Gestionar Pinturas</h1>
           </div>
           <button
             onClick={() => {
               resetForm();
               setShowModal(true);
             }}
-            className="flex items-center gap-2 rounded-md bg-gray-900 px-4 py-2 text-white transition-colors hover:bg-gray-800"
+            className="flex items-center justify-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-4 py-2 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50"
           >
             <Plus className="h-5 w-5" />
             Nueva Pintura
@@ -244,8 +246,8 @@ export default function AdminPaintingsPage() {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {paintings.map((painting) => (
-            <div key={painting.id} className="rounded-lg bg-white p-4 shadow-sm">
-              <div className="relative mb-3 aspect-[3/4] overflow-hidden rounded-md">
+            <div key={painting.id} className="rounded-lg border-2 border-red-900/30 bg-black/60 p-4 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40">
+              <div className="relative mb-3 aspect-[3/4] overflow-hidden rounded-md border border-red-900/30">
                 <Image
                   src={painting.imageUrl}
                   alt={painting.title}
@@ -254,24 +256,24 @@ export default function AdminPaintingsPage() {
                   sizes="300px"
                 />
               </div>
-              <h3 className="mb-1 font-semibold text-gray-900">{painting.title}</h3>
-              <p className="mb-2 text-sm text-gray-600">
+              <h3 className="mb-1 font-bold text-red-100">{painting.title}</h3>
+              <p className="mb-2 text-sm text-gray-400">
                 {painting.dimensions.width} x {painting.dimensions.height} cm
               </p>
-              <p className="mb-3 font-bold text-gray-900">
+              <p className="mb-3 font-bold text-red-500">
                 {formatPrice(painting.price)}
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEdit(painting)}
-                  className="flex flex-1 items-center justify-center gap-1 rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                  className="flex flex-1 items-center justify-center gap-1 rounded-lg border-2 border-red-900 bg-red-900/20 px-3 py-2 text-sm font-semibold text-red-100 transition-all hover:bg-red-900/40"
                 >
                   <Edit className="h-4 w-4" />
                   Editar
                 </button>
                 <button
                   onClick={() => handleDelete(painting)}
-                  className="flex items-center justify-center rounded-md border border-red-300 px-3 py-2 text-red-600 transition-colors hover:bg-red-50"
+                  className="flex items-center justify-center rounded-lg border-2 border-red-900 bg-red-950/30 px-3 py-2 text-red-400 transition-all hover:bg-red-900/40"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -281,18 +283,20 @@ export default function AdminPaintingsPage() {
         </div>
 
         {paintings.length === 0 && (
-          <div className="py-12 text-center text-gray-500">
-            No hay pinturas. Crea una nueva para comenzar.
+          <div className="rounded-lg border-2 border-red-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">
+            <p className="text-xl font-semibold text-red-100">
+              No hay pinturas. Crea una nueva para comenzar.
+            </p>
           </div>
         )}
       </div>
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border-2 border-red-900 bg-black/90 p-6 shadow-2xl shadow-red-900/50 backdrop-blur-md">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-red-100">
                 {editingPainting ? "Editar Pintura" : "Nueva Pintura"}
               </h2>
               <button
@@ -300,7 +304,7 @@ export default function AdminPaintingsPage() {
                   setShowModal(false);
                   resetForm();
                 }}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 transition-colors hover:text-red-400"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -309,11 +313,11 @@ export default function AdminPaintingsPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Image Upload */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Imagen *
                 </label>
                 {imagePreview && (
-                  <div className="relative mb-3 aspect-[3/4] w-48 overflow-hidden rounded-md">
+                  <div className="relative mb-3 aspect-[3/4] w-48 overflow-hidden rounded-md border-2 border-red-900/30">
                     <Image
                       src={imagePreview}
                       alt="Preview"
@@ -328,48 +332,51 @@ export default function AdminPaintingsPage() {
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100 file:mr-4 file:rounded-lg file:border-2 file:border-red-900 file:bg-red-900/20 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-red-100 file:hover:bg-red-900/40"
                   required={!editingPainting}
                 />
               </div>
 
               {/* Title */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Título *
                 </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full rounded-md border border-gray-300 px-4 py-2"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  placeholder="Título de la obra"
                   required
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Descripción
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full rounded-md border border-gray-300 px-4 py-2"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
                   rows={3}
+                  placeholder="Descripción de la obra"
                 />
               </div>
 
               {/* Price */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Precio (CLP) *
                 </label>
                 <input
                   type="number"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  className="w-full rounded-md border border-gray-300 px-4 py-2"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  placeholder="0"
                   required
                 />
               </div>
@@ -377,26 +384,28 @@ export default function AdminPaintingsPage() {
               {/* Dimensions */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-900">
+                  <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                     Ancho (cm) *
                   </label>
                   <input
                     type="number"
                     value={formData.width}
                     onChange={(e) => setFormData({ ...formData, width: e.target.value })}
-                    className="w-full rounded-md border border-gray-300 px-4 py-2"
+                    className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                    placeholder="0"
                     required
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-900">
+                  <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                     Alto (cm) *
                   </label>
                   <input
                     type="number"
                     value={formData.height}
                     onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-                    className="w-full rounded-md border border-gray-300 px-4 py-2"
+                    className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                    placeholder="0"
                     required
                   />
                 </div>
@@ -404,27 +413,28 @@ export default function AdminPaintingsPage() {
 
               {/* Category */}
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Categoría
                 </label>
                 <input
                   type="text"
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full rounded-md border border-gray-300 px-4 py-2"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  placeholder="Categoría (opcional)"
                 />
               </div>
 
               {/* Available */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   id="available"
                   checked={formData.available}
                   onChange={(e) => setFormData({ ...formData, available: e.target.checked })}
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-5 w-5 rounded border-2 border-red-900 bg-gray-900 text-red-600 focus:ring-2 focus:ring-red-600/50"
                 />
-                <label htmlFor="available" className="text-sm font-medium text-gray-900">
+                <label htmlFor="available" className="text-sm font-semibold text-red-100">
                   Disponible
                 </label>
               </div>
@@ -434,7 +444,7 @@ export default function AdminPaintingsPage() {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-md bg-gray-900 px-6 py-3 text-white transition-colors hover:bg-gray-800 disabled:bg-gray-400"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50 disabled:from-gray-800 disabled:to-gray-700 disabled:text-gray-400"
                 >
                   {uploading ? (
                     <>
@@ -451,7 +461,7 @@ export default function AdminPaintingsPage() {
                     setShowModal(false);
                     resetForm();
                   }}
-                  className="rounded-md border border-gray-300 px-6 py-3 text-gray-700 transition-colors hover:bg-gray-50"
+                  className="rounded-lg border-2 border-red-900 bg-red-900/20 px-6 py-3 font-semibold text-red-100 transition-all hover:bg-red-900/40"
                 >
                   Cancelar
                 </button>

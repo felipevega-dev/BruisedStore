@@ -17,30 +17,32 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black px-4">
         <div className="text-center">
-          <ShoppingBag className="mx-auto mb-4 h-24 w-24 text-gray-300" />
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">
-            Tu carrito está vacío
-          </h2>
-          <p className="mb-6 text-gray-600">
-            Agrega algunas obras a tu carrito para continuar
-          </p>
-          <Link
-            href="/"
-            className="inline-block rounded-md bg-gray-900 px-6 py-3 text-white transition-colors hover:bg-gray-800"
-          >
-            Ver Obras
-          </Link>
+          <div className="rounded-lg border-2 border-red-900 bg-black/60 p-12 backdrop-blur-sm shadow-2xl shadow-red-900/30">
+            <ShoppingBag className="mx-auto mb-4 h-24 w-24 text-red-600" />
+            <h2 className="mb-2 text-3xl font-bold text-red-100">
+              Tu carrito está vacío
+            </h2>
+            <p className="mb-6 text-gray-400">
+              Agrega algunas obras a tu carrito para continuar
+            </p>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50"
+            >
+              Ver Obras
+            </Link>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 sm:py-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="mb-8 text-3xl font-bold text-gray-900">
+        <h1 className="mb-8 text-4xl font-bold text-red-100 sm:text-5xl">
           Carrito de Compras
         </h1>
 
@@ -51,10 +53,10 @@ export default function CartPage() {
               {items.map((item) => (
                 <div
                   key={item.painting.id}
-                  className="flex gap-4 rounded-lg bg-white p-4 shadow-sm sm:gap-6"
+                  className="flex gap-4 rounded-lg border-2 border-red-900/30 bg-black/60 p-4 shadow-xl shadow-red-900/20 backdrop-blur-sm sm:gap-6"
                 >
                   {/* Image */}
-                  <div className="relative h-32 w-24 flex-shrink-0 overflow-hidden rounded-md sm:h-40 sm:w-32">
+                  <div className="relative h-32 w-24 flex-shrink-0 overflow-hidden rounded-md border-2 border-red-900/30 sm:h-40 sm:w-32">
                     <Image
                       src={item.painting.imageUrl}
                       alt={item.painting.title}
@@ -70,18 +72,18 @@ export default function CartPage() {
                       <div className="flex items-start justify-between">
                         <div>
                           <Link href={`/obra/${item.painting.id}`}>
-                            <h3 className="text-lg font-semibold text-gray-900 hover:text-gray-700">
+                            <h3 className="text-lg font-bold text-red-100 transition-colors hover:text-red-400">
                               {item.painting.title}
                             </h3>
                           </Link>
-                          <p className="mt-1 text-sm text-gray-600">
+                          <p className="mt-1 text-sm text-gray-400">
                             {item.painting.dimensions.width} x{" "}
                             {item.painting.dimensions.height} cm
                           </p>
                         </div>
                         <button
                           onClick={() => removeFromCart(item.painting.id)}
-                          className="text-gray-400 transition-colors hover:text-red-600"
+                          className="text-gray-400 transition-colors hover:text-red-400"
                           aria-label="Eliminar del carrito"
                         >
                           <Trash2 className="h-5 w-5" />
@@ -96,19 +98,19 @@ export default function CartPage() {
                           onClick={() =>
                             updateQuantity(item.painting.id, item.quantity - 1)
                           }
-                          className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 text-gray-600 transition-colors hover:bg-gray-100"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-red-900 bg-red-900/20 text-red-100 transition-colors hover:bg-red-900/40"
                           aria-label="Disminuir cantidad"
                         >
                           <Minus className="h-4 w-4" />
                         </button>
-                        <span className="w-8 text-center font-medium text-gray-900">
+                        <span className="w-8 text-center font-bold text-red-100">
                           {item.quantity}
                         </span>
                         <button
                           onClick={() =>
                             updateQuantity(item.painting.id, item.quantity + 1)
                           }
-                          className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 text-gray-600 transition-colors hover:bg-gray-100"
+                          className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-red-900 bg-red-900/20 text-red-100 transition-colors hover:bg-red-900/40"
                           aria-label="Aumentar cantidad"
                         >
                           <Plus className="h-4 w-4" />
@@ -116,7 +118,7 @@ export default function CartPage() {
                       </div>
 
                       {/* Price */}
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-xl font-bold text-red-500">
                         {formatPrice(item.painting.price * item.quantity)}
                       </p>
                     </div>
@@ -127,7 +129,7 @@ export default function CartPage() {
 
             <button
               onClick={clearCart}
-              className="mt-4 text-sm text-gray-600 hover:text-red-600 hover:underline"
+              className="mt-4 text-sm font-semibold text-gray-400 transition-colors hover:text-red-400 hover:underline"
             >
               Vaciar carrito
             </button>
@@ -135,38 +137,38 @@ export default function CartPage() {
 
           {/* Summary */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 rounded-lg bg-white p-6 shadow-md">
-              <h2 className="mb-4 text-xl font-semibold text-gray-900">
+            <div className="sticky top-24 rounded-lg border-2 border-red-900 bg-black/60 p-6 shadow-2xl shadow-red-900/30 backdrop-blur-sm">
+              <h2 className="mb-4 text-2xl font-bold text-red-100">
                 Resumen del Pedido
               </h2>
 
-              <div className="space-y-3 border-b pb-4">
-                <div className="flex justify-between text-gray-600">
+              <div className="space-y-3 border-b border-red-900/30 pb-4">
+                <div className="flex justify-between text-gray-300">
                   <span>Subtotal</span>
-                  <span>{formatPrice(getTotal())}</span>
+                  <span className="font-semibold">{formatPrice(getTotal())}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-300">
                   <span>Envío</span>
-                  <span>A calcular</span>
+                  <span className="text-gray-400">A calcular</span>
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-between text-lg font-bold text-gray-900">
-                <span>Total</span>
-                <span>{formatPrice(getTotal())}</span>
+              <div className="mt-4 flex justify-between border-t border-red-900/30 pt-4 text-xl font-bold">
+                <span className="text-red-100">Total</span>
+                <span className="text-red-500">{formatPrice(getTotal())}</span>
               </div>
 
-              <button className="mt-6 w-full rounded-md bg-gray-900 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-gray-800">
+              <button className="mt-6 w-full rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 text-base font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50">
                 Proceder al Pago
               </button>
 
-              <p className="mt-4 text-center text-xs text-gray-500">
+              <p className="mt-4 text-center text-xs text-gray-400">
                 El costo de envío se calculará durante el proceso de pago
               </p>
 
               <Link
                 href="/"
-                className="mt-4 block text-center text-sm text-gray-600 hover:text-gray-900 hover:underline"
+                className="mt-4 block text-center text-sm font-semibold text-gray-400 transition-colors hover:text-red-400 hover:underline"
               >
                 Continuar comprando
               </Link>
