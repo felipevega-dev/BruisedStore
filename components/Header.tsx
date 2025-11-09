@@ -3,14 +3,55 @@
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { ShoppingCart, User, LogOut, Shield } from "lucide-react";
-import { useState } from "react";
+import { ShoppingCart, User, LogOut, Shield, Bell } from "lucide-react";
+import { useState, useEffect } from "react";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Header() {
   const { getItemCount } = useCart();
   const { user, isAdmin, signOut } = useAuth();
   const itemCount = getItemCount();
   const [showMenu, setShowMenu] = useState(false);
+  const [pendingOrdersCount, setPendingOrdersCount] = useState(0);
+
+  // Listener para órdenes pendientes (solo para admins)
+  useEffect(() => {
+    if (!isAdmin) {
+      setPendingOrdersCount(0);
+      return;
+    }
+
+    // Listener para órdenes de compra pendientes
+    const ordersQuery = query(
+      collection(db, "orders"),
+      where("status", "==", "pending")
+    );
+
+    // Listener para órdenes personalizadas pendientes
+    const customOrdersQuery = query(
+      collection(db, "customOrders"),
+      where("status", "==", "pending")
+    );
+
+    const unsubscribeOrders = onSnapshot(ordersQuery, (snapshot) => {
+      const ordersCount = snapshot.size;
+      
+      // También escuchar custom orders
+      const unsubscribeCustomOrders = onSnapshot(customOrdersQuery, (customSnapshot) => {
+        const customOrdersCount = customSnapshot.size;
+        setPendingOrdersCount(ordersCount + customOrdersCount);
+      });
+
+      return () => {
+        unsubscribeCustomOrders();
+      };
+    });
+
+    return () => {
+      unsubscribeOrders();
+    };
+  }, [isAdmin]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -54,14 +95,19 @@ export default function Header() {
               )}
             </Link>
 
-            {/* Admin Button - Solo visible para admins */}
+            {/* Admin Button - Solo visible para admins con badge de notificaciones */}
             {isAdmin && (
               <Link
                 href="/admin"
-                className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 sm:text-base"
+                className="relative flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 sm:text-base"
               >
                 <Shield className="h-4 w-4" />
                 <span className="hidden sm:inline">Admin</span>
+                {pendingOrdersCount > 0 && (
+                  <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-yellow-400 text-xs font-bold text-black shadow-lg animate-pulse">
+                    {pendingOrdersCount}
+                  </span>
+                )}
               </Link>
             )}
 
@@ -124,3 +170,4 @@ export default function Header() {
     </header>
   );
 }
+

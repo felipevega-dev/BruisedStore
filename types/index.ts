@@ -17,6 +17,8 @@ export interface Painting {
 
 export type Orientation = 'horizontal' | 'vertical';
 
+// ========== CUSTOM ORDERS (Obras a Pedido) ==========
+
 export interface CustomOrderSize {
   name: string;
   width: number;
@@ -37,6 +39,49 @@ export interface CustomOrder {
   createdAt: Date;
   notes?: string;
 }
+
+// ========== REGULAR ORDERS (Compras de Pinturas) ==========
+
+export interface ShippingInfo {
+  fullName: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  region: string;
+  postalCode?: string;
+  notes?: string;
+}
+
+export interface PaymentInfo {
+  method: 'webpay' | 'mercadopago' | 'transferencia' | 'efectivo';
+  status: PaymentStatus;
+  transactionId?: string;
+  paidAt?: Date;
+}
+
+export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
+export type ShippingStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+export type OrderStatus = 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+
+export interface Order {
+  id?: string;
+  orderNumber: string; // Número de orden único (ej: ORD-20241109-001)
+  userId?: string; // ID del usuario si está logueado
+  items: CartItem[];
+  subtotal: number;
+  shippingCost: number;
+  total: number;
+  shippingInfo: ShippingInfo;
+  paymentInfo: PaymentInfo;
+  status: OrderStatus;
+  shippingStatus: ShippingStatus;
+  createdAt: Date;
+  updatedAt: Date;
+  notes?: string;
+}
+
+// ========== CART ==========
 
 export interface CartItem {
   painting: Painting;

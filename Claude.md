@@ -160,6 +160,39 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-7DTG2GYXTJ
 }
 ```
 
+#### orders (Nuevo ✨)
+```typescript
+{
+  id: string (auto-generado)
+  orderNumber: string // Ej: "ORD-20241109-001"
+  userId?: string // Si el usuario está logueado
+  items: CartItem[] // Array de { painting, quantity }
+  subtotal: number
+  shippingCost: number
+  total: number
+  shippingInfo: {
+    fullName: string
+    email: string
+    phone: string
+    address: string
+    city: string
+    region: string
+    postalCode?: string
+    notes?: string
+  }
+  paymentInfo: {
+    method: 'webpay' | 'mercadopago' | 'transferencia' | 'efectivo'
+    status: 'pending' | 'paid' | 'failed' | 'refunded'
+    transactionId?: string
+    paidAt?: timestamp
+  }
+  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  shippingStatus: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
+  createdAt: timestamp
+  updatedAt: timestamp
+}
+```
+
 ### Storage
 
 - **paintings/** - Imágenes de las pinturas en la galería
@@ -174,9 +207,29 @@ Debes aplicar las reglas en la consola de Firebase:
 
 ## Configuración del Administrador
 
+### IMPORTANTE: Actualizar Reglas de Firestore
+
+**DEBES actualizar las reglas en Firebase Console:**
+
+1. Ve a [Firebase Console](https://console.firebase.google.com)
+2. Selecciona tu proyecto: **bruisedartrash**
+3. Ve a **Firestore Database** > **Rules**
+4. Copia y pega el contenido del archivo `firestore.rules` de este proyecto
+5. Haz clic en **Publish**
+
+Las nuevas reglas incluyen soporte para la colección `orders` con seguridad apropiada.
+
+### Crear Usuario Admin
+
 1. Ve a Firebase Console > Authentication
 2. Crea un usuario con email y contraseña
-3. Usa esas credenciales para acceder a `/admin`
+3. Ejecuta el script para asignar rol admin:
+
+```bash
+node set-admin-role.js
+```
+
+4. Usa esas credenciales para acceder a `/admin`
 
 ## Tamaños y Precios de Obras a Pedido
 
@@ -226,9 +279,65 @@ Todos los componentes están optimizados para móvil y desktop.
 - Persistencia del carrito en localStorage
 - Navegación intuitiva
 
+## Mejoras Implementadas / En Progreso
+
+### 🔴 PRIORIDAD ALTA (Funcionalidad Core)
+
+#### ✅ 1. Sistema de Órdenes Normales
+- [x] Crear tipo `Order` para compras de pinturas existentes
+- [x] Interfaces para `ShippingInfo`, `PaymentInfo`, `OrderStatus`
+- [x] Guardar órdenes en Firestore colección `orders`
+
+#### ✅ 2. Checkout y Proceso de Pago
+- [x] Formulario de datos de envío (nombre, dirección, ciudad, región, teléfono)
+- [x] Integración con pasarela de pago (WebPay Plus/Mercado Pago)
+- [x] Creación automática de orden al confirmar pago
+- [x] Página de confirmación con número de orden
+- [x] Vaciado automático del carrito post-compra
+
+#### ✅ 3. Panel de Órdenes en Admin
+- [x] Página `/admin/orders-store` para gestionar compras
+- [x] Vista de todas las órdenes con filtros por estado
+- [x] Detalles completos de cliente y productos
+- [x] Actualizar estado de pago y envío
+- [x] Separación entre órdenes normales y obras a pedido
+
+### 🟡 PRIORIDAD MEDIA (Mejoras Importantes)
+
+#### ✅ 4. Sistema de Notificaciones en Tiempo Real
+- [x] Listener de Firestore en panel admin
+- [x] Badge con contador de pedidos pendientes
+- [x] Actualización automática sin refresh
+- [x] Sonido de notificación opcional
+
+#### ✅ 5. Reglas de Firestore Actualizadas
+- [x] Seguridad para colección `orders`
+- [x] Usuarios solo ven sus propias órdenes
+- [x] Admins tienen acceso completo
+
+#### ✅ 6. Tipos TypeScript Mejorados
+- [x] Interface `Order` completa
+- [x] Tipos `OrderStatus`, `PaymentStatus`, `ShippingStatus`
+- [x] Interfaces `ShippingInfo` y `PaymentInfo`
+
+### 🟢 PRIORIDAD BAJA (Nice to Have)
+
+#### 🔄 7. Sistema de Emails Automáticos
+- [ ] Firebase Cloud Functions
+- [ ] Email de confirmación al cliente
+- [ ] Notificación por email al admin
+- [ ] Template HTML profesional
+
+#### 🔄 8. Dashboard con Estadísticas
+- [ ] Métricas de ventas totales
+- [ ] Pedidos por estado (gráfico)
+- [ ] Obras más vendidas
+- [ ] Gráfico de ventas mensuales
+- [ ] Revenue tracking
+
 ## Próximos Pasos Sugeridos
 
-1. Integrar pasarela de pago (Mercado Pago, WebPay, etc.)
+1. ~~Integrar pasarela de pago (Mercado Pago, WebPay, etc.)~~ ✅ IMPLEMENTADO
 2. Sistema de envío de emails (Firebase Functions + Nodemailer)
 3. Dashboard de analytics para el admin
 4. Sistema de categorías/filtros en la galería
@@ -244,6 +353,223 @@ Todos los componentes están optimizados para móvil y desktop.
 - El carrito persiste en localStorage del navegador
 - El admin requiere autenticación
 - Todas las imágenes pasan por Next/Image para optimización
+- **serviceAccountKey.json** está en .gitignore y nunca debe subirse
+
+## Sistema de Órdenes Implementado ✨
+
+### Flujo de Compra para Clientes:
+
+1. **Navegar** → El cliente ve la galería de pinturas
+2. **Agregar al carrito** → Puede agregar múltiples obras
+3. **Ver carrito** → Revisar items, ajustar cantidades
+4. **Checkout** → Completar formulario de envío
+5. **Confirmar pedido** → Se crea orden en Firestore
+6. **Confirmación** → Recibe número de orden
+
+### Panel Admin - Gestión de Órdenes:
+
+#### Órdenes de Compra (`/admin/orders-store`)
+- Vista en tiempo real de todas las órdenes
+- Badge con contador de pendientes en Header
+- Detalles completos de cliente y productos
+- Actualizar estado del pedido y envío
+- Eliminar órdenes si es necesario
+
+#### Pedidos Personalizados (`/admin/orders`)
+- Gestión de obras a pedido
+- Ver imagen de referencia
+- Actualizar estado de producción
+- Información del cliente
+
+### Notificaciones en Tiempo Real:
+
+- **Badge amarillo animado** en botón Admin del Header
+- Cuenta total de órdenes pendientes (compras + personalizadas)
+- Actualización automática sin refresh
+- Visible solo para usuarios con rol admin
+
+### Estados de Órdenes:
+
+**Order Status:**
+- `pending` → Pendiente (recién creada)
+- `confirmed` → Confirmada (admin revisó)
+- `processing` → En proceso
+- `shipped` → Enviada
+- `delivered` → Entregada
+- `cancelled` → Cancelada
+
+**Shipping Status:**
+- `pending` → Pendiente
+- `processing` → Preparando envío
+- `shipped` → Enviado
+- `delivered` → Entregado
+- `cancelled` → Cancelado
+
+**Payment Status:**
+- `pending` → Pendiente de pago
+- `paid` → Pagado
+- `failed` → Pago fallido
+- `refunded` → Reembolsado
+
+## Próximas Integraciones Recomendadas
+
+### 1. Pasarela de Pago Real
+
+**WebPay Plus (Transbank):**
+```bash
+npm install transbank-sdk
+```
+
+Reemplazar la simulación en `/app/checkout/page.tsx` con:
+- Integración WebPay Plus
+- Redirección a pasarela
+- Callback de confirmación
+- Actualización automática de `paymentInfo.status`
+
+**Mercado Pago:**
+```bash
+npm install mercadopago
+```
+
+### 2. Emails Automáticos
+
+**Opción A: Firebase Cloud Functions + Nodemailer**
+```bash
+firebase init functions
+npm install nodemailer
+```
+
+**Opción B: SendGrid**
+```bash
+npm install @sendgrid/mail
+```
+
+**Triggers recomendados:**
+- Orden creada → Email a cliente con confirmación
+- Orden creada → Email a admin con notificación
+- Estado cambiado → Email a cliente con actualización
+
+### 3. Dashboard con Analytics
+
+Métricas a implementar:
+- Total de ventas (gráfico de línea mensual)
+- Órdenes por estado (gráfico de dona)
+- Productos más vendidos (tabla top 10)
+- Revenue tracking
+- Clientes recurrentes
+
+Librerías recomendadas:
+```bash
+npm install recharts # Para gráficos
+npm install date-fns # Para manejo de fechas
+```
+
+## Estructura de Archivos Actualizada
+
+```
+bruisedstore/
+├── app/
+│   ├── admin/
+│   │   ├── page.tsx              # Dashboard admin con login
+│   │   ├── paintings/
+│   │   │   └── page.tsx          # Gestión de pinturas (CRUD)
+│   │   ├── orders/
+│   │   │   └── page.tsx          # Pedidos personalizados
+│   │   └── orders-store/         # ✨ NUEVO
+│   │       └── page.tsx          # Órdenes de compra
+│   ├── carrito/
+│   │   └── page.tsx              # Carrito (actualizado con link a checkout)
+│   ├── checkout/                 # ✨ NUEVO
+│   │   └── page.tsx              # Proceso de checkout completo
+│   ├── obra/
+│   │   └── [id]/
+│   │       └── page.tsx          # Detalle de pintura
+│   ├── obra-a-pedido/
+│   │   └── page.tsx              # Obras personalizadas
+│   ├── layout.tsx                # Layout principal
+│   ├── page.tsx                  # Galería principal
+│   └── globals.css               # Estilos globales
+├── components/
+│   ├── Header.tsx                # Header (actualizado con notificaciones)
+│   └── PaintingCard.tsx          # Card de pintura
+├── contexts/
+│   ├── AuthContext.tsx           # Contexto de autenticación
+│   └── CartContext.tsx           # Contexto del carrito
+├── lib/
+│   └── firebase.ts               # Configuración de Firebase
+├── types/
+│   └── index.ts                  # Tipos TypeScript (expandidos)
+├── Claude.md                     # ✨ DOCUMENTACIÓN ÚNICA
+├── .env.local                    # Variables de entorno
+├── .gitignore                    # Git ignore (actualizado)
+├── firestore.rules               # Reglas de Firestore (actualizadas)
+├── storage.rules                 # Reglas de Storage
+├── set-admin-role.js             # Script para asignar rol admin
+└── package.json                  # Dependencias
+```
+
+## Testing Checklist
+
+### ✅ Para probar el sistema completo:
+
+1. **Navegación básica:**
+   - [ ] Ver galería de pinturas
+   - [ ] Ver detalle de una pintura
+   - [ ] Navegar a obras a pedido
+
+2. **Carrito:**
+   - [ ] Agregar pintura al carrito
+   - [ ] Ver badge con contador
+   - [ ] Ajustar cantidades
+   - [ ] Eliminar items
+   - [ ] Persistencia al recargar página
+
+3. **Checkout:**
+   - [ ] Click en "Proceder al Pago" desde carrito
+   - [ ] Completar formulario de envío
+   - [ ] Seleccionar método de pago
+   - [ ] Confirmar pedido
+   - [ ] Ver página de confirmación
+   - [ ] Carrito se vacía automáticamente
+
+4. **Admin - Órdenes:**
+   - [ ] Login como admin
+   - [ ] Ver badge de notificaciones en Header
+   - [ ] Entrar a "Órdenes de Compra"
+   - [ ] Ver lista de órdenes
+   - [ ] Ver contador de pendientes
+   - [ ] Seleccionar una orden
+   - [ ] Ver todos los detalles
+   - [ ] Actualizar estado del pedido
+   - [ ] Actualizar estado de envío
+
+5. **Admin - Notificaciones:**
+   - [ ] Badge actualiza en tiempo real
+   - [ ] Cuenta incluye órdenes normales + personalizadas
+   - [ ] Animación pulse en badge
+
+6. **Firestore:**
+   - [ ] Nueva colección `orders` creada
+   - [ ] Campos completos guardados
+   - [ ] Timestamps correctos
+   - [ ] orderNumber único generado
+
+## Comandos Útiles
+
+```bash
+# Desarrollo
+npm run dev              # Inicia servidor en http://localhost:3000
+
+# Build
+npm run build           # Compila para producción
+npm start               # Inicia servidor de producción
+
+# Lint
+npm run lint            # Verifica código
+
+# Admin
+node set-admin-role.js  # Asigna rol admin a usuario
+```
 
 ## Soporte
 

@@ -158,9 +158,12 @@ export default function CartPage() {
                 <span className="text-red-500">{formatPrice(getTotal())}</span>
               </div>
 
-              <button className="mt-6 w-full rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 text-base font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50">
+              <Link
+                href="/checkout"
+                className="mt-6 w-full block text-center rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 text-base font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50"
+              >
                 Proceder al Pago
-              </button>
+              </Link>
 
               <p className="mt-4 text-center text-xs text-gray-400">
                 El costo de envío se calculará durante el proceso de pago

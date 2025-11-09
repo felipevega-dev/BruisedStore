@@ -8,6 +8,11 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.role == 'admin';
     }
 
+    // Helper function para verificar si el usuario es el dueño del documento
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
     // Reglas para paintings
     match /paintings/{paintingId} {
       // Cualquiera puede leer las pinturas
@@ -17,13 +22,27 @@ service cloud.firestore {
       allow create, update, delete: if isAdmin();
     }
 
-    // Reglas para custom orders
+    // Reglas para custom orders (obras a pedido)
     match /customOrders/{orderId} {
       // Cualquiera puede crear pedidos personalizados
       allow create: if true;
 
       // Cualquiera puede leer (para que los usuarios vean sus propios pedidos)
       allow read: if true;
+
+      // Solo administradores pueden actualizar/eliminar
+      allow update, delete: if isAdmin();
+    }
+
+    // Reglas para orders (compras normales de pinturas)
+    match /orders/{orderId} {
+      // Cualquiera puede crear órdenes (usuarios anónimos pueden comprar)
+      allow create: if true;
+
+      // Lectura: Admin puede ver todas, usuarios solo las suyas
+      allow read: if isAdmin() || 
+                     (request.auth != null && resource.data.userId == request.auth.uid) ||
+                     (request.auth == null && true); // Permite lectura temporal para confirmación
 
       // Solo administradores pueden actualizar/eliminar
       allow update, delete: if isAdmin();

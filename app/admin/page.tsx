@@ -143,12 +143,31 @@ export default function AdminPage() {
           </Link>
 
           <Link
-            href="/admin/orders"
+            href="/admin/orders-store"
             className="group rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
           >
             <div className="flex items-center gap-4">
               <div className="rounded-lg border-2 border-red-900 bg-red-950/30 p-4 transition-all group-hover:border-red-600 group-hover:bg-red-950/50">
                 <Package className="h-8 w-8 text-red-400" />
+              </div>
+              <div>
+                <h2 className="mb-2 text-xl font-bold text-red-100">
+                  Órdenes de Compra
+                </h2>
+                <p className="text-gray-400">
+                  Ver y gestionar pedidos de pinturas
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/orders"
+            className="group rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+          >
+            <div className="flex items-center gap-4">
+              <div className="rounded-lg border-2 border-red-900 bg-red-950/30 p-4 transition-all group-hover:border-red-600 group-hover:bg-red-950/50">
+                <Palette className="h-8 w-8 text-red-400" />
               </div>
               <div>
                 <h2 className="mb-2 text-xl font-bold text-red-100">
