@@ -155,41 +155,41 @@ export default function CustomOrderPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12">
+    <div className="min-h-screen bg-white py-6 sm:py-8 lg:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-7xl">
           {/* Header */}
-          <div className="mb-8 text-center">
-            <div className="mb-4 flex items-center justify-center gap-3">
-              <Paintbrush className="h-10 w-10 text-red-600" />
-              <h1 className="text-4xl font-black text-black sm:text-5xl">
+          <div className="mb-6 text-center sm:mb-8">
+            <div className="mb-3 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3">
+              <Paintbrush className="h-8 w-8 text-red-600 sm:h-10 sm:w-10" />
+              <h1 className="text-3xl font-black text-black sm:text-4xl lg:text-5xl">
                 🎨 Obra a Pedido
               </h1>
             </div>
-            <p className="text-lg text-gray-700 font-semibold">
+            <p className="px-4 text-base text-gray-700 font-semibold sm:text-lg">
               Convierte tus visiones en realidad. Cada obra es única, cada
               trazo cuenta una historia.
             </p>
-            <div className="mx-auto mt-4 h-2 w-24 bg-red-600"></div>
+            <div className="mx-auto mt-3 h-1 w-20 bg-red-600 sm:mt-4 sm:h-2 sm:w-24"></div>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-2">
+          <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
             {/* Preview Section */}
             <div className="order-2 lg:order-1">
-              <div className="sticky top-24 border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <h2 className="mb-6 text-2xl font-black text-black border-b-4 border-black pb-3">
+              <div className="lg:sticky lg:top-24 border-4 border-black bg-white p-4 sm:p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                <h2 className="mb-4 text-xl font-black text-black border-b-4 border-black pb-2 sm:mb-6 sm:text-2xl sm:pb-3">
                   Vista Previa del Lienzo
                 </h2>
 
                 {/* Canvas Preview - Dinámico según tamaño seleccionado */}
-                <div className="mb-6 flex items-center justify-center bg-gray-50 p-6 border-4 border-black">
+                <div className="mb-4 flex items-center justify-center bg-gray-50 p-3 border-4 border-black sm:mb-6 sm:p-6">
                   <div
                     className="relative overflow-hidden border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                     style={{
-                      width: `${Math.min(canvasWidth * 8, 500)}px`,
-                      height: `${Math.min(canvasHeight * 8, 500)}px`,
-                      maxWidth: "100vw",
-                      maxHeight: "90vh",
+                      width: `${Math.min(canvasWidth * 6, 400)}px`,
+                      height: `${Math.min(canvasHeight * 6, 400)}px`,
+                      maxWidth: "calc(100vw - 80px)",
+                      maxHeight: "60vh",
                     }}
                   >
                     {imagePreview ? (
@@ -203,12 +203,12 @@ export default function CustomOrderPage() {
                       />
                     ) : (
                       <div className="flex h-full items-center justify-center bg-gray-100">
-                        <div className="text-center">
-                          <Upload className="mx-auto mb-3 h-16 w-16 text-gray-400" />
-                          <p className="text-lg font-bold text-gray-600">
+                        <div className="text-center px-4">
+                          <Upload className="mx-auto mb-2 h-12 w-12 text-gray-400 sm:mb-3 sm:h-16 sm:w-16" />
+                          <p className="text-sm font-bold text-gray-600 sm:text-lg">
                             Tu imagen aparecerá aquí
                           </p>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-xs text-gray-500 mt-1 sm:text-sm">
                             Sube una imagen de referencia
                           </p>
                         </div>
@@ -219,37 +219,37 @@ export default function CustomOrderPage() {
 
                 {/* Info */}
                 <div className="space-y-0 border-4 border-black bg-yellow-50">
-                  <div className="flex items-center justify-between border-b-4 border-black p-4 bg-white">
-                    <span className="font-bold text-black">
+                  <div className="flex items-center justify-between border-b-4 border-black p-3 bg-white sm:p-4">
+                    <span className="text-sm font-bold text-black sm:text-base">
                       Tamaño:
                     </span>
-                    <span className="font-black text-red-600 text-lg">
+                    <span className="text-base font-black text-red-600 sm:text-lg">
                       {selectedSize.name}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between border-b-4 border-black p-4">
-                    <span className="font-bold text-black">
+                  <div className="flex items-center justify-between border-b-4 border-black p-3 sm:p-4">
+                    <span className="text-sm font-bold text-black sm:text-base">
                       Dimensiones:
                     </span>
-                    <span className="font-black text-black">
+                    <span className="text-sm font-black text-black sm:text-base">
                       {displayWidth} x {displayHeight} cm
                     </span>
                   </div>
-                  <div className="flex items-center justify-between border-b-4 border-black p-4 bg-white">
-                    <span className="font-bold text-black">
+                  <div className="flex items-center justify-between border-b-4 border-black p-3 bg-white sm:p-4">
+                    <span className="text-sm font-bold text-black sm:text-base">
                       Orientación:
                     </span>
-                    <span className="font-black capitalize text-black">
+                    <span className="text-sm font-black capitalize text-black sm:text-base">
                       {formData.orientation === "horizontal"
                         ? "Horizontal"
                         : "Vertical"}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-5 bg-red-600">
-                    <span className="text-xl font-black text-white">
+                  <div className="flex flex-col items-center justify-between gap-2 p-4 bg-red-600 sm:flex-row sm:gap-0 sm:p-5">
+                    <span className="text-lg font-black text-white sm:text-xl">
                       Precio Total:
                     </span>
-                    <span className="text-4xl font-black text-white">
+                    <span className="text-3xl font-black text-white sm:text-4xl">
                       {formatPrice(totalPrice)}
                     </span>
                   </div>
@@ -261,7 +261,7 @@ export default function CustomOrderPage() {
             <div className="order-1 lg:order-2">
               <form
                 onSubmit={handleSubmit}
-                className="space-y-6 border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+                className="space-y-4 border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:space-y-6 sm:p-6 sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
               >
                 {/* Image Upload */}
                 <div>
@@ -294,35 +294,35 @@ export default function CustomOrderPage() {
 
                 {/* Orientation */}
                 <div>
-                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                  <label className="mb-2 block text-xs font-black uppercase tracking-wide text-black sm:mb-3 sm:text-sm">
                     Orientación del Lienzo *
                     {imagePreview && (
-                      <span className="ml-2 text-xs font-semibold normal-case text-gray-600">
+                      <span className="ml-1 text-[10px] font-semibold normal-case text-gray-600 sm:ml-2 sm:text-xs">
                         (Detectada automáticamente)
                       </span>
                     )}
                   </label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <button
                       type="button"
                       onClick={() =>
                         setFormData({ ...formData, orientation: "vertical" })
                       }
-                      className={`flex flex-col items-center gap-3 border-4 p-6 transition-all ${
+                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 sm:p-6 ${
                         formData.orientation === "vertical"
                           ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
                           : "border-black bg-white hover:bg-gray-50"
                       }`}
                     >
                       <div
-                        className={`h-20 w-14 border-4 ${
+                        className={`h-16 w-12 border-4 sm:h-20 sm:w-14 ${
                           formData.orientation === "vertical"
                             ? "border-red-600 bg-red-100"
                             : "border-black bg-gray-100"
                         }`}
                       ></div>
                       <span
-                        className={`text-sm font-black ${
+                        className={`text-xs font-black sm:text-sm ${
                           formData.orientation === "vertical"
                             ? "text-red-600"
                             : "text-black"
@@ -337,21 +337,21 @@ export default function CustomOrderPage() {
                       onClick={() =>
                         setFormData({ ...formData, orientation: "horizontal" })
                       }
-                      className={`flex flex-col items-center gap-3 border-4 p-6 transition-all ${
+                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 sm:p-6 ${
                         formData.orientation === "horizontal"
                           ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
                           : "border-black bg-white hover:bg-gray-50"
                       }`}
                     >
                       <div
-                        className={`h-14 w-20 border-4 ${
+                        className={`h-12 w-16 border-4 sm:h-14 sm:w-20 ${
                           formData.orientation === "horizontal"
                             ? "border-red-600 bg-red-100"
                             : "border-black bg-gray-100"
                         }`}
                       ></div>
                       <span
-                        className={`text-sm font-black ${
+                        className={`text-xs font-black sm:text-sm ${
                           formData.orientation === "horizontal"
                             ? "text-red-600"
                             : "text-black"
