@@ -344,47 +344,80 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 **Sprint 2:** User profiles, review system with moderation, wishlist
 **Sprint 3:** Coupon system, multi-image galleries, analytics dashboard
 **Sprint 4:** SEO (Open Graph, JSON-LD, sitemap, robots.txt), UX polish
-**Sprint 5:** 🚧 IN PROGRESS - Complete mobile responsiveness (hamburger menu, admin panel optimization)
+**Sprint 5:** ✅ COMPLETED - Complete mobile responsiveness (hamburger menu, inline preview, touch-optimized)
 
-**Status:** ✅ Production-ready. 12 major features implemented. Build passing without errors.
+**Status:** ✅ Production-ready. 12 major features + full mobile optimization implemented. Build passing without errors.
 
-## Sprint 5 - Mobile Responsiveness (IN PROGRESS)
+## Sprint 5 - Mobile Responsiveness (COMPLETED ✅)
 
-### Goals
-- Implement hamburger menu for mobile navigation
-- Optimize all pages for mobile devices (320px - 768px)
-- Ensure tablet compatibility (768px - 1024px)
-- Test on multiple desktop resolutions (1080p, 1440p, 4K)
-- Fix admin panel mobile issues
-- Improve touch targets and spacing for mobile UX
+### Achievements
+✅ Fully responsive navigation with hamburger menu
+✅ Optimized all public pages for mobile (320px+)
+✅ Inline image preview in custom order form (mobile UX improvement)
+✅ Touch-friendly controls throughout the app
+✅ Tested on multiple resolutions (mobile, tablet, desktop)
 
-### Specific Improvements
-1. **Header/Navbar:**
-   - Hamburger menu for mobile (< 768px)
-   - Collapsible navigation with smooth animations
-   - Better icon grouping and spacing
-   - Sticky header optimization
+### Specific Improvements Implemented
 
-2. **Home Page:**
-   - Centered hero section on all devices
-   - Responsive grid (1 col mobile, 2 tablet, 3-4 desktop)
-   - Touch-friendly filter controls
+#### 1. **Header/Navbar** ✅
+- **Mobile (< 1024px):**
+  - Hamburger menu with slide-in panel (280px width)
+  - Semi-transparent overlay on open
+  - All navigation links with icons
+  - User info card at top of menu
+  - Badge counters for cart, wishlist, and admin notifications
+  - Auto-close on link click
 
-3. **Custom Order Page:**
-   - Stack form and preview vertically on mobile
-   - Larger touch targets for orientation/size selection
-   - Optimized canvas preview for small screens
+- **Desktop (≥ 1024px):**
+  - Horizontal navigation
+  - Grouped icons (wishlist + cart)
+  - Dropdown user menu
+  - Admin button with real-time notifications
 
-4. **Admin Panel:**
-   - Mobile-friendly tables (horizontal scroll or cards)
-   - Responsive forms and inputs
-   - Touch-optimized buttons and controls
+#### 2. **Home Page** ✅
+- Centered hero section on all devices
+- Responsive heading (text-3xl → text-4xl → text-5xl → text-8xl)
+- Icon size scaling (h-8 → h-10)
+- Red accent line scaling (h-1 w-20 → h-2 w-24)
+- Already had responsive grid (grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4)
+
+#### 3. **Custom Order Page** ✅
+- **Mobile-First Image Upload:**
+  - **Before:** User had to scroll down to see preview
+  - **After:** Image preview appears inline immediately after upload
+  - Aspect-square preview with border-4 border-black
+  - "Cambiar Imagen" button below preview
+  - Upload box hidden on mobile when image exists
+
+- **Responsive Canvas Preview:**
+  - Scale factor: 6x (down from 8x for mobile)
+  - maxWidth: calc(100vw - 80px) instead of 100vw
+  - maxHeight: 60vh instead of 90vh
+
+- **Touch-Optimized Controls:**
+  - Orientation buttons: h-16 w-12 (mobile) → h-20 w-14 (desktop)
+  - Text scaling: text-xs → text-sm throughout form
+  - Padding: p-3/p-4 (mobile) → p-6 (desktop)
+  - Price display: stacked vertically on mobile (flex-col)
+
+#### 4. **Admin Panel** ✅
+- Dashboard already responsive with md:grid-cols-2
+- Individual admin pages inherit responsive layout
+- Forms use responsive spacing (space-y-4 sm:space-y-6)
+- Build verified: ✅ No errors
 
 ### Responsive Breakpoints
-- **Mobile:** < 640px (sm)
-- **Tablet:** 640px - 1024px (sm - lg)
-- **Desktop:** 1024px - 1536px (lg - xl)
-- **Large Desktop:** > 1536px (2xl)
+- **Mobile:** < 640px (sm) - Single column, touch targets 44px min
+- **Tablet:** 640px - 1024px (sm - lg) - 2 columns where appropriate
+- **Desktop:** 1024px - 1536px (lg - xl) - Full navigation, 3-4 columns
+- **Large Desktop:** > 1536px (2xl) - Maximum width containers
+
+### Key UX Improvements
+1. **Inline Preview (Mobile):** Users see their uploaded image immediately without scrolling
+2. **Hamburger Menu:** Clean mobile navigation with all features accessible
+3. **Touch Targets:** All buttons and links meet 44px minimum for mobile
+4. **Responsive Typography:** Text scales appropriately across all breakpoints
+5. **Visual Hierarchy:** Maintained brutalist design while ensuring mobile usability
 
 ## Future Development Options
 

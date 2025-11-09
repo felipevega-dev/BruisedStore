@@ -268,9 +268,39 @@ export default function CustomOrderPage() {
                   <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
                     Imagen de Referencia *
                   </label>
+
+                  {/* Mobile Preview (only shows when image is uploaded) */}
+                  {imagePreview && (
+                    <div className="mb-4 lg:hidden">
+                      <div className="relative border-4 border-black bg-white p-3">
+                        <div className="relative aspect-square w-full overflow-hidden border-2 border-black">
+                          <Image
+                            src={imagePreview}
+                            alt="Preview"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 1024px) 90vw, 500px"
+                            priority
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="mt-3 flex w-full items-center justify-center gap-2 rounded border-2 border-red-600 bg-white px-4 py-2 text-sm font-bold text-red-600 transition-all hover:bg-red-50"
+                        >
+                          <Upload className="h-4 w-4" />
+                          Cambiar Imagen
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Upload Box (minimized on mobile when image exists) */}
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="group cursor-pointer overflow-hidden border-4 border-dashed border-black bg-gray-50 p-8 transition-all hover:bg-yellow-50 hover:border-red-600"
+                    className={`group cursor-pointer overflow-hidden border-4 border-dashed border-black bg-gray-50 transition-all hover:bg-yellow-50 hover:border-red-600 ${
+                      imagePreview ? 'hidden lg:block lg:p-8' : 'p-6 sm:p-8'
+                    }`}
                   >
                     <Upload className="mx-auto mb-3 h-12 w-12 text-red-600 transition-transform group-hover:scale-110" />
                     <p className="mb-2 text-center font-bold text-black">
@@ -282,14 +312,28 @@ export default function CustomOrderPage() {
                       PNG, JPG hasta 10MB
                     </p>
                   </div>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                    required
-                  />
+
+                  {/* Mobile: Show compact upload button when image exists */}
+                  {!imagePreview && (
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                      required
+                    />
+                  )}
+
+                  {imagePreview && (
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  )}
                 </div>
 
                 {/* Orientation */}
