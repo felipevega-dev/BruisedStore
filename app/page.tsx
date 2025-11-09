@@ -14,7 +14,10 @@ export default function Home() {
   const [filteredPaintings, setFilteredPaintings] = useState<Painting[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<FilterOptions>({
+    search: '',
     category: 'all',
+    minPrice: 0,
+    maxPrice: 0,
     sortBy: 'recent',
   });
 
@@ -64,8 +67,8 @@ export default function Home() {
     }
 
     // Filtro de búsqueda
-    if (filters.searchQuery) {
-      const query = filters.searchQuery.toLowerCase();
+    if (filters.search) {
+      const query = filters.search.toLowerCase();
       result = result.filter(p => 
         p.title.toLowerCase().includes(query) ||
         p.description?.toLowerCase().includes(query) ||

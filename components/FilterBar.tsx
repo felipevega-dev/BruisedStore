@@ -12,9 +12,11 @@ interface FilterBarProps {
 export default function FilterBar({ onFilterChange, totalResults }: FilterBarProps) {
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>({
+    search: '',
     category: 'all',
+    minPrice: 0,
+    maxPrice: 0,
     sortBy: 'recent',
-    searchQuery: '',
   });
 
   const handleFilterChange = (key: keyof FilterOptions, value: any) => {
@@ -27,9 +29,9 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
     const defaultFilters: FilterOptions = {
       category: 'all',
       sortBy: 'recent',
-      searchQuery: '',
-      minPrice: undefined,
-      maxPrice: undefined,
+      search: '',
+      minPrice: 0,
+      maxPrice: 0,
     };
     setFilters(defaultFilters);
     onFilterChange(defaultFilters);
@@ -39,7 +41,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
     filters.category !== 'all' || 
     filters.minPrice || 
     filters.maxPrice || 
-    filters.searchQuery;
+    filters.search;
 
   return (
     <div className="mb-8 space-y-4">
@@ -51,8 +53,8 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
           <input
             type="text"
             placeholder="Buscar obras por título..."
-            value={filters.searchQuery || ''}
-            onChange={(e) => handleFilterChange('searchQuery', e.target.value)}
+            value={filters.search || ''}
+            onChange={(e) => handleFilterChange('search', e.target.value)}
             className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-4 text-gray-900 placeholder-gray-500 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
           />
         </div>
