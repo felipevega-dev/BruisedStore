@@ -50,8 +50,10 @@ service cloud.firestore {
 
     // Reglas para reviews (comentarios y calificaciones)
     match /reviews/{reviewId} {
-      // Cualquiera puede leer las reseñas aprobadas
-      allow read: if resource.data.approved == true || isAdmin();
+      // Lectura: Todos ven aprobadas, usuarios ven las suyas, admins ven todas
+      allow read: if resource.data.approved == true || 
+                     (request.auth != null && resource.data.userId == request.auth.uid) ||
+                     isAdmin();
 
       // Usuarios autenticados pueden crear reseñas
       allow create: if request.auth != null && 

@@ -32,14 +32,14 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
 
   useEffect(() => {
     fetchReviews();
-  }, [paintingId]);
+  }, [paintingId, user]);
 
   const fetchReviews = async () => {
     try {
+      // Obtener todas las reseñas (aprobadas para todos, todas para admin)
       const reviewsQuery = query(
         collection(db, "reviews"),
         where("paintingId", "==", paintingId),
-        where("approved", "==", true),
         orderBy("createdAt", "desc")
       );
       const snapshot = await getDocs(reviewsQuery);
@@ -51,7 +51,18 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
           createdAt: data.createdAt?.toDate() || new Date(),
         } as Review;
       });
-      setReviews(reviewsData);
+      
+      // Filtrar solo aprobadas para usuarios normales (admin ve todas)
+      const filteredReviews = reviewsData.filter((review) => {
+        // Si el usuario es el autor, puede ver su propia reseña
+        if (user && review.userId === user.uid) {
+          return true;
+        }
+        // Todos pueden ver las aprobadas
+        return review.approved;
+      });
+      
+      setReviews(filteredReviews);
     } catch (error) {
       console.error("Error fetching reviews:", error);
     } finally {
@@ -93,9 +104,12 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
         approved: false, // Requiere aprobación del admin
       });
 
-      setSuccess("¡Reseña enviada! Será visible una vez aprobada por el administrador.");
+      setSuccess("¡Reseña enviada! Ya puedes verla abajo. Será visible para todos una vez aprobada por el administrador.");
       setRating(0);
       setComment("");
+      
+      // Recargar reseñas para mostrar la nueva (el usuario verá la suya aunque no esté aprobada)
+      await fetchReviews();
       
       // Resetear mensaje de éxito después de 5 segundos
       setTimeout(() => setSuccess(""), 5000);
@@ -272,11 +286,23 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
           reviews.map((review) => (
             <div
               key={review.id}
-              className="rounded-lg border-2 border-gray-300 bg-white p-6 transition-all hover:border-black"
+              className={`rounded-lg border-2 p-6 transition-all ${
+                !review.approved
+                  ? "border-yellow-400 bg-yellow-50 hover:border-yellow-500"
+                  : "border-gray-300 bg-white hover:border-black"
+              }`}
             >
               <div className="mb-3 flex items-start justify-between">
-                <div>
-                  <p className="font-bold text-gray-900">{review.userName}</p>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="font-bold text-gray-900">{review.userName}</p>
+                    {!review.approved && (
+                      <span className="inline-flex items-center gap-1 rounded-full border-2 border-yellow-600 bg-yellow-100 px-3 py-1 text-xs font-bold text-yellow-800">
+                        <span className="animate-pulse">⏳</span>
+                        Pendiente de aprobación
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-gray-500">
                     {formatDate(review.createdAt)}
                   </p>
@@ -284,6 +310,13 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
                 {renderStars(review.rating)}
               </div>
               <p className="text-gray-700">{review.comment}</p>
+              {!review.approved && user?.uid === review.userId && (
+                <div className="mt-3 rounded-md border-2 border-yellow-400 bg-yellow-50 p-3">
+                  <p className="text-xs font-semibold text-yellow-800">
+                    💡 Tu reseña está siendo revisada. Será visible para todos una vez que el administrador la apruebe.
+                  </p>
+                </div>
+              )}
             </div>
           ))
         )}

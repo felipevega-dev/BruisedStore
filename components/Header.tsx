@@ -144,8 +144,8 @@ export default function Header() {
                       className="fixed inset-0 z-40"
                       onClick={() => setShowMenu(false)}
                     />
-                                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                  <div className="p-2">
+                    <div className="absolute right-0 top-full z-50 mt-2 w-48 rounded-lg border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                      <div className="p-2">
                     <div className="border-b-2 border-gray-200 px-3 py-2">
                       <p className="text-sm font-bold text-gray-900">
                         {user.displayName || "Usuario"}
@@ -170,15 +170,15 @@ export default function Header() {
                         <span>Panel Admin</span>
                       </Link>
                     )}
-                    <button
-                      onClick={handleSignOut}
-                      className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-bold text-red-600 transition-colors hover:bg-gray-100"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      <span>Cerrar Sesión</span>
-                    </button>
-                  </div>
-                </div>
+                        <button
+                          onClick={handleSignOut}
+                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-bold text-red-600 transition-colors hover:bg-gray-100"
+                        >
+                          <LogOut className="h-4 w-4" />
+                          <span>Cerrar Sesión</span>
+                        </button>
+                      </div>
+                    </div>
                   </>
                 )}
               </div>
