@@ -2,12 +2,14 @@ export interface Painting {
   id: string;
   title: string;
   description?: string;
-  imageUrl: string;
+  imageUrl: string; // Mantener para compatibilidad con versiones anteriores
+  images?: string[]; // Array de URLs de imágenes
   price: number;
   dimensions: {
     width: number;
     height: number;
   };
+  orientation?: Orientation; // horizontal o vertical
   available: boolean;
   createdAt: Date;
   category?: string;

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   getDocs,
@@ -12,7 +11,8 @@ import {
   doc,
   deleteDoc,
 } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
 import { CustomOrder } from "@/types";
 import Image from "next/image";
 import { Loader2, ArrowLeft, Trash2, Eye } from "lucide-react";
@@ -20,29 +20,26 @@ import Link from "next/link";
 
 export default function AdminOrdersPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const { user, isAdmin, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<CustomOrder[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<CustomOrder | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
+    if (!authLoading) {
+      if (!user || !isAdmin) {
         router.push("/admin");
       } else {
-        setUser(user);
         setLoading(false);
       }
-    });
-
-    return () => unsubscribe();
-  }, [router]);
+    }
+  }, [user, isAdmin, authLoading, router]);
 
   useEffect(() => {
-    if (user) {
+    if (user && isAdmin) {
       fetchOrders();
     }
-  }, [user]);
+  }, [user, isAdmin]);
 
   const fetchOrders = async () => {
     try {
@@ -126,7 +123,7 @@ export default function AdminOrdersPage() {
     return labels[status];
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
         <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">

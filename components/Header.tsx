@@ -2,48 +2,122 @@
 
 import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
-import { ShoppingCart } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { ShoppingCart, User, LogOut, Shield } from "lucide-react";
+import { useState } from "react";
 
 export default function Header() {
   const { getItemCount } = useCart();
+  const { user, isAdmin, signOut } = useAuth();
   const itemCount = getItemCount();
+  const [showMenu, setShowMenu] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut();
+    setShowMenu(false);
+  };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-2 border-red-900/30 bg-black/80 backdrop-blur-md supports-[backdrop-filter]:bg-black/60">
+    <header className="sticky top-0 z-50 w-full border-b-2 border-gray-200 bg-white shadow-md">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between sm:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
-            <h1 className="bg-gradient-to-r from-red-100 to-red-50 bg-clip-text text-xl font-bold text-transparent transition-all group-hover:from-red-400 group-hover:to-red-300 sm:text-2xl">
+            <h1 className="text-xl font-bold text-gray-900 transition-all group-hover:text-red-600 sm:text-2xl">
               Bruised Art
             </h1>
           </Link>
 
           {/* Navigation */}
-          <nav className="flex items-center space-x-3 sm:space-x-6">
+          <nav className="flex items-center space-x-4 sm:space-x-6">
             <Link
               href="/"
-              className="text-sm font-medium text-gray-300 transition-colors hover:text-red-400 sm:text-base"
+              className="text-sm font-medium text-gray-700 transition-colors hover:text-red-600 sm:text-base"
             >
               Obras
             </Link>
             <Link
               href="/obra-a-pedido"
-              className="text-sm font-medium text-gray-300 transition-colors hover:text-red-400 sm:text-base"
+              className="text-sm font-medium text-gray-700 transition-colors hover:text-red-600 sm:text-base"
             >
               Obra a Pedido
             </Link>
             <Link
               href="/carrito"
-              className="relative flex items-center space-x-1 text-sm font-medium text-gray-300 transition-colors hover:text-red-400 sm:text-base"
+              className="relative flex items-center space-x-1 text-sm font-medium text-gray-700 transition-colors hover:text-red-600 sm:text-base"
             >
               <ShoppingCart className="h-5 w-5" />
               {itemCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-700 text-xs font-bold text-red-100 shadow-lg shadow-red-900/50">
+                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white shadow-lg">
                   {itemCount}
                 </span>
               )}
             </Link>
+
+            {/* Admin Button - Solo visible para admins */}
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-red-700 sm:text-base"
+              >
+                <Shield className="h-4 w-4" />
+                <span className="hidden sm:inline">Admin</span>
+              </Link>
+            )}
+
+            {/* User Menu */}
+            {user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowMenu(!showMenu)}
+                  className="flex items-center gap-2 rounded-lg border-2 border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 hover:bg-gray-50 sm:px-4"
+                >
+                  <User className="h-4 w-4" />
+                  <span className="hidden max-w-[120px] truncate sm:inline">
+                    {user.email}
+                  </span>
+                  <span className="sm:hidden">Usuario</span>
+                </button>
+
+                {showMenu && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShowMenu(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-2 w-48 rounded-lg border-2 border-gray-200 bg-white py-2 shadow-lg z-50">
+                      <div className="border-b border-gray-200 px-4 py-2">
+                        <p className="text-xs font-semibold text-gray-500">
+                          Conectado como
+                        </p>
+                        <p className="truncate text-sm font-medium text-gray-900">
+                          {user.email}
+                        </p>
+                        {isAdmin && (
+                          <span className="mt-1 inline-block rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">
+                            Admin
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        onClick={handleSignOut}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Cerrar Sesión
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <Link
+                href="/admin"
+                className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 hover:bg-gray-50 sm:text-base"
+              >
+                Login
+              </Link>
+            )}
           </nav>
         </div>
       </div>

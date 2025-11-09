@@ -1,49 +1,49 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
-import { User } from "firebase/auth";
+import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { Palette, Package, LogOut, Loader2, Shield } from "lucide-react";
+import { Palette, Package, Loader2, Shield, AlertCircle } from "lucide-react";
 
 export default function AdminPage() {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, isAdmin, loading: authLoading, refreshUser } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+    if (!authLoading && user && isAdmin) {
+      // Ya está logueado y es admin, puede ver el panel
+    } else if (!authLoading && user && !isAdmin) {
+      // Está logueado pero no es admin, redirigir
+      router.push("/");
+    }
+  }, [user, isAdmin, authLoading, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      // Refrescar el token para obtener los custom claims actualizados
+      await refreshUser();
+      // El useEffect se encargará de redirigir si no es admin
     } catch (error: any) {
-      setError("Credenciales incorrectas");
+      setError("Credenciales incorrectas o no tienes permisos de administrador");
       console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
         <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
@@ -53,7 +53,7 @@ export default function AdminPage() {
     );
   }
 
-  if (!user) {
+  if (!user || !isAdmin) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black px-4">
         <div className="w-full max-w-md rounded-lg border-2 border-red-900 bg-black/60 p-8 shadow-2xl shadow-red-900/30 backdrop-blur-sm">
@@ -91,10 +91,15 @@ export default function AdminPage() {
               />
             </div>
             {error && (
-              <p className="rounded-lg border-2 border-red-900 bg-red-950/30 p-3 text-sm font-semibold text-red-400">
-                {error}
-              </p>
+              <div className="flex items-center gap-2 rounded-lg border-2 border-red-900 bg-red-950/30 p-3 text-sm font-semibold text-red-400">
+                <AlertCircle className="h-5 w-5" />
+                <span>{error}</span>
+              </div>
             )}
+            <div className="rounded-lg border-2 border-yellow-900 bg-yellow-950/20 p-4 text-xs text-yellow-300">
+              <p className="font-semibold mb-2">⚠️ Nota importante:</p>
+              <p>Tu cuenta debe tener el rol "admin" asignado mediante Custom Claims en Firebase. Contacta al administrador del sistema si no puedes acceder.</p>
+            </div>
             <button
               type="submit"
               className="w-full rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50"
@@ -110,17 +115,11 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-8">
           <h1 className="text-4xl font-bold text-red-100 sm:text-5xl">
             Panel de Administración
           </h1>
-          <button
-            onClick={handleLogout}
-            className="flex items-center justify-center gap-2 rounded-lg border-2 border-red-900 bg-red-900/20 px-4 py-2 font-semibold text-red-100 transition-all hover:bg-red-900 hover:shadow-lg hover:shadow-red-900/50"
-          >
-            <LogOut className="h-5 w-5" />
-            Cerrar Sesión
-          </button>
+          <p className="mt-2 text-gray-400">Bienvenido, {user?.email}</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">

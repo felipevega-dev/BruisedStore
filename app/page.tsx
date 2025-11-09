@@ -40,34 +40,44 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
-        {/* Background decorative elements */}
+      <section className="relative overflow-hidden border-b-4 border-black bg-white py-16 sm:py-20 lg:py-28">
+        {/* Geometric lines background */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-red-900/20 blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-red-950/30 blur-3xl"></div>
+          <div className="absolute left-0 top-0 h-full w-1 bg-red-600"></div>
+          <div className="absolute right-0 top-0 h-full w-1 bg-red-600"></div>
+          <div className="absolute left-1/4 top-0 h-full w-px bg-black/10"></div>
+          <div className="absolute left-2/4 top-0 h-full w-px bg-black/10"></div>
+          <div className="absolute left-3/4 top-0 h-full w-px bg-black/10"></div>
+          {/* Diagonal lines */}
+          <div className="absolute -left-20 top-1/4 h-px w-96 rotate-12 bg-red-600/20"></div>
+          <div className="absolute -right-20 top-2/3 h-px w-96 -rotate-12 bg-red-600/20"></div>
         </div>
 
         <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-6 flex items-center justify-center gap-3">
-              <Sparkles className="h-8 w-8 text-red-600 sm:h-10 sm:w-10" />
-              <h1 className="bg-gradient-to-r from-red-100 via-red-50 to-red-100 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl lg:text-8xl">
-                Bruised Art
-              </h1>
-              <Sparkles className="h-8 w-8 text-red-600 sm:h-10 sm:w-10" />
+            {/* Black border box */}
+            <div className="mx-auto mb-8 inline-block border-4 border-black bg-white px-8 py-4 sm:px-12 sm:py-6">
+              <div className="mb-6 flex items-center justify-center gap-3">
+                <Sparkles className="h-8 w-8 text-red-600 sm:h-10 sm:w-10" />
+                <h1 className="text-5xl font-black tracking-tight text-black sm:text-6xl md:text-7xl lg:text-8xl">
+                  Bruised Art
+                </h1>
+                <Sparkles className="h-8 w-8 text-red-600 sm:h-10 sm:w-10" />
+              </div>
+              
+              {/* Red accent line */}
+              <div className="mx-auto mb-6 h-1 w-32 bg-red-600"></div>
+              
+              <p className="mx-auto mb-8 max-w-2xl text-lg font-medium text-gray-700 sm:text-xl">
+                Galería de pinturas únicas. Cada obra cuenta una historia.
+              </p>
             </div>
-            
-            <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-300 sm:text-xl">
-              Galería de pinturas únicas. Cada obra cuenta una historia.
-            </p>
-            
-            <div className="mx-auto mb-8 h-1 w-24 bg-gradient-to-r from-red-900 via-red-600 to-red-900"></div>
             
             <Link
               href="/obra-a-pedido"
-              className="group inline-flex items-center gap-3 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-8 py-4 text-lg font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-2xl hover:shadow-red-900/50"
+              className="group inline-flex items-center gap-3 border-4 border-black bg-red-600 px-8 py-4 text-lg font-bold text-white transition-all hover:bg-red-700 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
             >
               <Paintbrush className="h-6 w-6 transition-transform group-hover:rotate-12" />
               Crear Obra a Pedido
@@ -77,30 +87,34 @@ export default function Home() {
       </section>
 
       {/* Paintings Grid */}
-      <section className="py-12 sm:py-16 lg:py-20">
+      <section className="border-b-4 border-black bg-white py-12 sm:py-16 lg:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <h2 className="mb-4 text-4xl font-bold text-red-100 sm:text-5xl">
-              Colección de Obras
-            </h2>
-            <div className="mx-auto h-1 w-16 bg-gradient-to-r from-red-900 via-red-600 to-red-900"></div>
+            {/* Section title with black border */}
+            <div className="mx-auto inline-block border-4 border-black bg-white px-8 py-3">
+              <h2 className="text-4xl font-black text-black sm:text-5xl">
+                Colección de Obras
+              </h2>
+            </div>
+            {/* Red accent line */}
+            <div className="mx-auto mt-4 h-1 w-24 bg-red-600"></div>
           </div>
 
           {loading ? (
             <div className="flex min-h-[400px] items-center justify-center">
-              <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
+              <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                 <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
-                <p className="mt-4 text-center text-gray-300">Cargando obras...</p>
+                <p className="mt-4 text-center font-semibold text-gray-900">Cargando obras...</p>
               </div>
             </div>
           ) : paintings.length === 0 ? (
             <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
-              <div className="rounded-lg border-2 border-red-900 bg-black/60 p-12 backdrop-blur-sm shadow-2xl shadow-red-900/30">
+              <div className="border-4 border-black bg-white p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                 <Paintbrush className="mx-auto mb-4 h-16 w-16 text-red-600" />
-                <p className="mb-2 text-xl font-semibold text-red-100">
+                <p className="mb-2 text-xl font-bold text-black">
                   No hay obras disponibles en este momento.
                 </p>
-                <p className="text-gray-400">
+                <p className="text-gray-600">
                   Vuelve pronto para ver nuevas creaciones.
                 </p>
               </div>

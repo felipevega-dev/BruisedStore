@@ -3,13 +3,18 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Helper function para verificar si el usuario es admin
+    function isAdmin() {
+      return request.auth != null && request.auth.token.role == 'admin';
+    }
+
     // Reglas para paintings
     match /paintings/{paintingId} {
       // Cualquiera puede leer las pinturas
       allow read: if true;
 
-      // Solo usuarios autenticados pueden escribir/actualizar/eliminar
-      allow create, update, delete: if request.auth != null;
+      // Solo administradores pueden escribir/actualizar/eliminar
+      allow create, update, delete: if isAdmin();
     }
 
     // Reglas para custom orders
@@ -17,8 +22,11 @@ service cloud.firestore {
       // Cualquiera puede crear pedidos personalizados
       allow create: if true;
 
-      // Solo usuarios autenticados pueden leer/actualizar/eliminar
-      allow read, update, delete: if request.auth != null;
+      // Cualquiera puede leer (para que los usuarios vean sus propios pedidos)
+      allow read: if true;
+
+      // Solo administradores pueden actualizar/eliminar
+      allow update, delete: if isAdmin();
     }
   }
 }

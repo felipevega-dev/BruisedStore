@@ -20,21 +20,30 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
     }).format(price);
   };
 
+  // Usar la primera imagen del array si existe, sino usar imageUrl
+  const displayImage = painting.images && painting.images.length > 0 
+    ? painting.images[0] 
+    : painting.imageUrl;
+
   return (
-    <div className="group relative overflow-hidden rounded-lg border-2 border-red-900/30 bg-black/60 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all duration-300 hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40">
+    <div className="group relative overflow-hidden border-4 border-black bg-white transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
       <Link href={`/obra/${painting.id}`}>
-        <div className="relative aspect-[3/4] w-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
+        <div 
+          className="relative w-full overflow-hidden bg-gray-100"
+          style={{
+            aspectRatio: painting.orientation === "horizontal" ? "4/3" : "3/4",
+          }}
+        >
           <Image
-            src={painting.imageUrl}
+            src={displayImage}
             alt={painting.title}
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
           {!painting.available && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-              <span className="rounded-lg border-2 border-red-900 bg-red-950/80 px-4 py-2 text-sm font-bold text-red-100 backdrop-blur-sm">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+              <span className="border-4 border-white bg-red-600 px-4 py-2 text-sm font-bold text-white">
                 No Disponible
               </span>
             </div>
@@ -42,17 +51,17 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
         </div>
       </Link>
 
-      <div className="p-4 sm:p-5">
+      <div className="border-t-4 border-black bg-white p-4 sm:p-5">
         <Link href={`/obra/${painting.id}`}>
-          <h3 className="mb-2 text-lg font-bold text-red-100 transition-colors hover:text-red-400 sm:text-xl">
+          <h3 className="mb-2 text-lg font-bold text-black transition-colors hover:text-red-600 sm:text-xl">
             {painting.title}
           </h3>
         </Link>
-        <p className="mb-4 text-sm text-gray-400">
+        <p className="mb-4 text-sm text-gray-600">
           {painting.dimensions.width} x {painting.dimensions.height} cm
         </p>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-2xl font-bold text-red-500">
+          <p className="text-2xl font-black text-red-600">
             {formatPrice(painting.price)}
           </p>
           {painting.available && (
@@ -61,7 +70,7 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
                 e.preventDefault();
                 addToCart(painting);
               }}
-              className="group/btn flex items-center justify-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900/80 to-red-800/80 px-4 py-2 text-sm font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50 active:scale-95"
+              className="group/btn flex items-center justify-center gap-2 border-4 border-black bg-red-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
             >
               <ShoppingCart className="h-4 w-4 transition-transform group-hover/btn:scale-110" />
               <span>Agregar</span>

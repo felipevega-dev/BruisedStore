@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   addDoc,
@@ -15,15 +14,17 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { auth, db, storage } from "@/lib/firebase";
-import { Painting } from "@/types";
+import { db, storage } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
+import { Painting, Orientation } from "@/types";
+import imageCompression from "browser-image-compression";
 import Image from "next/image";
 import { Trash2, Plus, Loader2, Edit, X, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminPaintingsPage() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const { user, isAdmin, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const [paintings, setPaintings] = useState<Painting[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -38,29 +39,28 @@ export default function AdminPaintingsPage() {
     width: "",
     height: "",
     category: "",
+    orientation: "vertical" as Orientation,
     available: true,
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [compressing, setCompressing] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
+    if (!authLoading) {
+      if (!user || !isAdmin) {
         router.push("/admin");
       } else {
-        setUser(user);
         setLoading(false);
       }
-    });
-
-    return () => unsubscribe();
-  }, [router]);
+    }
+  }, [user, isAdmin, authLoading, router]);
 
   useEffect(() => {
-    if (user) {
+    if (user && isAdmin) {
       fetchPaintings();
     }
-  }, [user]);
+  }, [user, isAdmin]);
 
   const fetchPaintings = async () => {
     try {
@@ -80,15 +80,90 @@ export default function AdminPaintingsPage() {
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  const optimizeImage = async (file: File): Promise<File> => {
+    const options = {
+      maxSizeMB: 1, // Máximo 1MB
+      maxWidthOrHeight: 1920, // Máximo ancho/alto de 1920px
+      useWebWorker: true,
+      fileType: "image/jpeg", // Convertir a JPEG para mejor compresión
+      initialQuality: 0.85, // Calidad del 85%
+    };
+
+    try {
+      const compressedFile = await imageCompression(file, options);
+      console.log(
+        `Imagen optimizada: ${(file.size / 1024 / 1024).toFixed(2)}MB -> ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`
+      );
+      return compressedFile;
+    } catch (error) {
+      console.error("Error al optimizar imagen:", error);
+      return file; // Retornar archivo original si falla la compresión
+    }
+  };
+
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    setCompressing(true);
+    try {
+      const optimizedFiles: File[] = [];
+      const previews: string[] = [];
+
+      // Procesar todas las imágenes
+      const processPromises = files.map(async (file) => {
+        const optimizedFile = await optimizeImage(file);
+        optimizedFiles.push(optimizedFile);
+        
+        // Crear preview
+        return new Promise<string>((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            resolve(reader.result as string);
+          };
+          reader.readAsDataURL(optimizedFile);
+        });
+      });
+
+      const newPreviews = await Promise.all(processPromises);
+      previews.push(...newPreviews);
+
+      // Actualizar estado
+      setImageFiles((prev) => [...prev, ...optimizedFiles]);
+      setImagePreviews((prev) => [...prev, ...previews]);
+      
+      // Limpiar el input para permitir subir las mismas imágenes de nuevo si es necesario
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch (error) {
+      console.error("Error al procesar imágenes:", error);
+      alert("Error al procesar las imágenes");
+    } finally {
+      setCompressing(false);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const preview = imagePreviews[index];
+    const isNewImage = preview.startsWith("data:");
+    
+    // Remover el preview
+    const newPreviews = imagePreviews.filter((_, i) => i !== index);
+    setImagePreviews(newPreviews);
+    
+    // Si es una imagen nueva (base64), también remover el archivo correspondiente
+    if (isNewImage && imageFiles.length > 0) {
+      // Contar cuántas imágenes nuevas (base64) hay antes de este índice
+      let newImageCount = 0;
+      for (let i = 0; i < index; i++) {
+        if (imagePreviews[i].startsWith("data:")) {
+          newImageCount++;
+        }
+      }
+      // Remover el archivo en la posición correspondiente
+      const newFiles = imageFiles.filter((_, i) => i !== newImageCount);
+      setImageFiles(newFiles);
     }
   };
 
@@ -100,10 +175,11 @@ export default function AdminPaintingsPage() {
       width: "",
       height: "",
       category: "",
+      orientation: "vertical" as Orientation,
       available: true,
     });
-    setImageFile(null);
-    setImagePreview(null);
+    setImageFiles([]);
+    setImagePreviews([]);
     setEditingPainting(null);
   };
 
@@ -116,41 +192,99 @@ export default function AdminPaintingsPage() {
       width: painting.dimensions.width.toString(),
       height: painting.dimensions.height.toString(),
       category: painting.category || "",
+      orientation: painting.orientation || "vertical",
       available: painting.available,
     });
-    setImagePreview(painting.imageUrl);
+    // Cargar imágenes existentes (solo URLs, no previews base64)
+    const existingImages = painting.images && painting.images.length > 0 
+      ? painting.images 
+      : [painting.imageUrl];
+    setImagePreviews(existingImages.filter(img => img && img.startsWith("http")));
+    setImageFiles([]); // No hay nuevos archivos al editar inicialmente
     setShowModal(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!imageFile && !editingPainting) {
-      alert("Por favor sube una imagen");
+    if (imageFiles.length === 0 && imagePreviews.length === 0 && !editingPainting) {
+      alert("Por favor sube al menos una imagen");
       return;
     }
 
     setUploading(true);
 
     try {
-      let imageUrl = editingPainting?.imageUrl || "";
+      let imageUrls: string[] = [];
 
-      // Upload new image if provided
-      if (imageFile) {
-        const imageRef = ref(storage, `paintings/${Date.now()}_${imageFile.name}`);
-        await uploadBytes(imageRef, imageFile);
-        imageUrl = await getDownloadURL(imageRef);
+      // Procesar imágenes: mantener orden y separar existentes de nuevas
+      const finalImageUrls: string[] = [];
+      const uploadPromises: Promise<string>[] = [];
+      let newFileIndex = 0;
+
+      // Procesar cada preview en orden
+      for (const preview of imagePreviews) {
+        if (preview.startsWith("http")) {
+          // Es una URL existente de Firebase, mantenerla
+          finalImageUrls.push(preview);
+        } else if (preview.startsWith("data:") && newFileIndex < imageFiles.length) {
+          // Es un preview nuevo (base64), subirlo
+          const file = imageFiles[newFileIndex];
+          const uploadPromise = (async () => {
+            const imageRef = ref(storage, `paintings/${Date.now()}_${Math.random().toString(36).substring(7)}_${file.name}`);
+            await uploadBytes(imageRef, file);
+            return await getDownloadURL(imageRef);
+          })();
+          uploadPromises.push(uploadPromise);
+          newFileIndex++;
+        }
+      }
+
+      // Esperar a que todas las nuevas imágenes se suban
+      if (uploadPromises.length > 0) {
+        const newImageUrls = await Promise.all(uploadPromises);
+        // Insertar las nuevas URLs en las posiciones correspondientes
+        let newUrlIndex = 0;
+        const allImageUrls: string[] = [];
+        for (const preview of imagePreviews) {
+          if (preview.startsWith("http")) {
+            allImageUrls.push(preview);
+          } else if (preview.startsWith("data:")) {
+            if (newUrlIndex < newImageUrls.length) {
+              allImageUrls.push(newImageUrls[newUrlIndex]);
+              newUrlIndex++;
+            }
+          }
+        }
+        imageUrls = allImageUrls;
+      } else {
+        // Solo imágenes existentes
+        imageUrls = finalImageUrls;
+      }
+
+      // Si no hay imágenes pero estamos editando, usar las existentes de la pintura
+      if (imageUrls.length === 0 && editingPainting) {
+        imageUrls = editingPainting.images || [editingPainting.imageUrl];
+      }
+
+      // Si no hay imágenes en absoluto, error
+      if (imageUrls.length === 0) {
+        alert("Error: No se pudieron cargar las imágenes");
+        setUploading(false);
+        return;
       }
 
       const paintingData = {
         title: formData.title,
         description: formData.description || null,
-        imageUrl: imageUrl,
+        imageUrl: imageUrls[0], // Mantener para compatibilidad
+        images: imageUrls, // Array de imágenes
         price: parseFloat(formData.price),
         dimensions: {
           width: parseFloat(formData.width),
           height: parseFloat(formData.height),
         },
+        orientation: formData.orientation,
         available: formData.available,
         category: formData.category || null,
       };
@@ -209,7 +343,7 @@ export default function AdminPaintingsPage() {
     }).format(price);
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
         <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
@@ -311,30 +445,54 @@ export default function AdminPaintingsPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Image Upload */}
+              {/* Multiple Images Upload */}
               <div>
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
-                  Imagen *
+                  Imágenes * (Puedes subir múltiples)
                 </label>
-                {imagePreview && (
-                  <div className="relative mb-3 aspect-[3/4] w-48 overflow-hidden rounded-md border-2 border-red-900/30">
-                    <Image
-                      src={imagePreview}
-                      alt="Preview"
-                      fill
-                      className="object-cover"
-                      sizes="192px"
-                    />
+                {compressing && (
+                  <div className="mb-3 rounded-lg border-2 border-yellow-900 bg-yellow-950/20 p-3 text-yellow-300">
+                    <Loader2 className="mr-2 inline h-4 w-4 animate-spin" />
+                    Optimizando imágenes...
+                  </div>
+                )}
+                {imagePreviews.length > 0 && (
+                  <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="relative group">
+                        <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md border-2 border-red-900/30">
+                          <Image
+                            src={preview}
+                            alt={`Preview ${index + 1}`}
+                            fill
+                            className="object-cover"
+                            sizes="150px"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeImage(index)}
+                          className="absolute -right-2 -top-2 rounded-full bg-red-900 p-1 text-red-100 opacity-0 transition-opacity group-hover:opacity-100"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
                 )}
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleImageChange}
                   className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100 file:mr-4 file:rounded-lg file:border-2 file:border-red-900 file:bg-red-900/20 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-red-100 file:hover:bg-red-900/40"
-                  required={!editingPainting}
+                  required={imagePreviews.length === 0 && !editingPainting}
+                  disabled={compressing}
                 />
+                <p className="mt-2 text-xs text-gray-400">
+                  Las imágenes se optimizarán automáticamente antes de subirse (máx. 1MB cada una)
+                </p>
               </div>
 
               {/* Title */}
@@ -408,6 +566,68 @@ export default function AdminPaintingsPage() {
                     placeholder="0"
                     required
                   />
+                </div>
+              </div>
+
+              {/* Orientation */}
+              <div>
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                  Orientación *
+                </label>
+                <div className="grid grid-cols-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, orientation: "vertical" })}
+                    className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
+                      formData.orientation === "vertical"
+                        ? "border-red-600 bg-red-950/50 shadow-lg shadow-red-900/50"
+                        : "border-red-900/30 bg-gray-900/30 hover:border-red-800"
+                    }`}
+                  >
+                    <div
+                      className={`h-16 w-12 rounded border-2 ${
+                        formData.orientation === "vertical"
+                          ? "border-red-500 bg-red-900/30"
+                          : "border-gray-600 bg-gray-800"
+                      }`}
+                    ></div>
+                    <span
+                      className={`text-sm font-semibold ${
+                        formData.orientation === "vertical"
+                          ? "text-red-100"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      Vertical
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, orientation: "horizontal" })}
+                    className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
+                      formData.orientation === "horizontal"
+                        ? "border-red-600 bg-red-950/50 shadow-lg shadow-red-900/50"
+                        : "border-red-900/30 bg-gray-900/30 hover:border-red-800"
+                    }`}
+                  >
+                    <div
+                      className={`h-12 w-16 rounded border-2 ${
+                        formData.orientation === "horizontal"
+                          ? "border-red-500 bg-red-900/30"
+                          : "border-gray-600 bg-gray-800"
+                      }`}
+                    ></div>
+                    <span
+                      className={`text-sm font-semibold ${
+                        formData.orientation === "horizontal"
+                          ? "text-red-100"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      Horizontal
+                    </span>
+                  </button>
                 </div>
               </div>
 
