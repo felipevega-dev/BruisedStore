@@ -19,7 +19,6 @@ export default function CustomOrderPage() {
     email: "",
     phone: "",
     selectedSizeIndex: 0,
-    orientation: "vertical" as Orientation,
     notes: "",
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -31,19 +30,18 @@ export default function CustomOrderPage() {
   const selectedSize = CUSTOM_ORDER_SIZES[formData.selectedSizeIndex];
   const totalPrice = BASE_CUSTOM_ORDER_PRICE * selectedSize.priceMultiplier;
 
-  // Calcular dimensiones del canvas según orientación
-  const canvasWidth =
-    formData.orientation === "horizontal"
-      ? selectedSize.height
-      : selectedSize.width;
-  const canvasHeight =
-    formData.orientation === "horizontal"
-      ? selectedSize.width
-      : selectedSize.height;
+  // Orientación automática según dimensiones del tamaño
+  // width < height = VERTICAL, width > height = HORIZONTAL, width = height = CUADRADO
+  const orientation: Orientation =
+    selectedSize.width < selectedSize.height
+      ? "vertical"
+      : selectedSize.width > selectedSize.height
+        ? "horizontal"
+        : "vertical"; // cuadrados se tratan como vertical por defecto
 
-  // Dimensiones para mostrar (más intuitivo: alto x ancho en vertical)
-  const displayWidth = formData.orientation === "horizontal" ? canvasWidth : canvasHeight;
-  const displayHeight = formData.orientation === "horizontal" ? canvasHeight : canvasWidth;
+  // Dimensiones del canvas (ancho x alto) directamente del size
+  const canvasWidth = selectedSize.width;
+  const canvasHeight = selectedSize.height;
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -51,19 +49,7 @@ export default function CustomOrderPage() {
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        const imageDataUrl = reader.result as string;
-        setImagePreview(imageDataUrl);
-
-        // Detectar orientación automáticamente
-        const img = document.createElement('img');
-        img.onload = () => {
-          const isHorizontal = img.width > img.height;
-          setFormData(prev => ({
-            ...prev,
-            orientation: isHorizontal ? 'horizontal' : 'vertical'
-          }));
-        };
-        img.src = imageDataUrl;
+        setImagePreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -100,7 +86,7 @@ export default function CustomOrderPage() {
         phone: formData.phone,
         referenceImageUrl: imageUrl,
         selectedSize: selectedSize,
-        orientation: formData.orientation,
+        orientation: orientation, // Usar orientación automática
         totalPrice: totalPrice,
         status: "pending",
         createdAt: new Date(),
@@ -118,7 +104,6 @@ export default function CustomOrderPage() {
         email: "",
         phone: "",
         selectedSizeIndex: 0,
-        orientation: "vertical",
         notes: "",
       });
       setImageFile(null);
@@ -181,15 +166,16 @@ export default function CustomOrderPage() {
                   Vista Previa del Lienzo
                 </h2>
 
-                {/* Canvas Preview - Dinámico según tamaño seleccionado */}
+                {/* Canvas Preview - Proporciones realistas del tamaño seleccionado */}
                 <div className="mb-4 flex items-center justify-center bg-gray-50 p-3 border-4 border-black sm:mb-6 sm:p-6">
                   <div
                     className="relative overflow-hidden border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                     style={{
-                      width: `${Math.min(canvasWidth * 6, 400)}px`,
-                      height: `${Math.min(canvasHeight * 6, 400)}px`,
-                      maxWidth: "calc(100vw - 80px)",
-                      maxHeight: "60vh",
+                      width: `${canvasWidth * 3}px`,
+                      height: `${canvasHeight * 3}px`,
+                      maxWidth: "min(calc(100vw - 120px), 500px)",
+                      maxHeight: "min(70vh, 600px)",
+                      aspectRatio: `${canvasWidth} / ${canvasHeight}`,
                     }}
                   >
                     {imagePreview ? (
@@ -232,7 +218,7 @@ export default function CustomOrderPage() {
                       Dimensiones:
                     </span>
                     <span className="text-sm font-black text-black sm:text-base">
-                      {displayWidth} x {displayHeight} cm
+                      {canvasWidth} x {canvasHeight} cm
                     </span>
                   </div>
                   <div className="flex items-center justify-between border-b-4 border-black p-3 bg-white sm:p-4">
@@ -240,9 +226,7 @@ export default function CustomOrderPage() {
                       Orientación:
                     </span>
                     <span className="text-sm font-black capitalize text-black sm:text-base">
-                      {formData.orientation === "horizontal"
-                        ? "Horizontal"
-                        : "Vertical"}
+                      {orientation === "horizontal" ? "Horizontal" : orientation === "vertical" && canvasWidth === canvasHeight ? "Cuadrado" : "Vertical"}
                     </span>
                   </div>
                   <div className="flex flex-col items-center justify-between gap-2 p-4 bg-red-600 sm:flex-row sm:gap-0 sm:p-5">
@@ -336,78 +320,7 @@ export default function CustomOrderPage() {
                   )}
                 </div>
 
-                {/* Orientation */}
-                <div>
-                  <label className="mb-2 block text-xs font-black uppercase tracking-wide text-black sm:mb-3 sm:text-sm">
-                    Orientación del Lienzo *
-                    {imagePreview && (
-                      <span className="ml-1 text-[10px] font-semibold normal-case text-gray-600 sm:ml-2 sm:text-xs">
-                        (Detectada automáticamente)
-                      </span>
-                    )}
-                  </label>
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFormData({ ...formData, orientation: "vertical" })
-                      }
-                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 sm:p-6 ${
-                        formData.orientation === "vertical"
-                          ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
-                          : "border-black bg-white hover:bg-gray-50"
-                      }`}
-                    >
-                      <div
-                        className={`h-16 w-12 border-4 sm:h-20 sm:w-14 ${
-                          formData.orientation === "vertical"
-                            ? "border-red-600 bg-red-100"
-                            : "border-black bg-gray-100"
-                        }`}
-                      ></div>
-                      <span
-                        className={`text-xs font-black sm:text-sm ${
-                          formData.orientation === "vertical"
-                            ? "text-red-600"
-                            : "text-black"
-                        }`}
-                      >
-                        Vertical
-                      </span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFormData({ ...formData, orientation: "horizontal" })
-                      }
-                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 sm:p-6 ${
-                        formData.orientation === "horizontal"
-                          ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
-                          : "border-black bg-white hover:bg-gray-50"
-                      }`}
-                    >
-                      <div
-                        className={`h-12 w-16 border-4 sm:h-14 sm:w-20 ${
-                          formData.orientation === "horizontal"
-                            ? "border-red-600 bg-red-100"
-                            : "border-black bg-gray-100"
-                        }`}
-                      ></div>
-                      <span
-                        className={`text-xs font-black sm:text-sm ${
-                          formData.orientation === "horizontal"
-                            ? "text-red-600"
-                            : "text-black"
-                        }`}
-                      >
-                        Horizontal
-                      </span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Size Selection */}
+                {/* Size Selection - Orientación automática según tamaño */}
                 <div>
                   <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
                     Tamaño del Lienzo *

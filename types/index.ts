@@ -163,21 +163,31 @@ export interface Cart {
   total: number;
 }
 
-// Tamaños disponibles - se ajustarán según orientación
+// Tamaños estándar de bastidores (formato: ALTO x ANCHO)
+// CONVENCIÓN: primer número = ALTO (height), segundo número = ANCHO (width)
+// Ejemplo: 50x40 = 50cm de alto x 40cm de ancho = VERTICAL (más alto que ancho)
+// Orientación automática: si height > width = VERTICAL, si width > height = HORIZONTAL
 // Precio base: 20.000 CLP (20x25)
-// Precio máximo: 432.000 CLP (180x140)
 export const CUSTOM_ORDER_SIZES: CustomOrderSize[] = [
-  { name: "20x25", width: 20, height: 25, priceMultiplier: 1 },      // $20.000
-  { name: "24x30", width: 24, height: 30, priceMultiplier: 1.5 },    // $24.000
-  { name: "30x40", width: 30, height: 40, priceMultiplier: 2 },      // $40.000
-  { name: "40x50", width: 40, height: 50, priceMultiplier: 2.5 },    // $50.000
-  { name: "40x70", width: 40, height: 70, priceMultiplier: 4 },      // $80.000
-  { name: "50x60", width: 50, height: 60, priceMultiplier: 5 },      // $100.000
-  { name: "50x70", width: 50, height: 70, priceMultiplier: 6 },      // $120.000
-  { name: "80x60", width: 80, height: 60, priceMultiplier: 8 },      // $160.000
-  { name: "100x80", width: 100, height: 80, priceMultiplier: 10.8 }, // $216.000
-  { name: "140x100", width: 140, height: 100, priceMultiplier: 16.2 }, // $324.000
-  { name: "180x140", width: 180, height: 140, priceMultiplier: 21.6 }, // $432.000
+  // VERTICALES (height > width) - más alto que ancho
+  { name: "25x20", width: 20, height: 25, priceMultiplier: 1 },      // $20.000 - VERTICAL
+  { name: "30x24", width: 24, height: 30, priceMultiplier: 1.5 },    // $30.000 - VERTICAL
+  { name: "40x30", width: 30, height: 40, priceMultiplier: 2 },      // $40.000 - VERTICAL
+  { name: "50x40", width: 40, height: 50, priceMultiplier: 2.5 },    // $50.000 - VERTICAL
+  { name: "70x40", width: 40, height: 70, priceMultiplier: 4 },      // $80.000 - VERTICAL
+  { name: "70x50", width: 50, height: 70, priceMultiplier: 6 },      // $120.000 - VERTICAL
+
+  // CUADRADOS (height = width)
+  { name: "50x50", width: 50, height: 50, priceMultiplier: 4.5 },    // $90.000 - CUADRADO
+  { name: "60x60", width: 60, height: 60, priceMultiplier: 6.5 },    // $130.000 - CUADRADO
+
+  // HORIZONTALES (width > height) - más ancho que alto
+  { name: "50x60", width: 60, height: 50, priceMultiplier: 5 },      // $100.000 - HORIZONTAL
+  { name: "50x70", width: 70, height: 50, priceMultiplier: 6 },      // $120.000 - HORIZONTAL
+  { name: "60x80", width: 80, height: 60, priceMultiplier: 8 },      // $160.000 - HORIZONTAL
+  { name: "80x100", width: 100, height: 80, priceMultiplier: 10.8 }, // $216.000 - HORIZONTAL
+  { name: "100x140", width: 140, height: 100, priceMultiplier: 16.2 }, // $324.000 - HORIZONTAL
+  { name: "140x180", width: 180, height: 140, priceMultiplier: 21.6 }, // $432.000 - HORIZONTAL
 ];
 
 export const BASE_CUSTOM_ORDER_PRICE = 20000; // Precio base: $20.000 CLP

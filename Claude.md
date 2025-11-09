@@ -345,8 +345,10 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 **Sprint 3:** Coupon system, multi-image galleries, analytics dashboard
 **Sprint 4:** SEO (Open Graph, JSON-LD, sitemap, robots.txt), UX polish
 **Sprint 5:** ✅ COMPLETED - Complete mobile responsiveness (hamburger menu, inline preview, touch-optimized)
+**Sprint 5.5:** ✅ COMPLETED - UX Feedback (toast notifications, profile edit, header z-index fix)
+**Sprint 6:** 🚀 IN PROGRESS - Quick-Win Features (WhatsApp Widget → PWA → Advanced Discounts)
 
-**Status:** ✅ Production-ready. 12 major features + full mobile optimization implemented. Build passing without errors.
+**Status:** ✅ Production-ready. 13 major features + UX polish + WhatsApp Widget implemented. Build passing without errors.
 
 ## Sprint 5 - Mobile Responsiveness (COMPLETED ✅)
 
@@ -419,14 +421,124 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 4. **Responsive Typography:** Text scales appropriately across all breakpoints
 5. **Visual Hierarchy:** Maintained brutalist design while ensuring mobile usability
 
+## Sprint 6 - Quick-Win Features (IN PROGRESS 🚀)
+
+### Part 1: WhatsApp Widget ✅ COMPLETED
+**Time:** 15-20 minutes | **Impact:** High conversion rate improvement
+
+#### Implementation
+- Created `components/WhatsAppWidget.tsx` - Floating widget with brutalist design
+- Context-aware messaging based on current page
+- Dismissible with localStorage persistence
+- Integrated globally in `app/layout.tsx`
+- Hidden on admin pages
+- **AdBlocker-proof:** No "WhatsApp" in localStorage keys or aria-labels
+
+#### Features
+- **Floating Button:** Green WhatsApp icon (bottom-right, z-[9998])
+- **Expandable Message:** Click to see help message bubble
+- **Smart Messages:** Different message per page (home, product, cart, custom order, etc.)
+- **Dismissible:** Red X button hides widget permanently (localStorage: `chat-widget-hidden`)
+- **Design:** Border-4, shadow-[8px_8px_0px_0px], consistent with brutalist theme
+
+#### Bug Fixes
+- ✅ Renamed localStorage key from `whatsapp-widget-dismissed` to `chat-widget-hidden`
+- ✅ Changed aria-labels from "WhatsApp" to generic "chat"
+- ✅ Button text: "Enviar Mensaje" instead of "Abrir WhatsApp"
+
+#### Code Pattern
+```typescript
+const getContextMessage = () => {
+  const baseMessage = "Hola! Estoy interesado en Bruised Art. ";
+  if (pathname === "/") return baseMessage + "Me gustaría conocer más...";
+  if (pathname.startsWith("/obra/")) return baseMessage + "Consulta sobre obra...";
+  // ... context-specific messages
+};
+
+const handleWhatsAppClick = () => {
+  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+  const message = encodeURIComponent(getContextMessage());
+  window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
+};
+```
+
+### Part 1.5: Canvas Size & Orientation System ✅ COMPLETED
+**Time:** 30 minutes | **Impact:** Realistic canvas previews, correct orientation
+
+#### Problem
+- Users could select orientations that didn't match canvas size (e.g., 80x60 as vertical)
+- Canvas preview didn't show realistic proportions (limited by maxWidth/maxHeight)
+- First number in size notation wasn't consistently treated as width
+
+#### Solution - Automatic Orientation
+**Canvas size notation:** `ALTO x ANCHO` (e.g., 50x40 = 50cm alto x 40cm ancho)
+- **CONVENCIÓN ESTÁNDAR:** Primer número = ALTO (height), Segundo número = ANCHO (width)
+- **height > width** → VERTICAL (e.g., 25x20, 40x30, 70x40)
+- **width > height** → HORIZONTAL (e.g., 50x60, 60x80, 100x140)
+- **height = width** → CUADRADO (e.g., 50x50, 60x60)
+
+#### Implementation Changes
+1. **Removed orientation buttons** - Orientation now automatic based on size
+2. **Updated CUSTOM_ORDER_SIZES** in `types/index.ts`:
+   - ✅ CORRECCIÓN CRÍTICA: Nombres reflejan convención ALTO x ANCHO
+   - Added 2 square sizes: 50x50, 60x60
+   - Organized sizes by orientation (vertical → square → horizontal)
+   - Clear comments indicating orientation for each size
+3. **Fixed canvas preview** in `app/obra-a-pedido/page.tsx`:
+   - Changed scale from 6x to 3x for better fit
+   - Removed `Math.min` that was cutting proportions
+   - Added `aspectRatio` CSS property for exact proportions
+   - New dimensions: `width: ${canvasWidth * 3}px`, `height: ${canvasHeight * 3}px`
+   - Responsive: `maxWidth: min(calc(100vw - 120px), 500px)`
+4. **Simplified state** - Removed `orientation` from formData (now computed)
+5. **Display shows real dimensions** - Always shows `{canvasWidth} x {canvasHeight} cm`
+
+#### New Canvas Sizes (14 total) - Formato: ALTO x ANCHO
+```typescript
+// VERTICALES (6) - más alto que ancho
+25x20 ($20.000), 30x24 ($30.000), 40x30 ($40.000),
+50x40 ($50.000), 70x40 ($80.000), 70x50 ($120.000)
+
+// CUADRADOS (2)
+50x50 ($90.000), 60x60 ($130.000)
+
+// HORIZONTALES (6) - más ancho que alto
+50x60 ($100.000), 50x70 ($120.000), 60x80 ($160.000),
+80x100 ($216.000), 100x140 ($324.000), 140x180 ($432.000)
+```
+
+#### Key Code Pattern
+```typescript
+// Automatic orientation
+const orientation: Orientation =
+  selectedSize.width < selectedSize.height ? "vertical"
+  : selectedSize.width > selectedSize.height ? "horizontal"
+  : "vertical"; // squares default to vertical
+
+// Real proportions in preview
+const canvasWidth = selectedSize.width;
+const canvasHeight = selectedSize.height;
+
+<div style={{
+  width: `${canvasWidth * 3}px`,
+  height: `${canvasHeight * 3}px`,
+  aspectRatio: `${canvasWidth} / ${canvasHeight}`,
+  maxWidth: "min(calc(100vw - 120px), 500px)",
+  maxHeight: "min(70vh, 600px)",
+}} />
+```
+
+### Part 2: PWA (Progressive Web App) - PENDING
+**Time:** 30-40 minutes | **Impact:** App-like experience, works offline
+
+### Part 3: Advanced Discounts - PENDING
+**Time:** 45-60 minutes | **Impact:** Marketing automation, customer retention
+
 ## Future Development Options
 
-Choose one for Sprint 6:
-- **PWA:** Add service worker, offline support, install prompt
-- **Email Notifications:** Firebase Functions + SendGrid for order confirmations
-- **Advanced Discounts:** Category-specific coupons, loyalty points, first-purchase auto-coupons
-- **WhatsApp Widget:** Floating chat widget with predefined messages per page
-- **Blog System:** Rich text editor, categories, tags, comments for SEO/engagement
+Remaining options for future sprints:
+- **Email Notifications:** Firebase Functions + SendGrid for order confirmations (2-3 hrs)
+- **Blog System:** Rich text editor, categories, tags, comments for SEO/engagement (1.5-2 hrs)
 
 ## Resources
 
