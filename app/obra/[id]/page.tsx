@@ -73,6 +73,17 @@ export default function PaintingDetailPage() {
   const images = painting ? getImages(painting) : [];
   const currentImage = images[selectedImageIndex] || "";
 
+  // Calcular aspect ratio real basado en las dimensiones de la pintura
+  const getAspectRatio = () => {
+    if (!painting) return "3/4"; // Default
+    const { width, height } = painting.dimensions;
+    // Calcular el ratio más simple posible
+    const ratio = width / height;
+    return ratio;
+  };
+
+  const aspectRatio = painting ? getAspectRatio() : 0.75;
+
   const handleImageClick = () => {
     setIsZoomed(true);
   };
@@ -138,25 +149,37 @@ export default function PaintingDetailPage() {
             <div 
               className="relative w-full cursor-zoom-in overflow-hidden border-4 border-black bg-gray-50"
               style={{
-                minHeight: "500px",
+                aspectRatio: `${painting.dimensions.width} / ${painting.dimensions.height}`,
+                minHeight: "400px",
                 maxHeight: "80vh",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                padding: "1rem",
               }}
               onClick={handleImageClick}
             >
-              <div className="relative flex h-full w-full items-center justify-center p-4">
+              <div 
+                className="relative flex items-center justify-center"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                }}
+              >
                 <Image
                   src={currentImage}
                   alt={painting.title}
-                  width={1200}
-                  height={1600}
-                  className="h-auto max-h-full w-auto max-w-full object-contain"
+                  width={painting.dimensions.width * 20}
+                  height={painting.dimensions.height * 20}
+                  className="object-contain"
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   style={{
                     objectFit: "contain",
+                    width: "auto",
+                    height: "auto",
                     maxWidth: "100%",
                     maxHeight: "100%",
                   }}
@@ -360,18 +383,22 @@ export default function PaintingDetailPage() {
             style={{
               maxWidth: "90vw",
               maxHeight: "90vh",
+              aspectRatio: painting ? `${painting.dimensions.width} / ${painting.dimensions.height}` : "3/4",
+              padding: "2rem",
             }}
           >
-            <div className="relative flex h-full w-full items-center justify-center p-8">
+            <div className="relative flex h-full w-full items-center justify-center">
               <Image
                 src={currentImage}
                 alt={painting.title}
-                width={2000}
-                height={2000}
-                className="h-auto max-h-full w-auto max-w-full object-contain"
+                width={painting.dimensions.width * 20}
+                height={painting.dimensions.height * 20}
+                className="object-contain"
                 sizes="90vw"
                 style={{
                   objectFit: "contain",
+                  width: "auto",
+                  height: "auto",
                   maxWidth: "100%",
                   maxHeight: "100%",
                 }}
