@@ -41,6 +41,10 @@ export default function CustomOrderPage() {
       ? selectedSize.width
       : selectedSize.height;
 
+  // Dimensiones para mostrar (más intuitivo: alto x ancho en vertical)
+  const displayWidth = formData.orientation === "horizontal" ? canvasWidth : canvasHeight;
+  const displayHeight = formData.orientation === "horizontal" ? canvasHeight : canvasWidth;
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -228,7 +232,7 @@ export default function CustomOrderPage() {
                       Dimensiones:
                     </span>
                     <span className="font-black text-black">
-                      {canvasWidth} x {canvasHeight} cm
+                      {displayWidth} x {displayHeight} cm
                     </span>
                   </div>
                   <div className="flex items-center justify-between border-b-4 border-black p-4 bg-white">
