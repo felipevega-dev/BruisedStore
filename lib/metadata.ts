@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
 
 const siteConfig = {
-  name: 'Bruised Art',
+  name: 'José Vega',
   description: 'Galería de arte online. Descubre pinturas únicas y obras personalizadas. Cada trazo cuenta una historia.',
   url: 'https://bruisedart.com', // Actualizar con tu dominio real
   ogImage: '/og-image.jpg', // Crear esta imagen
   links: {
-    instagram: 'https://instagram.com/bruisedart',
+    instagram: 'https://instagram.com/joseriop',
     facebook: 'https://facebook.com/bruisedart',
   },
 };
@@ -31,8 +31,8 @@ export function generateSiteMetadata(): Metadata {
       'retrato',
       'paisaje',
     ],
-    authors: [{ name: 'Bruised Art' }],
-    creator: 'Bruised Art',
+    authors: [{ name: 'José Vega' }],
+    creator: 'José Vega',
     openGraph: {
       type: 'website',
       locale: 'es_CL',
@@ -84,7 +84,7 @@ export function generatePaintingMetadata(painting: {
     }).format(price);
   };
 
-  const description = painting.description || `${painting.title} - Pintura original disponible en Bruised Art`;
+  const description = painting.description || `${painting.title} - Pintura original de José Vega`;
   const fullTitle = `${painting.title} - ${formatPrice(painting.price)}`;
 
   return {
@@ -153,7 +153,7 @@ export function generateProductSchema(painting: {
     image: painting.imageUrl,
     brand: {
       '@type': 'Brand',
-      name: 'Bruised Art',
+      name: 'José Vega',
     },
     offers: {
       '@type': 'Offer',

@@ -11,7 +11,8 @@ import {
   Orientation,
 } from "@/types";
 import Image from "next/image";
-import { Upload, Loader2, CheckCircle2, Paintbrush } from "lucide-react";
+import { Upload, Loader2, CheckCircle2, Paintbrush, Crop } from "lucide-react";
+import ImageCropper from "@/components/ImageCropper";
 
 export default function CustomOrderPage() {
   const [formData, setFormData] = useState({
@@ -23,6 +24,8 @@ export default function CustomOrderPage() {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [tempImage, setTempImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -46,12 +49,35 @@ export default function CustomOrderPage() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result as string);
+        setTempImage(reader.result as string);
+        setShowCropper(true);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleCropComplete = (croppedBlob: Blob) => {
+    // Create File from Blob
+    const croppedFile = new File([croppedBlob], "cropped-image.jpg", {
+      type: "image/jpeg",
+    });
+    setImageFile(croppedFile);
+
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(croppedBlob);
+    setImagePreview(previewUrl);
+    setShowCropper(false);
+    setTempImage(null);
+  };
+
+  const handleCropCancel = () => {
+    setShowCropper(false);
+    setTempImage(null);
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -60,6 +86,45 @@ export default function CustomOrderPage() {
       style: "currency",
       currency: "CLP",
     }).format(price);
+  };
+
+  // Función para cambiar orientación y reasignar tamaño más cercano
+  const handleOrientationChange = (newOrientation: Orientation) => {
+    const currentArea = selectedSize.width * selectedSize.height;
+
+    // Si ya es la orientación deseada, no hacer nada
+    if (orientation === newOrientation) return;
+
+    // Filtrar tamaños por orientación deseada
+    const targetSizes = CUSTOM_ORDER_SIZES.filter((size, index) => {
+      const sizeOrientation: Orientation =
+        size.width < size.height ? "vertical"
+        : size.width > size.height ? "horizontal"
+        : "vertical";
+      return sizeOrientation === newOrientation;
+    });
+
+    // Encontrar el tamaño más cercano en área
+    let closestIndex = 0;
+    let closestDiff = Infinity;
+
+    CUSTOM_ORDER_SIZES.forEach((size, index) => {
+      const sizeOrientation: Orientation =
+        size.width < size.height ? "vertical"
+        : size.width > size.height ? "horizontal"
+        : "vertical";
+
+      if (sizeOrientation === newOrientation) {
+        const area = size.width * size.height;
+        const diff = Math.abs(area - currentArea);
+        if (diff < closestDiff) {
+          closestDiff = diff;
+          closestIndex = index;
+        }
+      }
+    });
+
+    setFormData({ ...formData, selectedSizeIndex: closestIndex });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -267,14 +332,30 @@ export default function CustomOrderPage() {
                             priority
                           />
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => fileInputRef.current?.click()}
-                          className="mt-3 flex w-full items-center justify-center gap-2 rounded border-2 border-red-600 bg-white px-4 py-2 text-sm font-bold text-red-600 transition-all hover:bg-red-50"
-                        >
-                          <Upload className="h-4 w-4" />
-                          Cambiar Imagen
-                        </button>
+                        <div className="mt-3 flex gap-2">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowCropper(true);
+                            }}
+                            className="flex flex-1 items-center justify-center gap-2 rounded border-2 border-black bg-white px-4 py-2 text-sm font-bold text-black transition-all hover:bg-gray-50"
+                          >
+                            <Crop className="h-4 w-4" />
+                            Ajustar Imagen
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              fileInputRef.current?.click();
+                            }}
+                            className="flex flex-1 items-center justify-center gap-2 rounded border-2 border-red-600 bg-white px-4 py-2 text-sm font-bold text-red-600 transition-all hover:bg-red-50"
+                          >
+                            <Upload className="h-4 w-4" />
+                            Cambiar
+                          </button>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -320,7 +401,69 @@ export default function CustomOrderPage() {
                   )}
                 </div>
 
-                {/* Size Selection - Orientación automática según tamaño */}
+                {/* Orientation Selection */}
+                <div>
+                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                    Orientación del Lienzo *
+                  </label>
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                    <button
+                      type="button"
+                      onClick={() => handleOrientationChange("vertical")}
+                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 sm:p-6 ${
+                        orientation === "vertical"
+                          ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
+                          : "border-black bg-white hover:bg-gray-50"
+                      }`}
+                    >
+                      <div
+                        className={`h-16 w-12 border-4 sm:h-20 sm:w-14 ${
+                          orientation === "vertical"
+                            ? "border-red-600 bg-red-100"
+                            : "border-black bg-gray-100"
+                        }`}
+                      ></div>
+                      <span
+                        className={`text-xs font-black sm:text-sm ${
+                          orientation === "vertical"
+                            ? "text-red-600"
+                            : "text-black"
+                        }`}
+                      >
+                        Vertical
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleOrientationChange("horizontal")}
+                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 sm:p-6 ${
+                        orientation === "horizontal"
+                          ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
+                          : "border-black bg-white hover:bg-gray-50"
+                      }`}
+                    >
+                      <div
+                        className={`h-12 w-16 border-4 sm:h-14 sm:w-20 ${
+                          orientation === "horizontal"
+                            ? "border-red-600 bg-red-100"
+                            : "border-black bg-gray-100"
+                        }`}
+                      ></div>
+                      <span
+                        className={`text-xs font-black sm:text-sm ${
+                          orientation === "horizontal"
+                            ? "text-red-600"
+                            : "text-black"
+                        }`}
+                      >
+                        Horizontal
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Size Selection */}
                 <div>
                   <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
                     Tamaño del Lienzo *
@@ -434,6 +577,16 @@ export default function CustomOrderPage() {
           </div>
         </div>
       </div>
+
+      {/* Image Cropper Modal */}
+      {showCropper && (tempImage || imagePreview) && (
+        <ImageCropper
+          image={tempImage || imagePreview!}
+          aspectRatio={canvasWidth / canvasHeight}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
+      )}
     </div>
   );
 }

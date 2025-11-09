@@ -28,10 +28,11 @@ export default function WhatsAppWidget() {
   };
 
   const getContextMessage = () => {
-    const baseMessage = "Hola! Estoy interesado en Bruised Art. ";
+    const baseMessage = "Hola! Estoy interesado en las obras de José Vega. ";
 
+    // Mensajes según la página actual
     if (pathname === "/") {
-      return baseMessage + "Me gustaría conocer más sobre las obras disponibles.";
+      return baseMessage + "Me gustaría conocer más sobre las pinturas disponibles.";
     } else if (pathname.startsWith("/obra/")) {
       return baseMessage + "Tengo una consulta sobre una obra específica.";
     } else if (pathname === "/carrito") {

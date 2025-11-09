@@ -10,7 +10,7 @@ export default function Footer() {
           {/* About */}
           <div>
             <h3 className="mb-4 text-lg font-bold text-black">
-              Bruised Art
+              José Vega
             </h3>
             <p className="text-sm text-gray-600">
               Galería de arte online especializada en pinturas únicas y obras
@@ -64,7 +64,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 border-t-2 border-black pt-8 text-center text-sm text-gray-600">
-          <p>© {currentYear} Bruised Art. Todos los derechos reservados.</p>
+          <p>© {currentYear} José Vega. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

@@ -76,7 +76,7 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group z-50" onClick={closeMobileMenu}>
             <h1 className="text-xl font-black text-gray-900 transition-all group-hover:text-red-600 sm:text-2xl lg:text-3xl">
-              Bruised Art
+              José Vega
             </h1>
           </Link>
 

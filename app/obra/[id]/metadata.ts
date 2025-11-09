@@ -33,6 +33,6 @@ export async function generateMetadata({
   // Fallback metadata
   return {
     title: 'Obra de Arte',
-    description: 'Descubre esta obra única en Bruised Art',
+    description: 'Descubre esta obra única de José Vega',
   };
 }

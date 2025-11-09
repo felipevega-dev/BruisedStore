@@ -271,7 +271,7 @@ export default function CheckoutPage() {
   if (orderCreated) {
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "56912345678";
     const whatsappMessage = encodeURIComponent(
-      `¡Hola! Acabo de realizar un pedido en Bruised Art 🎨\n\n` +
+      `¡Hola! Acabo de realizar un pedido de las obras de José Vega 🎨\n\n` +
       `📋 *Número de Orden:* ${orderNumber}\n` +
       `💰 *Total:* ${formatPrice(getTotal() + 5000)}\n` +
       `📦 *Cantidad de items:* ${items.length}\n` +

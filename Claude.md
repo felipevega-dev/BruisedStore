@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**Bruised Art** - E-commerce platform for selling paintings online, inspired by [theberserkerart.cl](https://www.theberserkerart.cl/). Built with Next.js 16 (App Router), TypeScript, Tailwind CSS, and Firebase.
+**José Vega Art Gallery** - E-commerce platform for selling paintings online by Chilean artist José Vega (@joseriop). Built with Next.js 16 (App Router), TypeScript, Tailwind CSS, and Firebase.
 
 **Design Philosophy:** Brutalist design with heavy black borders (4px), bold shadows (`shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`), high contrast (black on white), and accent colors in red (#dc2626) and yellow (#fef3c7).
 
@@ -346,9 +346,9 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 **Sprint 4:** SEO (Open Graph, JSON-LD, sitemap, robots.txt), UX polish
 **Sprint 5:** ✅ COMPLETED - Complete mobile responsiveness (hamburger menu, inline preview, touch-optimized)
 **Sprint 5.5:** ✅ COMPLETED - UX Feedback (toast notifications, profile edit, header z-index fix)
-**Sprint 6:** 🚀 IN PROGRESS - Quick-Win Features (WhatsApp Widget → PWA → Advanced Discounts)
+**Sprint 6:** ✅ COMPLETED - Quick-Win Features (WhatsApp Widget → Rebrand → Instagram → Image Cropper)
 
-**Status:** ✅ Production-ready. 13 major features + UX polish + WhatsApp Widget implemented. Build passing without errors.
+**Status:** ✅ Production-ready. 14 major features + full UX polish + WhatsApp Widget + Image Cropper implemented. Build passing without errors.
 
 ## Sprint 5 - Mobile Responsiveness (COMPLETED ✅)
 
@@ -421,7 +421,7 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 4. **Responsive Typography:** Text scales appropriately across all breakpoints
 5. **Visual Hierarchy:** Maintained brutalist design while ensuring mobile usability
 
-## Sprint 6 - Quick-Win Features (IN PROGRESS 🚀)
+## Sprint 6 - Quick-Win Features (COMPLETED ✅)
 
 ### Part 1: WhatsApp Widget ✅ COMPLETED
 **Time:** 15-20 minutes | **Impact:** High conversion rate improvement
@@ -449,7 +449,7 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 #### Code Pattern
 ```typescript
 const getContextMessage = () => {
-  const baseMessage = "Hola! Estoy interesado en Bruised Art. ";
+  const baseMessage = "Hola! Estoy interesado en las obras de José Vega. ";
   if (pathname === "/") return baseMessage + "Me gustaría conocer más...";
   if (pathname.startsWith("/obra/")) return baseMessage + "Consulta sobre obra...";
   // ... context-specific messages
@@ -528,6 +528,142 @@ const canvasHeight = selectedSize.height;
 }} />
 ```
 
+### Part 2: Rebrand to José Vega ✅ COMPLETED
+**Time:** 20 minutes | **Impact:** Brand consistency, artist recognition
+
+#### Changes Made
+- Updated all instances of "Bruised Art" to "José Vega" across the application
+- Changed Instagram link from @bruisedart to @joseriop
+- Files updated:
+  - `components/Header.tsx` - Logo and site title
+  - `components/Footer.tsx` - Footer branding and copyright
+  - `components/WhatsAppWidget.tsx` - Chat messages
+  - `lib/metadata.ts` - SEO metadata, Open Graph, JSON-LD
+  - `app/page.tsx` - Hero section title
+  - `app/checkout/page.tsx` - WhatsApp order message
+  - `app/obra/[id]/metadata.ts` - Painting metadata
+  - `CLAUDE.md` - Documentation
+
+### Part 3: Instagram Section ✅ COMPLETED
+**Time:** 15 minutes | **Impact:** Social proof, artist connection
+
+#### Implementation
+- Replaced hidden catalog on homepage with Instagram CTA section
+- Catalog temporarily hidden (wrapped in `{false && ...}`) until quality photos ready
+- Instagram section features:
+  - Brutalist design with border-4, shadow effects
+  - Instagram SVG icon with hover color change to red
+  - Large "@joseriop" link to artist's profile
+  - Opens in new tab (`target="_blank"`)
+  - Yellow info box explaining feed will be added later
+  - Fully responsive design
+
+#### Code Pattern
+```tsx
+<a
+  href="https://instagram.com/joseriop"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="group flex items-center gap-4 border-4 border-black..."
+>
+  <svg className="h-12 w-12 transition-colors group-hover:fill-red-600">
+    {/* Instagram icon path */}
+  </svg>
+  <div className="text-left">
+    <p className="text-2xl font-black...">@joseriop</p>
+    <p className="text-sm...">Ver perfil completo →</p>
+  </div>
+</a>
+```
+
+### Part 4: Image Crop Tool ✅ COMPLETED
+**Time:** 45 minutes | **Impact:** Professional image handling, better paintings
+
+#### Implementation
+- Installed `react-easy-crop` library for advanced cropping
+- Created `components/ImageCropper.tsx` component with:
+  - Full-screen modal overlay (z-[9999], black background)
+  - Real-time crop preview with aspect ratio matching selected canvas
+  - Zoom control (1x - 3x) with slider and percentage display
+  - Rotation control (0° - 360°) with slider and degree display
+  - Touch-friendly drag to reposition image
+  - Apply/Cancel buttons with brutalist design
+  - Processing state with spinner
+  - Help text for user guidance
+
+#### Integration in Custom Order Page
+1. **Automatic Cropper on Upload:**
+   - When user selects image, cropper opens immediately
+   - Image loaded into `tempImage` state
+   - Modal shows with aspect ratio of currently selected canvas
+
+2. **Manual Adjustment:**
+   - "Ajustar Imagen" button appears after image is uploaded (mobile preview)
+   - Reopens cropper with current image
+   - Preserves existing crop or allows new adjustment
+
+3. **Dynamic Aspect Ratio:**
+   - Calculated as `canvasWidth / canvasHeight`
+   - Updates automatically when user changes canvas size
+   - Examples: 60x40 = 1.5 aspect, 25x20 = 0.8 aspect, 50x50 = 1.0 aspect
+
+4. **Output Handling:**
+   - Creates cropped Blob with 95% JPEG quality
+   - Converts to File object for Firebase upload
+   - Generates preview URL for immediate display
+   - Cleans up temporary image state
+
+#### Key Code Pattern
+```typescript
+// In ImageCropper.tsx
+const createCroppedImage = async (): Promise<Blob> => {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  
+  canvas.width = croppedAreaPixels.width;
+  canvas.height = croppedAreaPixels.height;
+  
+  // Apply rotation
+  ctx.translate(canvas.width / 2, canvas.height / 2);
+  ctx.rotate((rotation * Math.PI) / 180);
+  
+  // Draw cropped area
+  ctx.drawImage(imageObj, croppedAreaPixels.x, croppedAreaPixels.y, ...);
+  
+  return new Promise((resolve) => {
+    canvas.toBlob(blob => resolve(blob), "image/jpeg", 0.95);
+  });
+};
+
+// In obra-a-pedido/page.tsx
+{showCropper && (tempImage || imagePreview) && (
+  <ImageCropper
+    image={tempImage || imagePreview!}
+    aspectRatio={canvasWidth / canvasHeight}
+    onCropComplete={handleCropComplete}
+    onCancel={handleCropCancel}
+  />
+)}
+```
+
+#### User Flow
+1. User selects canvas size (e.g., 60x80 horizontal)
+2. User uploads reference image
+3. **Cropper opens automatically** with 60/80 = 0.75 aspect ratio
+4. User adjusts zoom, rotation, position
+5. User clicks "Aplicar Ajuste"
+6. Cropped image appears in preview
+7. User can click "Ajustar Imagen" to reopen cropper
+8. User can change canvas size → click "Ajustar Imagen" → crop to new aspect ratio
+9. On submit, cropped image uploads to Firebase Storage
+
+#### Benefits
+- **Perfect Fit:** Images always match selected canvas proportions
+- **Quality Control:** Users can frame/compose their reference properly
+- **Professional:** No distorted or stretched images
+- **Flexibility:** Change canvas size and re-crop without re-uploading
+- **Mobile-Friendly:** Touch gestures work for pan/zoom
+
 ### Part 2: PWA (Progressive Web App) - PENDING
 **Time:** 30-40 minutes | **Impact:** App-like experience, works offline
 
@@ -537,8 +673,11 @@ const canvasHeight = selectedSize.height;
 ## Future Development Options
 
 Remaining options for future sprints:
+- **PWA Implementation:** Service workers, offline support, install prompt (30-40 min)
+- **Advanced Discounts:** Quantity-based, category-based, user-based discount rules (45-60 min)
 - **Email Notifications:** Firebase Functions + SendGrid for order confirmations (2-3 hrs)
 - **Blog System:** Rich text editor, categories, tags, comments for SEO/engagement (1.5-2 hrs)
+- **Real Instagram Feed:** Implement actual Instagram API or third-party widget (1-2 hrs)
 
 ## Resources
 
