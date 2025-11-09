@@ -1,0 +1,176 @@
+"use client";
+
+import { useState } from "react";
+import { PAINTING_CATEGORIES, FilterOptions, PaintingCategory } from "@/types";
+import { Search, SlidersHorizontal, X } from "lucide-react";
+
+interface FilterBarProps {
+  onFilterChange: (filters: FilterOptions) => void;
+  totalResults: number;
+}
+
+export default function FilterBar({ onFilterChange, totalResults }: FilterBarProps) {
+  const [showFilters, setShowFilters] = useState(false);
+  const [filters, setFilters] = useState<FilterOptions>({
+    category: 'all',
+    sortBy: 'recent',
+    searchQuery: '',
+  });
+
+  const handleFilterChange = (key: keyof FilterOptions, value: any) => {
+    const newFilters = { ...filters, [key]: value };
+    setFilters(newFilters);
+    onFilterChange(newFilters);
+  };
+
+  const handleReset = () => {
+    const defaultFilters: FilterOptions = {
+      category: 'all',
+      sortBy: 'recent',
+      searchQuery: '',
+      minPrice: undefined,
+      maxPrice: undefined,
+    };
+    setFilters(defaultFilters);
+    onFilterChange(defaultFilters);
+  };
+
+  const hasActiveFilters = 
+    filters.category !== 'all' || 
+    filters.minPrice || 
+    filters.maxPrice || 
+    filters.searchQuery;
+
+  return (
+    <div className="mb-8 space-y-4">
+      {/* Barra de búsqueda y botón de filtros */}
+      <div className="flex flex-col gap-4 sm:flex-row">
+        {/* Búsqueda */}
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Buscar obras por título..."
+            value={filters.searchQuery || ''}
+            onChange={(e) => handleFilterChange('searchQuery', e.target.value)}
+            className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-4 text-gray-900 placeholder-gray-500 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+          />
+        </div>
+
+        {/* Botón de filtros */}
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className={`flex items-center gap-2 rounded-lg border-2 px-6 py-3 font-semibold transition-all ${
+            showFilters || hasActiveFilters
+              ? 'border-red-600 bg-red-600 text-white'
+              : 'border-black bg-white text-gray-900 hover:bg-gray-50'
+          }`}
+        >
+          <SlidersHorizontal className="h-5 w-5" />
+          <span className="hidden sm:inline">Filtros</span>
+          {hasActiveFilters && (
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-red-600">
+              !
+            </span>
+          )}
+        </button>
+      </div>
+
+      {/* Panel de filtros desplegable */}
+      {showFilters && (
+        <div className="rounded-lg border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="mb-4 flex items-center justify-between">
+            <h3 className="text-lg font-bold text-gray-900">Filtros Avanzados</h3>
+            {hasActiveFilters && (
+              <button
+                onClick={handleReset}
+                className="flex items-center gap-1 text-sm font-semibold text-red-600 hover:text-red-700"
+              >
+                <X className="h-4 w-4" />
+                Limpiar filtros
+              </button>
+            )}
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Categoría */}
+            <div>
+              <label className="mb-2 block text-sm font-bold text-gray-900">
+                Categoría
+              </label>
+              <select
+                value={filters.category || 'all'}
+                onChange={(e) => handleFilterChange('category', e.target.value as PaintingCategory | 'all')}
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+              >
+                <option value="all">Todas las categorías</option>
+                {PAINTING_CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Ordenar por */}
+            <div>
+              <label className="mb-2 block text-sm font-bold text-gray-900">
+                Ordenar por
+              </label>
+              <select
+                value={filters.sortBy || 'recent'}
+                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+              >
+                <option value="recent">Más recientes</option>
+                <option value="price-asc">Precio: Menor a Mayor</option>
+                <option value="price-desc">Precio: Mayor a Menor</option>
+                <option value="title-asc">Título: A-Z</option>
+                <option value="title-desc">Título: Z-A</option>
+              </select>
+            </div>
+
+            {/* Rango de precio */}
+            <div>
+              <label className="mb-2 block text-sm font-bold text-gray-900">
+                Precio mínimo
+              </label>
+              <input
+                type="number"
+                placeholder="$0"
+                value={filters.minPrice || ''}
+                onChange={(e) => handleFilterChange('minPrice', e.target.value ? Number(e.target.value) : undefined)}
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-bold text-gray-900">
+                Precio máximo
+              </label>
+              <input
+                type="number"
+                placeholder="Sin límite"
+                value={filters.maxPrice || ''}
+                onChange={(e) => handleFilterChange('maxPrice', e.target.value ? Number(e.target.value) : undefined)}
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Contador de resultados */}
+      <div className="flex items-center justify-between text-sm">
+        <p className="font-semibold text-gray-700">
+          {totalResults} {totalResults === 1 ? 'obra encontrada' : 'obras encontradas'}
+        </p>
+        {hasActiveFilters && (
+          <p className="text-gray-500">
+            Filtros activos
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}

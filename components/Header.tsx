@@ -158,10 +158,10 @@ export default function Header() {
               </div>
             ) : (
               <Link
-                href="/admin"
+                href="/login"
                 className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:border-gray-400 hover:bg-gray-50 sm:text-base"
               >
-                Login
+                Iniciar Sesión
               </Link>
             )}
           </nav>

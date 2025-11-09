@@ -16,7 +16,7 @@ import {
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
-import { Painting, Orientation } from "@/types";
+import { Painting, Orientation, PAINTING_CATEGORIES, PaintingCategory } from "@/types";
 import imageCompression from "browser-image-compression";
 import Image from "next/image";
 import { Trash2, Plus, Loader2, Edit, X, ArrowLeft } from "lucide-react";
@@ -636,13 +636,18 @@ export default function AdminPaintingsPage() {
                 <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Categoría
                 </label>
-                <input
-                  type="text"
+                <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
-                  placeholder="Categoría (opcional)"
-                />
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                >
+                  <option value="">Sin categoría</option>
+                  {PAINTING_CATEGORIES.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Available */}

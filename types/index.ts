@@ -12,10 +12,45 @@ export interface Painting {
   orientation?: Orientation; // horizontal o vertical
   available: boolean;
   createdAt: Date;
-  category?: string;
+  category?: PaintingCategory;
 }
 
 export type Orientation = 'horizontal' | 'vertical';
+
+export type PaintingCategory = 
+  | 'abstracto'
+  | 'retrato'
+  | 'paisaje'
+  | 'naturaleza-muerta'
+  | 'surrealismo'
+  | 'expresionismo'
+  | 'minimalista'
+  | 'figurativo'
+  | 'otro';
+
+export const PAINTING_CATEGORIES: { value: PaintingCategory; label: string }[] = [
+  { value: 'abstracto', label: 'Abstracto' },
+  { value: 'retrato', label: 'Retrato' },
+  { value: 'paisaje', label: 'Paisaje' },
+  { value: 'naturaleza-muerta', label: 'Naturaleza Muerta' },
+  { value: 'surrealismo', label: 'Surrealismo' },
+  { value: 'expresionismo', label: 'Expresionismo' },
+  { value: 'minimalista', label: 'Minimalista' },
+  { value: 'figurativo', label: 'Figurativo' },
+  { value: 'otro', label: 'Otro' },
+];
+
+export interface FilterOptions {
+  category?: PaintingCategory | 'all';
+  minPrice?: number;
+  maxPrice?: number;
+  minWidth?: number;
+  maxWidth?: number;
+  minHeight?: number;
+  maxHeight?: number;
+  sortBy?: 'recent' | 'price-asc' | 'price-desc' | 'title-asc' | 'title-desc';
+  searchQuery?: string;
+}
 
 // ========== CUSTOM ORDERS (Obras a Pedido) ==========
 

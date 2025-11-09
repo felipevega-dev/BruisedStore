@@ -105,6 +105,19 @@ bruisedstore/
 - Vista de imagen de referencia
 - Información del cliente
 
+## Configuración de WhatsApp
+
+### Número de WhatsApp para Contacto
+
+Configura tu número de WhatsApp en las variables de entorno:
+
+```env
+# En .env.local
+NEXT_PUBLIC_WHATSAPP_NUMBER=56912345678  # Sin espacios, sin +, con código país
+```
+
+El sistema enviará automáticamente mensajes pre-formateados con la información del pedido cuando el cliente haga clic en "Contactar por WhatsApp".
+
 ## Configuración de Firebase
 
 ### Variables de Entorno (.env.local)
@@ -412,6 +425,171 @@ Todos los componentes están optimizados para móvil y desktop.
 - `refunded` → Reembolsado
 
 ## Próximas Integraciones Recomendadas
+
+### 🔥 BACKLOG DE MEJORAS Y NUEVAS FEATURES
+
+#### **PRIORIDAD ALTA - Features Core** 🔴
+
+##### 1. Sistema de Registro y Login para Usuarios
+- [ ] Página `/register` con formulario de registro
+- [ ] Página `/login` para usuarios existentes
+- [ ] Integración con Firebase Auth (email/password)
+- [ ] Opción de login con Google
+- [ ] Recuperación de contraseña
+- [ ] Perfil de usuario con historial de pedidos
+- [ ] Ver estado de mis pedidos
+- **Beneficio:** Usuarios pueden trackear sus compras, mejorar experiencia
+
+##### 2. WhatsApp Integration Post-Compra
+- [ ] Botón "Contactar por WhatsApp" en confirmación de pedido
+- [ ] Mensaje pre-formateado con info del pedido
+- [ ] Enlace directo a chat con el vendedor
+- [ ] Variables: número de orden, total, items
+- **Formato:** `https://wa.me/56912345678?text=Hola...`
+- **Beneficio:** Comunicación directa e inmediata con el cliente
+
+##### 3. Sistema de Categorías y Filtros
+- [ ] Agregar categorías a pinturas (Abstracto, Retrato, Paisaje, etc.)
+- [ ] Filtro por categoría en galería
+- [ ] Filtro por rango de precio
+- [ ] Filtro por dimensiones
+- [ ] Ordenar por: Recientes, Precio (mayor/menor), Populares
+- [ ] Contador de resultados
+- **Beneficio:** Mejor navegación y UX
+
+##### 4. Barra de Búsqueda
+- [ ] Search bar en Header
+- [ ] Búsqueda por título de obra
+- [ ] Búsqueda por categoría
+- [ ] Sugerencias mientras escribe (typeahead)
+- [ ] Página de resultados `/search?q=...`
+- [ ] Resaltar términos encontrados
+- **Beneficio:** Encontrar obras rápidamente
+
+#### **PRIORIDAD MEDIA - Social Features** 🟡
+
+##### 5. Sistema de Comentarios y Reseñas
+- [ ] Comentarios en página de detalle de obra
+- [ ] Sistema de calificación (1-5 estrellas)
+- [ ] Solo usuarios registrados pueden comentar
+- [ ] Moderación de comentarios en admin panel
+- [ ] Respuestas del vendedor
+- [ ] Promedio de calificaciones visible
+- **Beneficio:** Social proof, confianza, engagement
+
+##### 6. Wishlist / Lista de Deseos
+- [ ] Botón "❤️ Guardar" en cada obra
+- [ ] Página `/wishlist` con obras guardadas
+- [ ] Persistencia por usuario (si está logueado)
+- [ ] Notificaciones de cambio de precio
+- [ ] Compartir wishlist
+- **Beneficio:** Aumentar conversión, retención
+
+##### 7. Sistema de Descuentos y Cupones
+- [ ] Códigos de descuento en checkout
+- [ ] Admin puede crear/gestionar cupones
+- [ ] Tipos: porcentaje, monto fijo
+- [ ] Fechas de validez
+- [ ] Límite de usos
+- [ ] Banner de promociones activas
+- **Beneficio:** Marketing, conversión
+
+#### **PRIORIDAD BAJA - Analytics y Optimización** 🟢
+
+##### 8. Dashboard con Analytics
+- [ ] Gráfico de ventas mensuales
+- [ ] Top 10 obras más vendidas
+- [ ] Revenue tracking
+- [ ] Tasa de conversión
+- [ ] Clientes recurrentes
+- [ ] Gráfico de órdenes por estado
+- **Librería:** recharts o chart.js
+
+##### 9. Galería de Imágenes Múltiples
+- [ ] Permitir múltiples imágenes por obra
+- [ ] Carrusel en página de detalle
+- [ ] Thumbnails navegables
+- [ ] Zoom en hover
+- **Beneficio:** Mostrar detalles de las obras
+
+##### 10. SEO y Performance
+- [ ] Metadata dinámica por página
+- [ ] Open Graph tags
+- [ ] Sitemap.xml automático
+- [ ] Schema.org markup para productos
+- [ ] Lazy loading optimizado
+- [ ] PWA configuration
+
+#### **INTEGRACIONES EXTERNAS** 🔌
+
+##### 11. Pasarela de Pago Real
+- [ ] WebPay Plus (Transbank) - Chile
+- [ ] Mercado Pago - LATAM
+- [ ] Manejo de callbacks
+- [ ] Actualización automática de estado
+- [ ] Webhook para confirmaciones
+
+##### 12. Sistema de Emails Automáticos
+- [ ] Confirmación de pedido al cliente
+- [ ] Notificación de nuevo pedido al admin
+- [ ] Actualización de estado de envío
+- [ ] Email de agradecimiento
+- [ ] Newsletter (opcional)
+- **Servicio:** SendGrid o Firebase Functions + Nodemailer
+
+##### 13. Integración con Redes Sociales
+- [ ] Botones de compartir en obras
+- [ ] Instagram feed en homepage
+- [ ] Pixel de Facebook para remarketing
+- [ ] Google Analytics
+
+#### **ADMIN PANEL ENHANCEMENTS** ⚙️
+
+##### 14. Gestión de Usuarios
+- [ ] Ver lista de todos los usuarios
+- [ ] Ver historial de compras por usuario
+- [ ] Bloquear/desbloquear usuarios
+- [ ] Enviar emails masivos
+- [ ] Exportar lista de clientes
+
+##### 15. Gestión de Inventario
+- [ ] Stock de obras (si aplica)
+- [ ] Alertas de stock bajo
+- [ ] Productos agotados automáticamente
+- [ ] Historial de cambios
+
+##### 16. Reportes y Exportación
+- [ ] Exportar órdenes a CSV/Excel
+- [ ] Reporte de ventas por período
+- [ ] Reporte de productos más vendidos
+- [ ] Reporte fiscal
+
+---
+
+### 🎯 PLAN DE IMPLEMENTACIÓN RECOMENDADO
+
+**SPRINT 1 (Esta sesión):**
+1. ✅ Sistema de órdenes y checkout
+2. ✅ Notificaciones en tiempo real
+3. 🔄 WhatsApp Integration
+4. 🔄 Sistema de categorías y filtros básicos
+
+**SPRINT 2 (Siguiente):**
+1. Sistema de registro/login de usuarios
+2. Barra de búsqueda
+3. Perfil de usuario con historial
+
+**SPRINT 3:**
+1. Comentarios y reseñas
+2. Wishlist
+3. Dashboard analytics básico
+
+**SPRINT 4:**
+1. Pasarela de pago real
+2. Emails automáticos
+3. Sistema de cupones
+
+---
 
 ### 1. Pasarela de Pago Real
 

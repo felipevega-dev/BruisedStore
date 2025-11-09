@@ -3,14 +3,20 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Painting } from "@/types";
+import { Painting, FilterOptions } from "@/types";
 import PaintingCard from "@/components/PaintingCard";
+import FilterBar from "@/components/FilterBar";
 import Link from "next/link";
 import { Loader2, Paintbrush, Sparkles } from "lucide-react";
 
 export default function Home() {
-  const [paintings, setPaintings] = useState<Painting[]>([]);
+  const [allPaintings, setAllPaintings] = useState<Painting[]>([]);
+  const [filteredPaintings, setFilteredPaintings] = useState<Painting[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<FilterOptions>({
+    category: 'all',
+    sortBy: 'recent',
+  });
 
   useEffect(() => {
     const fetchPaintings = async () => {
@@ -28,7 +34,8 @@ export default function Home() {
             createdAt: data.createdAt?.toDate() || new Date(),
           } as Painting;
         });
-        setPaintings(paintingsData);
+        setAllPaintings(paintingsData);
+        setFilteredPaintings(paintingsData);
       } catch (error) {
         console.error("Error fetching paintings:", error);
       } finally {
@@ -38,6 +45,60 @@ export default function Home() {
 
     fetchPaintings();
   }, []);
+
+  // Aplicar filtros
+  useEffect(() => {
+    let result = [...allPaintings];
+
+    // Filtro de categoría
+    if (filters.category && filters.category !== 'all') {
+      result = result.filter(p => p.category === filters.category);
+    }
+
+    // Filtro de precio
+    if (filters.minPrice !== undefined) {
+      result = result.filter(p => p.price >= filters.minPrice!);
+    }
+    if (filters.maxPrice !== undefined) {
+      result = result.filter(p => p.price <= filters.maxPrice!);
+    }
+
+    // Filtro de búsqueda
+    if (filters.searchQuery) {
+      const query = filters.searchQuery.toLowerCase();
+      result = result.filter(p => 
+        p.title.toLowerCase().includes(query) ||
+        p.description?.toLowerCase().includes(query) ||
+        p.category?.toLowerCase().includes(query)
+      );
+    }
+
+    // Ordenamiento
+    switch (filters.sortBy) {
+      case 'price-asc':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'title-asc':
+        result.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case 'title-desc':
+        result.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case 'recent':
+      default:
+        result.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        break;
+    }
+
+    setFilteredPaintings(result);
+  }, [filters, allPaintings]);
+
+  const handleFilterChange = (newFilters: FilterOptions) => {
+    setFilters(newFilters);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -100,6 +161,14 @@ export default function Home() {
             <div className="mx-auto mt-4 h-1 w-24 bg-red-600"></div>
           </div>
 
+          {/* Barra de filtros y búsqueda */}
+          {!loading && (
+            <FilterBar 
+              onFilterChange={handleFilterChange} 
+              totalResults={filteredPaintings.length}
+            />
+          )}
+
           {loading ? (
             <div className="flex min-h-[400px] items-center justify-center">
               <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -107,21 +176,27 @@ export default function Home() {
                 <p className="mt-4 text-center font-semibold text-gray-900">Cargando obras...</p>
               </div>
             </div>
-          ) : paintings.length === 0 ? (
+          ) : filteredPaintings.length === 0 ? (
             <div className="flex min-h-[400px] flex-col items-center justify-center text-center">
               <div className="border-4 border-black bg-white p-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                 <Paintbrush className="mx-auto mb-4 h-16 w-16 text-red-600" />
                 <p className="mb-2 text-xl font-bold text-black">
-                  No hay obras disponibles en este momento.
+                  {allPaintings.length === 0 
+                    ? "No hay obras disponibles en este momento."
+                    : "No se encontraron obras con los filtros aplicados."
+                  }
                 </p>
                 <p className="text-gray-600">
-                  Vuelve pronto para ver nuevas creaciones.
+                  {allPaintings.length === 0
+                    ? "Vuelve pronto para ver nuevas creaciones."
+                    : "Intenta ajustar los filtros o la búsqueda."
+                  }
                 </p>
               </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {paintings.map((painting) => (
+              {filteredPaintings.map((painting) => (
                 <PaintingCard key={painting.id} painting={painting} />
               ))}
             </div>
