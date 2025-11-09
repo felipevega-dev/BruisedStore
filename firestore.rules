@@ -1,0 +1,24 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Reglas para paintings
+    match /paintings/{paintingId} {
+      // Cualquiera puede leer las pinturas
+      allow read: if true;
+
+      // Solo usuarios autenticados pueden escribir/actualizar/eliminar
+      allow create, update, delete: if request.auth != null;
+    }
+
+    // Reglas para custom orders
+    match /customOrders/{orderId} {
+      // Cualquiera puede crear pedidos personalizados
+      allow create: if true;
+
+      // Solo usuarios autenticados pueden leer/actualizar/eliminar
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}

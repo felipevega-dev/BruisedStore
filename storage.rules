@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Reglas para imágenes de pinturas
+    match /paintings/{allPaths=**} {
+      // Cualquiera puede leer
+      allow read: if true;
+
+      // Solo usuarios autenticados pueden subir/eliminar
+      allow create, delete: if request.auth != null;
+    }
+
+    // Reglas para imágenes de pedidos personalizados
+    match /custom-orders/{allPaths=**} {
+      // Cualquiera puede subir (para el formulario público)
+      allow create: if true;
+
+      // Cualquiera puede leer
+      allow read: if true;
+
+      // Solo usuarios autenticados pueden eliminar
+      allow delete: if request.auth != null;
+    }
+  }
+}
