@@ -177,18 +177,15 @@ export default function CustomOrderPage() {
                   Vista Previa del Lienzo
                 </h2>
 
-                {/* Canvas Preview - MÁS GRANDE */}
+                {/* Canvas Preview - Dinámico según tamaño seleccionado */}
                 <div className="mb-6 flex items-center justify-center bg-gray-50 p-6 border-4 border-black">
                   <div
                     className="relative overflow-hidden border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                     style={{
-                      width: formData.orientation === "horizontal" 
-                        ? "min(500px, 90vw)" 
-                        : "min(400px, 70vw)",
-                      height: formData.orientation === "horizontal"
-                        ? "min(375px, 67.5vw)"
-                        : "min(500px, 87.5vw)",
-                      aspectRatio: `${canvasWidth}/${canvasHeight}`,
+                      width: `${Math.min(canvasWidth * 6, 500)}px`,
+                      height: `${Math.min(canvasHeight * 6, 500)}px`,
+                      maxWidth: "90vw",
+                      maxHeight: "80vh",
                     }}
                   >
                     {imagePreview ? (
