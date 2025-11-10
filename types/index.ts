@@ -108,6 +108,7 @@ export interface CustomOrder {
   status: 'pending' | 'in-progress' | 'completed' | 'cancelled';
   createdAt: Date;
   notes?: string;
+  userId?: string; // ID del usuario si está registrado
 }
 
 // ========== REGULAR ORDERS (Compras de Pinturas) ==========

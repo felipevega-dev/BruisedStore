@@ -1,14 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { sendEmailVerification } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { Loader2, Mail, CheckCircle2, AlertCircle, RefreshCw } from "lucide-react";
 import Link from "next/link";
 
 export default function VerifyEmailPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
   const { user, loading: authLoading } = useAuth();
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState("");
@@ -21,9 +24,9 @@ export default function VerifyEmailPage() {
     }
     
     if (user?.emailVerified) {
-      router.push("/");
+      router.push(redirectTo === "profile" ? "/profile" : "/");
     }
-  }, [user, authLoading, router]);
+  }, [user, authLoading, router, redirectTo]);
 
   const handleResendEmail = async () => {
     if (!user) return;
@@ -54,13 +57,19 @@ export default function VerifyEmailPage() {
     setMessage("");
 
     try {
+      // Forzar recarga completa del usuario desde Firebase
       await user.reload();
       
-      if (user.emailVerified) {
-        setMessage("¡Email verificado! Redirigiendo...");
-        setTimeout(() => router.push("/"), 1500);
+      // Obtener el usuario actualizado del auth
+      const currentUser = auth.currentUser;
+      
+      if (currentUser?.emailVerified) {
+        setMessage("✅ ¡Email verificado exitosamente! Redirigiendo...");
+        // Redirigir según el parámetro redirect
+        const destination = redirectTo === "profile" ? "/profile" : "/";
+        window.location.href = destination;
       } else {
-        setError("El email aún no ha sido verificado. Revisa tu correo y haz clic en el enlace.");
+        setError("El email aún no ha sido verificado. Revisa tu correo y haz clic en el enlace de verificación.");
       }
     } catch (error) {
       setError("Error al verificar. Intenta de nuevo.");
@@ -95,27 +104,39 @@ export default function VerifyEmailPage() {
           {/* Instructions */}
           <div className="mb-6 space-y-3 rounded-lg border-2 border-gray-300 bg-gray-50 p-4">
             <p className="text-sm font-semibold text-gray-900">
-              Hemos enviado un correo de verificación a:
+              📬 Hemos enviado un correo de verificación a:
             </p>
             <p className="text-sm font-bold text-red-600">
               {user?.email}
             </p>
+            
+            {redirectTo === "profile" && (
+              <div className="rounded-lg border-2 border-green-200 bg-green-50 p-3">
+                <p className="text-xs font-bold text-green-900">
+                  🎨 Después de verificar podrás ver tu pedido
+                </p>
+                <p className="mt-1 text-xs text-green-800">
+                  Te redirigiremos a tu perfil donde encontrarás el estado de tu obra personalizada.
+                </p>
+              </div>
+            )}
+            
             <div className="mt-4 space-y-2 text-xs text-gray-700">
               <p className="flex items-start gap-2">
-                <span className="mt-0.5">1.</span>
-                <span>Revisa tu bandeja de entrada</span>
+                <span className="mt-0.5 font-bold">1.</span>
+                <span>Abre tu correo electrónico</span>
               </p>
               <p className="flex items-start gap-2">
-                <span className="mt-0.5">2.</span>
-                <span>Busca un email de José Vega / Firebase</span>
+                <span className="mt-0.5 font-bold">2.</span>
+                <span>Busca el email de <strong>José Vega</strong> o <strong>noreply@...firebaseapp.com</strong></span>
               </p>
               <p className="flex items-start gap-2">
-                <span className="mt-0.5">3.</span>
-                <span>Haz clic en el enlace de verificación</span>
+                <span className="mt-0.5 font-bold">3.</span>
+                <span>Haz clic en el botón o enlace dentro del correo</span>
               </p>
               <p className="flex items-start gap-2">
-                <span className="mt-0.5">4.</span>
-                <span>Vuelve aquí y haz clic en "Ya verifiqué mi email"</span>
+                <span className="mt-0.5 font-bold">4.</span>
+                <span>Vuelve aquí y haz clic en <strong>"Ya verifiqué mi email"</strong></span>
               </p>
             </div>
           </div>
@@ -126,12 +147,14 @@ export default function VerifyEmailPage() {
               <AlertCircle className="h-5 w-5 shrink-0 text-yellow-600" />
               <div className="text-xs">
                 <p className="font-bold text-yellow-900">
-                  ⚠️ No encuentras el email?
+                  ⚠️ ¿No encuentras el email?
                 </p>
-                <p className="mt-1 text-yellow-800">
-                  Revisa tu carpeta de <strong>SPAM</strong> o <strong>Correo no deseado</strong>. 
-                  A veces los correos automáticos terminan ahí.
-                </p>
+                <ul className="mt-2 space-y-1 text-yellow-800">
+                  <li>• Revisa tu carpeta de <strong>SPAM / Correo no deseado</strong></li>
+                  <li>• El correo puede tardar 1-2 minutos en llegar</li>
+                  <li>• Verifica que escribiste bien tu email: <strong>{user?.email}</strong></li>
+                  <li>• Si no llega, usa el botón de abajo para reenviar</li>
+                </ul>
               </div>
             </div>
           </div>

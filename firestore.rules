@@ -30,8 +30,15 @@ service cloud.firestore {
       // Cualquiera puede leer (para que los usuarios vean sus propios pedidos)
       allow read: if true;
 
-      // Solo administradores pueden actualizar/eliminar
-      allow update, delete: if isAdmin();
+      // Usuarios pueden actualizar solo para agregar su userId después del registro
+      // O administradores pueden actualizar cualquier cosa
+      allow update: if isAdmin() || 
+                      (request.auth != null && 
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['userId']) &&
+                       request.resource.data.userId == request.auth.uid);
+
+      // Solo administradores pueden eliminar
+      allow delete: if isAdmin();
     }
 
     // Reglas para orders (compras normales de pinturas)

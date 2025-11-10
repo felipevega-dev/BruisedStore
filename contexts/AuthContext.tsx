@@ -45,12 +45,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshUser = async () => {
     if (auth.currentUser) {
+      await auth.currentUser.reload();
+      setUser({ ...auth.currentUser });
       await checkAdminRole(auth.currentUser);
     }
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Forzar reload para obtener emailVerified actualizado
+        await user.reload();
+      }
       setUser(user);
       if (user) {
         await checkAdminRole(user);

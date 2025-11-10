@@ -57,8 +57,11 @@ export default function RegisterPage() {
         displayName: formData.name,
       });
 
-      // Enviar email de verificación
-      await sendEmailVerification(userCredential.user);
+      // Enviar email de verificación con configuración personalizada
+      await sendEmailVerification(userCredential.user, {
+        url: `${window.location.origin}/verify-email?verified=true`,
+        handleCodeInApp: false,
+      });
 
       // Redirigir a página de verificación pendiente
       router.push("/verify-email");

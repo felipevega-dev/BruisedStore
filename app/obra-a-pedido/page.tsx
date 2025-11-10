@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import {
   CustomOrder,
   CUSTOM_ORDER_SIZES,
@@ -13,13 +15,13 @@ import {
   Orientation,
 } from "@/types";
 import Image from "next/image";
-import { Upload, Loader2, CheckCircle2, Paintbrush, Crop } from "lucide-react";
+import { Upload, Loader2, CheckCircle2, Paintbrush, Crop, X, UserPlus } from "lucide-react";
 import ImageCropper from "@/components/ImageCropper";
 import { useToast } from "@/hooks/useToast";
 
 export default function CustomOrderPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     customerName: "",
     email: "",
@@ -27,17 +29,6 @@ export default function CustomOrderPage() {
     selectedSizeIndex: 0,
     notes: "",
   });
-
-  // Redirect if not verified
-  useEffect(() => {
-    if (!authLoading) {
-      if (!user) {
-        router.push("/login");
-      } else if (!user.emailVerified) {
-        router.push("/verify-email");
-      }
-    }
-  }, [user, authLoading, router]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showCropper, setShowCropper] = useState(false);
@@ -45,6 +36,11 @@ export default function CustomOrderPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
+  const [registerLoading, setRegisterLoading] = useState(false);
+  const [registerPassword, setRegisterPassword] = useState("");
+  const [registerError, setRegisterError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { showToast, ToastContainer } = useToast();
 
@@ -194,7 +190,8 @@ export default function CustomOrderPage() {
       await uploadBytes(imageRef, imageFile!);
       const imageUrl = await getDownloadURL(imageRef);
 
-      const orderData: Omit<CustomOrder, "id"> = {
+      // Construir datos del pedido (omitir campos undefined)
+      const orderData: any = {
         customerName: formData.customerName,
         email: formData.email,
         phone: formData.phone,
@@ -203,33 +200,108 @@ export default function CustomOrderPage() {
         orientation: orientation,
         totalPrice: totalPrice,
         status: "pending",
-        createdAt: new Date(),
-        notes: formData.notes || undefined,
+        createdAt: serverTimestamp(),
       };
 
-      await addDoc(collection(db, "customOrders"), {
-        ...orderData,
-        createdAt: serverTimestamp(),
-      });
+      // Agregar campos opcionales solo si tienen valor
+      if (formData.notes && formData.notes.trim()) {
+        orderData.notes = formData.notes;
+      }
 
-      setSuccess(true);
+      if (user?.uid) {
+        orderData.userId = user.uid;
+      }
+
+      const docRef = await addDoc(collection(db, "customOrders"), orderData);
+
+      setCreatedOrderId(docRef.id);
       showToast("¡Pedido enviado exitosamente!", "success");
-      setFormData({
-        customerName: "",
-        email: "",
-        phone: "",
-        selectedSizeIndex: 0,
-        notes: "",
-      });
-      setImageFile(null);
-      setImagePreview(null);
-      setErrors({});
+
+      // Si el usuario NO está logueado, mostrar modal de registro
+      if (!user) {
+        setShowRegisterModal(true);
+      } else {
+        // Si ya está logueado, mostrar success normal
+        setSuccess(true);
+      }
     } catch (error) {
       console.error("Error creating custom order:", error);
       showToast("Hubo un error al enviar tu pedido. Por favor intenta nuevamente.", "error");
     } finally {
       setLoading(false);
     }
+  };
+
+  // Función para registrar usuario con los datos del pedido
+  const handleRegisterUser = async () => {
+    setRegisterError("");
+    
+    // Validar contraseña
+    if (!registerPassword) {
+      setRegisterError("Por favor ingresa una contraseña");
+      return;
+    }
+    
+    if (registerPassword.length < 6) {
+      setRegisterError("La contraseña debe tener al menos 6 caracteres");
+      return;
+    }
+    
+    setRegisterLoading(true);
+    
+    try {
+      // Crear usuario con la contraseña ingresada
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        registerPassword
+      );
+
+      // Actualizar perfil con el nombre
+      await updateProfile(userCredential.user, {
+        displayName: formData.customerName,
+      });
+
+      // Actualizar el pedido con el userId
+      if (createdOrderId) {
+        const { doc, updateDoc } = await import("firebase/firestore");
+        await updateDoc(doc(db, "customOrders", createdOrderId), {
+          userId: userCredential.user.uid,
+        });
+      }
+
+      // Enviar email de verificación con redirección a profile
+      await sendEmailVerification(userCredential.user, {
+        url: `${window.location.origin}/verify-email?redirect=profile`,
+        handleCodeInApp: false,
+      });
+
+      showToast("¡Cuenta creada! Revisa tu email para verificar", "success");
+      
+      // Redirigir a verify-email
+      router.push("/verify-email");
+    } catch (error: any) {
+      console.error("Error creating user:", error);
+      
+      if (error.code === "auth/email-already-in-use") {
+        setRegisterError("Este email ya tiene una cuenta.");
+        showToast("Este email ya tiene una cuenta. Por favor inicia sesión.", "error");
+        setTimeout(() => router.push("/login"), 2000);
+      } else if (error.code === "auth/weak-password") {
+        setRegisterError("La contraseña es muy débil. Usa al menos 6 caracteres.");
+      } else {
+        setRegisterError("Error al crear la cuenta. Intenta nuevamente.");
+        showToast("Error al crear la cuenta. Intenta nuevamente.", "error");
+      }
+    } finally {
+      setRegisterLoading(false);
+    }
+  };
+
+  // Función para continuar sin registro
+  const handleSkipRegister = () => {
+    setShowRegisterModal(false);
+    setSuccess(true);
   };
 
   if (success) {
@@ -257,6 +329,121 @@ export default function CustomOrderPage() {
 
   return (
     <div className="min-h-screen bg-white py-6 sm:py-8 lg:py-12">
+      {/* Modal de Registro */}
+      {showRegisterModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="relative w-full max-w-md border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:p-8">
+            <button
+              onClick={handleSkipRegister}
+              className="absolute right-4 top-4 text-gray-400 transition-colors hover:text-gray-600"
+            >
+              <X className="h-6 w-6" />
+            </button>
+
+            <div className="mb-6 text-center">
+              <UserPlus className="mx-auto mb-4 h-16 w-16 text-red-600" />
+              <h2 className="mb-2 text-2xl font-black text-black">
+                ¡Pedido Enviado!
+              </h2>
+              <div className="mx-auto mt-3 h-1 w-16 bg-red-600"></div>
+            </div>
+
+            <div className="mb-6 space-y-3 text-sm">
+              <p className="font-semibold text-gray-900">
+                ✅ Tu pedido ha sido recibido exitosamente
+              </p>
+              <p className="text-gray-700">
+                ¿Quieres crear una cuenta para hacer seguimiento de tu pedido?
+              </p>
+              
+              <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4">
+                <p className="mb-2 font-bold text-blue-900">
+                  🎁 Beneficios de crear cuenta:
+                </p>
+                <ul className="space-y-1 text-xs text-blue-800">
+                  <li>• Ver el estado de tu pedido en tiempo real</li>
+                  <li>• Historial de todos tus pedidos</li>
+                  <li>• Guardar tus datos para pedidos futuros</li>
+                  <li>• Acceso a ofertas exclusivas</li>
+                </ul>
+              </div>
+
+              <div className="rounded-lg border-2 border-gray-300 bg-gray-50 p-3">
+                <p className="mb-2 text-xs font-bold text-gray-900">
+                  📧 Usaremos estos datos:
+                </p>
+                <p className="text-xs text-gray-700">
+                  <strong>Nombre:</strong> {formData.customerName}
+                </p>
+                <p className="text-xs text-gray-700">
+                  <strong>Email:</strong> {formData.email}
+                </p>
+                <p className="mt-2 text-xs text-gray-600">
+                  Te enviaremos un correo de verificación para activar tu cuenta.
+                </p>
+              </div>
+
+              {/* Campo de Contraseña */}
+              <div>
+                <label className="mb-2 block text-sm font-bold text-gray-900">
+                  Crea una contraseña para tu cuenta
+                </label>
+                <input
+                  type="password"
+                  value={registerPassword}
+                  onChange={(e) => {
+                    setRegisterPassword(e.target.value);
+                    if (registerError) setRegisterError("");
+                  }}
+                  placeholder="Mínimo 6 caracteres"
+                  className="w-full rounded-lg border-2 border-black bg-white px-4 py-3 text-gray-900 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+                />
+                {registerError && (
+                  <p className="mt-2 text-sm font-bold text-red-600">
+                    {registerError}
+                  </p>
+                )}
+                <p className="mt-2 text-xs text-gray-600">
+                  Usa esta contraseña para iniciar sesión después
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={handleRegisterUser}
+                disabled={registerLoading}
+                className="w-full rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {registerLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Creando cuenta...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center gap-2">
+                    <UserPlus className="h-5 w-5" />
+                    Sí, crear mi cuenta
+                  </span>
+                )}
+              </button>
+
+              <button
+                onClick={handleSkipRegister}
+                disabled={registerLoading}
+                className="w-full rounded-lg border-2 border-black bg-white px-6 py-3 font-bold text-gray-900 transition-all hover:bg-gray-50 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Continuar sin cuenta
+              </button>
+            </div>
+
+            <p className="mt-4 text-center text-xs text-gray-600">
+              Al crear cuenta aceptas nuestros términos y condiciones
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Header */}

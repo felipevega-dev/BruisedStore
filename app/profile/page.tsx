@@ -44,7 +44,7 @@ export default function ProfilePage() {
     if (!user) return;
 
     try {
-      // Obtener órdenes normales
+      // Obtener órdenes normales (por email)
       const ordersQuery = query(
         collection(db, "orders"),
         where("shippingInfo.email", "==", user.email),
@@ -62,22 +62,40 @@ export default function ProfilePage() {
       });
       setOrders(ordersData);
 
-      // Obtener pedidos personalizados
-      const customOrdersQuery = query(
+      // Obtener pedidos personalizados (por userId O por email)
+      const customOrdersByUserId = query(
+        collection(db, "customOrders"),
+        where("userId", "==", user.uid),
+        orderBy("createdAt", "desc")
+      );
+      
+      const customOrdersByEmail = query(
         collection(db, "customOrders"),
         where("email", "==", user.email),
         orderBy("createdAt", "desc")
       );
-      const customOrdersSnapshot = await getDocs(customOrdersQuery);
-      const customOrdersData = customOrdersSnapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          ...data,
-          createdAt: data.createdAt?.toDate() || new Date(),
-        } as CustomOrder;
+
+      // Ejecutar ambas queries
+      const [userIdSnapshot, emailSnapshot] = await Promise.all([
+        getDocs(customOrdersByUserId),
+        getDocs(customOrdersByEmail),
+      ]);
+
+      // Combinar resultados y eliminar duplicados
+      const allCustomOrders = new Map<string, CustomOrder>();
+      
+      [...userIdSnapshot.docs, ...emailSnapshot.docs].forEach((doc) => {
+        if (!allCustomOrders.has(doc.id)) {
+          const data = doc.data();
+          allCustomOrders.set(doc.id, {
+            id: doc.id,
+            ...data,
+            createdAt: data.createdAt?.toDate() || new Date(),
+          } as CustomOrder);
+        }
       });
-      setCustomOrders(customOrdersData);
+
+      setCustomOrders(Array.from(allCustomOrders.values()));
     } catch (error) {
       console.error("Error fetching orders:", error);
     } finally {
