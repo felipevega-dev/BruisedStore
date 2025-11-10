@@ -347,8 +347,9 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 **Sprint 5:** ✅ COMPLETED - Complete mobile responsiveness (hamburger menu, inline preview, touch-optimized)
 **Sprint 5.5:** ✅ COMPLETED - UX Feedback (toast notifications, profile edit, header z-index fix)
 **Sprint 6:** ✅ COMPLETED - Quick-Win Features (WhatsApp Widget → Rebrand → Instagram → Image Cropper)
+**Sprint 6.1:** ✅ COMPLETED - Enhanced Cropper (Size selector, Orientation: Cuadrado, Validation)
 
-**Status:** ✅ Production-ready. 14 major features + full UX polish + WhatsApp Widget + Image Cropper implemented. Build passing without errors.
+**Status:** ✅ Production-ready. 14 major features + full UX polish + WhatsApp Widget + Advanced Image Cropper implemented. Build passing without errors.
 
 ## Sprint 5 - Mobile Responsiveness (COMPLETED ✅)
 
@@ -719,6 +720,64 @@ const createCroppedImage = async (): Promise<Blob> => {
 - **Mobile-Friendly:** Touch gestures work for pan/zoom
 - **Price Transparency:** See price updates when changing size in cropper
 - **Versatile Workflow:** Upload once, try different canvas sizes before deciding
+
+### Sprint 6.1 - Polish & Validation ✅ COMPLETED
+
+#### Form Validation Improvements
+**Obra a Pedido Page:**
+- ✅ **Real-time validation** with visual feedback
+- ✅ **Field-level error messages** (nombre, email, teléfono, imagen)
+- ✅ **Email regex validation**: `^[^\s@]+@[^\s@]+\.[^\s@]+$`
+- ✅ **Phone validation**: Mínimo 8 dígitos, acepta + y espacios
+- ✅ **Name validation**: Mínimo 3 caracteres
+- ✅ **Error clearing on edit**: Errores desaparecen cuando usuario corrige
+- ✅ **Toast notifications** reemplazan alerts nativos
+- ✅ **Border rojo en campos con error** para feedback visual claro
+
+**Key Implementation:**
+```typescript
+const validateForm = (): boolean => {
+  const newErrors: Record<string, string> = {};
+  
+  // Name validation
+  if (!formData.customerName.trim()) {
+    newErrors.customerName = "El nombre es requerido";
+  } else if (formData.customerName.trim().length < 3) {
+    newErrors.customerName = "El nombre debe tener al menos 3 caracteres";
+  }
+  
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.email)) {
+    newErrors.email = "Email inválido";
+  }
+  
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+
+// Clear error on user edit
+onChange={(e) => {
+  setFormData({ ...formData, email: e.target.value });
+  if (errors.email) {
+    setErrors({ ...errors, email: "" });
+  }
+}}
+```
+
+**Visual Feedback:**
+```tsx
+<input
+  className={`w-full border-4 bg-white ... ${
+    errors.email
+      ? "border-red-600 focus:border-red-600"
+      : "border-black focus:border-red-600"
+  }`}
+/>
+{errors.email && (
+  <p className="mt-2 text-sm font-bold text-red-600">{errors.email}</p>
+)}
+```
 
 ### Part 2: PWA (Progressive Web App) - PENDING
 **Time:** 30-40 minutes | **Impact:** App-like experience, works offline

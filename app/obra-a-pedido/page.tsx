@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import { Upload, Loader2, CheckCircle2, Paintbrush, Crop } from "lucide-react";
 import ImageCropper from "@/components/ImageCropper";
+import { useToast } from "@/hooks/useToast";
 
 export default function CustomOrderPage() {
   const [formData, setFormData] = useState({
@@ -28,7 +29,9 @@ export default function CustomOrderPage() {
   const [tempImage, setTempImage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { showToast, ToastContainer } = useToast();
 
   const selectedSize = CUSTOM_ORDER_SIZES[formData.selectedSizeIndex];
   const totalPrice = BASE_CUSTOM_ORDER_PRICE * selectedSize.priceMultiplier;
@@ -122,11 +125,47 @@ export default function CustomOrderPage() {
     setFormData({ ...formData, selectedSizeIndex: closestIndex });
   };
 
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    // Validate name
+    if (!formData.customerName.trim()) {
+      newErrors.customerName = "El nombre es requerido";
+    } else if (formData.customerName.trim().length < 3) {
+      newErrors.customerName = "El nombre debe tener al menos 3 caracteres";
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      newErrors.email = "El email es requerido";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Email inválido";
+    }
+
+    // Validate phone
+    const phoneRegex = /^[+]?[0-9\s-]{8,}$/;
+    if (!formData.phone.trim()) {
+      newErrors.phone = "El teléfono es requerido";
+    } else if (!phoneRegex.test(formData.phone)) {
+      newErrors.phone = "Teléfono inválido (mínimo 8 dígitos)";
+    }
+
+    // Validate image
+    if (!imageFile) {
+      newErrors.image = "La imagen de referencia es requerida";
+      showToast("Por favor sube una imagen de referencia", "error");
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!imageFile) {
-      alert("Por favor sube una imagen de referencia");
+    if (!validateForm()) {
+      showToast("Por favor completa todos los campos correctamente", "error");
       return;
     }
 
@@ -135,9 +174,9 @@ export default function CustomOrderPage() {
     try {
       const imageRef = ref(
         storage,
-        `custom-orders/${Date.now()}_${imageFile.name}`
+        `custom-orders/${Date.now()}_${imageFile!.name}`
       );
-      await uploadBytes(imageRef, imageFile);
+      await uploadBytes(imageRef, imageFile!);
       const imageUrl = await getDownloadURL(imageRef);
 
       const orderData: Omit<CustomOrder, "id"> = {
@@ -146,7 +185,7 @@ export default function CustomOrderPage() {
         phone: formData.phone,
         referenceImageUrl: imageUrl,
         selectedSize: selectedSize,
-        orientation: orientation, // Usar orientación automática
+        orientation: orientation,
         totalPrice: totalPrice,
         status: "pending",
         createdAt: new Date(),
@@ -159,6 +198,7 @@ export default function CustomOrderPage() {
       });
 
       setSuccess(true);
+      showToast("¡Pedido enviado exitosamente!", "success");
       setFormData({
         customerName: "",
         email: "",
@@ -168,9 +208,10 @@ export default function CustomOrderPage() {
       });
       setImageFile(null);
       setImagePreview(null);
+      setErrors({});
     } catch (error) {
       console.error("Error creating custom order:", error);
-      alert("Hubo un error al enviar tu pedido. Por favor intenta nuevamente.");
+      showToast("Hubo un error al enviar tu pedido. Por favor intenta nuevamente.", "error");
     } finally {
       setLoading(false);
     }
@@ -517,13 +558,25 @@ export default function CustomOrderPage() {
                   <input
                     type="text"
                     value={formData.customerName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, customerName: e.target.value })
-                    }
-                    className="w-full border-4 border-black bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                    onChange={(e) => {
+                      setFormData({ ...formData, customerName: e.target.value });
+                      if (errors.customerName) {
+                        setErrors({ ...errors, customerName: "" });
+                      }
+                    }}
+                    className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
+                      errors.customerName
+                        ? "border-red-600 focus:border-red-600 focus:ring-red-600/20"
+                        : "border-black focus:border-red-600 focus:ring-red-600/20"
+                    }`}
                     placeholder="Tu nombre"
                     required
                   />
+                  {errors.customerName && (
+                    <p className="mt-2 text-sm font-bold text-red-600">
+                      {errors.customerName}
+                    </p>
+                  )}
                 </div>
 
                 {/* Email */}
@@ -534,13 +587,25 @@ export default function CustomOrderPage() {
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="w-full border-4 border-black bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value });
+                      if (errors.email) {
+                        setErrors({ ...errors, email: "" });
+                      }
+                    }}
+                    className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
+                      errors.email
+                        ? "border-red-600 focus:border-red-600 focus:ring-red-600/20"
+                        : "border-black focus:border-red-600 focus:ring-red-600/20"
+                    }`}
                     placeholder="tu@email.com"
                     required
                   />
+                  {errors.email && (
+                    <p className="mt-2 text-sm font-bold text-red-600">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* Phone */}
@@ -551,13 +616,25 @@ export default function CustomOrderPage() {
                   <input
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="w-full border-4 border-black bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                    onChange={(e) => {
+                      setFormData({ ...formData, phone: e.target.value });
+                      if (errors.phone) {
+                        setErrors({ ...errors, phone: "" });
+                      }
+                    }}
+                    className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
+                      errors.phone
+                        ? "border-red-600 focus:border-red-600 focus:ring-red-600/20"
+                        : "border-black focus:border-red-600 focus:ring-red-600/20"
+                    }`}
                     placeholder="+56 9 1234 5678"
                     required
                   />
+                  {errors.phone && (
+                    <p className="mt-2 text-sm font-bold text-red-600">
+                      {errors.phone}
+                    </p>
+                  )}
                 </div>
 
                 {/* Notes */}
@@ -611,6 +688,9 @@ export default function CustomOrderPage() {
           onCancel={handleCropCancel}
         />
       )}
+
+      {/* Toast Notifications */}
+      <ToastContainer />
     </div>
   );
 }
