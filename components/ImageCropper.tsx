@@ -2,19 +2,24 @@
 
 import { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
-import { X, RotateCw, ZoomIn, ZoomOut, Check } from "lucide-react";
+import { X, RotateCw, ZoomIn, ZoomOut, Check, Maximize2 } from "lucide-react";
+import { CUSTOM_ORDER_SIZES, CustomOrderSize } from "@/types";
 
 interface ImageCropperProps {
   image: string;
   aspectRatio: number; // width / height (e.g., 1.5 for 60x40)
+  currentSizeIndex: number;
   onCropComplete: (croppedImageBlob: Blob) => void;
+  onSizeChange: (newSizeIndex: number) => void;
   onCancel: () => void;
 }
 
 export default function ImageCropper({
   image,
   aspectRatio,
+  currentSizeIndex,
   onCropComplete,
+  onSizeChange,
   onCancel,
 }: ImageCropperProps) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -22,6 +27,17 @@ export default function ImageCropper({
   const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const selectedSize = CUSTOM_ORDER_SIZES[currentSizeIndex];
+  const canvasWidth = selectedSize.width;
+  const canvasHeight = selectedSize.height;
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("es-CL", {
+      style: "currency",
+      currency: "CLP",
+    }).format(price * 20000); // BASE_CUSTOM_ORDER_PRICE
+  };
 
   const onCropChange = useCallback((location: { x: number; y: number }) => {
     setCrop(location);
@@ -105,20 +121,54 @@ export default function ImageCropper({
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90">
-      <div className="relative h-full w-full max-w-6xl p-4 sm:p-6">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4">
+      <div className="relative h-full w-full max-w-6xl">
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between rounded-lg border-4 border-white bg-black p-4">
-          <h2 className="text-lg font-black text-white sm:text-xl">
-            Ajustar Imagen al Lienzo
-          </h2>
+        <div className="mb-4 flex flex-col gap-3 rounded-lg border-4 border-white bg-black p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-lg font-black text-white sm:text-xl">
+              Ajustar Imagen al Lienzo
+            </h2>
+            <p className="mt-1 text-sm text-gray-400">
+              Tamaño: {canvasHeight}x{canvasWidth} cm ({formatPrice(selectedSize.priceMultiplier)})
+            </p>
+          </div>
           <button
             onClick={onCancel}
-            className="flex items-center gap-2 rounded-lg border-2 border-white bg-white px-3 py-2 text-sm font-bold text-black transition-all hover:bg-gray-200"
+            className="flex items-center justify-center gap-2 rounded-lg border-2 border-white bg-white px-3 py-2 text-sm font-bold text-black transition-all hover:bg-gray-200 sm:self-start"
           >
             <X className="h-4 w-4" />
-            <span className="hidden sm:inline">Cancelar</span>
+            <span>Cancelar</span>
           </button>
+        </div>
+
+        {/* Size Selector */}
+        <div className="mb-4 rounded-lg border-4 border-white bg-black p-4">
+          <div className="mb-3 flex items-center gap-2">
+            <Maximize2 className="h-5 w-5 text-white" />
+            <h3 className="text-sm font-bold uppercase text-white">
+              Tamaño del Lienzo
+            </h3>
+          </div>
+          <select
+            value={currentSizeIndex}
+            onChange={(e) => onSizeChange(parseInt(e.target.value))}
+            className="w-full rounded border-2 border-white bg-black px-4 py-3 text-sm font-bold text-white transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600"
+          >
+            {CUSTOM_ORDER_SIZES.map((size, index) => {
+              const orientation =
+                size.width < size.height
+                  ? "Vertical"
+                  : size.width > size.height
+                    ? "Horizontal"
+                    : "Cuadrado";
+              return (
+                <option key={index} value={index}>
+                  {size.name} cm ({size.height}x{size.width}) - {orientation} - {formatPrice(size.priceMultiplier)}
+                </option>
+              );
+            })}
+          </select>
         </div>
 
         {/* Cropper Area */}

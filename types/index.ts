@@ -15,7 +15,7 @@ export interface Painting {
   category?: PaintingCategory;
 }
 
-export type Orientation = 'horizontal' | 'vertical';
+export type Orientation = 'horizontal' | 'vertical' | 'cuadrado';
 
 export type PaintingCategory = 
   | 'abstracto'

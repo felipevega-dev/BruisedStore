@@ -579,11 +579,20 @@ const canvasHeight = selectedSize.height;
 ### Part 4: Image Crop Tool ✅ COMPLETED
 **Time:** 45 minutes | **Impact:** Professional image handling, better paintings
 
+#### Updates (Sprint 6.1 - Enhanced Cropper) ✅
+- **Size Selector in Cropper:** Dropdown to change canvas size without closing modal
+- **Current Size Display:** Shows dimensions and price in header (e.g., "50x40 cm - $50.000")
+- **Orientation Buttons Restored:** 3 buttons (Vertical, Cuadrado, Horizontal) in form
+- **Cuadrado Orientation Added:** New orientation type for square canvases (50x50, 60x60)
+- **Smart Size Switching:** Changes canvas size in cropper updates aspect ratio instantly
+
 #### Implementation
 - Installed `react-easy-crop` library for advanced cropping
 - Created `components/ImageCropper.tsx` component with:
   - Full-screen modal overlay (z-[9999], black background)
   - Real-time crop preview with aspect ratio matching selected canvas
+  - **Canvas size selector dropdown** (shows all 14 sizes with orientation and price)
+  - **Current size display in header** with dimensions and formatted price
   - Zoom control (1x - 3x) with slider and percentage display
   - Rotation control (0° - 360°) with slider and degree display
   - Touch-friendly drag to reposition image
@@ -592,19 +601,27 @@ const canvasHeight = selectedSize.height;
   - Help text for user guidance
 
 #### Integration in Custom Order Page
-1. **Automatic Cropper on Upload:**
+1. **Orientation Buttons (3 options):**
+   - Vertical (tall rectangles like 70x50)
+   - Cuadrado (squares like 50x50, 60x60)
+   - Horizontal (wide rectangles like 60x80)
+   - Visual indicators with colored borders when selected
+   - Smart reassignment: finds closest size by area in target orientation
+
+2. **Automatic Cropper on Upload:**
    - When user selects image, cropper opens immediately
    - Image loaded into `tempImage` state
    - Modal shows with aspect ratio of currently selected canvas
 
-2. **Manual Adjustment:**
+3. **Manual Adjustment:**
    - "Ajustar Imagen" button appears after image is uploaded (mobile preview)
+   - "Cambiar" button to upload different image
    - Reopens cropper with current image
    - Preserves existing crop or allows new adjustment
 
-3. **Dynamic Aspect Ratio:**
+4. **Dynamic Aspect Ratio:**
    - Calculated as `canvasWidth / canvasHeight`
-   - Updates automatically when user changes canvas size
+   - Updates automatically when user changes canvas size IN THE CROPPER
    - Examples: 60x40 = 1.5 aspect, 25x20 = 0.8 aspect, 50x50 = 1.0 aspect
 
 4. **Output Handling:**
@@ -615,7 +632,38 @@ const canvasHeight = selectedSize.height;
 
 #### Key Code Pattern
 ```typescript
-// In ImageCropper.tsx
+// In ImageCropper.tsx - Size selector integration
+interface ImageCropperProps {
+  image: string;
+  aspectRatio: number;
+  currentSizeIndex: number;
+  onCropComplete: (croppedImageBlob: Blob) => void;
+  onSizeChange: (newSizeIndex: number) => void;
+  onCancel: () => void;
+}
+
+// Size selector dropdown in cropper
+<select value={currentSizeIndex} onChange={(e) => onSizeChange(parseInt(e.target.value))}>
+  {CUSTOM_ORDER_SIZES.map((size, index) => {
+    const orientation = size.width < size.height ? "Vertical"
+      : size.width > size.height ? "Horizontal" : "Cuadrado";
+    return (
+      <option key={index} value={index}>
+        {size.name} cm ({size.height}x{size.width}) - {orientation} - {formatPrice}
+      </option>
+    );
+  })}
+</select>
+
+// Orientation type updated
+export type Orientation = 'horizontal' | 'vertical' | 'cuadrado';
+
+// Automatic orientation detection
+const orientation: Orientation =
+  selectedSize.width < selectedSize.height ? "vertical"
+  : selectedSize.width > selectedSize.height ? "horizontal"
+  : "cuadrado"; // width = height
+
 const createCroppedImage = async (): Promise<Blob> => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
@@ -640,29 +688,37 @@ const createCroppedImage = async (): Promise<Blob> => {
   <ImageCropper
     image={tempImage || imagePreview!}
     aspectRatio={canvasWidth / canvasHeight}
+    currentSizeIndex={formData.selectedSizeIndex}
     onCropComplete={handleCropComplete}
+    onSizeChange={handleSizeChangeInCropper}
     onCancel={handleCropCancel}
   />
 )}
 ```
 
-#### User Flow
-1. User selects canvas size (e.g., 60x80 horizontal)
-2. User uploads reference image
-3. **Cropper opens automatically** with 60/80 = 0.75 aspect ratio
-4. User adjusts zoom, rotation, position
-5. User clicks "Aplicar Ajuste"
-6. Cropped image appears in preview
-7. User can click "Ajustar Imagen" to reopen cropper
-8. User can change canvas size → click "Ajustar Imagen" → crop to new aspect ratio
-9. On submit, cropped image uploads to Firebase Storage
+#### Enhanced User Flow (Sprint 6.1)
+1. User clicks orientation button (Vertical / Cuadrado / Horizontal)
+2. System finds closest canvas size in that orientation by area
+3. User uploads reference image
+4. **Cropper opens automatically** with current canvas aspect ratio
+5. User sees canvas dimensions and price in cropper header
+6. User can **change canvas size from dropdown in cropper** → aspect ratio updates instantly
+7. User adjusts zoom, rotation, position
+8. User clicks "Aplicar Ajuste"
+9. Cropped image appears in preview
+10. User can click "Ajustar Imagen" to reopen cropper with same image
+11. User can click "Cambiar" to upload different image
+12. On submit, cropped image uploads to Firebase Storage
 
 #### Benefits
 - **Perfect Fit:** Images always match selected canvas proportions
 - **Quality Control:** Users can frame/compose their reference properly
 - **Professional:** No distorted or stretched images
-- **Flexibility:** Change canvas size and re-crop without re-uploading
+- **Flexibility:** Change canvas size IN THE CROPPER without re-uploading
+- **Orientation Control:** Easy switching between Vertical, Cuadrado, Horizontal
 - **Mobile-Friendly:** Touch gestures work for pan/zoom
+- **Price Transparency:** See price updates when changing size in cropper
+- **Versatile Workflow:** Upload once, try different canvas sizes before deciding
 
 ### Part 2: PWA (Progressive Web App) - PENDING
 **Time:** 30-40 minutes | **Impact:** App-like experience, works offline

@@ -40,7 +40,7 @@ export default function CustomOrderPage() {
       ? "vertical"
       : selectedSize.width > selectedSize.height
         ? "horizontal"
-        : "vertical"; // cuadrados se tratan como vertical por defecto
+        : "cuadrado"; // medidas iguales = cuadrado
 
   // Dimensiones del canvas (ancho x alto) directamente del size
   const canvasWidth = selectedSize.width;
@@ -81,6 +81,10 @@ export default function CustomOrderPage() {
     }
   };
 
+  const handleSizeChangeInCropper = (newSizeIndex: number) => {
+    setFormData({ ...formData, selectedSizeIndex: newSizeIndex });
+  };
+
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("es-CL", {
       style: "currency",
@@ -95,16 +99,7 @@ export default function CustomOrderPage() {
     // Si ya es la orientación deseada, no hacer nada
     if (orientation === newOrientation) return;
 
-    // Filtrar tamaños por orientación deseada
-    const targetSizes = CUSTOM_ORDER_SIZES.filter((size, index) => {
-      const sizeOrientation: Orientation =
-        size.width < size.height ? "vertical"
-        : size.width > size.height ? "horizontal"
-        : "vertical";
-      return sizeOrientation === newOrientation;
-    });
-
-    // Encontrar el tamaño más cercano en área
+    // Encontrar el tamaño más cercano en área con la orientación deseada
     let closestIndex = 0;
     let closestDiff = Infinity;
 
@@ -112,7 +107,7 @@ export default function CustomOrderPage() {
       const sizeOrientation: Orientation =
         size.width < size.height ? "vertical"
         : size.width > size.height ? "horizontal"
-        : "vertical";
+        : "cuadrado";
 
       if (sizeOrientation === newOrientation) {
         const area = size.width * size.height;
@@ -406,18 +401,18 @@ export default function CustomOrderPage() {
                   <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
                     Orientación del Lienzo *
                   </label>
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3">
                     <button
                       type="button"
                       onClick={() => handleOrientationChange("vertical")}
-                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 sm:p-6 ${
+                      className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
                         orientation === "vertical"
                           ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
                           : "border-black bg-white hover:bg-gray-50"
                       }`}
                     >
                       <div
-                        className={`h-16 w-12 border-4 sm:h-20 sm:w-14 ${
+                        className={`h-14 w-10 border-4 sm:h-16 sm:w-12 ${
                           orientation === "vertical"
                             ? "border-red-600 bg-red-100"
                             : "border-black bg-gray-100"
@@ -436,15 +431,42 @@ export default function CustomOrderPage() {
 
                     <button
                       type="button"
+                      onClick={() => handleOrientationChange("cuadrado")}
+                      className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
+                        orientation === "cuadrado"
+                          ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
+                          : "border-black bg-white hover:bg-gray-50"
+                      }`}
+                    >
+                      <div
+                        className={`h-12 w-12 border-4 sm:h-14 sm:w-14 ${
+                          orientation === "cuadrado"
+                            ? "border-red-600 bg-red-100"
+                            : "border-black bg-gray-100"
+                        }`}
+                      ></div>
+                      <span
+                        className={`text-xs font-black sm:text-sm ${
+                          orientation === "cuadrado"
+                            ? "text-red-600"
+                            : "text-black"
+                        }`}
+                      >
+                        Cuadrado
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
                       onClick={() => handleOrientationChange("horizontal")}
-                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 sm:p-6 ${
+                      className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
                         orientation === "horizontal"
                           ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
                           : "border-black bg-white hover:bg-gray-50"
                       }`}
                     >
                       <div
-                        className={`h-12 w-16 border-4 sm:h-14 sm:w-20 ${
+                        className={`h-10 w-14 border-4 sm:h-12 sm:w-16 ${
                           orientation === "horizontal"
                             ? "border-red-600 bg-red-100"
                             : "border-black bg-gray-100"
@@ -583,7 +605,9 @@ export default function CustomOrderPage() {
         <ImageCropper
           image={tempImage || imagePreview!}
           aspectRatio={canvasWidth / canvasHeight}
+          currentSizeIndex={formData.selectedSizeIndex}
           onCropComplete={handleCropComplete}
+          onSizeChange={handleSizeChangeInCropper}
           onCancel={handleCropCancel}
         />
       )}
