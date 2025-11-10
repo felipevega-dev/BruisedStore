@@ -779,10 +779,144 @@ onChange={(e) => {
 )}
 ```
 
-### Part 2: PWA (Progressive Web App) - PENDING
+---
+
+## Sprint 7: Authentication & Instagram (November 2025)
+
+### ✅ Part 1: Login/Register UX Improvements
+**Time:** 15 minutes | **Impact:** Critical - Prevents invalid registrations
+
+**What was added:**
+- Email validation with regex (rejects "a@b" format)
+- Password visibility toggles with Eye/EyeOff icons
+- Real-time error clearing on field edit
+- Consistent validation across login and register pages
+
+**Implementation:**
+```tsx
+// Email validation with regex
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!emailRegex.test(formData.email)) {
+  setError("Por favor ingresa un email válido (ejemplo: usuario@dominio.com)");
+  return;
+}
+
+// Password visibility toggle
+const [showPassword, setShowPassword] = useState(false);
+<input type={showPassword ? "text" : "password"} ... />
+<button onClick={() => setShowPassword(!showPassword)}>
+  {showPassword ? <EyeOff /> : <Eye />}
+</button>
+```
+
+**Files modified:**
+- `app/login/page.tsx`
+- `app/register/page.tsx`
+
+### ✅ Part 2: Email Verification System
+**Time:** 45 minutes | **Impact:** Critical - Prevents spam accounts
+
+**What was added:**
+- Firebase email verification on registration
+- New `/verify-email` page with resend functionality
+- Protected routes (checkout, obra-a-pedido require verified email)
+- Warning banner in Header for unverified users
+- Auto-redirect to verification page if not verified
+
+**Implementation:**
+```tsx
+// Send verification email on register
+import { sendEmailVerification } from "firebase/auth";
+await sendEmailVerification(userCredential.user);
+router.push("/verify-email");
+
+// Protect routes
+useEffect(() => {
+  if (!authLoading) {
+    if (!user) {
+      router.push("/login");
+    } else if (!user.emailVerified) {
+      router.push("/verify-email");
+    }
+  }
+}, [user, authLoading, router]);
+
+// Banner in Header
+{user && !user.emailVerified && (
+  <div className="border-b-2 border-yellow-400 bg-yellow-100 py-2">
+    <p>⚠️ Tu email no está verificado. <Link href="/verify-email">Verificar ahora</Link></p>
+  </div>
+)}
+```
+
+**Features:**
+- Instructions with spam warning
+- Resend email button (with rate limiting)
+- "Ya verifiqué mi email" button to check status
+- Auto-reload user state on verification
+- Brutalist design consistent with app
+
+**Files created:**
+- `app/verify-email/page.tsx` (new page)
+
+**Files modified:**
+- `app/register/page.tsx` (add sendEmailVerification)
+- `app/checkout/page.tsx` (add verification check)
+- `app/obra-a-pedido/page.tsx` (add verification check)
+- `components/Header.tsx` (add warning banner)
+
+### ✅ Part 3: Instagram Feed Integration
+**Time:** 20 minutes | **Impact:** High - Shows real work, builds trust
+
+**What was added:**
+- Elfsight Instagram Feed widget integration
+- Grid layout for 6 recent posts from @joseriop
+- Responsive design with brutalist styling
+- Setup instructions document
+
+**Implementation:**
+```tsx
+// In app/page.tsx
+import Script from "next/script";
+
+<Script 
+  src="https://static.elfsight.com/platform/platform.js" 
+  strategy="lazyOnload"
+/>
+<div 
+  className="elfsight-app-YOUR-WIDGET-ID-HERE"
+  data-elfsight-app-lazy
+></div>
+```
+
+**Setup required:**
+1. Create free Elfsight account at elfsight.com
+2. Create Instagram Feed widget with username `joseriop`
+3. Configure: Grid layout, 6 posts, 3 columns
+4. Copy widget ID and replace in `app/page.tsx`
+5. Remove yellow warning box after setup
+
+**Design:**
+- Black border-4 box with shadow-[8px_8px]
+- "📸 Últimas Publicaciones" title with red underline
+- Fallback skeleton loader for no-JS
+- Developer note box (remove after setup)
+
+**Files created:**
+- `INSTAGRAM_SETUP.md` (step-by-step guide)
+
+**Files modified:**
+- `app/page.tsx` (add Instagram widget section)
+
+**Documentation:**
+See `INSTAGRAM_SETUP.md` for complete setup instructions.
+
+---
+
+### Part 4: PWA (Progressive Web App) - PENDING
 **Time:** 30-40 minutes | **Impact:** App-like experience, works offline
 
-### Part 3: Advanced Discounts - PENDING
+### Part 5: Advanced Discounts - PENDING
 **Time:** 45-60 minutes | **Impact:** Marketing automation, customer retention
 
 ## Future Development Options
@@ -792,12 +926,12 @@ Remaining options for future sprints:
 - **Advanced Discounts:** Quantity-based, category-based, user-based discount rules (45-60 min)
 - **Email Notifications:** Firebase Functions + SendGrid for order confirmations (2-3 hrs)
 - **Blog System:** Rich text editor, categories, tags, comments for SEO/engagement (1.5-2 hrs)
-- **Real Instagram Feed:** Implement actual Instagram API or third-party widget (1-2 hrs)
 
 ## Resources
 
 - [Next.js 16 App Router Docs](https://nextjs.org/docs)
 - [Firebase Web SDK](https://firebase.google.com/docs/web/setup)
+- [Elfsight Instagram Widget](https://elfsight.com/instagram-feed-instashow/)
 - [Firestore Security Rules](https://firebase.google.com/docs/firestore/security/get-started)
 - Firebase Project: `bruisedartrash`
 - Git Repo: `felipevega-dev/BruisedStore`

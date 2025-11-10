@@ -7,6 +7,7 @@ import { Painting, FilterOptions } from "@/types";
 import PaintingCard from "@/components/PaintingCard";
 import FilterBar from "@/components/FilterBar";
 import Link from "next/link";
+import Script from "next/script";
 import { Loader2, Paintbrush, Sparkles } from "lucide-react";
 
 export default function Home() {
@@ -251,15 +252,38 @@ export default function Home() {
               </div>
             </a>
             
-            {/* Note about feed */}
-            <div className="max-w-2xl border-4 border-black bg-yellow-100 p-6 text-center">
-              <p className="text-sm font-bold text-black">
-                📸 Pronto mostraremos aquí las últimas publicaciones de Instagram
-              </p>
-              <p className="mt-2 text-xs text-gray-700">
-                Por ahora, visita nuestro perfil para ver el trabajo más reciente
-              </p>
+            {/* Instagram Feed Widget */}
+            <div className="w-full max-w-5xl border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <div className="mb-6 text-center">
+                <h3 className="text-2xl font-black text-black">
+                  📸 Últimas Publicaciones
+                </h3>
+                <div className="mx-auto mt-2 h-1 w-16 bg-red-600"></div>
+              </div>
+              
+              {/* Elfsight Instagram Feed Widget */}
+              <Script 
+                src="https://static.elfsight.com/platform/platform.js" 
+                strategy="lazyOnload"
+              />
+              <div 
+                className="elfsight-app-b1e04a35-e117-49e4-80d3-13a8d3eb2321"
+                data-elfsight-app-lazy
+              ></div>
+              
+              {/* Fallback mientras carga */}
+              <noscript>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                  {[1, 2, 3, 4, 5, 6].map((i) => (
+                    <div 
+                      key={i}
+                      className="aspect-square animate-pulse bg-gray-200"
+                    ></div>
+                  ))}
+                </div>
+              </noscript>
             </div>
+
           </div>
         </div>
       </section>

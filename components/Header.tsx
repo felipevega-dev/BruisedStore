@@ -71,6 +71,18 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b-4 border-black bg-white shadow-lg">
+      {/* Email Verification Banner */}
+      {user && !user.emailVerified && (
+        <div className="border-b-2 border-yellow-400 bg-yellow-100 py-2 text-center">
+          <p className="text-sm font-bold text-yellow-900">
+            ⚠️ Tu email no está verificado.{" "}
+            <Link href="/verify-email" className="underline hover:text-yellow-700">
+              Verificar ahora
+            </Link>
+          </p>
+        </div>
+      )}
+      
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between lg:h-20">
           {/* Logo */}

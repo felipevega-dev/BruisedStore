@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   CustomOrder,
   CUSTOM_ORDER_SIZES,
@@ -16,6 +18,8 @@ import ImageCropper from "@/components/ImageCropper";
 import { useToast } from "@/hooks/useToast";
 
 export default function CustomOrderPage() {
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const [formData, setFormData] = useState({
     customerName: "",
     email: "",
@@ -23,6 +27,17 @@ export default function CustomOrderPage() {
     selectedSizeIndex: 0,
     notes: "",
   });
+
+  // Redirect if not verified
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        router.push("/login");
+      } else if (!user.emailVerified) {
+        router.push("/verify-email");
+      }
+    }
+  }, [user, authLoading, router]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showCropper, setShowCropper] = useState(false);

@@ -1,21 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { ShippingInfo, PaymentInfo, Order, Coupon } from "@/types";
 import { collection, addDoc, serverTimestamp, query, where, getDocs, doc, updateDoc, increment } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CreditCard, Truck, Loader2, CheckCircle, Tag, X } from "lucide-react";
+import { ArrowLeft, CreditCard, Truck, Loader2, CheckCircle, Tag, X, AlertCircle } from "lucide-react";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, getTotal, clearCart } = useCart();
+  const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
+
+  // Redirect if not verified
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        router.push("/login");
+      } else if (!user.emailVerified) {
+        router.push("/verify-email");
+      }
+    }
+  }, [user, authLoading, router]);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState("");

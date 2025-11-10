@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -57,8 +57,11 @@ export default function RegisterPage() {
         displayName: formData.name,
       });
 
-      // Redirigir a la página principal
-      router.push("/");
+      // Enviar email de verificación
+      await sendEmailVerification(userCredential.user);
+
+      // Redirigir a página de verificación pendiente
+      router.push("/verify-email");
     } catch (error: any) {
       console.error("Registration error:", error);
       
