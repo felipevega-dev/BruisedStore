@@ -106,5 +106,21 @@ service cloud.firestore {
       // Solo administradores pueden eliminar (no recomendado)
       allow delete: if isAdmin();
     }
+
+    // Reglas para blogPosts (sistema de blog)
+    match /blogPosts/{postId} {
+      // Lectura: Todos pueden ver posts publicados, admins ven todos
+      allow read: if resource.data.published == true || isAdmin();
+
+      // Solo administradores pueden crear posts
+      allow create: if isAdmin() &&
+                       request.resource.data.authorId == request.auth.uid;
+
+      // Solo administradores pueden actualizar posts
+      allow update: if isAdmin();
+
+      // Solo administradores pueden eliminar posts
+      allow delete: if isAdmin();
+    }
   }
 }

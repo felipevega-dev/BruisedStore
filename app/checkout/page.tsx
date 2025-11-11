@@ -224,12 +224,8 @@ export default function CheckoutPage() {
       // Limpiar carrito
       clearCart();
 
-      // Mostrar confirmación
-      setOrderNumber(newOrderNumber);
-      setOrderCreated(true);
-
-      // En producción, aquí redirigirías a la pasarela de pago
-      // router.push(`/payment/${docRef.id}?method=${paymentMethod}`);
+      // Redirigir a página de confirmación
+      router.push(`/order-confirmation/${docRef.id}`);
     } catch (error) {
       console.error("Error creating order:", error);
       showToast("Error al crear el pedido. Por favor, intenta de nuevo.", "error");

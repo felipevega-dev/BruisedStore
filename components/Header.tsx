@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWishlist } from "@/contexts/WishlistContext";
-import { ShoppingCart, User, LogOut, Shield, Settings, Heart, Menu, X, Home, Palette } from "lucide-react";
+import { ShoppingCart, User, LogOut, Shield, Settings, Heart, Menu, X, Home, Palette, BookOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -114,6 +114,13 @@ export default function Header() {
             >
               <Palette className="h-4 w-4" />
               <span>Obra a Pedido</span>
+            </Link>
+            <Link
+              href="/blog"
+              className="flex items-center gap-2 text-base font-bold text-gray-700 transition-colors hover:text-red-600"
+            >
+              <BookOpen className="h-4 w-4" />
+              <span>Blog</span>
             </Link>
 
             {/* Icons Group */}
@@ -283,6 +290,14 @@ export default function Header() {
                 >
                   <Palette className="h-5 w-5" />
                   <span>Obra a Pedido</span>
+                </Link>
+                <Link
+                  href="/blog"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-red-600 hover:bg-red-50 hover:text-red-600"
+                >
+                  <BookOpen className="h-5 w-5" />
+                  <span>Blog</span>
                 </Link>
                 <Link
                   href="/wishlist"

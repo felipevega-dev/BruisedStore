@@ -243,3 +243,36 @@ export const DEFAULT_HOME_SETTINGS: Omit<HomeSettings, 'id' | 'updatedAt'> = {
   videoSize: 'medium',
   videoPosition: 'right',
 };
+
+// Blog System Types
+export type BlogCategory =
+  | 'proceso'
+  | 'inspiracion'
+  | 'tecnica'
+  | 'personal'
+  | 'exposiciones';
+
+export const BLOG_CATEGORIES: { value: BlogCategory; label: string }[] = [
+  { value: 'proceso', label: 'Proceso Creativo' },
+  { value: 'inspiracion', label: 'Inspiración' },
+  { value: 'tecnica', label: 'Técnica' },
+  { value: 'personal', label: 'Personal' },
+  { value: 'exposiciones', label: 'Exposiciones' },
+];
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string; // URL-friendly (e.g., "mi-proceso-creativo")
+  excerpt: string; // Short description for cards
+  content: string; // Full HTML content
+  coverImage?: string; // Optional featured image
+  category: BlogCategory;
+  tags: string[]; // ["acuarela", "abstracto", "naturaleza"]
+  published: boolean;
+  publishedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  authorId: string; // Admin user ID
+  viewCount?: number; // Optional view tracking
+}

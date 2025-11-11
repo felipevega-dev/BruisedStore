@@ -1,20 +1,40 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with this repository.
+
+## 📋 Quick Reference
+
+**Project:** José Vega Art Gallery - E-commerce for Chilean artist
+**Stack:** Next.js 16 + React 19 + TypeScript 5 + Tailwind 4 + Firebase 12
+**Design:** Brutalist (heavy borders, bold shadows, red/yellow accents)
+**Status:** ✅ Production-ready with 20+ features implemented
+
+### What Works
+✅ Full e-commerce (cart, checkout, orders)
+✅ Guest checkout + soft registration
+✅ Advanced image cropper for custom orders
+✅ Admin panel (CRUD, moderation, analytics)
+✅ Email verification + WhatsApp integration
+✅ Real-time notifications + toast system
+✅ Fully responsive (mobile-first)
+✅ Performance optimized (-75% image size, -57% TTI)
+
+### What Needs Work
+🔴 Payment gateway (manual only)
+🔴 Email notifications (no order confirmations)
+🔴 Error boundaries (app crashes on errors)
+🟡 Inventory tracking (no stock management)
+🟡 Advanced search (basic only)
+🟢 Test coverage (0%)
+
+---
 
 ## Project Overview
 
-**José Vega Art Gallery** - E-commerce platform for selling paintings online by Chilean artist José Vega (@joseriop). Built with Next.js 16 (App Router), TypeScript, Tailwind CSS, and Firebase.
+**José Vega Art Gallery** - E-commerce platform for Chilean artist José Vega (@joseriop).
 
-**Design Philosophy:** Brutalist design with heavy black borders (4px), bold shadows (`shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`), high contrast (black on white), and accent colors in red (#dc2626) and yellow (#fef3c7).
-
-## Tech Stack
-
-- **Next.js 16.0.1** (App Router) + React 19.2.0
-- **TypeScript 5** - All components strictly typed
-- **Tailwind CSS 4.1.17** - Utility-first styling
-- **Firebase 12.5.0** - Firestore (DB), Storage (images), Auth (users + admin)
-- **Lucide React** - Icon library
+**Stack:** Next.js 16 (App Router), React 19, TypeScript 5, Tailwind CSS 4, Firebase 12
+**Design:** Brutalist (border-4, shadow-[8px_8px_0px_0px_rgba(0,0,0,1)], red #dc2626, yellow #fef3c7)
 
 ## Development Commands
 
@@ -338,859 +358,283 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 ### Open Items
 - None currently reported
 
-## Sprint History
+## Feature Summary (All Sprints)
 
-**Sprint 1:** WhatsApp integration, categories/filters, search, auth (email + Google OAuth)
-**Sprint 2:** User profiles, review system with moderation, wishlist
-**Sprint 3:** Coupon system, multi-image galleries, analytics dashboard
-**Sprint 4:** SEO (Open Graph, JSON-LD, sitemap, robots.txt), UX polish
-**Sprint 5:** ✅ COMPLETED - Complete mobile responsiveness (hamburger menu, inline preview, touch-optimized)
-**Sprint 5.5:** ✅ COMPLETED - UX Feedback (toast notifications, profile edit, header z-index fix)
-**Sprint 6:** ✅ COMPLETED - Quick-Win Features (WhatsApp Widget → Rebrand → Instagram → Image Cropper)
-**Sprint 6.1:** ✅ COMPLETED - Enhanced Cropper (Size selector, Orientation: Cuadrado, Validation)
+### ✅ Core E-commerce
+- Gallery with filters (category, price, search)
+- Shopping cart (localStorage) + Wishlist (Firestore)
+- Guest & registered checkout with WhatsApp integration
+- Order management (2 types: store orders + custom commissions)
+- Coupon system with validation
 
-**Status:** ✅ Production-ready. 14 major features + full UX polish + WhatsApp Widget + Advanced Image Cropper implemented. Build passing without errors.
+### ✅ User System
+- Email/password + Google OAuth authentication
+- Email verification system
+- User profiles with order history
+- Review system with admin moderation (approve/hide/delete)
 
-## Sprint 5 - Mobile Responsiveness (COMPLETED ✅)
+### ✅ Admin Panel
+- Dashboard with real-time metrics
+- CRUD for paintings (multi-image upload, drag & drop)
+- Order management (status tracking, dual system)
+- Review moderation
+- Coupon management with comprehensive validation
+- Home page customization (banner, video, content)
+- Toast notifications across all admin operations
+- Loading states to prevent race conditions
 
-### Achievements
-✅ Fully responsive navigation with hamburger menu
-✅ Optimized all public pages for mobile (320px+)
-✅ Inline image preview in custom order form (mobile UX improvement)
-✅ Touch-friendly controls throughout the app
-✅ Tested on multiple resolutions (mobile, tablet, desktop)
+### ✅ Custom Order System
+- Advanced image cropper (react-easy-crop)
+- 14 canvas sizes (vertical, horizontal, square)
+- Size filtering by orientation
+- Real-time price calculator
+- Guest checkout + soft registration modal
+- Form validation with visual feedback
 
-### Specific Improvements Implemented
+### ✅ UX/UI Features
+- Brutalist design system
+- Fully responsive (mobile-first, hamburger menu)
+- WhatsApp floating widget (context-aware, dismissible)
+- Toast notification system (replaced all alerts)
+- Lazy loading + image optimization (-75% size)
+- 4 background themes for homepage
 
-#### 1. **Header/Navbar** ✅
-- **Mobile (< 1024px):**
-  - Hamburger menu with slide-in panel (280px width)
-  - Semi-transparent overlay on open
-  - All navigation links with icons
-  - User info card at top of menu
-  - Badge counters for cart, wishlist, and admin notifications
-  - Auto-close on link click
+### ✅ Technical Optimizations
+- Memory leak fix (Header.tsx nested listeners)
+- Parallel async operations (10x faster wishlist)
+- Consolidated utilities (removed duplicate formatPrice)
+- Real-time Firestore listeners with proper cleanup
 
-- **Desktop (≥ 1024px):**
-  - Horizontal navigation
-  - Grouped icons (wishlist + cart)
-  - Dropdown user menu
-  - Admin button with real-time notifications
+**Status:** ✅ Production-ready. 20+ major features. Build passing without errors.
 
-#### 2. **Home Page** ✅
-- Centered hero section on all devices
-- Responsive heading (text-3xl → text-4xl → text-5xl → text-8xl)
-- Icon size scaling (h-8 → h-10)
-- Red accent line scaling (h-1 w-20 → h-2 w-24)
-- Already had responsive grid (grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4)
+---
 
-#### 3. **Custom Order Page** ✅
-- **Mobile-First Image Upload:**
-  - **Before:** User had to scroll down to see preview
-  - **After:** Image preview appears inline immediately after upload
-  - Aspect-square preview with border-4 border-black
-  - "Cambiar Imagen" button below preview
-  - Upload box hidden on mobile when image exists
+## Key Implementation Patterns
 
-- **Responsive Canvas Preview:**
-  - Scale factor: 6x (down from 8x for mobile)
-  - maxWidth: calc(100vw - 80px) instead of 100vw
-  - maxHeight: 60vh instead of 90vh
+### 1. Image Cropper System
+- **Library:** react-easy-crop for advanced cropping
+- **Features:** Zoom (1x-3x), rotation (0°-360°), real-time aspect ratio
+- **Integration:** Auto-opens on upload, size selector in modal
+- **Output:** 95% JPEG quality, Firebase Storage upload
+- **UX:** Touch-friendly, shows dimensions + price in header
 
-- **Touch-Optimized Controls:**
-  - Orientation buttons: h-16 w-12 (mobile) → h-20 w-14 (desktop)
-  - Text scaling: text-xs → text-sm throughout form
-  - Padding: p-3/p-4 (mobile) → p-6 (desktop)
-  - Price display: stacked vertically on mobile (flex-col)
+### 2. Canvas Size System (Obra a Pedido)
+- **Convention:** ALTO x ANCHO (height x width)
+- **14 sizes:** 6 vertical, 2 square, 6 horizontal
+- **Auto-orientation:** Based on dimensions (no manual toggle needed)
+- **Filtering:** Shows only relevant sizes per selected orientation
+- **Preview:** 6x scale with realistic proportions
 
-#### 4. **Admin Panel** ✅
-- Dashboard already responsive with md:grid-cols-2
-- Individual admin pages inherit responsive layout
-- Forms use responsive spacing (space-y-4 sm:space-y-6)
-- Build verified: ✅ No errors
+### 3. Guest Checkout Flow
+- **No login wall:** Users can order without account
+- **Post-order modal:** Soft registration after commitment
+- **Benefits shown:** Order tracking, history, saved data
+- **Smart linking:** Associates order with user if they register
+- **Dual queries:** Find orders by userId OR email (backwards compatible)
 
-### Responsive Breakpoints
-- **Mobile:** < 640px (sm) - Single column, touch targets 44px min
-- **Tablet:** 640px - 1024px (sm - lg) - 2 columns where appropriate
-- **Desktop:** 1024px - 1536px (lg - xl) - Full navigation, 3-4 columns
-- **Large Desktop:** > 1536px (2xl) - Maximum width containers
+### 4. Toast Notification System
+- **Replaced:** All native alerts across the app
+- **Consistent UX:** Success (green), error (red), info (blue), warning (yellow)
+- **Non-blocking:** Doesn't interrupt user flow
+- **Auto-dismiss:** Configurable timeout
+- **Coverage:** All CRUD operations in admin panel
 
-### Key UX Improvements
-1. **Inline Preview (Mobile):** Users see their uploaded image immediately without scrolling
-2. **Hamburger Menu:** Clean mobile navigation with all features accessible
-3. **Touch Targets:** All buttons and links meet 44px minimum for mobile
-4. **Responsive Typography:** Text scales appropriately across all breakpoints
-5. **Visual Hierarchy:** Maintained brutalist design while ensuring mobile usability
-
-## Sprint 6 - Quick-Win Features (COMPLETED ✅)
-
-### Part 1: WhatsApp Widget ✅ COMPLETED
-**Time:** 15-20 minutes | **Impact:** High conversion rate improvement
-
-#### Implementation
-- Created `components/WhatsAppWidget.tsx` - Floating widget with brutalist design
-- Context-aware messaging based on current page
-- Dismissible with localStorage persistence
-- Integrated globally in `app/layout.tsx`
-- Hidden on admin pages
-- **AdBlocker-proof:** No "WhatsApp" in localStorage keys or aria-labels
-
-#### Features
-- **Floating Button:** Green WhatsApp icon (bottom-right, z-[9998])
-- **Expandable Message:** Click to see help message bubble
-- **Smart Messages:** Different message per page (home, product, cart, custom order, etc.)
-- **Dismissible:** Red X button hides widget permanently (localStorage: `chat-widget-hidden`)
-- **Design:** Border-4, shadow-[8px_8px_0px_0px], consistent with brutalist theme
-
-#### Bug Fixes
-- ✅ Renamed localStorage key from `whatsapp-widget-dismissed` to `chat-widget-hidden`
-- ✅ Changed aria-labels from "WhatsApp" to generic "chat"
-- ✅ Button text: "Enviar Mensaje" instead of "Abrir WhatsApp"
-
-#### Code Pattern
+### 5. Form Validation Pattern
 ```typescript
-const getContextMessage = () => {
-  const baseMessage = "Hola! Estoy interesado en las obras de José Vega. ";
-  if (pathname === "/") return baseMessage + "Me gustaría conocer más...";
-  if (pathname.startsWith("/obra/")) return baseMessage + "Consulta sobre obra...";
-  // ... context-specific messages
-};
+const [errors, setErrors] = useState<Record<string, string>>({});
 
-const handleWhatsAppClick = () => {
-  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
-  const message = encodeURIComponent(getContextMessage());
-  window.open(`https://wa.me/${phoneNumber}?text=${message}`, "_blank");
-};
-```
-
-### Part 1.5: Canvas Size & Orientation System ✅ COMPLETED
-**Time:** 30 minutes | **Impact:** Realistic canvas previews, correct orientation
-
-#### Problem
-- Users could select orientations that didn't match canvas size (e.g., 80x60 as vertical)
-- Canvas preview didn't show realistic proportions (limited by maxWidth/maxHeight)
-- First number in size notation wasn't consistently treated as width
-
-#### Solution - Automatic Orientation
-**Canvas size notation:** `ALTO x ANCHO` (e.g., 50x40 = 50cm alto x 40cm ancho)
-- **CONVENCIÓN ESTÁNDAR:** Primer número = ALTO (height), Segundo número = ANCHO (width)
-- **height > width** → VERTICAL (e.g., 25x20, 40x30, 70x40)
-- **width > height** → HORIZONTAL (e.g., 50x60, 60x80, 100x140)
-- **height = width** → CUADRADO (e.g., 50x50, 60x60)
-
-#### Implementation Changes
-1. **Removed orientation buttons** - Orientation now automatic based on size
-2. **Updated CUSTOM_ORDER_SIZES** in `types/index.ts`:
-   - ✅ CORRECCIÓN CRÍTICA: Nombres reflejan convención ALTO x ANCHO
-   - Added 2 square sizes: 50x50, 60x60
-   - Organized sizes by orientation (vertical → square → horizontal)
-   - Clear comments indicating orientation for each size
-3. **Fixed canvas preview** in `app/obra-a-pedido/page.tsx`:
-   - Changed scale from 6x to 3x for better fit
-   - Removed `Math.min` that was cutting proportions
-   - Added `aspectRatio` CSS property for exact proportions
-   - New dimensions: `width: ${canvasWidth * 3}px`, `height: ${canvasHeight * 3}px`
-   - Responsive: `maxWidth: min(calc(100vw - 120px), 500px)`
-4. **Simplified state** - Removed `orientation` from formData (now computed)
-5. **Display shows real dimensions** - Always shows `{canvasWidth} x {canvasHeight} cm`
-
-#### New Canvas Sizes (14 total) - Formato: ALTO x ANCHO
-```typescript
-// VERTICALES (6) - más alto que ancho
-25x20 ($20.000), 30x24 ($30.000), 40x30 ($40.000),
-50x40 ($50.000), 70x40 ($80.000), 70x50 ($120.000)
-
-// CUADRADOS (2)
-50x50 ($90.000), 60x60 ($130.000)
-
-// HORIZONTALES (6) - más ancho que alto
-50x60 ($100.000), 50x70 ($120.000), 60x80 ($160.000),
-80x100 ($216.000), 100x140 ($324.000), 140x180 ($432.000)
-```
-
-#### Key Code Pattern
-```typescript
-// Automatic orientation
-const orientation: Orientation =
-  selectedSize.width < selectedSize.height ? "vertical"
-  : selectedSize.width > selectedSize.height ? "horizontal"
-  : "vertical"; // squares default to vertical
-
-// Real proportions in preview
-const canvasWidth = selectedSize.width;
-const canvasHeight = selectedSize.height;
-
-<div style={{
-  width: `${canvasWidth * 3}px`,
-  height: `${canvasHeight * 3}px`,
-  aspectRatio: `${canvasWidth} / ${canvasHeight}`,
-  maxWidth: "min(calc(100vw - 120px), 500px)",
-  maxHeight: "min(70vh, 600px)",
-}} />
-```
-
-### Part 2: Rebrand to José Vega ✅ COMPLETED
-**Time:** 20 minutes | **Impact:** Brand consistency, artist recognition
-
-#### Changes Made
-- Updated all instances of "Bruised Art" to "José Vega" across the application
-- Changed Instagram link from @bruisedart to @joseriop
-- Files updated:
-  - `components/Header.tsx` - Logo and site title
-  - `components/Footer.tsx` - Footer branding and copyright
-  - `components/WhatsAppWidget.tsx` - Chat messages
-  - `lib/metadata.ts` - SEO metadata, Open Graph, JSON-LD
-  - `app/page.tsx` - Hero section title
-  - `app/checkout/page.tsx` - WhatsApp order message
-  - `app/obra/[id]/metadata.ts` - Painting metadata
-  - `CLAUDE.md` - Documentation
-
-### Part 3: Instagram Section ✅ COMPLETED
-**Time:** 15 minutes | **Impact:** Social proof, artist connection
-
-#### Implementation
-- Replaced hidden catalog on homepage with Instagram CTA section
-- Catalog temporarily hidden (wrapped in `{false && ...}`) until quality photos ready
-- Instagram section features:
-  - Brutalist design with border-4, shadow effects
-  - Instagram SVG icon with hover color change to red
-  - Large "@joseriop" link to artist's profile
-  - Opens in new tab (`target="_blank"`)
-  - Yellow info box explaining feed will be added later
-  - Fully responsive design
-
-#### Code Pattern
-```tsx
-<a
-  href="https://instagram.com/joseriop"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="group flex items-center gap-4 border-4 border-black..."
->
-  <svg className="h-12 w-12 transition-colors group-hover:fill-red-600">
-    {/* Instagram icon path */}
-  </svg>
-  <div className="text-left">
-    <p className="text-2xl font-black...">@joseriop</p>
-    <p className="text-sm...">Ver perfil completo →</p>
-  </div>
-</a>
-```
-
-### Part 4: Image Crop Tool ✅ COMPLETED
-**Time:** 45 minutes | **Impact:** Professional image handling, better paintings
-
-#### Updates (Sprint 6.1 - Enhanced Cropper) ✅
-- **Size Selector in Cropper:** Dropdown to change canvas size without closing modal
-- **Current Size Display:** Shows dimensions and price in header (e.g., "50x40 cm - $50.000")
-- **Orientation Buttons Restored:** 3 buttons (Vertical, Cuadrado, Horizontal) in form
-- **Cuadrado Orientation Added:** New orientation type for square canvases (50x50, 60x60)
-- **Smart Size Switching:** Changes canvas size in cropper updates aspect ratio instantly
-
-#### Implementation
-- Installed `react-easy-crop` library for advanced cropping
-- Created `components/ImageCropper.tsx` component with:
-  - Full-screen modal overlay (z-[9999], black background)
-  - Real-time crop preview with aspect ratio matching selected canvas
-  - **Canvas size selector dropdown** (shows all 14 sizes with orientation and price)
-  - **Current size display in header** with dimensions and formatted price
-  - Zoom control (1x - 3x) with slider and percentage display
-  - Rotation control (0° - 360°) with slider and degree display
-  - Touch-friendly drag to reposition image
-  - Apply/Cancel buttons with brutalist design
-  - Processing state with spinner
-  - Help text for user guidance
-
-#### Integration in Custom Order Page
-1. **Orientation Buttons (3 options):**
-   - Vertical (tall rectangles like 70x50)
-   - Cuadrado (squares like 50x50, 60x60)
-   - Horizontal (wide rectangles like 60x80)
-   - Visual indicators with colored borders when selected
-   - Smart reassignment: finds closest size by area in target orientation
-
-2. **Automatic Cropper on Upload:**
-   - When user selects image, cropper opens immediately
-   - Image loaded into `tempImage` state
-   - Modal shows with aspect ratio of currently selected canvas
-
-3. **Manual Adjustment:**
-   - "Ajustar Imagen" button appears after image is uploaded (mobile preview)
-   - "Cambiar" button to upload different image
-   - Reopens cropper with current image
-   - Preserves existing crop or allows new adjustment
-
-4. **Dynamic Aspect Ratio:**
-   - Calculated as `canvasWidth / canvasHeight`
-   - Updates automatically when user changes canvas size IN THE CROPPER
-   - Examples: 60x40 = 1.5 aspect, 25x20 = 0.8 aspect, 50x50 = 1.0 aspect
-
-4. **Output Handling:**
-   - Creates cropped Blob with 95% JPEG quality
-   - Converts to File object for Firebase upload
-   - Generates preview URL for immediate display
-   - Cleans up temporary image state
-
-#### Key Code Pattern
-```typescript
-// In ImageCropper.tsx - Size selector integration
-interface ImageCropperProps {
-  image: string;
-  aspectRatio: number;
-  currentSizeIndex: number;
-  onCropComplete: (croppedImageBlob: Blob) => void;
-  onSizeChange: (newSizeIndex: number) => void;
-  onCancel: () => void;
-}
-
-// Size selector dropdown in cropper
-<select value={currentSizeIndex} onChange={(e) => onSizeChange(parseInt(e.target.value))}>
-  {CUSTOM_ORDER_SIZES.map((size, index) => {
-    const orientation = size.width < size.height ? "Vertical"
-      : size.width > size.height ? "Horizontal" : "Cuadrado";
-    return (
-      <option key={index} value={index}>
-        {size.name} cm ({size.height}x{size.width}) - {orientation} - {formatPrice}
-      </option>
-    );
-  })}
-</select>
-
-// Orientation type updated
-export type Orientation = 'horizontal' | 'vertical' | 'cuadrado';
-
-// Automatic orientation detection
-const orientation: Orientation =
-  selectedSize.width < selectedSize.height ? "vertical"
-  : selectedSize.width > selectedSize.height ? "horizontal"
-  : "cuadrado"; // width = height
-
-const createCroppedImage = async (): Promise<Blob> => {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  
-  canvas.width = croppedAreaPixels.width;
-  canvas.height = croppedAreaPixels.height;
-  
-  // Apply rotation
-  ctx.translate(canvas.width / 2, canvas.height / 2);
-  ctx.rotate((rotation * Math.PI) / 180);
-  
-  // Draw cropped area
-  ctx.drawImage(imageObj, croppedAreaPixels.x, croppedAreaPixels.y, ...);
-  
-  return new Promise((resolve) => {
-    canvas.toBlob(blob => resolve(blob), "image/jpeg", 0.95);
-  });
-};
-
-// In obra-a-pedido/page.tsx
-{showCropper && (tempImage || imagePreview) && (
-  <ImageCropper
-    image={tempImage || imagePreview!}
-    aspectRatio={canvasWidth / canvasHeight}
-    currentSizeIndex={formData.selectedSizeIndex}
-    onCropComplete={handleCropComplete}
-    onSizeChange={handleSizeChangeInCropper}
-    onCancel={handleCropCancel}
-  />
-)}
-```
-
-#### Enhanced User Flow (Sprint 6.1)
-1. User clicks orientation button (Vertical / Cuadrado / Horizontal)
-2. System finds closest canvas size in that orientation by area
-3. User uploads reference image
-4. **Cropper opens automatically** with current canvas aspect ratio
-5. User sees canvas dimensions and price in cropper header
-6. User can **change canvas size from dropdown in cropper** → aspect ratio updates instantly
-7. User adjusts zoom, rotation, position
-8. User clicks "Aplicar Ajuste"
-9. Cropped image appears in preview
-10. User can click "Ajustar Imagen" to reopen cropper with same image
-11. User can click "Cambiar" to upload different image
-12. On submit, cropped image uploads to Firebase Storage
-
-#### Benefits
-- **Perfect Fit:** Images always match selected canvas proportions
-- **Quality Control:** Users can frame/compose their reference properly
-- **Professional:** No distorted or stretched images
-- **Flexibility:** Change canvas size IN THE CROPPER without re-uploading
-- **Orientation Control:** Easy switching between Vertical, Cuadrado, Horizontal
-- **Mobile-Friendly:** Touch gestures work for pan/zoom
-- **Price Transparency:** See price updates when changing size in cropper
-- **Versatile Workflow:** Upload once, try different canvas sizes before deciding
-
-### Sprint 6.1 - Polish & Validation ✅ COMPLETED
-
-#### Form Validation Improvements
-**Obra a Pedido Page:**
-- ✅ **Real-time validation** with visual feedback
-- ✅ **Field-level error messages** (nombre, email, teléfono, imagen)
-- ✅ **Email regex validation**: `^[^\s@]+@[^\s@]+\.[^\s@]+$`
-- ✅ **Phone validation**: Mínimo 8 dígitos, acepta + y espacios
-- ✅ **Name validation**: Mínimo 3 caracteres
-- ✅ **Error clearing on edit**: Errores desaparecen cuando usuario corrige
-- ✅ **Toast notifications** reemplazan alerts nativos
-- ✅ **Border rojo en campos con error** para feedback visual claro
-
-**Key Implementation:**
-```typescript
 const validateForm = (): boolean => {
   const newErrors: Record<string, string> = {};
-  
-  // Name validation
-  if (!formData.customerName.trim()) {
-    newErrors.customerName = "El nombre es requerido";
-  } else if (formData.customerName.trim().length < 3) {
-    newErrors.customerName = "El nombre debe tener al menos 3 caracteres";
-  }
-  
-  // Email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formData.email)) {
-    newErrors.email = "Email inválido";
-  }
-  
+  // Validation logic
+  if (!field.trim()) newErrors.field = "Campo requerido";
   setErrors(newErrors);
   return Object.keys(newErrors).length === 0;
 };
 
-// Clear error on user edit
+// Clear error on edit
 onChange={(e) => {
-  setFormData({ ...formData, email: e.target.value });
-  if (errors.email) {
-    setErrors({ ...errors, email: "" });
-  }
+  setValue(e.target.value);
+  if (errors.field) setErrors({ ...errors, field: "" });
 }}
+
+// Visual feedback
+className={`... ${errors.field ? "border-red-600" : "border-black"}`}
+{errors.field && <p className="text-red-600">{errors.field}</p>}
 ```
 
-**Visual Feedback:**
-```tsx
-<input
-  className={`w-full border-4 bg-white ... ${
-    errors.email
-      ? "border-red-600 focus:border-red-600"
-      : "border-black focus:border-red-600"
-  }`}
-/>
-{errors.email && (
-  <p className="mt-2 text-sm font-bold text-red-600">{errors.email}</p>
-)}
-```
-
----
-
-## Sprint 7: Authentication & Instagram (November 2025)
-
-### ✅ Part 1: Login/Register UX Improvements
-**Time:** 15 minutes | **Impact:** Critical - Prevents invalid registrations
-
-**What was added:**
-- Email validation with regex (rejects "a@b" format)
-- Password visibility toggles with Eye/EyeOff icons
-- Real-time error clearing on field edit
-- Consistent validation across login and register pages
-
-**Implementation:**
-```tsx
-// Email validation with regex
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if (!emailRegex.test(formData.email)) {
-  setError("Por favor ingresa un email válido (ejemplo: usuario@dominio.com)");
-  return;
-}
-
-// Password visibility toggle
-const [showPassword, setShowPassword] = useState(false);
-<input type={showPassword ? "text" : "password"} ... />
-<button onClick={() => setShowPassword(!showPassword)}>
-  {showPassword ? <EyeOff /> : <Eye />}
-</button>
-```
-
-**Files modified:**
-- `app/login/page.tsx`
-- `app/register/page.tsx`
-
-### ✅ Part 2: Email Verification System
-**Time:** 45 minutes | **Impact:** Critical - Prevents spam accounts
-
-**What was added:**
-- Firebase email verification on registration
-- New `/verify-email` page with resend functionality
-- Protected routes (checkout, obra-a-pedido require verified email)
-- Warning banner in Header for unverified users
-- Auto-redirect to verification page if not verified
-
-**Implementation:**
-```tsx
-// Send verification email on register
-import { sendEmailVerification } from "firebase/auth";
-await sendEmailVerification(userCredential.user);
-router.push("/verify-email");
-
-// Protect routes
-useEffect(() => {
-  if (!authLoading) {
-    if (!user) {
-      router.push("/login");
-    } else if (!user.emailVerified) {
-      router.push("/verify-email");
-    }
-  }
-}, [user, authLoading, router]);
-
-// Banner in Header
-{user && !user.emailVerified && (
-  <div className="border-b-2 border-yellow-400 bg-yellow-100 py-2">
-    <p>⚠️ Tu email no está verificado. <Link href="/verify-email">Verificar ahora</Link></p>
-  </div>
-)}
-```
-
-**Features:**
-- Instructions with spam warning
-- Resend email button (with rate limiting)
-- "Ya verifiqué mi email" button to check status
-- Auto-reload user state on verification
-- Brutalist design consistent with app
-
-**Files created:**
-- `app/verify-email/page.tsx` (new page)
-
-**Files modified:**
-- `app/register/page.tsx` (add sendEmailVerification with custom URL)
-- `app/checkout/page.tsx` (add verification check)
-- `app/obra-a-pedido/page.tsx` (add verification check)
-- `components/Header.tsx` (add warning banner)
-- `contexts/AuthContext.tsx` (force user.reload() on auth state change)
-
-**UX Improvements:**
-- Banner updates immediately after verification (window.location.href refresh)
-- Clear spam warning with bullet points
-- Email address visible for user confirmation
-- Friendly numbered steps (1, 2, 3, 4)
-- Resend button with rate limiting
-
-**Email Customization (requires Firebase Console setup):**
-1. Go to Firebase Console → Authentication → Templates
-2. Edit "Email address verification" template
-3. Change language to Spanish
-4. Customize subject: "Verifica tu email - José Vega Galería"
-5. Customize body with branded message
-6. Save changes
-
-**Documentation created:**
-- `EMAIL_VERIFICATION_SETUP.md` (Firebase Console setup guide)
-- `EMAIL_IMPROVEMENTS.md` (summary of improvements)
-
-### ✅ Part 3: Instagram Feed Integration
-**Time:** 20 minutes | **Impact:** High - Shows real work, builds trust
-
-**What was added:**
-- Elfsight Instagram Feed widget integration
-- Grid layout for 6 recent posts from @joseriop
-- Responsive design with brutalist styling
-- Setup instructions document
-
-**Implementation:**
-```tsx
-// In app/page.tsx
-import Script from "next/script";
-
-<Script 
-  src="https://static.elfsight.com/platform/platform.js" 
-  strategy="lazyOnload"
-/>
-<div 
-  className="elfsight-app-YOUR-WIDGET-ID-HERE"
-  data-elfsight-app-lazy
-></div>
-```
-
-**Setup required:**
-1. Create free Elfsight account at elfsight.com
-2. Create Instagram Feed widget with username `joseriop`
-3. Configure: Grid layout, 6 posts, 3 columns
-4. Copy widget ID and replace in `app/page.tsx`
-5. Remove yellow warning box after setup
-
-**Design:**
-- Black border-4 box with shadow-[8px_8px]
-- "📸 Últimas Publicaciones" title with red underline
-- Fallback skeleton loader for no-JS
-- Developer note box (remove after setup)
-
-**Files created:**
-- `INSTAGRAM_SETUP.md` (step-by-step guide)
-
-**Files modified:**
-- `app/page.tsx` (add Instagram widget section)
-
-**Documentation:**
-See `INSTAGRAM_SETUP.md` for complete setup instructions.
-
----
-
-## Sprint 8: Guest Checkout & Conversion Optimization (November 2025)
-
-### ✅ Guest Checkout for Custom Orders
-**Time:** 60 minutes | **Impact:** Critical - +200% conversion improvement
-
-**Problem:**
-- Users forced to login BEFORE placing custom order
-- 70%+ cart abandonment rate
-- High friction, lost sales
-
-**Solution: Guest Checkout + Soft Registration**
-
-**Implementation:**
-
-1. **Removed Login Requirement**
-   ```tsx
-   // BEFORE: Blocked non-logged users
-   useEffect(() => {
-     if (!user) router.push("/login"); // ❌
-   }, [user]);
-   
-   // AFTER: Open to everyone ✅
-   // No redirect, full access
-   ```
-
-2. **Post-Order Registration Modal**
-   - Appears AFTER successful order (guests only)
-   - Benefits: tracking, history, saved data, offers
-   - Auto-generates temp password
-   - Creates account with form data
-   - Links order via userId
-   - Sends verification → redirects to /profile
-
-3. **Smart Order Association**
-   ```typescript
-   interface CustomOrder {
-     userId?: string; // NEW - optional user link
-   }
-   
-   // Auto-link if logged in
-   userId: user?.uid || undefined
-   
-   // Post-registration update
-   updateDoc(doc(db, "customOrders", orderId), {
-     userId: newUser.uid
-   })
-   ```
-
-4. **Flexible Profile Queries**
-   ```tsx
-   // Find by userId OR email (backwards compatible)
-   Promise.all([
-     getDocs(query(where("userId", "==", uid))),
-     getDocs(query(where("email", "==", email)))
-   ])
-   // Merge, deduplicate
-   ```
-
-5. **Context-Aware Verification**
-   ```tsx
-   // Email includes redirect param
-   url: `${origin}/verify-email?redirect=profile`
-   
-   // Shows custom message
-   "🎨 Después de verificar podrás ver tu pedido"
-   
-   // Redirects accordingly
-   window.location.href = redirect === "profile" ? "/profile" : "/"
-   ```
-
-**User Flows:**
-
-```
-GUEST USER:
-Enter /obra-a-pedido → Fill form → Submit →
-Modal "Create account?" →
-  ├─ YES → Register → Verify → /profile ✅
-  └─ NO → Success → Order saved ✅
-
-LOGGED USER:
-Enter → Fill → Submit → Auto-link → Success ✅
-
-EXISTING EMAIL:
-Register attempt → Error → Redirect /login ✅
-```
-
-**Metrics Impact:**
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| Abandonment | 70% | 20% | -71% |
-| Orders | 30/100 | 80/100 | +167% |
-| Registrations | 30/100 | 60/100 | +100% |
-| Time | 5 min | 2 min | -60% |
-
-**Files modified:**
-- `types/index.ts` - Added userId? to CustomOrder
-- `app/obra-a-pedido/page.tsx` - Modal, registration, no login wall
-- `app/verify-email/page.tsx` - Redirect detection, custom messages
-- `app/profile/page.tsx` - Dual query (userId + email)
-
-**Documentation:**
-- `GUEST_CHECKOUT_FLOW.md` - Complete flow with diagrams
-
-**Best Practices Applied:**
-✅ Guest checkout (Amazon, Shopify standard)
-✅ Soft registration (after commitment)
-✅ Value proposition (clear benefits)
-✅ Data reuse (zero extra fields)
-✅ Progress preservation (order saved always)
-
----
-
-### Part 2: PWA (Progressive Web App) - PENDING
-**Time:** 30-40 minutes | **Impact:** App-like experience, works offline
-
-### Part 5: Advanced Discounts - PENDING
-**Time:** 45-60 minutes | **Impact:** Marketing automation, customer retention
-
-## Future Development Options
-
-Remaining options for future sprints:
-- **PWA Implementation:** Service workers, offline support, install prompt (30-40 min)
-- **Advanced Discounts:** Quantity-based, category-based, user-based discount rules (45-60 min)
-- **Email Notifications:** Firebase Functions + SendGrid for order confirmations (2-3 hrs)
-- **Blog System:** Rich text editor, categories, tags, comments for SEO/engagement (1.5-2 hrs)
-
-## Sprint 9: Home Page Customization System (November 2025)
-
-### ✅ COMPLETED - Dynamic Home Page with Admin Control
-
-**Time:** 3-4 hours | **Impact:** HUGE - Full control over homepage presentation
-
-## Sprint 10: Video System Overhaul & Performance (November 2025)
-
-### ✅ COMPLETED - Complete Video & Optimization Sprint
-
-**Time:** 2-3 hours | **Impact:** CRITICAL - Better UX, faster load times
-
-#### What was built:
-
-**1. Video System Improvements**
-- ❌ Removed Instagram embeds (no playback support)
-- ✅ Auto-detection of video orientation (vertical 9:16, horizontal 16:9, square 1:1)
-- ✅ Video preview in admin panel with playback
-- ✅ Configurable video sizes (256px, 320px, 384px - compact!)
-- ✅ Dynamic positioning (left/right of text)
-- ✅ Simplified layout with flexbox
-
-**2. Performance Optimizations**
-- ✅ Lazy loading for banner images (only first 3 priority)
-- ✅ Automatic image compression (profile: 800px 90%, banner: 1200px 85%)
-- ✅ 75% reduction in image sizes
-- ✅ 57% faster Time to Interactive
-
-**3. Background Theme System**
-- ✅ 4 dynamic background styles (Gray, Book, Dark, Light)
-- ✅ Auto-adjusting text colors for readability
-- ✅ Accent colors match theme
-- ✅ Markdown support with themed styling
-
-#### Files Modified:
-- [`types/index.ts`](types/index.ts) - Updated `HomeSettings` with videoSize, videoPosition, removed instagram
-- [`components/HomeContentSection.tsx`](components/HomeContentSection.tsx) - Flexbox layout, background themes, video detection
-- [`components/AnimatedBanner.tsx`](components/AnimatedBanner.tsx) - Lazy loading optimization
-- [`app/admin/home-settings/page.tsx`](app/admin/home-settings/page.tsx) - Image compression, video preview, new controls
-- [`app/page.tsx`](app/page.tsx) - Pass backgroundStyle prop
-
-#### Key Metrics:
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Banner Load (12 imgs) | ~8MB | ~2MB | **-75%** |
-| Time to Interactive | 4.2s | 1.8s | **-57%** |
-| Video Options | 3 (broken) | 2 (working) | Quality > Quantity |
-| Background Themes | 1 | 4 | **+300%** |
-
-#### What was built (Sprint 9):
-
-**1. Animated Banner with Carousel**
-- Infinite scrolling carousel of framed paintings
-- Customizable profile photo
-- Editable hero title + subtitle
-- Smooth 60 FPS animation
-- Responsive design (mobile → desktop)
-
-**2. Content Section with Video Integration**
-- Markdown-supported text editor
-- Video embed options:
-  - Instagram Reel (URL)
-  - YouTube (URL)
-  - Custom uploaded video (Firebase Storage)
-  - No video (text only)
-- Side-by-side layout (desktop) / stacked (mobile)
-- 4 background style options
-
-**3. Full Admin Panel** ([`/admin/home-settings`](app/admin/home-settings/page.tsx))
-- Drag & drop image uploads
-- Live preview button
-- Profile photo management
-- Banner carousel (up to 12 images)
-- Video configuration
-- Markdown text editor
-- Real-time updates
-
-#### Files Created:
-- [`types/index.ts`](types/index.ts) - Added `HomeSettings` interface
-- [`components/AnimatedBanner.tsx`](components/AnimatedBanner.tsx) - Banner with carousel
-- [`components/HomeContentSection.tsx`](components/HomeContentSection.tsx) - Content + video
-- [`app/admin/home-settings/page.tsx`](app/admin/home-settings/page.tsx) - Admin panel
-- [`HOME_CUSTOMIZATION_GUIDE.md`](HOME_CUSTOMIZATION_GUIDE.md) - Complete user guide
-
-#### Files Modified:
-- [`app/page.tsx`](app/page.tsx) - Integrated new components
-- [`app/admin/page.tsx`](app/admin/page.tsx) - Added link to home settings
-- [`firestore.rules`](firestore.rules) - Added homeSettings collection rules
-
-#### Key Features:
-- **Banner Images:** Default 6 images from `/public/img`, configurable up to 12
-- **Profile Photo:** Optional, 5MB max, auto-cropped to circle
-- **Video Support:** Instagram embed, YouTube embed, or custom MP4 upload (50MB max)
-- **Markdown:** Full markdown support in content text
-- **Responsive:** Works perfectly on mobile, tablet, desktop
-- **Performance:** < 3s load time, smooth 60 FPS animations
-
-#### Firestore Structure:
+### 6. Responsive Breakpoints
+- **Mobile:** < 640px - Single column, 44px touch targets
+- **Tablet:** 640px-1024px - 2 columns, hamburger menu
+- **Desktop:** 1024px+ - Full nav, 3-4 columns
+- **Pattern:** Mobile-first, progressive enhancement
+
+### 7. Firestore Real-time Listeners (Fixed Pattern)
 ```typescript
-// Collection: homeSettings, Document ID: "main"
-{
-  profileImageUrl?: string,
-  bannerImages: string[], // Up to 12 URLs
-  heroTitle: string,
-  heroSubtitle?: string,
-  contentTitle: string,
-  contentText: string, // Markdown supported
-  videoType: 'instagram' | 'youtube' | 'upload' | 'none',
-  videoUrl?: string,
-  videoFile?: string,
-  backgroundStyle: 'gray' | 'book' | 'dark' | 'light',
-  updatedAt: Timestamp,
-  updatedBy: string
-}
+// ❌ WRONG - Memory leak (nested listeners)
+const unsub1 = onSnapshot(query1, () => {
+  const unsub2 = onSnapshot(query2, () => { });
+});
+
+// ✅ CORRECT - Parallel independent listeners
+let count1 = 0, count2 = 0;
+const update = () => setTotal(count1 + count2);
+
+const unsub1 = onSnapshot(query1, (snap) => { count1 = snap.size; update(); });
+const unsub2 = onSnapshot(query2, (snap) => { count2 = snap.size; update(); });
+
+return () => { unsub1(); unsub2(); };
 ```
 
-#### Security:
-- Public read access (anyone can see home settings)
-- Admin-only write access
-- Firebase Storage paths: `home-settings/*`
+### 8. Performance Optimizations
+- **Parallel fetching:** `Promise.all()` instead of sequential loops (10x faster)
+- **Image compression:** 800px profile (90%), 1200px banner (85%)
+- **Lazy loading:** Only first 3 banner images as priority
+- **Code splitting:** Consolidated utilities (removed duplicates)
+- **Result:** -75% image size, -57% Time to Interactive
 
-#### Dependencies Added:
-- `react-markdown` - For markdown rendering in content section
+---
 
-#### Usage:
-1. Admin goes to `/admin/home-settings`
-2. Upload profile photo, banner images
-3. Configure title, subtitle, content text
-4. Add Instagram/YouTube URL or upload video
-5. Click "Save" → Changes live instantly
+## Areas for Improvement
 
-See [`HOME_CUSTOMIZATION_GUIDE.md`](HOME_CUSTOMIZATION_GUIDE.md) for complete user guide.
+### 🔴 High Priority
+
+#### 1. **Email Notifications (Firebase Functions)**
+**Problem:** Users receive no confirmation emails after orders
+**Solution:**
+- Implement Firebase Cloud Functions + SendGrid/Resend
+- Send emails on: order creation, status updates, custom order acceptance
+- Templates: Order confirmation, shipping notification, payment received
+**Impact:** Professional UX, reduces support queries
+**Time:** 2-3 hours
+
+#### 2. **Error Boundaries**
+**Problem:** React errors crash entire app, no fallback UI
+**Solution:**
+- Add Error Boundary components at route level
+- Implement fallback UI with "Try again" button
+- Log errors to Firebase (or Sentry for production)
+**Impact:** Better reliability, graceful degradation
+**Time:** 30-45 minutes
+
+#### 3. **Search Functionality Enhancement**
+**Problem:** Basic search only in gallery, no fuzzy matching
+**Solution:**
+- Add Algolia or Meilisearch for instant search
+- Search across: paintings, categories, descriptions
+- Implement autocomplete suggestions
+**Impact:** Improved discoverability, better UX
+**Time:** 2-3 hours
+
+#### 4. **Payment Gateway Integration**
+**Problem:** Only supports "transferencia" and "efectivo" (manual)
+**Solution:**
+- Integrate Transbank WebPay (Chile standard)
+- Or MercadoPago / Stripe for Latin America
+- Auto-update order status on payment
+**Impact:** Critical for scaling, automated payment flow
+**Time:** 4-6 hours
+
+### 🟡 Medium Priority
+
+#### 5. **PWA Implementation**
+**Problem:** No offline support, not installable
+**Solution:**
+- Add service workers for offline mode
+- Create manifest.json with app icons
+- Implement install prompt
+- Cache critical assets
+**Impact:** App-like experience, works offline
+**Time:** 30-40 minutes
+
+#### 6. **Advanced Analytics**
+**Problem:** Basic dashboard, no conversion tracking
+**Solution:**
+- Google Analytics 4 integration
+- Track: add to cart, checkout start, purchase complete
+- Conversion funnels, user behavior analysis
+**Impact:** Data-driven decisions, optimize conversion
+**Time:** 1-2 hours
+
+#### 7. **Inventory Management**
+**Problem:** No stock tracking for paintings (sold items still visible)
+**Solution:**
+- Add `stock` field to paintings
+- Decrement on purchase
+- Hide "Add to Cart" when stock = 0
+- Admin alerts on low stock
+**Impact:** Prevents double-selling, better inventory control
+**Time:** 1-2 hours
+
+#### 8. **Bulk Operations in Admin**
+**Problem:** Must update orders one-by-one
+**Solution:**
+- Bulk select checkboxes
+- Batch actions: approve reviews, update order status, delete
+- Confirmation modal for bulk operations
+**Impact:** Admin efficiency, saves time
+**Time:** 1.5-2 hours
+
+### 🟢 Low Priority / Nice to Have
+
+#### 9. **Blog System**
+**Why:** SEO, content marketing, artist stories
+**Features:** Rich text editor, categories, tags, comments
+**Time:** 1.5-2 hours
+
+#### 10. **Advanced Discounts**
+**Why:** Marketing campaigns, quantity discounts
+**Features:** Buy 2 get 10%, category-based, user-specific
+**Time:** 45-60 minutes
+
+#### 11. **Social Sharing**
+**Why:** Virality, user-generated marketing
+**Features:** Share buttons on paintings, Open Graph optimization
+**Time:** 30 minutes
+
+#### 12. **Wishlist Sharing**
+**Why:** Gift registries, social proof
+**Features:** Public wishlist URLs, shareable links
+**Time:** 1 hour
+
+### 🔧 Technical Debt
+
+#### 13. **Test Coverage**
+**Current:** 0% test coverage
+**Goal:**
+- Unit tests for utilities (formatPrice, validation)
+- Integration tests for checkout flow
+- E2E tests with Playwright (critical paths)
+**Time:** 4-6 hours initial setup
+
+#### 14. **TypeScript Strict Mode**
+**Current:** Some `any` types remain (croppedAreaPixels, etc.)
+**Goal:** Enable `strict: true` in tsconfig, fix all type errors
+**Time:** 2-3 hours
+
+#### 15. **Accessibility Audit**
+**Issues:** Missing ARIA labels, keyboard navigation gaps
+**Solution:** Run Lighthouse, fix contrast issues, add alt texts
+**Time:** 2-3 hours
+
+#### 16. **Security Hardening**
+- Rate limiting on forms (prevent spam)
+- Input sanitization (XSS prevention)
+- CSRF tokens for state-changing operations
+- Security headers (CSP, HSTS)
+**Time:** 3-4 hours
+
+---
+
+## Recommended Next Steps (Priority Order)
+
+1. **Payment Gateway** (critical for revenue)
+2. **Email Notifications** (critical for UX)
+3. **Error Boundaries** (quick win, reliability)
+4. **Inventory Management** (prevents business issues)
+5. **PWA** (quick win, modern UX)
+6. **Advanced Analytics** (data-driven optimization)
+
+**Total estimated time for top 6:** ~15-20 hours
 
 ---
 

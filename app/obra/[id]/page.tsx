@@ -11,6 +11,7 @@ import Link from "next/link";
 import { ArrowLeft, Loader2, ShoppingCart, CheckCircle2 } from "lucide-react";
 import ReviewSection from "@/components/ReviewSection";
 import ImageGallery from "@/components/ImageGallery";
+import ShareButtons from "@/components/ShareButtons";
 import { generateProductSchema } from "@/lib/metadata";
 
 export default function PaintingDetailPage() {
@@ -217,6 +218,15 @@ export default function PaintingDetailPage() {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Share Buttons */}
+        <div className="mt-8">
+          <ShareButtons
+            url={`/obra/${painting.id}`}
+            title={painting.title}
+            imageUrl={images[0]}
+          />
         </div>
 
         {/* Reviews Section */}

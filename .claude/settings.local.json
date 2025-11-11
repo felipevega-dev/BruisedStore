@@ -3,7 +3,12 @@
     "allow": [
       "Bash(dir:*)",
       "Bash(npm run build:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(\"d:\\Proyectos\\bruisedstore\\CLAUDE_temp.md\")",
+      "Bash(move:*)",
+      "Bash(npm test:*)",
+      "Bash(npx vitest run lib/simple.test.ts)",
+      "Bash(npm test:coverage:*)"
     ],
     "deny": [],
     "ask": []
