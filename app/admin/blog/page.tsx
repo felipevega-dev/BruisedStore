@@ -268,27 +268,29 @@ export default function AdminBlogPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
-        <Loader2 className="h-12 w-12 animate-spin text-red-600" />
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
+        <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
+          <Loader2 className="h-12 w-12 animate-spin text-red-600" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <BookOpen className="h-8 w-8 text-red-600" />
-            <h1 className="text-4xl font-black text-gray-900">
+            <BookOpen className="h-8 w-8 text-red-400" />
+            <h1 className="text-4xl font-black text-red-100">
               Administrar Blog
             </h1>
           </div>
           {!showForm && (
             <button
               onClick={() => setShowForm(true)}
-              className="flex items-center gap-2 rounded-lg border-4 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+              className="flex items-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50"
             >
               <Plus className="h-5 w-5" />
               Nuevo Post
@@ -298,46 +300,46 @@ export default function AdminBlogPage() {
 
         {/* Form */}
         {showForm && (
-          <div className="mb-8 rounded-lg border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-            <h2 className="mb-6 text-2xl font-black text-gray-900">
+          <div className="mb-8 rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm">
+            <h2 className="mb-6 text-2xl font-black text-red-100">
               {editingPost ? "Editar Post" : "Crear Nuevo Post"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Title */}
               <div>
-                <label className="mb-2 block font-bold text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Título *
                 </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => handleTitleChange(e.target.value)}
-                  className="w-full rounded-lg border-4 border-black bg-white px-4 py-3 font-bold text-gray-900 focus:border-red-600 focus:outline-none"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
                   required
                 />
               </div>
 
               {/* Slug */}
               <div>
-                <label className="mb-2 block font-bold text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Slug (URL)
                 </label>
                 <input
                   type="text"
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  className="w-full rounded-lg border-4 border-black bg-gray-50 px-4 py-3 font-mono text-sm text-gray-900"
+                  className="w-full rounded-lg border-2 border-red-900/50 bg-gray-800 px-4 py-3 font-mono text-sm text-gray-400"
                   readOnly
                 />
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-500">
                   URL: /blog/{formData.slug || "tu-post"}
                 </p>
               </div>
 
               {/* Excerpt */}
               <div>
-                <label className="mb-2 block font-bold text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Extracto *
                 </label>
                 <textarea
@@ -346,17 +348,17 @@ export default function AdminBlogPage() {
                     setFormData({ ...formData, excerpt: e.target.value })
                   }
                   rows={3}
-                  className="w-full rounded-lg border-4 border-black bg-white px-4 py-3 font-bold text-gray-900 focus:border-red-600 focus:outline-none"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
                   required
                 />
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-400">
                   Descripción corta para las tarjetas del blog
                 </p>
               </div>
 
               {/* Category */}
               <div>
-                <label className="mb-2 block font-bold text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Categoría *
                 </label>
                 <select
@@ -367,7 +369,7 @@ export default function AdminBlogPage() {
                       category: e.target.value as BlogCategory,
                     })
                   }
-                  className="w-full rounded-lg border-4 border-black bg-white px-4 py-3 font-bold text-gray-900 focus:border-red-600 focus:outline-none"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
                 >
                   {BLOG_CATEGORIES.map((cat) => (
                     <option key={cat.value} value={cat.value}>
@@ -379,7 +381,7 @@ export default function AdminBlogPage() {
 
               {/* Tags */}
               <div>
-                <label className="mb-2 block font-bold text-gray-900">Tags</label>
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">Tags</label>
                 <input
                   type="text"
                   value={formData.tags}
@@ -387,20 +389,20 @@ export default function AdminBlogPage() {
                     setFormData({ ...formData, tags: e.target.value })
                   }
                   placeholder="acuarela, abstracto, naturaleza"
-                  className="w-full rounded-lg border-4 border-black bg-white px-4 py-3 font-bold text-gray-900 focus:border-red-600 focus:outline-none"
+                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
                 />
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-400">
                   Separados por comas
                 </p>
               </div>
 
               {/* Cover Image */}
               <div>
-                <label className="mb-2 block font-bold text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Imagen de Portada
                 </label>
                 {coverImagePreview && (
-                  <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg border-4 border-black">
+                  <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg border-2 border-red-900">
                     <img
                       src={coverImagePreview}
                       alt="Preview"
@@ -413,13 +415,13 @@ export default function AdminBlogPage() {
                         setCoverImageFile(null);
                         setFormData({ ...formData, coverImage: "" });
                       }}
-                      className="absolute right-2 top-2 rounded-full border-2 border-black bg-red-600 p-2 text-white transition-all hover:bg-red-700"
+                      className="absolute right-2 top-2 rounded-full border-2 border-red-900 bg-red-600 p-2 text-white transition-all hover:bg-red-700"
                     >
                       <X className="h-4 w-4" />
                     </button>
                   </div>
                 )}
-                <label className="flex cursor-pointer items-center gap-2 rounded-lg border-4 border-black bg-white px-6 py-3 font-bold text-gray-900 transition-all hover:bg-gray-50">
+                <label className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-red-900 bg-gray-800 px-6 py-3 font-bold text-red-100 transition-all hover:bg-gray-700">
                   <ImageIcon className="h-5 w-5" />
                   {coverImagePreview ? "Cambiar Imagen" : "Subir Imagen"}
                   <input
@@ -429,14 +431,14 @@ export default function AdminBlogPage() {
                     className="hidden"
                   />
                 </label>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="mt-1 text-sm text-gray-400">
                   Máximo 5MB. Tamaño recomendado: 1200x630px
                 </p>
               </div>
 
               {/* Content Editor */}
               <div>
-                <label className="mb-2 block font-bold text-gray-900">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
                   Contenido *
                 </label>
                 <TipTapEditor
@@ -456,9 +458,9 @@ export default function AdminBlogPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, published: e.target.checked })
                   }
-                  className="h-6 w-6 rounded border-4 border-black accent-red-600"
+                  className="h-6 w-6 rounded border-2 border-red-900 bg-gray-800 accent-red-600"
                 />
-                <label htmlFor="published" className="font-bold text-gray-900">
+                <label htmlFor="published" className="font-bold text-red-100">
                   Publicar inmediatamente
                 </label>
               </div>
@@ -468,7 +470,7 @@ export default function AdminBlogPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex items-center gap-2 rounded-lg border-4 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50 disabled:opacity-50"
                 >
                   {submitting ? (
                     <>
@@ -485,7 +487,7 @@ export default function AdminBlogPage() {
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="rounded-lg border-4 border-black bg-white px-6 py-3 font-bold text-gray-900 transition-all hover:bg-gray-50"
+                  className="rounded-lg border-2 border-red-900/50 bg-gray-800 px-6 py-3 font-bold text-red-100 transition-all hover:bg-gray-700"
                 >
                   Cancelar
                 </button>
@@ -498,12 +500,12 @@ export default function AdminBlogPage() {
         {!showForm && (
           <div className="space-y-4">
             {posts.length === 0 ? (
-              <div className="rounded-lg border-4 border-black bg-white p-12 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <BookOpen className="mx-auto mb-4 h-16 w-16 text-gray-400" />
-                <p className="text-lg font-bold text-gray-900">
+              <div className="rounded-lg border-2 border-red-900/30 bg-black/60 p-12 text-center shadow-xl shadow-red-900/20 backdrop-blur-sm">
+                <BookOpen className="mx-auto mb-4 h-16 w-16 text-red-400" />
+                <p className="text-lg font-bold text-red-100">
                   No hay posts aún
                 </p>
-                <p className="text-gray-600">
+                <p className="text-gray-400">
                   Crea tu primer post para comenzar
                 </p>
               </div>
@@ -511,11 +513,11 @@ export default function AdminBlogPage() {
               posts.map((post) => (
                 <div
                   key={post.id}
-                  className="flex items-center gap-4 rounded-lg border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+                  className="flex items-center gap-4 rounded-lg border-2 border-red-900/30 bg-black/60 p-4 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
                 >
                   {/* Cover Image */}
                   {post.coverImage && (
-                    <div className="aspect-video w-32 overflow-hidden rounded border-2 border-black">
+                    <div className="aspect-video w-32 overflow-hidden rounded border-2 border-red-900">
                       <img
                         src={post.coverImage}
                         alt={post.title}
@@ -527,21 +529,21 @@ export default function AdminBlogPage() {
                   {/* Info */}
                   <div className="flex-1">
                     <div className="mb-2 flex items-center gap-2">
-                      <h3 className="text-xl font-black text-gray-900">
+                      <h3 className="text-xl font-black text-red-100">
                         {post.title}
                       </h3>
                       {post.published ? (
-                        <span className="rounded-full border-2 border-green-800 bg-green-100 px-3 py-1 text-xs font-bold text-green-800">
+                        <span className="rounded-full border-2 border-green-600 bg-green-900/50 px-3 py-1 text-xs font-bold text-green-400">
                           Publicado
                         </span>
                       ) : (
-                        <span className="rounded-full border-2 border-gray-800 bg-gray-100 px-3 py-1 text-xs font-bold text-gray-800">
+                        <span className="rounded-full border-2 border-yellow-600 bg-yellow-900/50 px-3 py-1 text-xs font-bold text-yellow-400">
                           Borrador
                         </span>
                       )}
                     </div>
-                    <p className="mb-2 text-sm text-gray-600">{post.excerpt}</p>
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
+                    <p className="mb-2 text-sm text-gray-300">{post.excerpt}</p>
+                    <div className="flex items-center gap-4 text-xs text-gray-400">
                       <span>
                         {BLOG_CATEGORIES.find((c) => c.value === post.category)
                           ?.label}
@@ -557,28 +559,28 @@ export default function AdminBlogPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => togglePublished(post)}
-                      className="rounded border-2 border-black bg-white p-2 transition-all hover:bg-gray-50"
+                      className="rounded border-2 border-red-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-red-700"
                       title={post.published ? "Despublicar" : "Publicar"}
                     >
                       {post.published ? (
-                        <EyeOff className="h-5 w-5" />
+                        <EyeOff className="h-5 w-5 text-yellow-400" />
                       ) : (
-                        <Eye className="h-5 w-5" />
+                        <Eye className="h-5 w-5 text-green-400" />
                       )}
                     </button>
                     <button
                       onClick={() => handleEdit(post)}
-                      className="rounded border-2 border-black bg-white p-2 transition-all hover:bg-blue-50"
+                      className="rounded border-2 border-red-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-blue-600"
                       title="Editar"
                     >
-                      <Edit className="h-5 w-5" />
+                      <Edit className="h-5 w-5 text-blue-400" />
                     </button>
                     <button
                       onClick={() => handleDelete(post.id)}
-                      className="rounded border-2 border-black bg-white p-2 transition-all hover:bg-red-50"
+                      className="rounded border-2 border-red-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-red-600"
                       title="Eliminar"
                     >
-                      <Trash2 className="h-5 w-5 text-red-600" />
+                      <Trash2 className="h-5 w-5 text-red-400" />
                     </button>
                   </div>
                 </div>
