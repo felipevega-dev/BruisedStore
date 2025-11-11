@@ -7,6 +7,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { ShoppingCart, Heart, Images } from "lucide-react";
 import { useToast } from "@/hooks/useToast";
+import { formatPrice } from "@/lib/utils";
 
 interface PaintingCardProps {
   painting: Painting;
@@ -36,13 +37,6 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
     e.preventDefault();
     addToCart(painting);
     showToast(`"${painting.title}" agregado al carrito 🛒`, "success");
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-    }).format(price);
   };
 
   // Usar la primera imagen del array si existe, sino usar imageUrl

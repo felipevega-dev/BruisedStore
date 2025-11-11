@@ -39,22 +39,29 @@ export default function Header() {
       where("status", "==", "pending")
     );
 
+    // Mantener contadores separados y combinarlos
+    let ordersCount = 0;
+    let customOrdersCount = 0;
+
+    const updateTotal = () => {
+      setPendingOrdersCount(ordersCount + customOrdersCount);
+    };
+
+    // Listeners separados e independientes
     const unsubscribeOrders = onSnapshot(ordersQuery, (snapshot) => {
-      const ordersCount = snapshot.size;
-
-      // También escuchar custom orders
-      const unsubscribeCustomOrders = onSnapshot(customOrdersQuery, (customSnapshot) => {
-        const customOrdersCount = customSnapshot.size;
-        setPendingOrdersCount(ordersCount + customOrdersCount);
-      });
-
-      return () => {
-        unsubscribeCustomOrders();
-      };
+      ordersCount = snapshot.size;
+      updateTotal();
     });
 
+    const unsubscribeCustomOrders = onSnapshot(customOrdersQuery, (snapshot) => {
+      customOrdersCount = snapshot.size;
+      updateTotal();
+    });
+
+    // Limpiar ambos listeners al desmontar
     return () => {
       unsubscribeOrders();
+      unsubscribeCustomOrders();
     };
   }, [isAdmin]);
 

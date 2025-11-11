@@ -232,10 +232,9 @@ export default function CustomOrderPage() {
       if (fileToUpload.size > 1024 * 1024) {
         try {
           fileToUpload = await compressImage(fileToUpload, 1920, 0.85);
-          console.log(`Image compressed: ${imageFile!.size} → ${fileToUpload.size} bytes`);
         } catch (compressionError) {
-          console.warn("Compression failed, uploading original:", compressionError);
           // Continue with original file if compression fails
+          showToast("No se pudo optimizar la imagen, subiendo original", "warning");
         }
       }
 

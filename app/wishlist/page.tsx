@@ -10,6 +10,7 @@ import { Painting } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/contexts/CartContext";
+import { formatPrice } from "@/lib/utils";
 import {
   Heart,
   ShoppingCart,
@@ -44,21 +45,24 @@ export default function WishlistPage() {
   const fetchWishlistPaintings = async () => {
     try {
       setLoading(true);
-      const paintingsData: Painting[] = [];
 
-      for (const paintingId of wishlist) {
-        const paintingRef = doc(db, "paintings", paintingId);
-        const paintingSnap = await getDoc(paintingRef);
+      // Fetch all paintings in parallel instead of sequentially
+      const paintingPromises = wishlist.map((paintingId) =>
+        getDoc(doc(db, "paintings", paintingId))
+      );
 
-        if (paintingSnap.exists()) {
-          const data = paintingSnap.data();
-          paintingsData.push({
-            id: paintingSnap.id,
+      const paintingSnaps = await Promise.all(paintingPromises);
+
+      const paintingsData: Painting[] = paintingSnaps
+        .filter((snap) => snap.exists())
+        .map((snap) => {
+          const data = snap.data();
+          return {
+            id: snap.id,
             ...data,
             createdAt: data.createdAt?.toDate() || new Date(),
-          } as Painting);
-        }
-      }
+          } as Painting;
+        });
 
       setPaintings(paintingsData);
     } catch (error) {
@@ -66,13 +70,6 @@ export default function WishlistPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-    }).format(price);
   };
 
   const handleRemove = async (paintingId: string) => {

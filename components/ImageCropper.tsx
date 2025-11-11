@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { X, RotateCw, ZoomIn, ZoomOut, Check, Maximize2 } from "lucide-react";
 import { CUSTOM_ORDER_SIZES, CustomOrderSize } from "@/types";
+import { formatPrice as formatCLP } from "@/lib/utils";
 
 interface ImageCropperProps {
   image: string;
@@ -32,11 +33,8 @@ export default function ImageCropper({
   const canvasWidth = selectedSize.width;
   const canvasHeight = selectedSize.height;
 
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-    }).format(price * 20000); // BASE_CUSTOM_ORDER_PRICE
+  const formatPrice = (multiplier: number) => {
+    return formatCLP(multiplier * 20000); // BASE_CUSTOM_ORDER_PRICE
   };
 
   const onCropChange = useCallback((location: { x: number; y: number }) => {

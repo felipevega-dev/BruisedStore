@@ -11,11 +11,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, CreditCard, Truck, Loader2, CheckCircle, Tag, X, AlertCircle } from "lucide-react";
 import { formatPrice, generateOrderNumber } from "@/lib/utils";
+import { useToast } from "@/hooks/useToast";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, getTotal, clearCart } = useCart();
   const { user, loading: authLoading } = useAuth();
+  const { showToast, ToastContainer } = useToast();
   const [loading, setLoading] = useState(false);
   const [orderCreated, setOrderCreated] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
@@ -170,7 +172,7 @@ export default function CheckoutPage() {
     e.preventDefault();
 
     if (items.length === 0) {
-      alert("El carrito está vacío");
+      showToast("El carrito está vacío", "error");
       return;
     }
 
@@ -219,8 +221,6 @@ export default function CheckoutPage() {
         });
       }
 
-      console.log("Order created with ID:", docRef.id);
-
       // Limpiar carrito
       clearCart();
 
@@ -232,7 +232,7 @@ export default function CheckoutPage() {
       // router.push(`/payment/${docRef.id}?method=${paymentMethod}`);
     } catch (error) {
       console.error("Error creating order:", error);
-      alert("Error al crear el pedido. Por favor, intenta de nuevo.");
+      showToast("Error al crear el pedido. Por favor, intenta de nuevo.", "error");
     } finally {
       setLoading(false);
     }
@@ -345,19 +345,21 @@ export default function CheckoutPage() {
 
   // Formulario de checkout
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8 sm:py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex items-center gap-4">
-          <Link
-            href="/carrito"
-            className="text-gray-300 transition-colors hover:text-red-400"
-          >
-            <ArrowLeft className="h-6 w-6" />
-          </Link>
-          <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">
-            Finalizar Compra
-          </h1>
-        </div>
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8 sm:py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex items-center gap-4">
+            <Link
+              href="/carrito"
+              className="text-gray-300 transition-colors hover:text-red-400"
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </Link>
+            <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">
+              Finalizar Compra
+            </h1>
+          </div>
 
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Formulario */}
@@ -709,8 +711,9 @@ export default function CheckoutPage() {
               </p>
             </div>
           </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
