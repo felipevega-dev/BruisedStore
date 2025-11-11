@@ -27,41 +27,86 @@ export default function Header() {
       return;
     }
 
-    // Listener para órdenes de compra pendientes
-    const ordersQuery = query(
-      collection(db, "orders"),
-      where("status", "==", "pending")
-    );
+    const updateCounts = () => {
+      // Obtener los IDs de órdenes ya vistas
+      const viewedOrderIds = new Set<string>();
+      const viewedCustomOrderIds = new Set<string>();
+      
+      try {
+        const storedOrders = localStorage.getItem("viewedOrderIds");
+        const storedCustomOrders = localStorage.getItem("viewedCustomOrderIds");
+        
+        if (storedOrders) {
+          JSON.parse(storedOrders).forEach((id: string) => viewedOrderIds.add(id));
+        }
+        if (storedCustomOrders) {
+          JSON.parse(storedCustomOrders).forEach((id: string) => viewedCustomOrderIds.add(id));
+        }
+      } catch (e) {
+        console.error("Error loading viewed orders:", e);
+      }
 
-    // Listener para órdenes personalizadas pendientes
-    const customOrdersQuery = query(
-      collection(db, "customOrders"),
-      where("status", "==", "pending")
-    );
+      // Listener para órdenes de compra pendientes Y no vistas
+      const ordersQuery = query(
+        collection(db, "orders"),
+        where("status", "==", "pending")
+      );
 
-    // Mantener contadores separados y combinarlos
-    let ordersCount = 0;
-    let customOrdersCount = 0;
+      // Listener para órdenes personalizadas pendientes Y no vistas
+      const customOrdersQuery = query(
+        collection(db, "customOrders"),
+        where("status", "==", "pending")
+      );
 
-    const updateTotal = () => {
-      setPendingOrdersCount(ordersCount + customOrdersCount);
+      let ordersCount = 0;
+      let customOrdersCount = 0;
+
+      const updateTotal = () => {
+        setPendingOrdersCount(ordersCount + customOrdersCount);
+      };
+
+      // Listeners que filtran por órdenes no vistas
+      const unsubscribeOrders = onSnapshot(ordersQuery, (snapshot) => {
+        ordersCount = snapshot.docs.filter((doc) => !viewedOrderIds.has(doc.id)).length;
+        updateTotal();
+      });
+
+      const unsubscribeCustomOrders = onSnapshot(customOrdersQuery, (snapshot) => {
+        customOrdersCount = snapshot.docs.filter((doc) => !viewedCustomOrderIds.has(doc.id)).length;
+        updateTotal();
+      });
+
+      return () => {
+        unsubscribeOrders();
+        unsubscribeCustomOrders();
+      };
     };
 
-    // Listeners separados e independientes
-    const unsubscribeOrders = onSnapshot(ordersQuery, (snapshot) => {
-      ordersCount = snapshot.size;
-      updateTotal();
-    });
+    // Initial update
+    const unsubscribe = updateCounts();
 
-    const unsubscribeCustomOrders = onSnapshot(customOrdersQuery, (snapshot) => {
-      customOrdersCount = snapshot.size;
-      updateTotal();
-    });
+    // Listen for storage changes (when orders are marked as viewed)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "viewedOrderIds" || e.key === "viewedCustomOrderIds") {
+        // Re-run the listeners
+        if (unsubscribe) unsubscribe();
+        updateCounts();
+      }
+    };
 
-    // Limpiar ambos listeners al desmontar
+    // Custom event for same-window storage updates
+    const handleCustomStorageChange = () => {
+      if (unsubscribe) unsubscribe();
+      updateCounts();
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("ordersViewed", handleCustomStorageChange);
+
     return () => {
-      unsubscribeOrders();
-      unsubscribeCustomOrders();
+      if (unsubscribe) unsubscribe();
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("ordersViewed", handleCustomStorageChange);
     };
   }, [isAdmin]);
 

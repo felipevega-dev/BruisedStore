@@ -15,7 +15,7 @@ import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { CustomOrder } from "@/types";
 import Image from "next/image";
-import { Loader2, ArrowLeft, Trash2, Eye } from "lucide-react";
+import { Loader2, ArrowLeft, Trash2, Eye, Bell, Package } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminOrdersPage() {
@@ -24,6 +24,40 @@ export default function AdminOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<CustomOrder[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<CustomOrder | null>(null);
+  const [viewedOrderIds, setViewedOrderIds] = useState<Set<string>>(new Set());
+  const [pendingCount, setPendingCount] = useState(0);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+
+  // Cargar órdenes vistas del localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("viewedCustomOrderIds");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setViewedOrderIds(new Set(parsed));
+      } catch (e) {
+        console.error("Error parsing viewed orders:", e);
+      }
+    }
+  }, []);
+
+  // Marcar una orden como vista
+  const markOrderAsViewed = (orderId: string) => {
+    setViewedOrderIds((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(orderId);
+      // Guardar en localStorage
+      localStorage.setItem("viewedCustomOrderIds", JSON.stringify([...newSet]));
+      // Disparar evento para que el Header se actualice
+      window.dispatchEvent(new Event("ordersViewed"));
+      return newSet;
+    });
+  };
+
+  // Verificar si una orden es nueva (no vista)
+  const isOrderNew = (order: CustomOrder): boolean => {
+    return !viewedOrderIds.has(order.id!) && order.status === "pending";
+  };
 
   useEffect(() => {
     if (!authLoading) {
@@ -37,6 +71,9 @@ export default function AdminOrdersPage() {
 
   useEffect(() => {
     if (user && isAdmin) {
+      // NO marcar todas como vistas aquí
+      localStorage.setItem("adminLastViewedCustomOrdersPage", Date.now().toString());
+      
       fetchOrders();
     }
   }, [user, isAdmin]);
@@ -54,20 +91,32 @@ export default function AdminOrdersPage() {
         } as CustomOrder;
       });
       setOrders(ordersData);
+      
+      // Contar pendientes NO VISTAS
+      const newOrders = ordersData.filter((o) => isOrderNew(o));
+      setPendingCount(newOrders.length);
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
   };
 
   const handleStatusChange = async (orderId: string, newStatus: CustomOrder["status"]) => {
+    setUpdatingStatus(true);
     try {
       await updateDoc(doc(db, "customOrders", orderId), {
         status: newStatus,
       });
-      await fetchOrders();
+      
+      // Actualizar el estado local inmediatamente
+      setSelectedOrder(prev => prev ? { ...prev, status: newStatus } : null);
+      setOrders(prev => prev.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      ));
     } catch (error) {
       console.error("Error updating order status:", error);
       alert("Error al actualizar el estado");
+    } finally {
+      setUpdatingStatus(false);
     }
   };
 
@@ -136,63 +185,102 @@ export default function AdminOrdersPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex items-center gap-4">
-          <Link
-            href="/admin"
-            className="text-gray-300 transition-colors hover:text-red-400"
-          >
-            <ArrowLeft className="h-6 w-6" />
-          </Link>
-          <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">
-            Pedidos Personalizados
-          </h1>
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <Link
+              href="/admin"
+              className="text-gray-300 transition-colors hover:text-red-400"
+            >
+              <ArrowLeft className="h-6 w-6" />
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">
+                Pedidos Personalizados
+              </h1>
+              <p className="text-gray-400">Obras a pedido</p>
+            </div>
+          </div>
+
+          {pendingCount > 0 && (
+            <div className="flex items-center gap-2 rounded-lg border-2 border-yellow-900 bg-yellow-950/30 px-4 py-2">
+              <Bell className="h-5 w-5 text-yellow-400" />
+              <span className="font-bold text-yellow-300">
+                {pendingCount} nuevo{pendingCount !== 1 ? "s" : ""}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Orders List */}
           <div className="lg:col-span-1">
             <div className="space-y-3">
-              {orders.map((order) => (
-                <div
-                  key={order.id}
-                  onClick={() => setSelectedOrder(order)}
-                  className={`cursor-pointer rounded-lg border-2 bg-black/60 p-4 backdrop-blur-sm transition-all hover:shadow-xl ${
-                    selectedOrder?.id === order.id
-                      ? "border-red-700 shadow-2xl shadow-red-900/40"
-                      : "border-red-900/30 hover:border-red-700 hover:shadow-red-900/20"
-                  }`}
-                >
-                  <div className="mb-2 flex items-start justify-between">
-                    <div>
-                      <h3 className="font-bold text-red-100">
-                        {order.customerName}
-                      </h3>
-                      <p className="text-sm text-gray-400">{order.email}</p>
+              {orders.map((order) => {
+                const isNew = isOrderNew(order);
+                return (
+                  <div
+                    key={order.id}
+                    onClick={() => {
+                      setSelectedOrder(order);
+                      // Marcar como vista cuando se hace clic
+                      if (order.id) {
+                        markOrderAsViewed(order.id);
+                        // Actualizar el contador
+                        setPendingCount((prev) => Math.max(0, prev - 1));
+                      }
+                    }}
+                    className={`relative cursor-pointer rounded-lg border-2 bg-black/60 p-4 backdrop-blur-sm transition-all hover:shadow-xl ${
+                      selectedOrder?.id === order.id
+                        ? "border-red-700 shadow-2xl shadow-red-900/40"
+                        : "border-red-900/30 hover:border-red-700 hover:shadow-red-900/20"
+                    }`}
+                  >
+                    {/* Badge NUEVO */}
+                    {isNew && (
+                      <div className="absolute -right-2 -top-2 z-10 animate-pulse">
+                        <span className="inline-flex items-center gap-1 rounded-full border-2 border-yellow-400 bg-yellow-500 px-2 py-1 text-xs font-black text-black shadow-lg">
+                          <Bell className="h-3 w-3" />
+                          NUEVO
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="mb-2 flex items-start justify-between">
+                      <div>
+                        <h3 className="font-bold text-red-100">
+                          {order.customerName}
+                        </h3>
+                        <p className="text-sm text-gray-400">{order.email}</p>
+                      </div>
+                      <span
+                        className={`rounded-lg border-2 px-2 py-1 text-xs font-bold ${getStatusColor(
+                          order.status
+                        )}`}
+                      >
+                        {getStatusLabel(order.status)}
+                      </span>
                     </div>
-                    <span
-                      className={`rounded-lg border-2 px-2 py-1 text-xs font-bold ${getStatusColor(
-                        order.status
-                      )}`}
-                    >
-                      {getStatusLabel(order.status)}
-                    </span>
-                  </div>
-                  <p className="mb-1 text-sm text-gray-400">
-                    {order.selectedSize.name}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <p className="font-bold text-red-500">
-                      {formatPrice(order.totalPrice)}
+                    <p className="mb-1 text-sm text-gray-400">
+                      {order.selectedSize.name}
                     </p>
-                    <Eye className="h-4 w-4 text-gray-400" />
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold text-red-500">
+                        {formatPrice(order.totalPrice)}
+                      </p>
+                      <Eye className="h-4 w-4 text-gray-400" />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {orders.length === 0 && (
                 <div className="rounded-lg border-2 border-red-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">
+                  <Package className="mx-auto mb-4 h-16 w-16 text-red-600" />
                   <p className="text-xl font-semibold text-red-100">
                     No hay pedidos personalizados
+                  </p>
+                  <p className="mt-2 text-sm text-gray-400">
+                    Los pedidos aparecerán aquí cuando los clientes soliciten obras a pedido
                   </p>
                 </div>
               )}
@@ -213,6 +301,37 @@ export default function AdminOrdersPage() {
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>
+                </div>
+
+                {/* Status Update - MOVIDO ARRIBA */}
+                <div className="mb-6 rounded-lg border-2 border-yellow-900/50 bg-yellow-950/20 p-4">
+                  <h3 className="mb-3 flex items-center gap-2 font-bold text-yellow-300">
+                    <Package className="h-5 w-5" />
+                    Estado del Pedido
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(["pending", "in-progress", "completed", "cancelled"] as CustomOrder["status"][]).map(
+                      (status) => (
+                        <button
+                          key={status}
+                          onClick={() => handleStatusChange(selectedOrder.id!, status)}
+                          disabled={updatingStatus}
+                          className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
+                            selectedOrder.status === status
+                              ? `${getStatusColor(status)} shadow-lg ring-2 ring-white/50`
+                              : `${getStatusColor(status)} opacity-50 hover:opacity-100 hover:scale-105`
+                          } disabled:cursor-not-allowed disabled:opacity-30`}
+                        >
+                          {getStatusLabel(status)}
+                        </button>
+                      )
+                    )}
+                  </div>
+                  {updatingStatus && (
+                    <p className="mt-2 text-sm text-yellow-300">
+                      Actualizando estado...
+                    </p>
+                  )}
                 </div>
 
                 {/* Image */}
@@ -309,63 +428,6 @@ export default function AdminOrdersPage() {
                     </div>
                   </div>
                 )}
-
-                {/* Status Update */}
-                <div>
-                  <h3 className="mb-3 font-bold text-red-100">
-                    Actualizar Estado
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      onClick={() =>
-                        handleStatusChange(selectedOrder.id!, "pending")
-                      }
-                      className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
-                        selectedOrder.status === "pending"
-                          ? "border-yellow-600 bg-yellow-900/50 text-yellow-300 shadow-lg shadow-yellow-900/50"
-                          : "border-yellow-900 bg-yellow-900/20 text-yellow-400 hover:bg-yellow-900/40"
-                      }`}
-                    >
-                      Pendiente
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleStatusChange(selectedOrder.id!, "in-progress")
-                      }
-                      className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
-                        selectedOrder.status === "in-progress"
-                          ? "border-blue-600 bg-blue-900/50 text-blue-300 shadow-lg shadow-blue-900/50"
-                          : "border-blue-900 bg-blue-900/20 text-blue-400 hover:bg-blue-900/40"
-                      }`}
-                    >
-                      En Progreso
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleStatusChange(selectedOrder.id!, "completed")
-                      }
-                      className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
-                        selectedOrder.status === "completed"
-                          ? "border-green-600 bg-green-900/50 text-green-300 shadow-lg shadow-green-900/50"
-                          : "border-green-900 bg-green-900/20 text-green-400 hover:bg-green-900/40"
-                      }`}
-                    >
-                      Completado
-                    </button>
-                    <button
-                      onClick={() =>
-                        handleStatusChange(selectedOrder.id!, "cancelled")
-                      }
-                      className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
-                        selectedOrder.status === "cancelled"
-                          ? "border-red-600 bg-red-900/50 text-red-300 shadow-lg shadow-red-900/50"
-                          : "border-red-900 bg-red-900/20 text-red-400 hover:bg-red-900/40"
-                      }`}
-                    >
-                      Cancelado
-                    </button>
-                  </div>
-                </div>
               </div>
             ) : (
               <div className="flex h-full items-center justify-center rounded-lg border-2 border-red-900/30 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">

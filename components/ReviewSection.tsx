@@ -36,12 +36,25 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
 
   const fetchReviews = async () => {
     try {
-      // Obtener todas las reseñas del painting
+      setLoading(true);
+      
+      // Query base para todas las reseñas de este painting
+      const reviewsRef = collection(db, "reviews");
       const reviewsQuery = query(
-        collection(db, "reviews"),
-        where("paintingId", "==", paintingId)
+        reviewsRef,
+        where("paintingId", "==", paintingId),
+        orderBy("createdAt", "desc")
       );
+      
       const snapshot = await getDocs(reviewsQuery);
+      
+      if (snapshot.empty) {
+        console.log("No reviews found for painting:", paintingId);
+        setReviews([]);
+        setLoading(false);
+        return;
+      }
+      
       const reviewsData = snapshot.docs.map((doc) => {
         const data = doc.data();
         return {
@@ -51,21 +64,23 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
         } as Review;
       });
       
-      // Filtrar y ordenar en el cliente
-      const filteredReviews = reviewsData
-        .filter((review) => {
-          // Si el usuario es el autor, puede ver su propia reseña
-          if (user && review.userId === user.uid) {
-            return true;
-          }
-          // Todos pueden ver las aprobadas
-          return review.approved;
-        })
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      console.log("Reviews fetched:", reviewsData.length);
       
+      // Filtrar: mostrar aprobadas para todos, y las propias del usuario (aprobadas o no)
+      const filteredReviews = reviewsData.filter((review) => {
+        // El usuario puede ver su propia reseña aunque no esté aprobada
+        if (user && review.userId === user.uid) {
+          return true;
+        }
+        // Todos pueden ver las aprobadas
+        return review.approved === true;
+      });
+      
+      console.log("Filtered reviews:", filteredReviews.length);
       setReviews(filteredReviews);
     } catch (error) {
       console.error("Error fetching reviews:", error);
+      setError("Error al cargar las reseñas");
     } finally {
       setLoading(false);
     }
@@ -97,7 +112,7 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
       await addDoc(collection(db, "reviews"), {
         paintingId,
         userId: user.uid,
-        userName: user.displayName || "Usuario",
+        userName: user.displayName || "Usuario Anónimo",
         userEmail: user.email,
         rating,
         comment: comment.trim(),
@@ -105,15 +120,22 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
         approved: false, // Requiere aprobación del admin
       });
 
-      setSuccess("¡Reseña enviada! Ya puedes verla abajo. Será visible para todos una vez aprobada por el administrador.");
+      setSuccess("✅ ¡Reseña enviada correctamente!");
       setRating(0);
       setComment("");
       
-      // Recargar reseñas para mostrar la nueva (el usuario verá la suya aunque no esté aprobada)
-      await fetchReviews();
+      // Mostrar mensaje informativo
+      setTimeout(() => {
+        setSuccess("Tu reseña ya aparece abajo con un fondo amarillo. Será visible para todos una vez aprobada por el administrador.");
+      }, 2000);
       
-      // Resetear mensaje de éxito después de 5 segundos
-      setTimeout(() => setSuccess(""), 5000);
+      // Recargar reseñas para mostrar la nueva (el usuario verá la suya aunque no esté aprobada)
+      setTimeout(async () => {
+        await fetchReviews();
+      }, 500);
+      
+      // Resetear mensaje de éxito después de 8 segundos
+      setTimeout(() => setSuccess(""), 8000);
     } catch (error) {
       console.error("Error submitting review:", error);
       setError("Error al enviar la reseña. Por favor intenta de nuevo.");

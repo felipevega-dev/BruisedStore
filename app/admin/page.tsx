@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag, BarChart3, Home, BookOpen } from "lucide-react";
+import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag, BarChart3, Home, BookOpen, Bell } from "lucide-react";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 export default function AdminPage() {
   const { user, isAdmin, loading: authLoading, refreshUser } = useAuth();
@@ -15,6 +16,96 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  
+  // Contadores de notificaciones por categoría
+  const [ordersCount, setOrdersCount] = useState(0);
+  const [customOrdersCount, setCustomOrdersCount] = useState(0);
+  const [reviewsCount, setReviewsCount] = useState(0);
+
+  // Obtener conteos de notificaciones
+  useEffect(() => {
+    if (!user || !isAdmin) return;
+
+    // Cargar IDs vistos
+    const viewedOrderIds = new Set<string>();
+    const viewedCustomOrderIds = new Set<string>();
+    
+    try {
+      const storedOrders = localStorage.getItem("viewedOrderIds");
+      const storedCustomOrders = localStorage.getItem("viewedCustomOrderIds");
+      
+      if (storedOrders) {
+        JSON.parse(storedOrders).forEach((id: string) => viewedOrderIds.add(id));
+      }
+      if (storedCustomOrders) {
+        JSON.parse(storedCustomOrders).forEach((id: string) => viewedCustomOrderIds.add(id));
+      }
+    } catch (e) {
+      console.error("Error loading viewed orders:", e);
+    }
+
+    // Listener para órdenes de compra pendientes no vistas
+    const ordersQuery = query(
+      collection(db, "orders"),
+      where("status", "==", "pending")
+    );
+
+    const unsubOrders = onSnapshot(ordersQuery, (snapshot) => {
+      const count = snapshot.docs.filter(doc => !viewedOrderIds.has(doc.id)).length;
+      setOrdersCount(count);
+    });
+
+    // Listener para órdenes personalizadas pendientes no vistas
+    const customOrdersQuery = query(
+      collection(db, "customOrders"),
+      where("status", "==", "pending")
+    );
+
+    const unsubCustomOrders = onSnapshot(customOrdersQuery, (snapshot) => {
+      const count = snapshot.docs.filter(doc => !viewedCustomOrderIds.has(doc.id)).length;
+      setCustomOrdersCount(count);
+    });
+
+    // Listener para reviews pendientes
+    const reviewsQuery = query(
+      collection(db, "reviews"),
+      where("approved", "==", false)
+    );
+
+    const unsubReviews = onSnapshot(reviewsQuery, (snapshot) => {
+      setReviewsCount(snapshot.size);
+    });
+
+    // Listener para cambios en localStorage (cuando se marcan como vistas)
+    const handleStorageChange = () => {
+      // Re-cargar los IDs y actualizar contadores
+      const newViewedOrders = new Set<string>();
+      const newViewedCustomOrders = new Set<string>();
+      
+      try {
+        const storedOrders = localStorage.getItem("viewedOrderIds");
+        const storedCustomOrders = localStorage.getItem("viewedCustomOrderIds");
+        
+        if (storedOrders) {
+          JSON.parse(storedOrders).forEach((id: string) => newViewedOrders.add(id));
+        }
+        if (storedCustomOrders) {
+          JSON.parse(storedCustomOrders).forEach((id: string) => newViewedCustomOrders.add(id));
+        }
+      } catch (e) {
+        console.error("Error reloading viewed orders:", e);
+      }
+    };
+
+    window.addEventListener("ordersViewed", handleStorageChange);
+
+    return () => {
+      unsubOrders();
+      unsubCustomOrders();
+      unsubReviews();
+      window.removeEventListener("ordersViewed", handleStorageChange);
+    };
+  }, [user, isAdmin]);
 
   useEffect(() => {
     if (!authLoading && user && isAdmin) {
@@ -144,17 +235,37 @@ export default function AdminPage() {
 
           <Link
             href="/admin/orders-store"
-            className="group rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+            className={`group relative rounded-lg border-2 p-6 shadow-xl backdrop-blur-sm transition-all ${
+              ordersCount > 0
+                ? "border-yellow-600 bg-yellow-950/30 shadow-yellow-900/40 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-900/60 animate-pulse"
+                : "border-red-900/30 bg-black/60 shadow-red-900/20 hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+            }`}
           >
-            <div className="flex items-center gap-4">
-              <div className="rounded-lg border-2 border-red-900 bg-red-950/30 p-4 transition-all group-hover:border-red-600 group-hover:bg-red-950/50">
-                <Package className="h-8 w-8 text-red-400" />
+            {ordersCount > 0 && (
+              <div className="absolute -right-2 -top-2 z-10">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-yellow-400 bg-yellow-500 text-sm font-black text-black shadow-lg">
+                  {ordersCount}
+                </span>
               </div>
-              <div>
-                <h2 className="mb-2 text-xl font-bold text-red-100">
-                  Órdenes de Compra
-                </h2>
-                <p className="text-gray-400">
+            )}
+            <div className="flex items-center gap-4">
+              <div className={`rounded-lg border-2 p-4 transition-all ${
+                ordersCount > 0
+                  ? "border-yellow-600 bg-yellow-900/50 group-hover:border-yellow-500 group-hover:bg-yellow-900/70"
+                  : "border-red-900 bg-red-950/30 group-hover:border-red-600 group-hover:bg-red-950/50"
+              }`}>
+                <Package className={`h-8 w-8 ${ordersCount > 0 ? "text-yellow-300" : "text-red-400"}`} />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h2 className={`mb-2 text-xl font-bold ${ordersCount > 0 ? "text-yellow-100" : "text-red-100"}`}>
+                    Órdenes de Compra
+                  </h2>
+                  {ordersCount > 0 && (
+                    <Bell className="h-5 w-5 text-yellow-400 animate-bounce" />
+                  )}
+                </div>
+                <p className={ordersCount > 0 ? "text-yellow-200" : "text-gray-400"}>
                   Ver y gestionar pedidos de pinturas
                 </p>
               </div>
@@ -163,17 +274,37 @@ export default function AdminPage() {
 
           <Link
             href="/admin/orders"
-            className="group rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+            className={`group relative rounded-lg border-2 p-6 shadow-xl backdrop-blur-sm transition-all ${
+              customOrdersCount > 0
+                ? "border-yellow-600 bg-yellow-950/30 shadow-yellow-900/40 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-900/60 animate-pulse"
+                : "border-red-900/30 bg-black/60 shadow-red-900/20 hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+            }`}
           >
-            <div className="flex items-center gap-4">
-              <div className="rounded-lg border-2 border-red-900 bg-red-950/30 p-4 transition-all group-hover:border-red-600 group-hover:bg-red-950/50">
-                <Palette className="h-8 w-8 text-red-400" />
+            {customOrdersCount > 0 && (
+              <div className="absolute -right-2 -top-2 z-10">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-yellow-400 bg-yellow-500 text-sm font-black text-black shadow-lg">
+                  {customOrdersCount}
+                </span>
               </div>
-              <div>
-                <h2 className="mb-2 text-xl font-bold text-red-100">
-                  Pedidos Personalizados
-                </h2>
-                <p className="text-gray-400">
+            )}
+            <div className="flex items-center gap-4">
+              <div className={`rounded-lg border-2 p-4 transition-all ${
+                customOrdersCount > 0
+                  ? "border-yellow-600 bg-yellow-900/50 group-hover:border-yellow-500 group-hover:bg-yellow-900/70"
+                  : "border-red-900 bg-red-950/30 group-hover:border-red-600 group-hover:bg-red-950/50"
+              }`}>
+                <Palette className={`h-8 w-8 ${customOrdersCount > 0 ? "text-yellow-300" : "text-red-400"}`} />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h2 className={`mb-2 text-xl font-bold ${customOrdersCount > 0 ? "text-yellow-100" : "text-red-100"}`}>
+                    Pedidos Personalizados
+                  </h2>
+                  {customOrdersCount > 0 && (
+                    <Bell className="h-5 w-5 text-yellow-400 animate-bounce" />
+                  )}
+                </div>
+                <p className={customOrdersCount > 0 ? "text-yellow-200" : "text-gray-400"}>
                   Ver y gestionar pedidos de obras a pedido
                 </p>
               </div>
@@ -182,17 +313,37 @@ export default function AdminPage() {
 
           <Link
             href="/admin/reviews"
-            className="group rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+            className={`group relative rounded-lg border-2 p-6 shadow-xl backdrop-blur-sm transition-all ${
+              reviewsCount > 0
+                ? "border-yellow-600 bg-yellow-950/30 shadow-yellow-900/40 hover:border-yellow-500 hover:shadow-2xl hover:shadow-yellow-900/60 animate-pulse"
+                : "border-red-900/30 bg-black/60 shadow-red-900/20 hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+            }`}
           >
-            <div className="flex items-center gap-4">
-              <div className="rounded-lg border-2 border-red-900 bg-red-950/30 p-4 transition-all group-hover:border-red-600 group-hover:bg-red-950/50">
-                <MessageCircle className="h-8 w-8 text-red-400" />
+            {reviewsCount > 0 && (
+              <div className="absolute -right-2 -top-2 z-10">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-yellow-400 bg-yellow-500 text-sm font-black text-black shadow-lg">
+                  {reviewsCount}
+                </span>
               </div>
-              <div>
-                <h2 className="mb-2 text-xl font-bold text-red-100">
-                  Moderación de Reseñas
-                </h2>
-                <p className="text-gray-400">
+            )}
+            <div className="flex items-center gap-4">
+              <div className={`rounded-lg border-2 p-4 transition-all ${
+                reviewsCount > 0
+                  ? "border-yellow-600 bg-yellow-900/50 group-hover:border-yellow-500 group-hover:bg-yellow-900/70"
+                  : "border-red-900 bg-red-950/30 group-hover:border-red-600 group-hover:bg-red-950/50"
+              }`}>
+                <MessageCircle className={`h-8 w-8 ${reviewsCount > 0 ? "text-yellow-300" : "text-red-400"}`} />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h2 className={`mb-2 text-xl font-bold ${reviewsCount > 0 ? "text-yellow-100" : "text-red-100"}`}>
+                    Moderación de Reseñas
+                  </h2>
+                  {reviewsCount > 0 && (
+                    <Bell className="h-5 w-5 text-yellow-400 animate-bounce" />
+                  )}
+                </div>
+                <p className={reviewsCount > 0 ? "text-yellow-200" : "text-gray-400"}>
                   Aprobar, rechazar y gestionar comentarios
                 </p>
               </div>

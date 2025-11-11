@@ -169,14 +169,16 @@ export default function Home() {
       </section>
 
       {/* Gallery Section */}
-      <section className="bg-white py-16 sm:py-20">
+      <section id="galeria" className="bg-white py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 text-center">
+          <div className="mb-12 text-center">
             <h2 className="mb-4 text-4xl font-black text-gray-900 sm:text-5xl">
               Galería de Obras
             </h2>
-            <p className="text-lg text-gray-600">
-              Explora la colección completa de pinturas disponibles
+            <p className="mx-auto max-w-3xl text-lg text-gray-600">
+              Explora mi colección completa de pinturas originales. Cada obra es única, creada con
+              técnicas mixtas y expresionismo contemporáneo. Todas las piezas están disponibles para
+              compra inmediata con envío seguro a todo Chile.
             </p>
           </div>
 

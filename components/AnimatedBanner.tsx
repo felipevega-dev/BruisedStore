@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { Palette, Instagram } from "lucide-react";
 
 interface AnimatedBannerProps {
   images: string[];
@@ -64,18 +66,36 @@ export default function AnimatedBanner({
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
-        {/* Profile Image */}
+        {/* Profile Image with Flip Effect */}
         {profileImage && (
-          <div className="mb-6 overflow-hidden rounded-full border-8 border-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)]">
-            <div className="relative h-32 w-32 sm:h-40 sm:w-40">
-              <Image
-                src={profileImage}
-                alt={heroTitle}
-                fill
-                className="object-cover"
-                sizes="160px"
-                priority
-              />
+          <div className="flip-card mb-6">
+            <div className="flip-card-inner">
+              {/* Front - Normal Image */}
+              <div className="flip-card-front overflow-hidden rounded-full border-8 border-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)]">
+                <div className="relative h-32 w-32 sm:h-40 sm:w-40">
+                  <Image
+                    src={profileImage}
+                    alt={heroTitle}
+                    fill
+                    className="object-cover"
+                    sizes="160px"
+                    priority
+                  />
+                </div>
+              </div>
+              {/* Back - Filtered Image */}
+              <div className="flip-card-back overflow-hidden rounded-full border-8 border-red-600 shadow-[8px_8px_0px_0px_rgba(220,38,38,0.5)]">
+                <div className="relative h-32 w-32 sm:h-40 sm:w-40">
+                  <Image
+                    src={profileImage}
+                    alt={`${heroTitle} - Bruised`}
+                    fill
+                    className="object-cover bruised-filter"
+                    sizes="160px"
+                    priority
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -94,6 +114,51 @@ export default function AnimatedBanner({
 
         {/* Decorative line */}
         <div className="mt-6 h-2 w-24 bg-red-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] sm:w-32" />
+
+        {/* Call to Action Buttons */}
+        <div className="mt-8 flex flex-col sm:flex-row gap-4">
+          <Link
+            href="/obra-a-pedido"
+            className="group inline-flex items-center justify-center gap-2 rounded-lg border-4 border-white bg-red-600 px-6 py-3 text-lg font-black text-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)] transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-red-700 hover:shadow-none"
+          >
+            <Palette className="h-5 w-5" />
+            Obra a Pedido
+          </Link>
+          <Link
+            href="#galeria"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border-4 border-white bg-white px-6 py-3 text-lg font-black text-black shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+          >
+            Ver Galería
+          </Link>
+        </div>
+
+        {/* Social Links */}
+        <div className="mt-8 flex items-center gap-4">
+          <a
+            href="https://www.instagram.com/joseriop"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex h-12 w-12 items-center justify-center rounded-full border-4 border-white bg-white/10 backdrop-blur-sm transition-all hover:bg-white hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.5)]"
+            aria-label="Instagram"
+          >
+            <Instagram className="h-6 w-6 text-white transition-colors group-hover:text-pink-600" />
+          </a>
+          <a
+            href="https://www.tiktok.com/@josevegaart"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex h-12 w-12 items-center justify-center rounded-full border-4 border-white bg-white/10 backdrop-blur-sm transition-all hover:bg-white hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.5)]"
+            aria-label="TikTok"
+          >
+            <svg
+              className="h-6 w-6 text-white transition-colors group-hover:text-black"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+            </svg>
+          </a>
+        </div>
       </div>
 
       {/* CSS Animation */}
@@ -104,6 +169,78 @@ export default function AnimatedBanner({
           }
           100% {
             transform: translateX(-33.333%);
+          }
+        }
+
+        /* Flip Card Styles */
+        .flip-card {
+          perspective: 1000px;
+          cursor: pointer;
+        }
+
+        .flip-card-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transition: transform 0.6s;
+          transform-style: preserve-3d;
+        }
+
+        .flip-card:hover .flip-card-inner,
+        .flip-card:active .flip-card-inner {
+          transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+        }
+
+        .flip-card-back {
+          transform: rotateY(180deg);
+        }
+
+        /* Bruised Filter - Infrared/Experimental Effect */
+        .bruised-filter {
+          filter: 
+            hue-rotate(280deg) 
+            saturate(180%) 
+            contrast(130%) 
+            brightness(110%)
+            sepia(30%);
+          mix-blend-mode: normal;
+        }
+
+        /* Alternative filters you can try: */
+        /* 
+        Red-dominant bruised look:
+        filter: contrast(130%) brightness(90%) saturate(150%) hue-rotate(340deg);
+        
+        Purple bruised look:
+        filter: hue-rotate(270deg) saturate(200%) contrast(120%) brightness(95%);
+        
+        Infrared look:
+        filter: hue-rotate(180deg) saturate(300%) brightness(120%) contrast(110%);
+        
+        Dark moody look:
+        filter: contrast(150%) brightness(80%) saturate(120%) hue-rotate(330deg) grayscale(20%);
+        */
+
+        @media (max-width: 640px) {
+          .flip-card-inner {
+            width: 8rem;
+            height: 8rem;
+          }
+        }
+
+        @media (min-width: 641px) {
+          .flip-card-inner {
+            width: 10rem;
+            height: 10rem;
           }
         }
       `}</style>

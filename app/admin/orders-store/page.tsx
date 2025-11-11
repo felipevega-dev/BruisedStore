@@ -32,6 +32,38 @@ export default function AdminStoreOrdersPage() {
   const [pendingCount, setPendingCount] = useState(0);
   const [updatingStatus, setUpdatingStatus] = useState(false);
   const [updatingShipping, setUpdatingShipping] = useState(false);
+  const [viewedOrderIds, setViewedOrderIds] = useState<Set<string>>(new Set());
+
+  // Cargar órdenes vistas del localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("viewedOrderIds");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setViewedOrderIds(new Set(parsed));
+      } catch (e) {
+        console.error("Error parsing viewed orders:", e);
+      }
+    }
+  }, []);
+
+  // Marcar una orden como vista
+  const markOrderAsViewed = (orderId: string) => {
+    setViewedOrderIds((prev) => {
+      const newSet = new Set(prev);
+      newSet.add(orderId);
+      // Guardar en localStorage
+      localStorage.setItem("viewedOrderIds", JSON.stringify([...newSet]));
+      // Disparar evento para que el Header se actualice
+      window.dispatchEvent(new Event("ordersViewed"));
+      return newSet;
+    });
+  };
+
+  // Verificar si una orden es nueva (no vista)
+  const isOrderNew = (order: Order): boolean => {
+    return !viewedOrderIds.has(order.id!) && order.status === "pending";
+  };
 
   useEffect(() => {
     if (!authLoading) {
@@ -45,6 +77,9 @@ export default function AdminStoreOrdersPage() {
 
   useEffect(() => {
     if (user && isAdmin) {
+      // NO marcar todas como vistas aquí, solo actualizar el timestamp de entrada
+      localStorage.setItem("adminLastViewedOrdersPage", Date.now().toString());
+
       // Listener en tiempo real
       const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
       const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -63,14 +98,14 @@ export default function AdminStoreOrdersPage() {
         });
         setOrders(ordersData);
 
-        // Contar pendientes
-        const pending = ordersData.filter((o) => o.status === "pending").length;
-        setPendingCount(pending);
+        // Contar pendientes NO VISTAS
+        const newOrders = ordersData.filter((o) => isOrderNew(o));
+        setPendingCount(newOrders.length);
       });
 
       return () => unsubscribe();
     }
-  }, [user, isAdmin]);
+  }, [user, isAdmin, viewedOrderIds]);
 
   const handleStatusChange = async (
     orderId: string,
@@ -236,44 +271,64 @@ export default function AdminStoreOrdersPage() {
           {/* Orders List */}
           <div className="lg:col-span-1">
             <div className="space-y-3">
-              {orders.map((order) => (
-                <div
-                  key={order.id}
-                  onClick={() => setSelectedOrder(order)}
-                  className={`cursor-pointer rounded-lg border-2 bg-black/60 p-4 backdrop-blur-sm transition-all hover:shadow-xl ${
-                    selectedOrder?.id === order.id
-                      ? "border-red-700 shadow-2xl shadow-red-900/40"
-                      : "border-red-900/30 hover:border-red-700 hover:shadow-red-900/20"
-                  }`}
-                >
-                  <div className="mb-2 flex items-start justify-between">
-                    <div>
-                      <h3 className="font-bold text-red-100">
-                        {order.orderNumber}
-                      </h3>
-                      <p className="text-sm text-gray-400">
-                        {order.shippingInfo.fullName}
-                      </p>
+              {orders.map((order) => {
+                const isNew = isOrderNew(order);
+                return (
+                  <div
+                    key={order.id}
+                    onClick={() => {
+                      setSelectedOrder(order);
+                      // Marcar como vista cuando se hace clic y actualizar contador
+                      if (order.id && isNew) {
+                        markOrderAsViewed(order.id);
+                        setPendingCount((prev) => Math.max(0, prev - 1));
+                      }
+                    }}
+                    className={`relative cursor-pointer rounded-lg border-2 bg-black/60 p-4 backdrop-blur-sm transition-all hover:shadow-xl ${
+                      selectedOrder?.id === order.id
+                        ? "border-red-700 shadow-2xl shadow-red-900/40"
+                        : "border-red-900/30 hover:border-red-700 hover:shadow-red-900/20"
+                    }`}
+                  >
+                    {/* Badge NUEVO */}
+                    {isNew && (
+                      <div className="absolute -right-2 -top-2 z-10 animate-pulse">
+                        <span className="inline-flex items-center gap-1 rounded-full border-2 border-yellow-400 bg-yellow-500 px-2 py-1 text-xs font-black text-black shadow-lg">
+                          <Bell className="h-3 w-3" />
+                          NUEVO
+                        </span>
+                      </div>
+                    )}
+                    
+                    <div className="mb-2 flex items-start justify-between">
+                      <div>
+                        <h3 className="font-bold text-red-100">
+                          {order.orderNumber}
+                        </h3>
+                        <p className="text-sm text-gray-400">
+                          {order.shippingInfo.fullName}
+                        </p>
+                      </div>
+                      <span
+                        className={`rounded-lg border-2 px-2 py-1 text-xs font-bold ${getStatusColor(
+                          order.status
+                        )}`}
+                      >
+                        {getStatusLabel(order.status)}
+                      </span>
                     </div>
-                    <span
-                      className={`rounded-lg border-2 px-2 py-1 text-xs font-bold ${getStatusColor(
-                        order.status
-                      )}`}
-                    >
-                      {getStatusLabel(order.status)}
-                    </span>
-                  </div>
-                  <p className="mb-1 text-xs text-gray-500">
-                    {order.items.length} item{order.items.length !== 1 ? "s" : ""}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <p className="font-bold text-red-500">
-                      {formatPrice(order.total)}
+                    <p className="mb-1 text-xs text-gray-500">
+                      {order.items.length} item{order.items.length !== 1 ? "s" : ""}
                     </p>
-                    <Eye className="h-4 w-4 text-gray-400" />
+                    <div className="flex items-center justify-between">
+                      <p className="font-bold text-red-500">
+                        {formatPrice(order.total)}
+                      </p>
+                      <Eye className="h-4 w-4 text-gray-400" />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {orders.length === 0 && (
                 <div className="rounded-lg border-2 border-red-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">
@@ -308,6 +363,39 @@ export default function AdminStoreOrdersPage() {
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>
+                </div>
+
+                {/* Status Update - MOVIDO ARRIBA */}
+                <div className="mb-6 rounded-lg border-2 border-yellow-900/50 bg-yellow-950/20 p-4">
+                  <h3 className="mb-3 flex items-center gap-2 font-bold text-yellow-300">
+                    <Package className="h-5 w-5" />
+                    Estado del Pedido
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {(["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"] as OrderStatus[]).map(
+                      (status) => (
+                        <button
+                          key={status}
+                          onClick={() =>
+                            handleStatusChange(selectedOrder.id!, status)
+                          }
+                          disabled={updatingStatus}
+                          className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
+                            selectedOrder.status === status
+                              ? `${getStatusColor(status)} shadow-lg ring-2 ring-white/50`
+                              : `${getStatusColor(status)} opacity-50 hover:opacity-100 hover:scale-105`
+                          } disabled:cursor-not-allowed disabled:opacity-30`}
+                        >
+                          {getStatusLabel(status)}
+                        </button>
+                      )
+                    )}
+                  </div>
+                  {updatingStatus && (
+                    <p className="mt-2 text-sm text-yellow-300">
+                      Actualizando estado...
+                    </p>
+                  )}
                 </div>
 
                 {/* Items */}
@@ -477,33 +565,6 @@ export default function AdminStoreOrdersPage() {
                   </div>
                 )}
 
-                {/* Status Update */}
-                <div className="mb-6">
-                  <h3 className="mb-3 font-bold text-red-100">
-                    Estado del Pedido
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {(["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"] as OrderStatus[]).map(
-                      (status) => (
-                        <button
-                          key={status}
-                          onClick={() =>
-                            handleStatusChange(selectedOrder.id!, status)
-                          }
-                          disabled={updatingStatus}
-                          className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
-                            selectedOrder.status === status
-                              ? `${getStatusColor(status)} shadow-lg`
-                              : `${getStatusColor(status)} opacity-50 hover:opacity-100`
-                          } disabled:cursor-not-allowed disabled:opacity-30`}
-                        >
-                          {getStatusLabel(status)}
-                        </button>
-                      )
-                    )}
-                  </div>
-                </div>
-
                 {/* Shipping Status Update */}
                 <div>
                   <h3 className="mb-3 font-bold text-red-100">
@@ -520,8 +581,8 @@ export default function AdminStoreOrdersPage() {
                           disabled={updatingShipping}
                           className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
                             selectedOrder.shippingStatus === status
-                              ? `${getShippingStatusColor(status)} shadow-lg`
-                              : `${getShippingStatusColor(status)} opacity-50 hover:opacity-100`
+                              ? `${getShippingStatusColor(status)} shadow-lg ring-2 ring-white/50`
+                              : `${getShippingStatusColor(status)} opacity-50 hover:opacity-100 hover:scale-105`
                           } disabled:cursor-not-allowed disabled:opacity-30`}
                         >
                           {getShippingStatusLabel(status)}
@@ -529,6 +590,11 @@ export default function AdminStoreOrdersPage() {
                       )
                     )}
                   </div>
+                  {updatingShipping && (
+                    <p className="mt-2 text-sm text-yellow-300">
+                      Actualizando estado de envío...
+                    </p>
+                  )}
                 </div>
               </div>
             ) : (
