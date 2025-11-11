@@ -123,52 +123,64 @@ export default function ImageCropper({
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 p-4">
       <div className="relative h-full w-full max-w-6xl">
-        {/* Header */}
-        <div className="mb-4 flex flex-col gap-3 rounded-lg border-4 border-white bg-black p-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-lg font-black text-white sm:text-xl">
-              Ajustar Imagen al Lienzo
-            </h2>
-            <p className="mt-1 text-sm text-gray-400">
-              Tamaño: {canvasHeight}x{canvasWidth} cm ({formatPrice(selectedSize.priceMultiplier)})
-            </p>
+        {/* Header - Ultra Compact Single Row */}
+        <div className="mb-3 flex flex-col gap-2 rounded-lg border-4 border-white bg-black p-3 sm:flex-row sm:items-center sm:gap-3">
+          {/* Title */}
+          <h2 className="text-base font-black text-white sm:text-lg">
+            Ajustar Imagen
+          </h2>
+
+          {/* Divider */}
+          <div className="hidden h-8 w-px bg-white/30 sm:block"></div>
+
+          {/* Current Size - Inline */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase text-gray-400">Tamaño:</span>
+            <span className="text-sm font-black text-white">
+              {canvasHeight}x{canvasWidth} cm
+            </span>
+            <span className="text-xs font-bold text-green-400">
+              {formatPrice(selectedSize.priceMultiplier)}
+            </span>
           </div>
+
+          {/* Divider */}
+          <div className="hidden h-8 w-px bg-white/30 sm:block"></div>
+
+          {/* Size Selector - Inline */}
+          <div className="flex flex-1 items-center gap-2">
+            <label className="text-xs font-bold uppercase text-gray-400 sm:whitespace-nowrap">
+              Cambiar:
+            </label>
+            <select
+              value={currentSizeIndex}
+              onChange={(e) => onSizeChange(parseInt(e.target.value))}
+              className="flex-1 rounded border-2 border-white bg-black px-2 py-1.5 text-xs font-bold text-white transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600 sm:text-sm"
+            >
+              {CUSTOM_ORDER_SIZES.map((size, index) => {
+                const orientation =
+                  size.width < size.height
+                    ? "V"
+                    : size.width > size.height
+                      ? "H"
+                      : "C";
+                return (
+                  <option key={index} value={index}>
+                    {size.height}x{size.width}cm [{orientation}] - {formatPrice(size.priceMultiplier)}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+
+          {/* Cancel Button */}
           <button
             onClick={onCancel}
-            className="flex items-center justify-center gap-2 rounded-lg border-2 border-white bg-white px-3 py-2 text-sm font-bold text-black transition-all hover:bg-gray-200 sm:self-start"
+            className="flex items-center justify-center gap-1.5 rounded-lg border-2 border-white bg-white px-3 py-1.5 text-sm font-bold text-black transition-all hover:bg-gray-200 sm:ml-auto"
           >
             <X className="h-4 w-4" />
-            <span>Cancelar</span>
+            <span className="hidden sm:inline">Cancelar</span>
           </button>
-        </div>
-
-        {/* Size Selector */}
-        <div className="mb-4 rounded-lg border-4 border-white bg-black p-4">
-          <div className="mb-3 flex items-center gap-2">
-            <Maximize2 className="h-5 w-5 text-white" />
-            <h3 className="text-sm font-bold uppercase text-white">
-              Tamaño del Lienzo
-            </h3>
-          </div>
-          <select
-            value={currentSizeIndex}
-            onChange={(e) => onSizeChange(parseInt(e.target.value))}
-            className="w-full rounded border-2 border-white bg-black px-4 py-3 text-sm font-bold text-white transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600"
-          >
-            {CUSTOM_ORDER_SIZES.map((size, index) => {
-              const orientation =
-                size.width < size.height
-                  ? "Vertical"
-                  : size.width > size.height
-                    ? "Horizontal"
-                    : "Cuadrado";
-              return (
-                <option key={index} value={index}>
-                  {size.name} cm ({size.height}x{size.width}) - {orientation} - {formatPrice(size.priceMultiplier)}
-                </option>
-              );
-            })}
-          </select>
         </div>
 
         {/* Cropper Area */}
@@ -185,67 +197,72 @@ export default function ImageCropper({
           />
         </div>
 
-        {/* Controls */}
-        <div className="space-y-3 rounded-lg border-4 border-white bg-black p-4">
-          {/* Zoom Control */}
-          <div className="flex items-center gap-3">
-            <ZoomOut className="h-5 w-5 text-white" />
-            <input
-              type="range"
-              min={1}
-              max={3}
-              step={0.1}
-              value={zoom}
-              onChange={(e) => setZoom(parseFloat(e.target.value))}
-              className="flex-1"
-            />
-            <ZoomIn className="h-5 w-5 text-white" />
-            <span className="min-w-[3rem] text-center text-sm font-bold text-white">
-              {Math.round(zoom * 100)}%
-            </span>
+        {/* Controls - Compact Layout */}
+        <div className="rounded-lg border-4 border-white bg-black p-4">
+          <div className="grid gap-3 sm:grid-cols-2">
+            {/* Zoom Control */}
+            <div>
+              <div className="mb-2 flex items-center gap-2">
+                <ZoomIn className="h-4 w-4 text-white" />
+                <label className="text-xs font-bold uppercase text-gray-400">Zoom</label>
+                <span className="ml-auto text-sm font-bold text-white">
+                  {Math.round(zoom * 100)}%
+                </span>
+              </div>
+              <input
+                type="range"
+                min={1}
+                max={3}
+                step={0.1}
+                value={zoom}
+                onChange={(e) => setZoom(parseFloat(e.target.value))}
+                className="w-full"
+              />
+            </div>
+
+            {/* Rotation Control */}
+            <div>
+              <div className="mb-2 flex items-center gap-2">
+                <RotateCw className="h-4 w-4 text-white" />
+                <label className="text-xs font-bold uppercase text-gray-400">Rotación</label>
+                <span className="ml-auto text-sm font-bold text-white">
+                  {rotation}°
+                </span>
+              </div>
+              <input
+                type="range"
+                min={0}
+                max={360}
+                step={1}
+                value={rotation}
+                onChange={(e) => setRotation(parseInt(e.target.value))}
+                className="w-full"
+              />
+            </div>
           </div>
 
-          {/* Rotation Control */}
-          <div className="flex items-center gap-3">
-            <RotateCw className="h-5 w-5 text-white" />
-            <input
-              type="range"
-              min={0}
-              max={360}
-              step={1}
-              value={rotation}
-              onChange={(e) => setRotation(parseInt(e.target.value))}
-              className="flex-1"
-            />
-            <span className="min-w-[3rem] text-center text-sm font-bold text-white">
-              {rotation}°
-            </span>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-col gap-3 pt-3 sm:flex-row">
-            <button
-              onClick={handleApplyCrop}
-              disabled={isProcessing}
-              className="flex flex-1 items-center justify-center gap-2 rounded-lg border-4 border-green-600 bg-green-600 px-6 py-3 text-base font-black text-white transition-all hover:bg-green-700 disabled:opacity-50 sm:text-lg"
-            >
-              {isProcessing ? (
-                <>
-                  <div className="h-5 w-5 animate-spin rounded-full border-4 border-white border-t-transparent"></div>
-                  <span>Procesando...</span>
-                </>
-              ) : (
-                <>
-                  <Check className="h-5 w-5" />
-                  <span>Aplicar Ajuste</span>
-                </>
-              )}
-            </button>
-          </div>
+          {/* Action Button */}
+          <button
+            onClick={handleApplyCrop}
+            disabled={isProcessing}
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border-4 border-green-600 bg-green-600 px-6 py-3 text-base font-black text-white transition-all hover:bg-green-700 disabled:opacity-50 sm:text-lg"
+          >
+            {isProcessing ? (
+              <>
+                <div className="h-5 w-5 animate-spin rounded-full border-4 border-white border-t-transparent"></div>
+                <span>Procesando...</span>
+              </>
+            ) : (
+              <>
+                <Check className="h-5 w-5" />
+                <span>Aplicar Ajuste</span>
+              </>
+            )}
+          </button>
 
           {/* Help Text */}
-          <p className="text-center text-xs text-gray-400">
-            Usa los controles para ajustar zoom y rotación. Arrastra para reposicionar la imagen.
+          <p className="mt-3 text-center text-xs text-gray-400">
+            Arrastra para reposicionar • Usa los controles para ajustar zoom y rotación
           </p>
         </div>
       </div>

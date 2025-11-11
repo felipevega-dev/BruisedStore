@@ -62,6 +62,25 @@ export default function CustomOrderPage() {
   const canvasWidth = selectedSize.width;
   const canvasHeight = selectedSize.height;
 
+  // Filtrar tamaños según orientación
+  const getFilteredSizes = (targetOrientation: Orientation) => {
+    return CUSTOM_ORDER_SIZES.map((size, originalIndex) => {
+      const sizeOrientation: Orientation =
+        size.width < size.height
+          ? "vertical"
+          : size.width > size.height
+            ? "horizontal"
+            : "cuadrado";
+      return {
+        size,
+        originalIndex,
+        orientation: sizeOrientation,
+      };
+    }).filter((item) => item.orientation === targetOrientation);
+  };
+
+  const filteredSizes = getFilteredSizes(orientation);
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -511,8 +530,8 @@ export default function CustomOrderPage() {
                   <div
                     className="relative overflow-hidden border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
                     style={{
-                      width: `${canvasWidth * 3}px`,
-                      height: `${canvasHeight * 3}px`,
+                      width: `${canvasWidth * 6}px`,
+                      height: `${canvasHeight * 6}px`,
                       maxWidth: "min(calc(100vw - 120px), 500px)",
                       maxHeight: "min(70vh, 600px)",
                       aspectRatio: `${canvasWidth} / ${canvasHeight}`,
@@ -558,7 +577,7 @@ export default function CustomOrderPage() {
                       Dimensiones:
                     </span>
                     <span className="text-sm font-black text-black sm:text-base">
-                      {canvasWidth} x {canvasHeight} cm
+                      {canvasHeight} x {canvasWidth} cm
                     </span>
                   </div>
                   <div className="flex items-center justify-between border-b-4 border-black p-3 bg-white sm:p-4">
@@ -635,23 +654,65 @@ export default function CustomOrderPage() {
                     </div>
                   )}
 
-                  {/* Upload Box (minimized on mobile when image exists) */}
-                  <div
-                    onClick={() => fileInputRef.current?.click()}
-                    className={`group cursor-pointer overflow-hidden border-4 border-dashed border-black bg-gray-50 transition-all hover:bg-yellow-50 hover:border-red-600 ${
-                      imagePreview ? 'hidden lg:block lg:p-8' : 'p-6 sm:p-8'
-                    }`}
-                  >
-                    <Upload className="mx-auto mb-3 h-12 w-12 text-red-600 transition-transform group-hover:scale-110" />
-                    <p className="mb-2 text-center font-bold text-black">
-                      {imageFile
-                        ? imageFile.name
-                        : "drag.jpg"}
-                    </p>
-                    <p className="text-center text-xs font-semibold text-gray-600">
-                      PNG, JPG hasta 10MB
-                    </p>
-                  </div>
+                  {/* Desktop Preview (when image is uploaded) */}
+                  {imagePreview && (
+                    <div className="hidden lg:block">
+                      <div className="border-4 border-black bg-white p-4">
+                        <div className="relative h-48 w-full overflow-hidden border-2 border-black bg-gray-100">
+                          <Image
+                            src={imagePreview}
+                            alt="Imagen de referencia"
+                            fill
+                            className="object-cover object-top"
+                            sizes="500px"
+                            priority
+                          />
+                          {/* Gradient overlay at bottom */}
+                          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        </div>
+                        <div className="mt-4 grid grid-cols-2 gap-3">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowCropper(true);
+                            }}
+                            className="flex items-center justify-center gap-2 border-4 border-black bg-white px-4 py-3 font-bold text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+                          >
+                            <Crop className="h-5 w-5" />
+                            Editar Recorte
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              fileInputRef.current?.click();
+                            }}
+                            className="flex items-center justify-center gap-2 border-4 border-red-600 bg-white px-4 py-3 font-bold text-red-600 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+                          >
+                            <Upload className="h-5 w-5" />
+                            Cambiar Imagen
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Upload Box (only shows when NO image) */}
+                  {!imagePreview && (
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      className="group cursor-pointer overflow-hidden border-4 border-dashed border-black bg-gray-50 p-6 transition-all hover:border-red-600 hover:bg-yellow-50 sm:p-8"
+                    >
+                      <Upload className="mx-auto mb-3 h-12 w-12 text-red-600 transition-transform group-hover:scale-110" />
+                      <p className="mb-2 text-center font-bold text-black">
+                        drag.jpg
+                      </p>
+                      <p className="text-center text-xs font-semibold text-gray-600">
+                        PNG, JPG hasta 10MB
+                      </p>
+                    </div>
+                  )}
 
                   {/* Mobile: Show compact upload button when image exists */}
                   {!imagePreview && (
@@ -781,9 +842,9 @@ export default function CustomOrderPage() {
                     className="w-full border-4 border-black bg-white px-4 py-3 font-bold text-black transition-all focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
                     required
                   >
-                    {CUSTOM_ORDER_SIZES.map((size, index) => (
-                      <option key={index} value={index} className="font-bold">
-                        {size.name} ({size.width}x{size.height} cm) - {formatPrice(BASE_CUSTOM_ORDER_PRICE * size.priceMultiplier)}
+                    {filteredSizes.map((item) => (
+                      <option key={item.originalIndex} value={item.originalIndex} className="font-bold">
+                        {item.size.name} ({item.size.height}x{item.size.width} cm) - {formatPrice(BASE_CUSTOM_ORDER_PRICE * item.size.priceMultiplier)}
                       </option>
                     ))}
                   </select>
