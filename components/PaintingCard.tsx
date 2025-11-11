@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Painting } from "@/types";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
-import { ShoppingCart, Heart, Images } from "lucide-react";
+import { ShoppingCart, Heart, Images, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/useToast";
 import { formatPrice } from "@/lib/utils";
 
@@ -35,16 +35,28 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
+
+    // Check stock availability
+    if (painting.stock !== undefined && painting.stock <= 0) {
+      showToast("Esta obra ya no está disponible", "error");
+      return;
+    }
+
     addToCart(painting);
     showToast(`"${painting.title}" agregado al carrito 🛒`, "success");
   };
 
   // Usar la primera imagen del array si existe, sino usar imageUrl
-  const displayImage = painting.images && painting.images.length > 0 
-    ? painting.images[0] 
+  const displayImage = painting.images && painting.images.length > 0
+    ? painting.images[0]
     : painting.imageUrl;
 
   const hasMultipleImages = painting.images && painting.images.length > 1;
+
+  // Check stock status
+  const isOutOfStock = painting.stock !== undefined && painting.stock <= 0;
+  const isLowStock = painting.stock !== undefined && painting.stock > 0 &&
+    painting.stock <= (painting.lowStockThreshold || 1);
 
   return (
     <div className="group relative overflow-hidden border-4 border-black bg-white transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -92,6 +104,13 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
               </span>
             </div>
           )}
+          {isOutOfStock && painting.available && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+              <span className="border-4 border-white bg-red-600 px-4 py-2 text-sm font-bold text-white">
+                Agotado
+              </span>
+            </div>
+          )}
         </div>
       </Link>
 
@@ -101,14 +120,24 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
             {painting.title}
           </h3>
         </Link>
-        <p className="mb-4 text-sm text-gray-600">
-          {painting.dimensions.width} x {painting.dimensions.height} cm
-        </p>
+        <div className="mb-2 flex items-center justify-between">
+          <p className="text-sm text-gray-600">
+            {painting.dimensions.width} x {painting.dimensions.height} cm
+          </p>
+          {isLowStock && !isOutOfStock && (
+            <div className="flex items-center gap-1 rounded-full border-2 border-yellow-600 bg-yellow-50 px-2 py-0.5">
+              <AlertTriangle className="h-3 w-3 text-yellow-600" />
+              <span className="text-xs font-bold text-yellow-700">
+                ¡Solo {painting.stock}!
+              </span>
+            </div>
+          )}
+        </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-2xl font-black text-red-600">
             {formatPrice(painting.price)}
           </p>
-          {painting.available && (
+          {painting.available && !isOutOfStock && (
             <button
               onClick={handleAddToCart}
               className="group/btn flex items-center justify-center gap-2 border-4 border-black bg-red-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"

@@ -7,6 +7,7 @@ import { BlogPost, BLOG_CATEGORIES } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Tag, BookOpen, Loader2, Filter } from "lucide-react";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function BlogPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -88,6 +89,9 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-white py-8 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumbs */}
+        <Breadcrumbs items={[{ label: "Blog" }]} />
+
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="mb-4 flex justify-center">

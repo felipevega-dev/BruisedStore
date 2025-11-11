@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppWidget from "@/components/WhatsAppWidget";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { generateSiteMetadata, generateOrganizationSchema } from "@/lib/metadata";
 
 const geistSans = Geist({
@@ -22,7 +23,15 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = generateSiteMetadata();
+export const metadata: Metadata = {
+  ...generateSiteMetadata(),
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'José Vega Art',
+  },
+};
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -60,6 +69,7 @@ export default function RootLayout({
                   </main>
                   <Footer />
                   <WhatsAppWidget />
+                  <PWAInstallPrompt />
                 </div>
               </CartProvider>
             </WishlistProvider>

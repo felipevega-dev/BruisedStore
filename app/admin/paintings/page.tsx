@@ -43,6 +43,8 @@ export default function AdminPaintingsPage() {
     category: "",
     orientation: "vertical" as Orientation,
     available: true,
+    stock: "",
+    lowStockThreshold: "1",
   });
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -179,6 +181,8 @@ export default function AdminPaintingsPage() {
       category: "",
       orientation: "vertical" as Orientation,
       available: true,
+      stock: "",
+      lowStockThreshold: "1",
     });
     setImageFiles([]);
     setImagePreviews([]);
@@ -196,6 +200,8 @@ export default function AdminPaintingsPage() {
       category: painting.category || "",
       orientation: painting.orientation || "vertical",
       available: painting.available,
+      stock: painting.stock !== undefined ? painting.stock.toString() : "",
+      lowStockThreshold: painting.lowStockThreshold?.toString() || "1",
     });
     // Cargar imágenes existentes (solo URLs, no previews base64)
     const existingImages = painting.images && painting.images.length > 0 
@@ -289,6 +295,8 @@ export default function AdminPaintingsPage() {
         orientation: formData.orientation,
         available: formData.available,
         category: formData.category || null,
+        stock: formData.stock ? parseInt(formData.stock) : undefined,
+        lowStockThreshold: formData.lowStockThreshold ? parseInt(formData.lowStockThreshold) : 1,
       };
 
       if (editingPainting) {
@@ -669,6 +677,37 @@ export default function AdminPaintingsPage() {
                 <label htmlFor="available" className="text-sm font-semibold text-red-100">
                   Disponible
                 </label>
+              </div>
+
+              {/* Stock Management */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="stock" className="mb-2 block text-sm font-semibold text-red-100">
+                    Stock <span className="text-xs text-red-400">(vacío = ilimitado)</span>
+                  </label>
+                  <input
+                    type="number"
+                    id="stock"
+                    value={formData.stock}
+                    onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                    placeholder="Ej: 5"
+                    min="0"
+                    className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 placeholder-red-700 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lowStockThreshold" className="mb-2 block text-sm font-semibold text-red-100">
+                    Alerta de Stock Bajo
+                  </label>
+                  <input
+                    type="number"
+                    id="lowStockThreshold"
+                    value={formData.lowStockThreshold}
+                    onChange={(e) => setFormData({ ...formData, lowStockThreshold: e.target.value })}
+                    min="0"
+                    className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 placeholder-red-700 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  />
+                </div>
               </div>
 
               {/* Buttons */}

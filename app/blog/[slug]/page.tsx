@@ -9,6 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Tag, ArrowLeft, Clock, Loader2, User } from "lucide-react";
 import ShareButtons from "@/components/ShareButtons";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 export default function BlogPostPage() {
   const params = useParams();
@@ -120,9 +121,51 @@ export default function BlogPostPage() {
     );
   }
 
+  // Generate JSON-LD for SEO
+  const jsonLd = post
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.excerpt,
+        image: post.coverImage,
+        author: {
+          '@type': 'Person',
+          name: 'José Vega',
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'José Vega Art',
+          logo: {
+            '@type': 'ImageObject',
+            url: 'https://bruisedart.com/logo.png',
+          },
+        },
+        datePublished: post.publishedAt?.toISOString(),
+        dateModified: post.updatedAt?.toISOString(),
+        keywords: post.tags.join(', '),
+      }
+    : null;
+
   return (
     <div className="min-h-screen bg-white py-8 sm:py-12">
+      {/* JSON-LD for SEO */}
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumbs */}
+        <Breadcrumbs
+          items={[
+            { label: "Blog", href: "/blog" },
+            { label: post.title },
+          ]}
+        />
+
         {/* Back Button */}
         <Link
           href="/blog"

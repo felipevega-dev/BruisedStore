@@ -19,6 +19,7 @@ import { db, storage } from "@/lib/firebase";
 import { BlogPost, BLOG_CATEGORIES, BlogCategory } from "@/types";
 import TipTapEditor from "@/components/TipTapEditor";
 import { useToast } from "@/hooks/useToast";
+import imageCompression from "browser-image-compression";
 import {
   BookOpen,
   Plus,
@@ -105,16 +106,36 @@ export default function AdminBlogPage() {
     });
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         showToast("La imagen no debe superar 5MB", "error");
         return;
       }
-      setCoverImageFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      setCoverImagePreview(previewUrl);
+
+      try {
+        // Compress image for blog covers (1200x630 recommended)
+        const options = {
+          maxSizeMB: 0.8,
+          maxWidthOrHeight: 1200,
+          useWebWorker: true,
+          fileType: "image/jpeg",
+        };
+
+        const compressedFile = await imageCompression(file, options);
+        setCoverImageFile(compressedFile);
+        const previewUrl = URL.createObjectURL(compressedFile);
+        setCoverImagePreview(previewUrl);
+
+        showToast(
+          `Imagen optimizada: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${(compressedFile.size / 1024 / 1024).toFixed(2)}MB`,
+          "success"
+        );
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        showToast("Error al optimizar imagen", "error");
+      }
     }
   };
 

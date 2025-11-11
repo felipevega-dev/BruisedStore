@@ -18,12 +18,13 @@ This file provides guidance to Claude Code when working with this repository.
 ✅ Real-time notifications + toast system
 ✅ Fully responsive (mobile-first)
 ✅ Performance optimized (-75% image size, -57% TTI)
+✅ Error boundaries (graceful error handling)
+✅ Inventory management (stock tracking & auto-decrement)
+✅ PWA support (offline mode + installable)
 
 ### What Needs Work
 🔴 Payment gateway (manual only)
 🔴 Email notifications (no order confirmations)
-🔴 Error boundaries (app crashes on errors)
-🟡 Inventory tracking (no stock management)
 🟡 Advanced search (basic only)
 🟢 Test coverage (0%)
 
@@ -625,16 +626,138 @@ return () => { unsub1(); unsub2(); };
 
 ---
 
+## ✨ Sprint 12: Critical Features (Nov 2025)
+
+### Completed Features
+
+#### 1. Error Boundaries ✅
+**Location:** `components/ErrorBoundary.tsx`
+**Purpose:** Prevents app crashes, graceful error handling
+
+**Features:**
+- Catches React errors at component boundaries
+- Shows user-friendly error UI with brutalist design
+- Development mode shows stack traces
+- Production mode hides technical details
+- Actions: Retry, Reload, or Go Home
+- WhatsApp contact link for persistent issues
+
+**Implementation:**
+```tsx
+// Already integrated in app/layout.tsx
+<ErrorBoundary>
+  <AuthProvider>
+    {/* ... nested providers ... */}
+  </AuthProvider>
+</ErrorBoundary>
+```
+
+**Usage:**
+- Wrap critical sections with `<ErrorBoundary>`
+- Provide custom `fallback` prop for custom error UI
+- Errors are logged to console (ready for Sentry integration)
+
+---
+
+#### 2. Inventory Management ✅
+**Files Modified:**
+- `types/index.ts` - Added `stock` and `lowStockThreshold` fields
+- `app/admin/paintings/page.tsx` - Admin UI for stock management
+- `components/PaintingCard.tsx` - Stock badges and availability checks
+- `app/checkout/page.tsx` - Auto-decrement stock on purchase
+
+**Features:**
+- **Stock Tracking:** Optional `stock` field (undefined = unlimited)
+- **Low Stock Alerts:** Yellow badge shows "¡Solo X!" when below threshold
+- **Out of Stock:** Red "Agotado" overlay prevents purchases
+- **Auto-Decrement:** Stock reduces automatically on checkout
+- **Admin Controls:** Set stock + low stock threshold per painting
+
+**Database Schema:**
+```typescript
+interface Painting {
+  // ... existing fields ...
+  stock?: number;              // undefined = unlimited
+  lowStockThreshold?: number;  // Default: 1
+}
+```
+
+**Firestore Rules Update Needed:**
+```javascript
+// Add to firestore.rules
+match /paintings/{paintingId} {
+  allow update: if request.auth.token.role == 'admin'
+                || (request.resource.data.diff(resource.data).affectedKeys()
+                    .hasOnly(['stock']));  // Allow stock updates from checkout
+}
+```
+
+**UX Features:**
+- **PaintingCard:** Shows low stock badge, hides "Add to Cart" if out of stock
+- **Admin Panel:** Stock input with "vacío = ilimitado" hint
+- **Checkout:** Parallel stock updates with `Promise.all()` for performance
+- **Cart Validation:** Prevents adding out-of-stock items
+
+---
+
+#### 3. PWA Support ✅
+**Files Created:**
+- `public/manifest.json` - App manifest with icons and theme
+- `public/sw.js` - Service worker for offline caching
+- `public/offline.html` - Offline fallback page
+- `components/PWAInstallPrompt.tsx` - Install prompt UI
+
+**Features:**
+- **Installable:** Users can add to home screen
+- **Offline Mode:** Service worker caches pages and assets
+- **Install Prompt:** Shows after 3 seconds (dismissable)
+- **Theme:** Red (#DC2626) for brutalist design
+- **Manifest:** Proper icons (192x192, 512x512 needed)
+
+**Implementation Details:**
+```typescript
+// Service Worker Strategy: Network First, Cache Fallback
+// - Static assets cached on install
+// - Runtime cache for visited pages
+// - Offline page shown when network fails
+```
+
+**Metadata Added to layout.tsx:**
+```typescript
+export const metadata: Metadata = {
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'José Vega Art',
+  },
+};
+```
+
+**TODO: Create App Icons**
+Place in `public/`:
+- `icon-192.png` (192x192px)
+- `icon-512.png` (512x512px)
+Use red (#DC2626) background with white "JV" or logo
+
+**Testing:**
+1. Run `npm run build && npm start`
+2. Open Chrome DevTools → Application → Service Workers
+3. Verify manifest.json loads correctly
+4. Test "Add to Home Screen" on mobile
+5. Turn off network to test offline mode
+
+---
+
 ## Recommended Next Steps (Priority Order)
 
 1. **Payment Gateway** (critical for revenue)
 2. **Email Notifications** (critical for UX)
-3. **Error Boundaries** (quick win, reliability)
-4. **Inventory Management** (prevents business issues)
-5. **PWA** (quick win, modern UX)
-6. **Advanced Analytics** (data-driven optimization)
+3. **Advanced Analytics** (data-driven optimization)
+4. **Create PWA Icons** (complete PWA setup)
 
-**Total estimated time for top 6:** ~15-20 hours
+**Completed:** Error Boundaries, Inventory Management, PWA
+**Remaining estimated time for top 4:** ~12-15 hours
 
 ---
 

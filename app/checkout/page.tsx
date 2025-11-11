@@ -221,6 +221,17 @@ export default function CheckoutPage() {
         });
       }
 
+      // Decrement stock for purchased paintings
+      const stockUpdatePromises = items.map(async (item) => {
+        if (item.painting.stock !== undefined) {
+          const paintingRef = doc(db, "paintings", item.painting.id);
+          await updateDoc(paintingRef, {
+            stock: increment(-item.quantity),
+          });
+        }
+      });
+      await Promise.all(stockUpdatePromises);
+
       // Limpiar carrito
       clearCart();
 

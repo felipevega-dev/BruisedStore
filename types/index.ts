@@ -11,6 +11,8 @@ export interface Painting {
   };
   orientation?: Orientation; // horizontal o vertical
   available: boolean;
+  stock?: number; // Inventory tracking (undefined = unlimited/legacy, 0 = out of stock)
+  lowStockThreshold?: number; // Alert admin when stock reaches this level (default: 1)
   createdAt: Date;
   category?: PaintingCategory;
 }
