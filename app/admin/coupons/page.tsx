@@ -529,33 +529,41 @@ export default function AdminCouponsPage() {
                       </div>
                     </div>
 
-                    <div className="flex gap-2 sm:flex-col">
+                    <div className="flex flex-wrap gap-2 sm:flex-col sm:flex-nowrap">
                       <button
                         onClick={() => toggleActive(coupon)}
-                        className={`flex items-center gap-2 rounded-lg border-2 px-4 py-2 font-bold transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${
+                        className={`flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-2 font-bold transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${
                           coupon.isActive
                             ? "border-yellow-600 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
                             : "border-green-600 bg-green-50 text-green-700 hover:bg-green-100"
                         }`}
                         title={coupon.isActive ? "Desactivar" : "Activar"}
+                        aria-label={coupon.isActive ? "Desactivar cupón" : "Activar cupón"}
                       >
                         {coupon.isActive ? (
                           <ToggleRight className="h-5 w-5" />
                         ) : (
                           <ToggleLeft className="h-5 w-5" />
                         )}
+                        <span className="hidden sm:inline">
+                          {coupon.isActive ? "Desactivar" : "Activar"}
+                        </span>
                       </button>
                       <button
                         onClick={() => handleEdit(coupon)}
-                        className="flex items-center gap-2 rounded-lg border-2 border-blue-600 bg-blue-50 px-4 py-2 font-bold text-blue-700 transition-all hover:bg-blue-100 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        className="flex items-center justify-center gap-2 rounded-lg border-2 border-blue-600 bg-blue-50 px-4 py-2 font-bold text-blue-700 transition-all hover:bg-blue-100 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        aria-label="Editar cupón"
                       >
                         <Edit className="h-5 w-5" />
+                        <span className="hidden sm:inline">Editar</span>
                       </button>
                       <button
                         onClick={() => handleDelete(coupon.id)}
-                        className="flex items-center gap-2 rounded-lg border-2 border-red-600 bg-red-50 px-4 py-2 font-bold text-red-700 transition-all hover:bg-red-100 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        className="flex items-center justify-center gap-2 rounded-lg border-2 border-red-600 bg-red-50 px-4 py-2 font-bold text-red-700 transition-all hover:bg-red-100 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        aria-label="Eliminar cupón"
                       >
                         <Trash2 className="h-5 w-5" />
+                        <span className="hidden sm:inline">Eliminar</span>
                       </button>
                     </div>
                   </div>

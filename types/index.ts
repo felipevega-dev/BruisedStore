@@ -192,3 +192,48 @@ export const CUSTOM_ORDER_SIZES: CustomOrderSize[] = [
 ];
 
 export const BASE_CUSTOM_ORDER_PRICE = 20000; // Precio base: $20.000 CLP
+
+// Home Page Settings
+export interface HomeSettings {
+  id: string;
+  // Banner settings
+  profileImageUrl?: string; // Foto de perfil del artista
+  bannerImages: string[]; // Array de URLs de pinturas para el carrusel
+
+  // Hero section
+  heroTitle: string; // Título principal (default: "José Vega")
+  heroSubtitle?: string; // Subtítulo opcional
+
+  // Content section
+  contentTitle: string; // Título de la sección de contenido
+  contentText: string; // Texto descriptivo (markdown supported)
+
+  // Video settings
+  videoType: 'instagram' | 'upload' | 'youtube' | 'none';
+  videoUrl?: string; // URL de Instagram Reel, YouTube, etc.
+  videoFile?: string; // URL de video subido a Firebase Storage
+
+  // Styling
+  backgroundStyle: 'gray' | 'book' | 'dark' | 'light';
+
+  // Metadata
+  updatedAt: Date;
+  updatedBy?: string; // userId del admin que actualizó
+}
+
+export const DEFAULT_HOME_SETTINGS: Omit<HomeSettings, 'id' | 'updatedAt'> = {
+  bannerImages: [
+    '/img/clown.jpg',
+    '/img/drag.jpg',
+    '/img/elfenlied.jpg',
+    '/img/felix.jpg',
+    '/img/lady.jpg',
+    '/img/wow.jpg',
+  ],
+  heroTitle: 'José Vega',
+  heroSubtitle: 'Arte Contemporáneo',
+  contentTitle: 'Bienvenido a mi Galería',
+  contentText: 'Explora mi colección de obras únicas. Cada pieza cuenta una historia y captura un momento especial.',
+  videoType: 'none',
+  backgroundStyle: 'gray',
+};

@@ -28,5 +28,14 @@ service firebase.storage {
       // Solo administradores pueden eliminar
       allow delete: if isAdmin();
     }
+
+    // Reglas para configuración del home (fotos de perfil, banner, videos)
+    match /home-settings/{allPaths=**} {
+      // Cualquiera puede leer (para mostrar en el home)
+      allow read: if true;
+
+      // Solo administradores pueden subir/actualizar/eliminar
+      allow create, update, delete: if isAdmin();
+    }
   }
 }

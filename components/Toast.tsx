@@ -49,6 +49,9 @@ export default function Toast({ message, type = "info", duration = 3000, onClose
 
   return (
     <div
+      role="alert"
+      aria-live="polite"
+      aria-atomic="true"
       className={`fixed bottom-4 right-4 z-[9999] flex items-center gap-3 border-4 px-4 py-3 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] animate-in slide-in-from-bottom-5 ${getStyles()} max-w-md`}
     >
       {getIcon()}

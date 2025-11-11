@@ -191,7 +191,7 @@ export default function AnalyticsPage() {
 
   if (loading || authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-red-950 to-black">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
         <div className="text-center">
           <div className="mb-4 inline-block h-12 w-12 animate-spin rounded-full border-4 border-red-500 border-t-transparent"></div>
           <p className="text-lg font-semibold text-red-100">Cargando analytics...</p>
@@ -202,7 +202,7 @@ export default function AnalyticsPage() {
 
   if (!analytics) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-red-950 to-black">
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
         <div className="text-center text-red-100">
           <p>Error al cargar analytics</p>
         </div>
@@ -211,7 +211,7 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-900 via-red-950 to-black py-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

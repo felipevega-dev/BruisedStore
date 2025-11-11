@@ -172,7 +172,7 @@ export default function ImageCropper({
         </div>
 
         {/* Cropper Area */}
-        <div className="relative mb-4 h-[50vh] w-full overflow-hidden rounded-lg border-4 border-white bg-black sm:h-[60vh]">
+        <div className="relative mb-4 h-[40vh] w-full overflow-hidden rounded-lg border-4 border-white bg-black sm:h-[50vh] md:h-[60vh]">
           <Cropper
             image={image}
             crop={crop}

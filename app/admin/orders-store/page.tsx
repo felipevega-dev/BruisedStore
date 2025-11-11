@@ -197,7 +197,7 @@ export default function AdminStoreOrdersPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex items-center justify-between">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/admin"
@@ -365,9 +365,9 @@ export default function AdminStoreOrdersPage() {
                         {selectedOrder.shippingInfo.phone}
                       </span>
                     </div>
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                    <div className="flex flex-col gap-1 border-b border-red-900/20 pb-2 sm:flex-row sm:justify-between">
                       <span className="text-gray-400">Dirección:</span>
-                      <span className="font-semibold text-right text-red-100">
+                      <span className="font-semibold text-red-100 break-words sm:text-right sm:max-w-[60%]">
                         {selectedOrder.shippingInfo.address}
                       </span>
                     </div>

@@ -4,16 +4,10 @@ import { useCart } from "@/contexts/CartContext";
 import Image from "next/image";
 import Link from "next/link";
 import { Trash2, Plus, Minus, ShoppingBag } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, getTotal, clearCart } = useCart();
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-    }).format(price);
-  };
 
   if (items.length === 0) {
     return (

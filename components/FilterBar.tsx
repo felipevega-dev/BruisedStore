@@ -20,7 +20,28 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
   });
 
   const handleFilterChange = (key: keyof FilterOptions, value: any) => {
-    const newFilters = { ...filters, [key]: value };
+    let validatedValue = value;
+
+    // Validar precios
+    if (key === 'minPrice' || key === 'maxPrice') {
+      // Convertir a número y evitar negativos
+      const numValue = typeof value === 'number' ? value : Number(value);
+      if (numValue < 0) {
+        validatedValue = 0;
+      } else {
+        validatedValue = numValue;
+      }
+
+      // Validar que minPrice no sea mayor que maxPrice
+      if (key === 'minPrice' && filters.maxPrice > 0 && validatedValue > filters.maxPrice) {
+        validatedValue = filters.maxPrice;
+      }
+      if (key === 'maxPrice' && filters.minPrice > 0 && validatedValue < filters.minPrice && validatedValue > 0) {
+        validatedValue = filters.minPrice;
+      }
+    }
+
+    const newFilters = { ...filters, [key]: validatedValue };
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
@@ -140,8 +161,9 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
               <input
                 type="number"
                 placeholder="$0"
+                min="0"
                 value={filters.minPrice || ''}
-                onChange={(e) => handleFilterChange('minPrice', e.target.value ? Number(e.target.value) : undefined)}
+                onChange={(e) => handleFilterChange('minPrice', e.target.value ? Number(e.target.value) : 0)}
                 className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
               />
             </div>
@@ -153,8 +175,9 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
               <input
                 type="number"
                 placeholder="Sin límite"
+                min="0"
                 value={filters.maxPrice || ''}
-                onChange={(e) => handleFilterChange('maxPrice', e.target.value ? Number(e.target.value) : undefined)}
+                onChange={(e) => handleFilterChange('maxPrice', e.target.value ? Number(e.target.value) : 0)}
                 className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
               />
             </div>

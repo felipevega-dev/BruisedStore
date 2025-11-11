@@ -10,6 +10,7 @@ import { db } from "@/lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, CreditCard, Truck, Loader2, CheckCircle, Tag, X, AlertCircle } from "lucide-react";
+import { formatPrice, generateOrderNumber } from "@/lib/utils";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -49,24 +50,6 @@ export default function CheckoutPage() {
   });
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentInfo["method"]>("webpay");
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-    }).format(price);
-  };
-
-  const generateOrderNumber = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const random = Math.floor(Math.random() * 1000)
-      .toString()
-      .padStart(3, "0");
-    return `ORD-${year}${month}${day}-${random}`;
-  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -391,7 +374,7 @@ export default function CheckoutPage() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="sm:col-span-2">
-                    <label className="mb-2 block text-sm font-bold text-red-100">
+                    <label className="mb-2 block text-base font-bold text-red-100 sm:text-sm">
                       Nombre Completo *
                     </label>
                     <input
@@ -406,7 +389,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-bold text-red-100">
+                    <label className="mb-2 block text-base font-bold text-red-100 sm:text-sm">
                       Email *
                     </label>
                     <input
@@ -421,7 +404,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-bold text-red-100">
+                    <label className="mb-2 block text-base font-bold text-red-100 sm:text-sm">
                       Teléfono *
                     </label>
                     <input
@@ -436,7 +419,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label className="mb-2 block text-sm font-bold text-red-100">
+                    <label className="mb-2 block text-base font-bold text-red-100 sm:text-sm">
                       Dirección *
                     </label>
                     <input
@@ -451,7 +434,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-bold text-red-100">
+                    <label className="mb-2 block text-base font-bold text-red-100 sm:text-sm">
                       Ciudad *
                     </label>
                     <input
@@ -466,7 +449,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-bold text-red-100">
+                    <label className="mb-2 block text-base font-bold text-red-100 sm:text-sm">
                       Región *
                     </label>
                     <select
@@ -487,7 +470,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
-                    <label className="mb-2 block text-sm font-bold text-red-100">
+                    <label className="mb-2 block text-base font-bold text-red-100 sm:text-sm">
                       Código Postal (Opcional)
                     </label>
                     <input
@@ -501,7 +484,7 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label className="mb-2 block text-sm font-bold text-red-100">
+                    <label className="mb-2 block text-base font-bold text-red-100 sm:text-sm">
                       Notas del Pedido (Opcional)
                     </label>
                     <textarea
@@ -689,13 +672,13 @@ export default function CheckoutPage() {
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                         placeholder="CÓDIGO"
-                        className="flex-1 rounded-lg border-2 border-red-900 bg-gray-900 px-3 py-2 font-mono text-sm font-bold uppercase text-red-100 transition-colors placeholder:text-gray-500 focus:border-red-600 focus:outline-none"
+                        className="flex-1 rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 font-mono text-base font-bold uppercase text-red-100 transition-colors placeholder:text-gray-500 focus:border-red-600 focus:outline-none sm:px-3 sm:py-2 sm:text-sm"
                         disabled={validatingCoupon}
                       />
                       <button
                         onClick={handleApplyCoupon}
                         disabled={validatingCoupon || !couponCode.trim()}
-                        className="rounded-lg border-2 border-red-900 bg-red-600 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-lg border-2 border-red-900 bg-red-600 px-6 py-3 text-base font-bold text-white transition-all hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-4 sm:py-2 sm:text-sm"
                       >
                         {validatingCoupon ? (
                           <Loader2 className="h-4 w-4 animate-spin" />

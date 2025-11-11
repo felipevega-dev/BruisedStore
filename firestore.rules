@@ -94,5 +94,17 @@ service cloud.firestore {
       // Solo administradores pueden crear/actualizar/eliminar
       allow create, update, delete: if isAdmin();
     }
+
+    // Reglas para homeSettings (configuración de la página principal)
+    match /homeSettings/{settingsId} {
+      // Todos pueden leer la configuración del home
+      allow read: if true;
+
+      // Solo administradores pueden crear/actualizar configuración
+      allow create, update: if isAdmin();
+
+      // Solo administradores pueden eliminar (no recomendado)
+      allow delete: if isAdmin();
+    }
   }
 }

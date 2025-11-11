@@ -427,8 +427,8 @@ export default function AdminPaintingsPage() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border-2 border-red-900 bg-black/90 p-6 shadow-2xl shadow-red-900/50 backdrop-blur-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm overflow-y-auto">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border-2 border-red-900 bg-black/90 p-4 sm:p-6 shadow-2xl shadow-red-900/50 backdrop-blur-md my-4 scrollbar-thin scrollbar-thumb-red-900 scrollbar-track-red-950">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-red-100">
                 {editingPainting ? "Editar Pintura" : "Nueva Pintura"}

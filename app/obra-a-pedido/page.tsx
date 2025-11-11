@@ -18,6 +18,8 @@ import Image from "next/image";
 import { Upload, Loader2, CheckCircle2, Paintbrush, Crop, X, UserPlus } from "lucide-react";
 import ImageCropper from "@/components/ImageCropper";
 import { useToast } from "@/hooks/useToast";
+import { isValidFileSize, compressImage } from "@/lib/utils";
+import { MAX_IMAGE_SIZE_MB } from "@/lib/constants";
 
 export default function CustomOrderPage() {
   const router = useRouter();
@@ -63,6 +65,27 @@ export default function CustomOrderPage() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Validate file size (10MB max)
+      if (!isValidFileSize(file, MAX_IMAGE_SIZE_MB)) {
+        showToast(
+          `La imagen es demasiado grande. Máximo ${MAX_IMAGE_SIZE_MB}MB`,
+          "error"
+        );
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        return;
+      }
+
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        showToast("Por favor selecciona un archivo de imagen válido", "error");
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setTempImage(reader.result as string);
@@ -183,11 +206,25 @@ export default function CustomOrderPage() {
     setLoading(true);
 
     try {
+      // Compress image before upload
+      let fileToUpload = imageFile!;
+
+      // Only compress if file is larger than 1MB
+      if (fileToUpload.size > 1024 * 1024) {
+        try {
+          fileToUpload = await compressImage(fileToUpload, 1920, 0.85);
+          console.log(`Image compressed: ${imageFile!.size} → ${fileToUpload.size} bytes`);
+        } catch (compressionError) {
+          console.warn("Compression failed, uploading original:", compressionError);
+          // Continue with original file if compression fails
+        }
+      }
+
       const imageRef = ref(
         storage,
-        `custom-orders/${Date.now()}_${imageFile!.name}`
+        `custom-orders/${Date.now()}_${fileToUpload.name}`
       );
-      await uploadBytes(imageRef, imageFile!);
+      await uploadBytes(imageRef, fileToUpload);
       const imageUrl = await getDownloadURL(imageRef);
 
       // Construir datos del pedido (omitir campos undefined)
@@ -529,7 +566,7 @@ export default function CustomOrderPage() {
                       Orientación:
                     </span>
                     <span className="text-sm font-black capitalize text-black sm:text-base">
-                      {orientation === "horizontal" ? "Horizontal" : orientation === "vertical" && canvasWidth === canvasHeight ? "Cuadrado" : "Vertical"}
+                      {orientation === "horizontal" ? "Horizontal" : orientation === "cuadrado" ? "Cuadrado" : "Vertical"}
                     </span>
                   </div>
                   <div className="flex flex-col items-center justify-between gap-2 p-4 bg-red-600 sm:flex-row sm:gap-0 sm:p-5">
@@ -552,7 +589,7 @@ export default function CustomOrderPage() {
               >
                 {/* Image Upload */}
                 <div>
-                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
                     Imagen de Referencia *
                   </label>
 
@@ -641,7 +678,7 @@ export default function CustomOrderPage() {
 
                 {/* Orientation Selection */}
                 <div>
-                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
                     Orientación del Lienzo *
                   </label>
                   <div className="grid grid-cols-3 gap-2 sm:gap-3">
@@ -730,7 +767,7 @@ export default function CustomOrderPage() {
 
                 {/* Size Selection */}
                 <div>
-                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
                     Tamaño del Lienzo *
                   </label>
                   <select
@@ -754,7 +791,7 @@ export default function CustomOrderPage() {
 
                 {/* Name */}
                 <div>
-                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
                     Nombre Completo *
                   </label>
                   <input
@@ -783,7 +820,7 @@ export default function CustomOrderPage() {
 
                 {/* Email */}
                 <div>
-                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
                     Correo Electrónico *
                   </label>
                   <input
@@ -812,7 +849,7 @@ export default function CustomOrderPage() {
 
                 {/* Phone */}
                 <div>
-                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
                     Teléfono *
                   </label>
                   <input
@@ -841,7 +878,7 @@ export default function CustomOrderPage() {
 
                 {/* Notes */}
                 <div>
-                  <label className="mb-3 block text-sm font-black uppercase tracking-wide text-black">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
                     Detalles Adicionales (Opcional)
                   </label>
                   <textarea

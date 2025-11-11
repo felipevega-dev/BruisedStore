@@ -7,6 +7,7 @@ import { WishlistProvider } from "@/contexts/WishlistContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppWidget from "@/components/WhatsAppWidget";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { generateSiteMetadata, generateOrganizationSchema } from "@/lib/metadata";
 
 const geistSans = Geist({
@@ -48,18 +49,22 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <WishlistProvider>
-            <CartProvider>
-              <div className="flex min-h-screen flex-col">
-                <Header />
-                <main className="flex-1">{children}</main>
-                <Footer />
-                <WhatsAppWidget />
-              </div>
-            </CartProvider>
-          </WishlistProvider>
-        </AuthProvider>
+        <ErrorBoundary>
+          <AuthProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <div className="flex min-h-screen flex-col">
+                  <Header />
+                  <main className="flex-1">
+                    <ErrorBoundary>{children}</ErrorBoundary>
+                  </main>
+                  <Footer />
+                  <WhatsAppWidget />
+                </div>
+              </CartProvider>
+            </WishlistProvider>
+          </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );
