@@ -69,6 +69,8 @@ export default function HomeSettingsPage() {
           videoType: data.videoType,
           videoUrl: data.videoUrl,
           videoFile: data.videoFile,
+          videoSize: data.videoSize || "medium",
+          videoPosition: data.videoPosition || "right",
           backgroundStyle: data.backgroundStyle,
           updatedBy: data.updatedBy,
         });
@@ -173,6 +175,8 @@ export default function HomeSettingsPage() {
         contentTitle: finalSettings.contentTitle,
         contentText: finalSettings.contentText,
         videoType: finalSettings.videoType,
+        videoSize: finalSettings.videoSize || "medium",
+        videoPosition: finalSettings.videoPosition || "right",
         backgroundStyle: finalSettings.backgroundStyle,
         updatedAt: serverTimestamp(),
         updatedBy: user.uid,
@@ -426,15 +430,13 @@ export default function HomeSettingsPage() {
                 className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
               >
                 <option value="none">Sin Video</option>
-                <option value="instagram">Instagram Reel</option>
                 <option value="youtube">YouTube</option>
-                <option value="upload">Subir Video</option>
+                <option value="upload">Subir Video (detecta orientación automáticamente)</option>
               </select>
             </div>
 
             {/* Video URL */}
-            {(settings.videoType === "instagram" ||
-              settings.videoType === "youtube") && (
+            {settings.videoType === "youtube" && (
               <div className="mb-4">
                 <label className="mb-2 block text-sm font-bold text-red-100">
                   URL del Video
@@ -446,11 +448,7 @@ export default function HomeSettingsPage() {
                     setSettings({ ...settings, videoUrl: e.target.value })
                   }
                   className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
-                  placeholder={
-                    settings.videoType === "instagram"
-                      ? "https://www.instagram.com/reel/..."
-                      : "https://www.youtube.com/watch?v=..."
-                  }
+                  placeholder="https://www.youtube.com/watch?v=..."
                 />
               </div>
             )}
@@ -461,6 +459,36 @@ export default function HomeSettingsPage() {
                 <label className="mb-2 block text-sm font-bold text-red-100">
                   Archivo de Video (máx 50MB)
                 </label>
+
+                {/* Current video preview */}
+                {settings.videoFile && !videoUploadFile && (
+                  <div className="mb-4 overflow-hidden rounded-lg border-2 border-red-900 bg-black">
+                    <video
+                      src={settings.videoFile}
+                      controls
+                      className="w-full max-h-64 object-contain"
+                      playsInline
+                    >
+                      Tu navegador no soporta el elemento de video.
+                    </video>
+                    <div className="p-2 text-center">
+                      <p className="text-xs text-red-300">Video actual</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* New video selected preview */}
+                {videoUploadFile && (
+                  <div className="mb-4 rounded-lg border-2 border-green-600 bg-green-950/30 p-3">
+                    <p className="text-sm font-bold text-green-400">
+                      ✓ Nuevo video seleccionado: {videoUploadFile.name}
+                    </p>
+                    <p className="text-xs text-green-300 mt-1">
+                      Se subirá al guardar los cambios
+                    </p>
+                  </div>
+                )}
+
                 <input
                   ref={videoFileRef}
                   type="file"
@@ -473,8 +501,53 @@ export default function HomeSettingsPage() {
                   className="flex w-full items-center justify-center gap-2 rounded border-2 border-red-900 bg-red-950 px-4 py-3 font-bold text-red-100 transition-all hover:bg-red-900"
                 >
                   <Upload className="h-5 w-5" />
-                  {videoUploadFile ? videoUploadFile.name : "Seleccionar Video"}
+                  {settings.videoFile ? "Cambiar Video" : "Seleccionar Video"}
                 </button>
+              </div>
+            )}
+
+            {/* Video Size */}
+            {settings.videoType !== "none" && (
+              <div className="mb-4">
+                <label className="mb-2 block text-sm font-bold text-red-100">
+                  Tamaño del Video
+                </label>
+                <select
+                  value={settings.videoSize || "medium"}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      videoSize: e.target.value as HomeSettings["videoSize"],
+                    })
+                  }
+                  className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                >
+                  <option value="small">Pequeño</option>
+                  <option value="medium">Mediano</option>
+                  <option value="large">Grande (ancho completo)</option>
+                </select>
+              </div>
+            )}
+
+            {/* Video Position */}
+            {settings.videoType !== "none" && settings.videoSize !== "large" && (
+              <div className="mb-4">
+                <label className="mb-2 block text-sm font-bold text-red-100">
+                  Posición del Video
+                </label>
+                <select
+                  value={settings.videoPosition || "right"}
+                  onChange={(e) =>
+                    setSettings({
+                      ...settings,
+                      videoPosition: e.target.value as HomeSettings["videoPosition"],
+                    })
+                  }
+                  className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                >
+                  <option value="left">Izquierda (texto a la derecha)</option>
+                  <option value="right">Derecha (texto a la izquierda)</option>
+                </select>
               </div>
             )}
 

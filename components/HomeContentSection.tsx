@@ -2,6 +2,7 @@
 
 import { HomeSettings } from "@/types";
 import ReactMarkdown from "react-markdown";
+import { useState, useRef, useEffect } from "react";
 
 interface HomeContentSectionProps {
   title: string;
@@ -9,6 +10,8 @@ interface HomeContentSectionProps {
   videoType: HomeSettings["videoType"];
   videoUrl?: string;
   videoFile?: string;
+  videoSize?: HomeSettings["videoSize"];
+  videoPosition?: HomeSettings["videoPosition"];
 }
 
 export default function HomeContentSection({
@@ -17,33 +20,36 @@ export default function HomeContentSection({
   videoType,
   videoUrl,
   videoFile,
+  videoSize = "medium",
+  videoPosition = "right",
 }: HomeContentSectionProps) {
+  const [videoAspectRatio, setVideoAspectRatio] = useState<"vertical" | "horizontal" | "square">("vertical");
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoType === "upload" && videoFile && videoRef.current) {
+      const video = videoRef.current;
+
+      const handleLoadedMetadata = () => {
+        const width = video.videoWidth;
+        const height = video.videoHeight;
+
+        if (height > width * 1.2) {
+          setVideoAspectRatio("vertical");
+        } else if (width > height * 1.2) {
+          setVideoAspectRatio("horizontal");
+        } else {
+          setVideoAspectRatio("square");
+        }
+      };
+
+      video.addEventListener("loadedmetadata", handleLoadedMetadata);
+      return () => video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+    }
+  }, [videoType, videoFile]);
+
   const renderVideo = () => {
     if (videoType === "none") return null;
-
-    // Instagram embed
-    if (videoType === "instagram" && videoUrl) {
-      // Extract Instagram post ID from URL
-      const instagramRegex = /instagram\.com\/(p|reel)\/([A-Za-z0-9_-]+)/;
-      const match = videoUrl.match(instagramRegex);
-      const postId = match ? match[2] : null;
-
-      if (postId) {
-        return (
-          <div className="h-[600px] w-full overflow-hidden rounded-lg border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-            <iframe
-              src={`https://www.instagram.com/p/${postId}/embed/captioned`}
-              className="h-full w-full"
-              frameBorder="0"
-              scrolling="no"
-              allowtransparency="true"
-              allow="encrypted-media"
-              title="Instagram post"
-            />
-          </div>
-        );
-      }
-    }
 
     // YouTube embed
     if (videoType === "youtube" && videoUrl) {
@@ -54,27 +60,34 @@ export default function HomeContentSection({
 
       if (videoId) {
         return (
-          <div className="aspect-[9/16] w-full overflow-hidden rounded-lg border-4 border-black bg-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:aspect-video">
+          <div className="aspect-video w-full overflow-hidden rounded-lg border-4 border-black bg-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <iframe
               src={`https://www.youtube.com/embed/${videoId}`}
               className="h-full w-full"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
+              title="YouTube video"
             />
           </div>
         );
       }
     }
 
-    // Uploaded video file
+    // Uploaded video file with auto-detected aspect ratio
     if (videoType === "upload" && videoFile) {
+      const aspectClass =
+        videoAspectRatio === "vertical" ? "aspect-[9/16]" :
+        videoAspectRatio === "horizontal" ? "aspect-video" :
+        "aspect-square";
+
       return (
-        <div className="overflow-hidden rounded-lg border-4 border-black bg-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+        <div className={`${aspectClass} w-full overflow-hidden rounded-lg border-4 border-black bg-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`}>
           <video
+            ref={videoRef}
             src={videoFile}
             controls
-            className="aspect-[9/16] w-full sm:aspect-video"
+            className="h-full w-full object-contain"
             playsInline
           >
             Tu navegador no soporta el elemento de video.
@@ -86,12 +99,31 @@ export default function HomeContentSection({
     return null;
   };
 
+  // Video size mapping
+  const videoSizeClasses = {
+    small: "lg:col-span-1",
+    medium: "lg:col-span-1",
+    large: "lg:col-span-2 lg:max-w-4xl lg:mx-auto",
+  };
+
+  const hasVideo = videoType !== "none";
+  const gridCols = !hasVideo ? "lg:grid-cols-1 lg:max-w-4xl lg:mx-auto" :
+                   videoSize === "large" ? "lg:grid-cols-1" :
+                   "lg:grid-cols-2";
+
   return (
     <section className="bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 py-16 sm:py-24">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
+        <div className={`grid gap-12 ${gridCols} lg:items-start`}>
+          {/* Video on left if videoPosition is 'left' */}
+          {hasVideo && videoPosition === "left" && videoSize !== "large" && (
+            <div className={`${videoSizeClasses[videoSize]} lg:sticky lg:top-24`}>
+              {renderVideo()}
+            </div>
+          )}
+
           {/* Text Content */}
-          <div className="space-y-6">
+          <div className={`space-y-6 ${videoSize === "large" ? "lg:max-w-4xl lg:mx-auto" : ""}`}>
             <h2 className="text-4xl font-black text-gray-900 sm:text-5xl lg:text-6xl">
               {title}
             </h2>
@@ -134,9 +166,18 @@ export default function HomeContentSection({
             </div>
           </div>
 
-          {/* Video Content */}
-          {videoType !== "none" && (
-            <div className="lg:sticky lg:top-24">{renderVideo()}</div>
+          {/* Video on right if videoPosition is 'right' */}
+          {hasVideo && videoPosition === "right" && videoSize !== "large" && (
+            <div className={`${videoSizeClasses[videoSize]} lg:sticky lg:top-24`}>
+              {renderVideo()}
+            </div>
+          )}
+
+          {/* Large video full width below text */}
+          {hasVideo && videoSize === "large" && (
+            <div className={`${videoSizeClasses[videoSize]} mt-8`}>
+              {renderVideo()}
+            </div>
           )}
         </div>
       </div>

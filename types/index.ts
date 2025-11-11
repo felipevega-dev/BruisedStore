@@ -209,12 +209,16 @@ export interface HomeSettings {
   contentText: string; // Texto descriptivo (markdown supported)
 
   // Video settings
-  videoType: 'instagram' | 'upload' | 'youtube' | 'none';
+  videoType: 'upload' | 'youtube' | 'none';
   videoUrl?: string; // URL de Instagram Reel, YouTube, etc.
   videoFile?: string; // URL de video subido a Firebase Storage
 
   // Styling
   backgroundStyle: 'gray' | 'book' | 'dark' | 'light';
+
+  // Video layout configuration
+  videoSize: 'small' | 'medium' | 'large'; // Tamaño del video
+  videoPosition: 'left' | 'right'; // Posición del video (texto en lado opuesto)
 
   // Metadata
   updatedAt: Date;
@@ -236,4 +240,6 @@ export const DEFAULT_HOME_SETTINGS: Omit<HomeSettings, 'id' | 'updatedAt'> = {
   contentText: 'Explora mi colección de obras únicas. Cada pieza cuenta una historia y captura un momento especial.',
   videoType: 'none',
   backgroundStyle: 'gray',
+  videoSize: 'medium',
+  videoPosition: 'right',
 };

@@ -141,6 +141,8 @@ export default function Home() {
         videoType={homeSettings.videoType}
         videoUrl={homeSettings.videoUrl}
         videoFile={homeSettings.videoFile}
+        videoSize={homeSettings.videoSize}
+        videoPosition={homeSettings.videoPosition}
       />
 
       {/* Call to Action - Obra a Pedido */}
