@@ -12,6 +12,7 @@ interface HomeContentSectionProps {
   videoFile?: string;
   videoSize?: HomeSettings["videoSize"];
   videoPosition?: HomeSettings["videoPosition"];
+  backgroundStyle?: HomeSettings["backgroundStyle"];
 }
 
 export default function HomeContentSection({
@@ -22,6 +23,7 @@ export default function HomeContentSection({
   videoFile,
   videoSize = "medium",
   videoPosition = "right",
+  backgroundStyle = "gray",
 }: HomeContentSectionProps) {
   const [videoAspectRatio, setVideoAspectRatio] = useState<"vertical" | "horizontal" | "square">("vertical");
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -99,53 +101,72 @@ export default function HomeContentSection({
     return null;
   };
 
-  // Video size mapping
+  // Video size mapping - Tamaños reducidos significativamente
   const videoSizeClasses = {
-    small: "lg:col-span-1",
-    medium: "lg:col-span-1",
-    large: "lg:col-span-2 lg:max-w-4xl lg:mx-auto",
+    small: "lg:w-64", // 256px - Muy pequeño, como thumbnail
+    medium: "lg:w-80", // 320px - Pequeño
+    large: "lg:w-96", // 384px - Mediano (antes era full width)
   };
 
   const hasVideo = videoType !== "none";
-  const gridCols = !hasVideo ? "lg:grid-cols-1 lg:max-w-4xl lg:mx-auto" :
-                   videoSize === "large" ? "lg:grid-cols-1" :
-                   "lg:grid-cols-2";
+
+  // Background style mapping
+  const backgroundClasses = {
+    gray: "bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300",
+    book: "bg-gradient-to-br from-amber-50 via-yellow-50 to-amber-100",
+    dark: "bg-gradient-to-br from-gray-900 via-gray-800 to-black",
+    light: "bg-gradient-to-br from-white via-gray-50 to-gray-100",
+  };
+
+  const textColorClasses = {
+    gray: "text-gray-900",
+    book: "text-amber-900",
+    dark: "text-gray-100",
+    light: "text-gray-900",
+  };
+
+  const accentColorClasses = {
+    gray: "bg-red-600",
+    book: "bg-amber-600",
+    dark: "bg-red-500",
+    light: "bg-red-600",
+  };
 
   return (
-    <section className="bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 py-16 sm:py-24">
+    <section className={`${backgroundClasses[backgroundStyle]} py-16 sm:py-24`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`grid gap-12 ${gridCols} lg:items-start`}>
-          {/* Video on left if videoPosition is 'left' */}
-          {hasVideo && videoPosition === "left" && videoSize !== "large" && (
-            <div className={`${videoSizeClasses[videoSize]} lg:sticky lg:top-24`}>
+        <div className={`flex flex-col lg:flex-row gap-8 lg:gap-12 ${videoPosition === "left" ? "lg:flex-row" : "lg:flex-row-reverse"} lg:items-start`}>
+          {/* Video - Always on side with fixed width */}
+          {hasVideo && (
+            <div className={`flex-shrink-0 ${videoSizeClasses[videoSize]} lg:sticky lg:top-24`}>
               {renderVideo()}
             </div>
           )}
 
-          {/* Text Content */}
-          <div className={`space-y-6 ${videoSize === "large" ? "lg:max-w-4xl lg:mx-auto" : ""}`}>
-            <h2 className="text-4xl font-black text-gray-900 sm:text-5xl lg:text-6xl">
+          {/* Text Content - Takes remaining space */}
+          <div className="flex-1 space-y-6 min-w-0">
+            <h2 className={`text-4xl font-black ${textColorClasses[backgroundStyle]} sm:text-5xl lg:text-6xl`}>
               {title}
             </h2>
 
-            <div className="h-2 w-20 bg-red-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]" />
+            <div className={`h-2 w-20 ${accentColorClasses[backgroundStyle]} shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`} />
 
-            <div className="prose prose-lg max-w-none text-gray-800">
+            <div className={`prose prose-lg max-w-none ${textColorClasses[backgroundStyle]}`}>
               <ReactMarkdown
                 components={{
                   p: ({ children }) => (
-                    <p className="mb-4 text-lg leading-relaxed">{children}</p>
+                    <p className={`mb-4 text-lg leading-relaxed ${textColorClasses[backgroundStyle]}`}>{children}</p>
                   ),
                   strong: ({ children }) => (
-                    <strong className="font-black text-gray-900">
+                    <strong className={`font-black ${textColorClasses[backgroundStyle]}`}>
                       {children}
                     </strong>
                   ),
                   em: ({ children }) => (
-                    <em className="italic text-red-600">{children}</em>
+                    <em className={`italic ${accentColorClasses[backgroundStyle].replace('bg-', 'text-')}`}>{children}</em>
                   ),
                   h3: ({ children }) => (
-                    <h3 className="mb-3 mt-6 text-2xl font-black text-gray-900">
+                    <h3 className={`mb-3 mt-6 text-2xl font-black ${textColorClasses[backgroundStyle]}`}>
                       {children}
                     </h3>
                   ),
@@ -165,20 +186,6 @@ export default function HomeContentSection({
               </ReactMarkdown>
             </div>
           </div>
-
-          {/* Video on right if videoPosition is 'right' */}
-          {hasVideo && videoPosition === "right" && videoSize !== "large" && (
-            <div className={`${videoSizeClasses[videoSize]} lg:sticky lg:top-24`}>
-              {renderVideo()}
-            </div>
-          )}
-
-          {/* Large video full width below text */}
-          {hasVideo && videoSize === "large" && (
-            <div className={`${videoSizeClasses[videoSize]} mt-8`}>
-              {renderVideo()}
-            </div>
-          )}
         </div>
       </div>
     </section>

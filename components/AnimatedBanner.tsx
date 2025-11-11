@@ -49,7 +49,8 @@ export default function AnimatedBanner({
                     fill
                     className="object-cover"
                     sizes="350px"
-                    priority={index < 6}
+                    priority={index < 3}
+                    loading={index < 3 ? undefined : "lazy"}
                   />
                 </div>
               </div>

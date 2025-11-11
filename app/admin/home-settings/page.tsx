@@ -16,6 +16,7 @@ import { ArrowLeft, Save, Upload, Trash2, Loader2, Eye, X, Image as ImageIcon } 
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/hooks/useToast";
+import { compressImage } from "@/lib/utils";
 
 const SETTINGS_DOC_ID = "main";
 
@@ -83,26 +84,51 @@ export default function HomeSettingsPage() {
     }
   };
 
-  const handleProfileImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfileImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         showToast("La imagen debe ser menor a 5MB", "error");
         return;
       }
-      setProfileImageFile(file);
-      const previewUrl = URL.createObjectURL(file);
-      setSettings({ ...settings, profileImageUrl: previewUrl });
+
+      try {
+        // Compress profile image (smaller size for profile)
+        const compressed = await compressImage(file, 800, 0.9);
+        setProfileImageFile(compressed);
+        const previewUrl = URL.createObjectURL(compressed);
+        setSettings({ ...settings, profileImageUrl: previewUrl });
+        showToast("Imagen de perfil lista para subir", "success");
+      } catch (error) {
+        console.error("Error compressing profile image:", error);
+        setProfileImageFile(file);
+        const previewUrl = URL.createObjectURL(file);
+        setSettings({ ...settings, profileImageUrl: previewUrl });
+      }
     }
   };
 
-  const handleBannerImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBannerImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length + settings.bannerImages.length > 12) {
       showToast("Máximo 12 imágenes en el banner", "warning");
       return;
     }
-    setNewBannerImages(files);
+
+    // Compress images before storing
+    const compressedFiles: File[] = [];
+    for (const file of files) {
+      try {
+        const compressed = await compressImage(file, 1200, 0.85);
+        compressedFiles.push(compressed);
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        compressedFiles.push(file); // Use original if compression fails
+      }
+    }
+
+    setNewBannerImages(compressedFiles);
+    showToast(`${compressedFiles.length} imagen(es) lista(s) para subir`, "success");
   };
 
   const removeBannerImage = (index: number) => {
@@ -522,15 +548,15 @@ export default function HomeSettingsPage() {
                   }
                   className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
                 >
-                  <option value="small">Pequeño</option>
-                  <option value="medium">Mediano</option>
-                  <option value="large">Grande (ancho completo)</option>
+                  <option value="small">Pequeño (256px)</option>
+                  <option value="medium">Mediano (320px)</option>
+                  <option value="large">Grande (384px)</option>
                 </select>
               </div>
             )}
 
             {/* Video Position */}
-            {settings.videoType !== "none" && settings.videoSize !== "large" && (
+            {settings.videoType !== "none" && (
               <div className="mb-4">
                 <label className="mb-2 block text-sm font-bold text-red-100">
                   Posición del Video
@@ -548,6 +574,9 @@ export default function HomeSettingsPage() {
                   <option value="left">Izquierda (texto a la derecha)</option>
                   <option value="right">Derecha (texto a la izquierda)</option>
                 </select>
+                <p className="mt-1 text-xs text-red-300">
+                  El video siempre aparece al lado del texto (no debajo)
+                </p>
               </div>
             )}
 
