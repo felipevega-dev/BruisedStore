@@ -30,14 +30,18 @@ import {
   ToggleLeft,
   ToggleRight,
 } from "lucide-react";
+import { useToast } from "@/hooks/useToast";
+import { formatPrice as formatCLP } from "@/lib/utils";
 
 export default function AdminCouponsPage() {
   const router = useRouter();
   const { user, isAdmin, loading: authLoading } = useAuth();
+  const { showToast, ToastContainer } = useToast();
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingCoupon, setEditingCoupon] = useState<Coupon | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Form state
   const [code, setCode] = useState("");
@@ -95,6 +99,58 @@ export default function AdminCouponsPage() {
     setIsActive(true);
     setEditingCoupon(null);
     setShowForm(false);
+    setErrors({});
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    // Code validation
+    if (!code.trim()) {
+      newErrors.code = "El código es requerido";
+    } else if (code.trim().length < 3) {
+      newErrors.code = "El código debe tener al menos 3 caracteres";
+    }
+
+    // Discount value validation
+    const discountVal = parseFloat(discountValue);
+    if (!discountValue || isNaN(discountVal) || discountVal <= 0) {
+      newErrors.discountValue = "El valor de descuento debe ser mayor a 0";
+    } else if (discountType === "percentage" && discountVal > 100) {
+      newErrors.discountValue = "El porcentaje no puede ser mayor a 100%";
+    }
+
+    // Date validation
+    if (!validFrom) {
+      newErrors.validFrom = "La fecha de inicio es requerida";
+    }
+    if (!validUntil) {
+      newErrors.validUntil = "La fecha de fin es requerida";
+    }
+    if (validFrom && validUntil && new Date(validFrom) >= new Date(validUntil)) {
+      newErrors.validUntil = "La fecha de fin debe ser posterior a la fecha de inicio";
+    }
+
+    // Min purchase validation (if provided)
+    if (minPurchase && (isNaN(parseFloat(minPurchase)) || parseFloat(minPurchase) < 0)) {
+      newErrors.minPurchase = "Monto mínimo inválido";
+    }
+
+    // Max discount validation (if provided for percentage type)
+    if (discountType === "percentage" && maxDiscount) {
+      const maxVal = parseFloat(maxDiscount);
+      if (isNaN(maxVal) || maxVal <= 0) {
+        newErrors.maxDiscount = "Descuento máximo inválido";
+      }
+    }
+
+    // Usage limit validation (if provided)
+    if (usageLimit && (isNaN(parseInt(usageLimit)) || parseInt(usageLimit) <= 0)) {
+      newErrors.usageLimit = "Límite de uso inválido";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleEdit = (coupon: Coupon) => {
@@ -114,6 +170,12 @@ export default function AdminCouponsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      showToast("Por favor corrige los errores del formulario", "error");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -133,17 +195,19 @@ export default function AdminCouponsPage() {
 
       if (editingCoupon) {
         await updateDoc(doc(db, "coupons", editingCoupon.id), couponData);
+        showToast(`Cupón "${code.toUpperCase()}" actualizado exitosamente`, "success");
       } else {
         await addDoc(collection(db, "coupons"), {
           ...couponData,
           createdAt: serverTimestamp(),
         });
+        showToast(`Cupón "${code.toUpperCase()}" creado exitosamente`, "success");
       }
 
       resetForm();
     } catch (error) {
       console.error("Error saving coupon:", error);
-      alert("Error al guardar el cupón");
+      showToast("Error al guardar el cupón", "error");
     } finally {
       setSubmitting(false);
     }
@@ -154,9 +218,10 @@ export default function AdminCouponsPage() {
 
     try {
       await deleteDoc(doc(db, "coupons", id));
+      showToast("Cupón eliminado exitosamente", "success");
     } catch (error) {
       console.error("Error deleting coupon:", error);
-      alert("Error al eliminar el cupón");
+      showToast("Error al eliminar el cupón", "error");
     }
   };
 
@@ -168,13 +233,6 @@ export default function AdminCouponsPage() {
     } catch (error) {
       console.error("Error toggling coupon:", error);
     }
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-    }).format(price);
   };
 
   const formatDate = (date: Date) => {
@@ -204,7 +262,9 @@ export default function AdminCouponsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12">
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-white py-8 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -266,11 +326,21 @@ export default function AdminCouponsPage() {
                   <input
                     type="text"
                     value={code}
-                    onChange={(e) => setCode(e.target.value.toUpperCase())}
-                    className="w-full rounded-lg border-2 border-gray-300 p-3 font-mono font-bold uppercase transition-colors focus:border-black focus:outline-none"
+                    onChange={(e) => {
+                      setCode(e.target.value.toUpperCase());
+                      if (errors.code) setErrors({ ...errors, code: "" });
+                    }}
+                    className={`w-full rounded-lg border-2 p-3 font-mono font-bold uppercase transition-colors focus:outline-none ${
+                      errors.code
+                        ? "border-red-600 focus:border-red-600"
+                        : "border-gray-300 focus:border-black"
+                    }`}
                     placeholder="VERANO2024"
                     required
                   />
+                  {errors.code && (
+                    <p className="mt-1 text-sm font-bold text-red-600">{errors.code}</p>
+                  )}
                 </div>
 
                 <div>
@@ -310,16 +380,27 @@ export default function AdminCouponsPage() {
                   <input
                     type="number"
                     value={discountValue}
-                    onChange={(e) => setDiscountValue(e.target.value)}
-                    className="w-full rounded-lg border-2 border-gray-300 p-3 font-medium transition-colors focus:border-black focus:outline-none"
+                    onChange={(e) => {
+                      setDiscountValue(e.target.value);
+                      if (errors.discountValue) setErrors({ ...errors, discountValue: "" });
+                    }}
+                    className={`w-full rounded-lg border-2 p-3 font-medium transition-colors focus:outline-none ${
+                      errors.discountValue
+                        ? "border-red-600 focus:border-red-600"
+                        : "border-gray-300 focus:border-black"
+                    }`}
                     placeholder={discountType === "percentage" ? "10" : "5000"}
                     min="0"
                     step={discountType === "percentage" ? "1" : "100"}
                     required
                   />
-                  <p className="mt-1 text-xs text-gray-500">
-                    {discountType === "percentage" ? "Ej: 10 para 10%" : "Ej: 5000 para $5.000"}
-                  </p>
+                  {errors.discountValue ? (
+                    <p className="mt-1 text-sm font-bold text-red-600">{errors.discountValue}</p>
+                  ) : (
+                    <p className="mt-1 text-xs text-gray-500">
+                      {discountType === "percentage" ? "Ej: 10 para 10%" : "Ej: 5000 para $5.000"}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -363,10 +444,20 @@ export default function AdminCouponsPage() {
                   <input
                     type="date"
                     value={validFrom}
-                    onChange={(e) => setValidFrom(e.target.value)}
-                    className="w-full rounded-lg border-2 border-gray-300 p-3 font-medium transition-colors focus:border-black focus:outline-none"
+                    onChange={(e) => {
+                      setValidFrom(e.target.value);
+                      if (errors.validFrom) setErrors({ ...errors, validFrom: "" });
+                    }}
+                    className={`w-full rounded-lg border-2 p-3 font-medium transition-colors focus:outline-none ${
+                      errors.validFrom
+                        ? "border-red-600 focus:border-red-600"
+                        : "border-gray-300 focus:border-black"
+                    }`}
                     required
                   />
+                  {errors.validFrom && (
+                    <p className="mt-1 text-sm font-bold text-red-600">{errors.validFrom}</p>
+                  )}
                 </div>
 
                 <div>
@@ -376,10 +467,20 @@ export default function AdminCouponsPage() {
                   <input
                     type="date"
                     value={validUntil}
-                    onChange={(e) => setValidUntil(e.target.value)}
-                    className="w-full rounded-lg border-2 border-gray-300 p-3 font-medium transition-colors focus:border-black focus:outline-none"
+                    onChange={(e) => {
+                      setValidUntil(e.target.value);
+                      if (errors.validUntil) setErrors({ ...errors, validUntil: "" });
+                    }}
+                    className={`w-full rounded-lg border-2 p-3 font-medium transition-colors focus:outline-none ${
+                      errors.validUntil
+                        ? "border-red-600 focus:border-red-600"
+                        : "border-gray-300 focus:border-black"
+                    }`}
                     required
                   />
+                  {errors.validUntil && (
+                    <p className="mt-1 text-sm font-bold text-red-600">{errors.validUntil}</p>
+                  )}
                 </div>
 
                 <div>
@@ -503,7 +604,7 @@ export default function AdminCouponsPage() {
                             <>
                               <DollarSign className="h-4 w-4 text-red-600" />
                               <span className="font-semibold">
-                                {formatPrice(coupon.discountValue)} de descuento
+                                {formatCLP(coupon.discountValue)} de descuento
                               </span>
                             </>
                           )}
@@ -511,7 +612,7 @@ export default function AdminCouponsPage() {
 
                         {coupon.minPurchase && (
                           <div className="text-gray-600">
-                            Compra mínima: {formatPrice(coupon.minPurchase)}
+                            Compra mínima: {formatCLP(coupon.minPurchase)}
                           </div>
                         )}
 
@@ -574,5 +675,6 @@ export default function AdminCouponsPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -16,10 +16,12 @@ import { db } from "@/lib/firebase";
 import { Review } from "@/types";
 import Link from "next/link";
 import { ArrowLeft, Star, Check, X, Trash2, Loader2, MessageCircle } from "lucide-react";
+import { useToast } from "@/hooks/useToast";
 
 export default function AdminReviewsPage() {
   const router = useRouter();
   const { user, isAdmin, loading: authLoading } = useAuth();
+  const { showToast, ToastContainer } = useToast();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [filter, setFilter] = useState<"all" | "pending" | "approved">("all");
   const [loading, setLoading] = useState(true);
@@ -57,8 +59,10 @@ export default function AdminReviewsPage() {
       await updateDoc(doc(db, "reviews", reviewId), {
         approved: true,
       });
+      showToast("Reseña aprobada exitosamente", "success");
     } catch (error) {
       console.error("Error approving review:", error);
+      showToast("Error al aprobar reseña", "error");
     }
   };
 
@@ -67,8 +71,10 @@ export default function AdminReviewsPage() {
       await updateDoc(doc(db, "reviews", reviewId), {
         approved: false,
       });
+      showToast("Reseña ocultada", "info");
     } catch (error) {
       console.error("Error rejecting review:", error);
+      showToast("Error al ocultar reseña", "error");
     }
   };
 
@@ -79,8 +85,10 @@ export default function AdminReviewsPage() {
 
     try {
       await deleteDoc(doc(db, "reviews", reviewId));
+      showToast("Reseña eliminada exitosamente", "success");
     } catch (error) {
       console.error("Error deleting review:", error);
+      showToast("Error al eliminar reseña", "error");
     }
   };
 
@@ -135,7 +143,9 @@ export default function AdminReviewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12">
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-white py-8 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 flex items-center gap-4">
@@ -316,5 +326,6 @@ export default function AdminReviewsPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

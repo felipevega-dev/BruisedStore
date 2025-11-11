@@ -19,14 +19,19 @@ import { Order, OrderStatus, ShippingStatus } from "@/types";
 import Image from "next/image";
 import { Loader2, ArrowLeft, Trash2, Eye, Package, Bell } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/hooks/useToast";
+import { formatPrice } from "@/lib/utils";
 
 export default function AdminStoreOrdersPage() {
   const router = useRouter();
   const { user, isAdmin, loading: authLoading } = useAuth();
+  const { showToast, ToastContainer } = useToast();
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [pendingCount, setPendingCount] = useState(0);
+  const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [updatingShipping, setUpdatingShipping] = useState(false);
 
   useEffect(() => {
     if (!authLoading) {
@@ -71,14 +76,18 @@ export default function AdminStoreOrdersPage() {
     orderId: string,
     newStatus: OrderStatus
   ) => {
+    setUpdatingStatus(true);
     try {
       await updateDoc(doc(db, "orders", orderId), {
         status: newStatus,
         updatedAt: new Date(),
       });
+      showToast("Estado del pedido actualizado exitosamente", "success");
     } catch (error) {
       console.error("Error updating order status:", error);
-      alert("Error al actualizar el estado");
+      showToast("Error al actualizar el estado", "error");
+    } finally {
+      setUpdatingStatus(false);
     }
   };
 
@@ -86,14 +95,18 @@ export default function AdminStoreOrdersPage() {
     orderId: string,
     newStatus: ShippingStatus
   ) => {
+    setUpdatingShipping(true);
     try {
       await updateDoc(doc(db, "orders", orderId), {
         shippingStatus: newStatus,
         updatedAt: new Date(),
       });
+      showToast("Estado de envío actualizado exitosamente", "success");
     } catch (error) {
       console.error("Error updating shipping status:", error);
-      alert("Error al actualizar el estado de envío");
+      showToast("Error al actualizar el estado de envío", "error");
+    } finally {
+      setUpdatingShipping(false);
     }
   };
 
@@ -105,17 +118,11 @@ export default function AdminStoreOrdersPage() {
     try {
       await deleteDoc(doc(db, "orders", orderId));
       setSelectedOrder(null);
+      showToast("Pedido eliminado exitosamente", "success");
     } catch (error) {
       console.error("Error deleting order:", error);
-      alert("Error al eliminar el pedido");
+      showToast("Error al eliminar el pedido", "error");
     }
-  };
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-    }).format(price);
   };
 
   const formatDate = (date: Date) => {
@@ -195,7 +202,9 @@ export default function AdminStoreOrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
@@ -481,11 +490,12 @@ export default function AdminStoreOrdersPage() {
                           onClick={() =>
                             handleStatusChange(selectedOrder.id!, status)
                           }
+                          disabled={updatingStatus}
                           className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
                             selectedOrder.status === status
                               ? `${getStatusColor(status)} shadow-lg`
                               : `${getStatusColor(status)} opacity-50 hover:opacity-100`
-                          }`}
+                          } disabled:cursor-not-allowed disabled:opacity-30`}
                         >
                           {getStatusLabel(status)}
                         </button>
@@ -507,11 +517,12 @@ export default function AdminStoreOrdersPage() {
                           onClick={() =>
                             handleShippingStatusChange(selectedOrder.id!, status)
                           }
+                          disabled={updatingShipping}
                           className={`rounded-lg border-2 px-4 py-2 text-sm font-bold transition-all ${
                             selectedOrder.shippingStatus === status
                               ? `${getShippingStatusColor(status)} shadow-lg`
                               : `${getShippingStatusColor(status)} opacity-50 hover:opacity-100`
-                          }`}
+                          } disabled:cursor-not-allowed disabled:opacity-30`}
                         >
                           {getShippingStatusLabel(status)}
                         </button>
@@ -531,5 +542,6 @@ export default function AdminStoreOrdersPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

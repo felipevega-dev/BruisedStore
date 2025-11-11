@@ -21,10 +21,12 @@ import imageCompression from "browser-image-compression";
 import Image from "next/image";
 import { Trash2, Plus, Loader2, Edit, X, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/hooks/useToast";
 
 export default function AdminPaintingsPage() {
   const router = useRouter();
   const { user, isAdmin, loading: authLoading } = useAuth();
+  const { showToast, ToastContainer } = useToast();
   const [loading, setLoading] = useState(true);
   const [paintings, setPaintings] = useState<Painting[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -138,7 +140,7 @@ export default function AdminPaintingsPage() {
       }
     } catch (error) {
       console.error("Error al procesar imágenes:", error);
-      alert("Error al procesar las imágenes");
+      showToast("Error al procesar las imágenes", "error");
     } finally {
       setCompressing(false);
     }
@@ -208,7 +210,7 @@ export default function AdminPaintingsPage() {
     e.preventDefault();
 
     if (imageFiles.length === 0 && imagePreviews.length === 0 && !editingPainting) {
-      alert("Por favor sube al menos una imagen");
+      showToast("Por favor sube al menos una imagen", "error");
       return;
     }
 
@@ -269,7 +271,7 @@ export default function AdminPaintingsPage() {
 
       // Si no hay imágenes en absoluto, error
       if (imageUrls.length === 0) {
-        alert("Error: No se pudieron cargar las imágenes");
+        showToast("Error: No se pudieron cargar las imágenes", "error");
         setUploading(false);
         return;
       }
@@ -292,12 +294,14 @@ export default function AdminPaintingsPage() {
       if (editingPainting) {
         // Update existing painting
         await updateDoc(doc(db, "paintings", editingPainting.id), paintingData);
+        showToast(`"${formData.title}" actualizada exitosamente`, "success");
       } else {
         // Create new painting
         await addDoc(collection(db, "paintings"), {
           ...paintingData,
           createdAt: serverTimestamp(),
         });
+        showToast(`"${formData.title}" creada exitosamente`, "success");
       }
 
       await fetchPaintings();
@@ -305,7 +309,7 @@ export default function AdminPaintingsPage() {
       resetForm();
     } catch (error) {
       console.error("Error saving painting:", error);
-      alert("Error al guardar la pintura");
+      showToast("Error al guardar la pintura", "error");
     } finally {
       setUploading(false);
     }
@@ -330,9 +334,10 @@ export default function AdminPaintingsPage() {
       // Delete document from Firestore
       await deleteDoc(doc(db, "paintings", painting.id));
       await fetchPaintings();
+      showToast(`"${painting.title}" eliminada exitosamente`, "success");
     } catch (error) {
       console.error("Error deleting painting:", error);
-      alert("Error al eliminar la pintura");
+      showToast("Error al eliminar la pintura", "error");
     }
   };
 
@@ -354,15 +359,17 @@ export default function AdminPaintingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin"
-              className="text-gray-300 transition-colors hover:text-red-400"
-            >
-              <ArrowLeft className="h-6 w-6" />
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/admin"
+                className="text-gray-300 transition-colors hover:text-red-400"
+              >
+                <ArrowLeft className="h-6 w-6" />
             </Link>
             <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">Gestionar Pinturas</h1>
           </div>
@@ -695,6 +702,7 @@ export default function AdminPaintingsPage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
