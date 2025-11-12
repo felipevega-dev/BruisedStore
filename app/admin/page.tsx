@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag, BarChart3, Home, BookOpen, Bell, Music } from "lucide-react";
+import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag, BarChart3, Home, BookOpen, Bell, Music, Settings } from "lucide-react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 export default function AdminPage() {
@@ -383,6 +383,25 @@ export default function AdminPage() {
                 </h2>
                 <p className="text-gray-400">
                   Personalizar banner, contenido y videos
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/general-settings"
+            className="group rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+          >
+            <div className="flex items-center gap-4">
+              <div className="rounded-lg border-2 border-red-900 bg-red-950/30 p-4 transition-all group-hover:border-red-600 group-hover:bg-red-950/50">
+                <Settings className="h-8 w-8 text-red-400" />
+              </div>
+              <div>
+                <h2 className="mb-2 text-xl font-bold text-red-100">
+                  Configuraciones Generales
+                </h2>
+                <p className="text-gray-400">
+                  Colores, contacto, redes sociales y más
                 </p>
               </div>
             </div>

@@ -222,9 +222,6 @@ export interface HomeSettings {
   videoSize: 'small' | 'medium' | 'large'; // Tamaño del video
   videoPosition: 'left' | 'right'; // Posición del video (texto en lado opuesto)
 
-  // PWA Settings
-  showPWAPrompt: boolean; // Mostrar o ocultar el prompt de instalación de PWA
-
   // Metadata
   updatedAt: Date;
   updatedBy?: string; // userId del admin que actualizó
@@ -247,7 +244,6 @@ export const DEFAULT_HOME_SETTINGS: Omit<HomeSettings, 'id' | 'updatedAt'> = {
   backgroundStyle: 'gray',
   videoSize: 'medium',
   videoPosition: 'right',
-  showPWAPrompt: false, // Oculto por defecto
 };
 
 // Blog System Types
@@ -310,4 +306,74 @@ export const DEFAULT_MUSIC_SETTINGS: Omit<MusicSettings, 'id' | 'updatedAt'> = {
   playMode: 'loop',
   volume: 30, // Volumen por defecto al 30%
   defaultVolume: 30, // Volumen inicial para nuevos usuarios
+};
+
+// General Settings (Site-wide configuration)
+export interface GeneralSettings {
+  id: string;
+  
+  // PWA
+  showPWAPrompt: boolean;
+  
+  // Brand Colors
+  primaryColor: string; // Color principal (ej: #DC2626 - red-600)
+  secondaryColor: string; // Color secundario (ej: #991B1B - red-800)
+  accentColor: string; // Color de acento para botones, links, etc.
+  
+  // Contact Info
+  contactEmail: string;
+  contactPhone: string;
+  whatsappNumber: string; // Solo números, ej: "56912345678"
+  
+  // Social Media
+  instagramUrl?: string;
+  tiktokUrl?: string;
+  facebookUrl?: string;
+  
+  // Footer
+  footerText: string; // Texto del footer
+  showSocialInFooter: boolean;
+  
+  // Banner/Hero
+  bannerBackgroundColor: string; // Color de fondo del banner
+  bannerOverlayOpacity: number; // 0-100 - Opacidad de la capa oscura sobre el banner
+  
+  // UI Preferences
+  enableAnimations: boolean; // Habilitar/deshabilitar animaciones
+  buttonStyle: 'rounded' | 'square' | 'pill'; // Estilo de botones
+  
+  // Metadata
+  updatedAt: Date;
+  updatedBy?: string;
+}
+
+export const DEFAULT_GENERAL_SETTINGS: Omit<GeneralSettings, 'id' | 'updatedAt'> = {
+  showPWAPrompt: false,
+  
+  // Colores actuales de la marca
+  primaryColor: '#DC2626', // red-600
+  secondaryColor: '#991B1B', // red-800
+  accentColor: '#EF4444', // red-500
+  
+  // Contacto
+  contactEmail: 'contacto@josevega.art',
+  contactPhone: '+56 9 1234 5678',
+  whatsappNumber: '56912345678',
+  
+  // Redes sociales
+  instagramUrl: '',
+  tiktokUrl: '',
+  facebookUrl: '',
+  
+  // Footer
+  footerText: '© 2024 José Vega. Todos los derechos reservados.',
+  showSocialInFooter: true,
+  
+  // Banner
+  bannerBackgroundColor: '#1F2937', // gray-800
+  bannerOverlayOpacity: 60,
+  
+  // UI
+  enableAnimations: true,
+  buttonStyle: 'rounded',
 };

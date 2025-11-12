@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Download, X } from "lucide-react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { HomeSettings } from "@/types";
+import { GeneralSettings } from "@/types";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -19,10 +19,10 @@ export default function PWAInstallPrompt() {
   // Cargar configuración para ver si PWA está habilitada
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      doc(db, "homeSettings", "main"),
+      doc(db, "generalSettings", "main"),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
-          const data = docSnapshot.data() as HomeSettings;
+          const data = docSnapshot.data() as GeneralSettings;
           setPwaEnabled(data.showPWAPrompt ?? false);
         } else {
           setPwaEnabled(false);
