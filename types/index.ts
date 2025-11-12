@@ -278,3 +278,30 @@ export interface BlogPost {
   authorId: string; // Admin user ID
   viewCount?: number; // Optional view tracking
 }
+
+// Background Music System
+export interface MusicTrack {
+  id: string;
+  title: string;
+  fileUrl: string; // URL del archivo de audio en Firebase Storage
+  duration?: number; // Duración en segundos
+  uploadedAt: Date;
+}
+
+export interface MusicSettings {
+  id: string; // "main" - documento único
+  enabled: boolean; // Si la música está habilitada globalmente
+  tracks: MusicTrack[]; // Array de pistas disponibles
+  playMode: 'single' | 'loop' | 'playlist'; // single: toca una vez, loop: repite la misma, playlist: toca todas en orden
+  volume: number; // 0-100
+  currentTrackId?: string; // ID de la pista activa (para modo single/loop)
+  updatedAt: Date;
+  updatedBy?: string; // userId del admin
+}
+
+export const DEFAULT_MUSIC_SETTINGS: Omit<MusicSettings, 'id' | 'updatedAt'> = {
+  enabled: false,
+  tracks: [],
+  playMode: 'loop',
+  volume: 30, // Volumen por defecto al 30%
+};

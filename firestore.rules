@@ -122,5 +122,17 @@ service cloud.firestore {
       // Solo administradores pueden eliminar posts
       allow delete: if isAdmin();
     }
+
+    // Reglas para musicSettings (configuración de música de fondo)
+    match /musicSettings/{settingsId} {
+      // Todos pueden leer la configuración de música
+      allow read: if true;
+
+      // Solo administradores pueden crear/actualizar configuración
+      allow create, update: if isAdmin();
+
+      // Solo administradores pueden eliminar (no recomendado)
+      allow delete: if isAdmin();
+    }
   }
 }

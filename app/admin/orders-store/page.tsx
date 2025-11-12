@@ -117,6 +117,13 @@ export default function AdminStoreOrdersPage() {
         status: newStatus,
         updatedAt: new Date(),
       });
+      
+      // Actualizar el estado local inmediatamente
+      setSelectedOrder(prev => prev ? { ...prev, status: newStatus } : null);
+      setOrders(prev => prev.map(order => 
+        order.id === orderId ? { ...order, status: newStatus } : order
+      ));
+      
       showToast("Estado del pedido actualizado exitosamente", "success");
     } catch (error) {
       console.error("Error updating order status:", error);
@@ -136,6 +143,13 @@ export default function AdminStoreOrdersPage() {
         shippingStatus: newStatus,
         updatedAt: new Date(),
       });
+      
+      // Actualizar el estado local inmediatamente
+      setSelectedOrder(prev => prev ? { ...prev, shippingStatus: newStatus } : null);
+      setOrders(prev => prev.map(order => 
+        order.id === orderId ? { ...order, shippingStatus: newStatus } : order
+      ));
+      
       showToast("Estado de envío actualizado exitosamente", "success");
     } catch (error) {
       console.error("Error updating shipping status:", error);

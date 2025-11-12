@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import ImageZoom from "./ImageZoom";
+import Image from "next/image";
 
 interface ImageGalleryProps {
   images: string[];
@@ -34,47 +35,47 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
 
   return (
     <div className="space-y-4">
-      {/* Imagen Principal */}
-      <div className="relative aspect-square bg-neutral-100 border-4 border-black overflow-hidden group">
-        <Image
-          src={images[currentIndex]}
-          alt={`${title} - Imagen ${currentIndex + 1}`}
-          fill
-          className="object-cover"
-          priority
-        />
-        
-        {/* Navegación - Solo mostrar si hay más de una imagen */}
-        {images.length > 1 && (
-          <>
-            {/* Botón Anterior */}
-            <button
-              onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white border-4 border-black p-2 
-                         opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                         hover:bg-yellow-300 active:translate-y-[-48%]"
-              aria-label="Imagen anterior"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            
-            {/* Botón Siguiente */}
-            <button
-              onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white border-4 border-black p-2 
-                         opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                         hover:bg-yellow-300 active:translate-y-[-48%]"
-              aria-label="Imagen siguiente"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
+      {/* Imagen Principal con Zoom */}
+      <div className="relative border-4 border-black bg-neutral-100">
+        <div className="group relative">
+          <ImageZoom
+            src={images[currentIndex]}
+            alt={`${title} - Imagen ${currentIndex + 1}`}
+            aspectRatio="1/1"
+          />
+          
+          {/* Navegación - Solo mostrar si hay más de una imagen */}
+          {images.length > 1 && (
+            <>
+              {/* Botón Anterior */}
+              <button
+                onClick={goToPrevious}
+                className="absolute left-4 top-1/2 z-20 -translate-y-1/2 border-4 border-black bg-white p-2 
+                           opacity-0 transition-opacity duration-200 hover:bg-yellow-300 active:translate-y-[-48%]
+                           group-hover:opacity-100"
+                aria-label="Imagen anterior"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              
+              {/* Botón Siguiente */}
+              <button
+                onClick={goToNext}
+                className="absolute right-4 top-1/2 z-20 -translate-y-1/2 border-4 border-black bg-white p-2 
+                           opacity-0 transition-opacity duration-200 hover:bg-yellow-300 active:translate-y-[-48%]
+                           group-hover:opacity-100"
+                aria-label="Imagen siguiente"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
 
-            {/* Indicador de posición */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 text-sm font-bold">
-              {currentIndex + 1} / {images.length}
-            </div>
-          </>
-        )}
+              {/* Indicador de posición */}
+              <div className="absolute bottom-4 left-1/2 z-20 -translate-x-1/2 bg-black/70 px-3 py-1 text-sm font-bold text-white">
+                {currentIndex + 1} / {images.length}
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Miniaturas - Solo mostrar si hay más de una imagen */}

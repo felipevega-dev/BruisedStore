@@ -7,6 +7,7 @@ import { WishlistProvider } from "@/contexts/WishlistContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppWidget from "@/components/WhatsAppWidget";
+import BackgroundMusic from "@/components/BackgroundMusic";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { generateSiteMetadata, generateOrganizationSchema } from "@/lib/metadata";
@@ -69,6 +70,7 @@ export default function RootLayout({
                   </main>
                   <Footer />
                   <WhatsAppWidget />
+                  <BackgroundMusic />
                   <PWAInstallPrompt />
                 </div>
               </CartProvider>

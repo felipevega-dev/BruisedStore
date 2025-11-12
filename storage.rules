@@ -37,5 +37,14 @@ service firebase.storage {
       // Solo administradores pueden subir/actualizar/eliminar
       allow create, update, delete: if isAdmin();
     }
+
+    // Reglas para archivos de música de fondo
+    match /music/{allPaths=**} {
+      // Cualquiera puede leer (para reproducir en el sitio)
+      allow read: if true;
+
+      // Solo administradores pueden subir/actualizar/eliminar
+      allow create, update, delete: if isAdmin();
+    }
   }
 }

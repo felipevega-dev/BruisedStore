@@ -122,7 +122,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b-4 border-black bg-white shadow-lg">
+    <header className="sticky top-0 z-30 w-full border-b-4 border-black bg-white shadow-lg">
       {/* Email Verification Banner */}
       {user && !user.emailVerified && (
         <div className="border-b-2 border-yellow-400 bg-yellow-100 py-2 text-center">
@@ -299,7 +299,7 @@ export default function Header() {
             className="fixed inset-0 z-40 bg-black/50 lg:hidden"
             onClick={closeMobileMenu}
           />
-          <div className="fixed right-0 top-0 z-[60] h-full w-[280px] overflow-y-auto border-l-4 border-black bg-white shadow-2xl lg:hidden">
+          <div className="fixed right-0 top-9 z-40 h-full w-[280px] overflow-y-auto border-l-4 border-black bg-white shadow-2xl lg:hidden">
             <div className="flex flex-col p-6 pt-20">
               {/* User Info (if logged in) */}
               {user && (
