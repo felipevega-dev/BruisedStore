@@ -25,6 +25,12 @@ export default function BackgroundMusic() {
   const [userHasMuted, setUserHasMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Marcar como montado para evitar hydration mismatch
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Cargar configuración de música y preferencia de mute del usuario
   useEffect(() => {
@@ -191,7 +197,12 @@ export default function BackgroundMusic() {
     }
   }, [volume]);
 
-  // Si no hay configuración o está deshabilitado, mostrar barra vacía en desarrollo
+  // No renderizar nada hasta que esté montado (evita hydration mismatch)
+  if (!isMounted) {
+    return null;
+  }
+
+  // Si no hay configuración o está deshabilitado, mostrar barra vacía solo en desarrollo
   const isDev = process.env.NODE_ENV === "development";
   
   if (!settings) {
@@ -209,22 +220,8 @@ export default function BackgroundMusic() {
   }
 
   if (!settings.enabled) {
-    return isDev ? (
-      <>
-        <div className="h-9"></div>
-        <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
-          <div className="container mx-auto flex items-center gap-2 px-4 py-1">
-            <Music className="h-4 w-4 text-gray-600" />
-            <span className="text-xs text-gray-500">
-              Música deshabilitada - Actívala en{" "}
-              <a href="/admin/music" className="text-red-400 underline">
-                /admin/music
-              </a>
-            </span>
-          </div>
-        </div>
-      </>
-    ) : null;
+    // Si está deshabilitada, NO mostrar nada (ni siquiera en desarrollo)
+    return null;
   }
 
   if (settings.tracks.length === 0) {

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { useMusic } from "@/contexts/MusicContext";
 import { ShoppingCart, User, LogOut, Shield, Settings, Heart, Menu, X, Home, Palette, BookOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
@@ -14,6 +15,7 @@ export default function Header() {
   const { getItemCount } = useCart();
   const { user, isAdmin, signOut } = useAuth();
   const { wishlistCount } = useWishlist();
+  const { hasMusicBar, isMounted } = useMusic();
   const itemCount = getItemCount();
   const [showMenu, setShowMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -121,8 +123,12 @@ export default function Header() {
     setShowMobileMenu(false);
   };
 
+  // Calcular la clase de posición - solo aplicar top-9 si está montado Y tiene barra
+  // Si no está montado, usar top-0 para evitar mismatch
+  const headerTopClass = isMounted && hasMusicBar ? 'top-9' : 'top-0';
+
   return (
-    <header className="sticky top-0 z-30 w-full border-b-4 border-black bg-white shadow-lg">
+    <header className={`sticky ${headerTopClass} z-30 w-full border-b-4 border-black bg-white shadow-lg`}>
       {/* Email Verification Banner */}
       {user && !user.emailVerified && (
         <div className="border-b-2 border-yellow-400 bg-yellow-100 py-2 text-center">

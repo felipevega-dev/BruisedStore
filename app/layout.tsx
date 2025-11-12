@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { WishlistProvider } from "@/contexts/WishlistContext";
+import { MusicProvider } from "@/contexts/MusicContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppWidget from "@/components/WhatsAppWidget";
@@ -63,16 +64,18 @@ export default function RootLayout({
           <AuthProvider>
             <WishlistProvider>
               <CartProvider>
-                <div className="flex min-h-screen flex-col">
-                  <Header />
-                  <main className="flex-1">
-                    <ErrorBoundary>{children}</ErrorBoundary>
-                  </main>
-                  <Footer />
-                  <WhatsAppWidget />
-                  <BackgroundMusic />
-                  <PWAInstallPrompt />
-                </div>
+                <MusicProvider>
+                  <div className="flex min-h-screen flex-col">
+                    <Header />
+                    <main className="flex-1">
+                      <ErrorBoundary>{children}</ErrorBoundary>
+                    </main>
+                    <Footer />
+                    <WhatsAppWidget />
+                    <BackgroundMusic />
+                    <PWAInstallPrompt />
+                  </div>
+                </MusicProvider>
               </CartProvider>
             </WishlistProvider>
           </AuthProvider>
