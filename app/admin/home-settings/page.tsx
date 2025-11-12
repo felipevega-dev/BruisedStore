@@ -73,6 +73,7 @@ export default function HomeSettingsPage() {
           videoSize: data.videoSize || "medium",
           videoPosition: data.videoPosition || "right",
           backgroundStyle: data.backgroundStyle,
+          showPWAPrompt: data.showPWAPrompt ?? false,
           updatedBy: data.updatedBy,
         });
       }
@@ -204,6 +205,7 @@ export default function HomeSettingsPage() {
         videoSize: finalSettings.videoSize || "medium",
         videoPosition: finalSettings.videoPosition || "right",
         backgroundStyle: finalSettings.backgroundStyle,
+        showPWAPrompt: finalSettings.showPWAPrompt ?? false,
         updatedAt: serverTimestamp(),
         updatedBy: user.uid,
       };
@@ -600,6 +602,29 @@ export default function HomeSettingsPage() {
                 <option value="dark">Oscuro</option>
                 <option value="light">Claro</option>
               </select>
+            </div>
+
+            {/* PWA Install Prompt */}
+            <div className="rounded-lg border-2 border-red-900 bg-black/60 p-6 backdrop-blur-sm">
+              <div className="mb-4">
+                <label className="mb-2 flex items-center gap-2 text-sm font-bold text-red-100">
+                  <input
+                    type="checkbox"
+                    checked={settings.showPWAPrompt ?? false}
+                    onChange={(e) =>
+                      setSettings({
+                        ...settings,
+                        showPWAPrompt: e.target.checked,
+                      })
+                    }
+                    className="h-4 w-4 rounded border-red-900 bg-gray-900 text-red-600 focus:ring-2 focus:ring-red-600"
+                  />
+                  Mostrar Prompt de Instalación PWA
+                </label>
+                <p className="mt-1 text-xs text-red-300">
+                  Muestra un mensaje invitando a los usuarios a instalar la app como PWA
+                </p>
+              </div>
             </div>
           </div>
         </div>

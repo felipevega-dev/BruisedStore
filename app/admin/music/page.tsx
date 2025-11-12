@@ -349,11 +349,14 @@ export default function AdminMusicSettingsPage() {
             {/* Volume Control */}
             <div className="rounded-lg border-2 border-red-900 bg-black/60 p-6 backdrop-blur-sm">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-red-100">Volumen</h3>
+                <h3 className="text-xl font-bold text-red-100">Volumen de la Barra</h3>
                 <span className="text-2xl font-black text-red-500">
                   {settings.volume}%
                 </span>
               </div>
+              <p className="mb-3 text-sm text-gray-400">
+                Volumen actual de la barra de reproducción (se sincroniza con los controles de la barra)
+              </p>
               <input
                 type="range"
                 min="0"
@@ -361,6 +364,29 @@ export default function AdminMusicSettingsPage() {
                 value={settings.volume}
                 onChange={(e) =>
                   setSettings({ ...settings, volume: parseInt(e.target.value) })
+                }
+                className="h-3 w-full cursor-pointer appearance-none rounded-lg bg-red-950/50 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-red-600"
+              />
+            </div>
+
+            {/* Default Volume Control */}
+            <div className="rounded-lg border-2 border-red-900 bg-black/60 p-6 backdrop-blur-sm">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-red-100">Volumen Inicial</h3>
+                <span className="text-2xl font-black text-red-500">
+                  {settings.defaultVolume}%
+                </span>
+              </div>
+              <p className="mb-3 text-sm text-gray-400">
+                Volumen con el que empezarán los nuevos visitantes (primera vez). Después cada usuario guardará su preferencia.
+              </p>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={settings.defaultVolume || 30}
+                onChange={(e) =>
+                  setSettings({ ...settings, defaultVolume: parseInt(e.target.value) })
                 }
                 className="h-3 w-full cursor-pointer appearance-none rounded-lg bg-red-950/50 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-red-600"
               />

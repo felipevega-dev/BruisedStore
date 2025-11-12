@@ -128,7 +128,7 @@ export default function Header() {
   const headerTopClass = isMounted && hasMusicBar ? 'top-9' : 'top-0';
 
   return (
-    <header className={`sticky ${headerTopClass} z-30 w-full border-b-4 border-black bg-white shadow-lg`}>
+    <header className={`sticky ${headerTopClass} z-30 w-full border-b-4 border-black bg-white shadow-lg`} suppressHydrationWarning>
       {/* Email Verification Banner */}
       {user && !user.emailVerified && (
         <div className="border-b-2 border-yellow-400 bg-yellow-100 py-2 text-center">

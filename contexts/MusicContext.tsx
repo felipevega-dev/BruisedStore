@@ -26,22 +26,26 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!isMounted) return;
 
+    const isDev = process.env.NODE_ENV === "development";
+
     const unsubscribe = onSnapshot(
       doc(db, "musicSettings", "main"),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data() as MusicSettings;
-          // Mostrar barra solo si está habilitada Y tiene tracks
-          // No mostrar en desarrollo si está deshabilitada explícitamente
-          setHasMusicBar(data.enabled && data.tracks && data.tracks.length > 0);
+          // Mostrar barra si está habilitada Y tiene tracks
+          // En desarrollo, también mostrar si no hay tracks (para debugging)
+          const shouldShow = data.enabled && data.tracks && data.tracks.length > 0;
+          const showInDev = isDev && data.tracks && data.tracks.length === 0;
+          setHasMusicBar(shouldShow || showInDev);
         } else {
-          // Si no hay configuración, no mostrar barra (ni en desarrollo)
-          setHasMusicBar(false);
+          // Si no hay configuración, mostrar en desarrollo para debugging
+          setHasMusicBar(isDev);
         }
       },
       (error) => {
         console.error("Error listening to music settings:", error);
-        setHasMusicBar(false);
+        setHasMusicBar(isDev);
       }
     );
 

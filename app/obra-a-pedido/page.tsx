@@ -504,7 +504,7 @@ export default function CustomOrderPage() {
           {/* Header */}
           <div className="mb-6 text-center sm:mb-8">
             <div className="mb-3 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3">
-              <Paintbrush className="h-8 w-8 text-red-600 sm:h-10 sm:w-10" />
+             
               <h1 className="text-3xl font-black text-black sm:text-4xl lg:text-5xl">
                 🎨 Obra a Pedido
               </h1>

@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Download, X } from "lucide-react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { HomeSettings } from "@/types";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -11,6 +14,24 @@ interface BeforeInstallPromptEvent extends Event {
 export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [pwaEnabled, setPwaEnabled] = useState(false);
+
+  // Cargar configuración para ver si PWA está habilitada
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      doc(db, "homeSettings", "main"),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data() as HomeSettings;
+          setPwaEnabled(data.showPWAPrompt ?? false);
+        } else {
+          setPwaEnabled(false);
+        }
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     // Register service worker
@@ -32,10 +53,10 @@ export default function PWAInstallPrompt() {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
 
-      // Show prompt after 3 seconds if not dismissed before
+      // Show prompt after 3 seconds if not dismissed before AND if enabled in settings
       setTimeout(() => {
         const dismissed = localStorage.getItem("pwa-install-dismissed");
-        if (!dismissed) {
+        if (!dismissed && pwaEnabled) {
           setShowPrompt(true);
         }
       }, 3000);
@@ -46,7 +67,7 @@ export default function PWAInstallPrompt() {
     return () => {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
-  }, []);
+  }, [pwaEnabled]);
 
   const handleInstall = async () => {
     if (!deferredPrompt) return;

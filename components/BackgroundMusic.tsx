@@ -19,13 +19,19 @@ export default function BackgroundMusic() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [volume, setVolume] = useState(30);
+  const [userVolume, setUserVolume] = useState(100); // Volumen del slider del usuario (0-100)
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [userHasMuted, setUserHasMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+
+  // Calcular el volumen REAL del audio: userVolume * masterVolume (del admin)
+  const getRealVolume = () => {
+    const masterVolume = settings?.defaultVolume ?? 100; // Volumen maestro del admin
+    return (userVolume / 100) * (masterVolume / 100);
+  };
 
   // Marcar como montado para evitar hydration mismatch
   useEffect(() => {
@@ -41,23 +47,29 @@ export default function BackgroundMusic() {
       setIsMuted(true);
     }
 
-    // Cargar volumen guardado
-    const savedVolume = localStorage.getItem("musicVolume");
-    if (savedVolume) {
-      setVolume(parseInt(savedVolume));
-    }
-
     // Listener en tiempo real para settings
     const unsubscribe = onSnapshot(
       doc(db, "musicSettings", "main"),
       (docSnapshot) => {
         if (docSnapshot.exists()) {
           const data = docSnapshot.data();
-          setSettings({
+          const musicSettings = {
             id: docSnapshot.id,
             ...data,
             updatedAt: data.updatedAt?.toDate() || new Date(),
-          } as MusicSettings);
+          } as MusicSettings;
+          
+          setSettings(musicSettings);
+
+          // Cargar volumen del usuario (su preferencia de slider, siempre 0-100)
+          const savedUserVolume = localStorage.getItem("userVolume");
+          if (savedUserVolume) {
+            setUserVolume(parseInt(savedUserVolume));
+          } else {
+            // Primera vez: slider al 100%
+            setUserVolume(100);
+            localStorage.setItem("userVolume", "100");
+          }
         } else {
           // Usar defaults si no existe configuración
           setSettings({
@@ -65,6 +77,12 @@ export default function BackgroundMusic() {
             ...DEFAULT_MUSIC_SETTINGS,
             updatedAt: new Date(),
           });
+          
+          // Cargar volumen del usuario
+          const savedUserVolume = localStorage.getItem("userVolume");
+          if (savedUserVolume) {
+            setUserVolume(parseInt(savedUserVolume));
+          }
         }
       }
     );
@@ -174,11 +192,14 @@ export default function BackgroundMusic() {
     }
   };
 
-  const handleVolumeChange = (newVolume: number) => {
-    setVolume(newVolume);
-    localStorage.setItem("musicVolume", newVolume.toString());
+  const handleVolumeChange = (newUserVolume: number) => {
+    setUserVolume(newUserVolume);
+    localStorage.setItem("userVolume", newUserVolume.toString());
+    // Aplicar el volumen real al audio inmediatamente
     if (audioRef.current) {
-      audioRef.current.volume = newVolume / 100;
+      const realVolume = (newUserVolume / 100) * ((settings?.defaultVolume ?? 100) / 100);
+      audioRef.current.volume = realVolume;
+      console.log(`🎚️ Usuario: ${newUserVolume}% | Master: ${settings?.defaultVolume ?? 100}% | Real: ${(realVolume * 100).toFixed(1)}%`);
     }
   };
 
@@ -190,12 +211,23 @@ export default function BackgroundMusic() {
     }
   };
 
-  // Actualizar volumen
+  // Actualizar volumen cuando cambia el valor o cuando se carga el audio
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
+      const realVolume = getRealVolume();
+      audioRef.current.volume = realVolume;
+      console.log(`🔊 Volumen aplicado - Usuario: ${userVolume}% | Master: ${settings?.defaultVolume ?? 100}% | Real: ${(realVolume * 100).toFixed(1)}%`);
     }
-  }, [volume]);
+  }, [userVolume, settings?.defaultVolume, audioRef.current]);
+
+  // Aplicar volumen inicial al audio cuando se monta
+  useEffect(() => {
+    if (audioRef.current) {
+      const realVolume = getRealVolume();
+      audioRef.current.volume = realVolume;
+      console.log(`🎵 Volumen inicial - Usuario: ${userVolume}% | Master: ${settings?.defaultVolume ?? 100}% | Real: ${(realVolume * 100).toFixed(1)}%`);
+    }
+  }, []);
 
   // No renderizar nada hasta que esté montado (evita hydration mismatch)
   if (!isMounted) {
@@ -207,15 +239,12 @@ export default function BackgroundMusic() {
   
   if (!settings) {
     return isDev ? (
-      <>
-        <div className="h-9"></div>
-        <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
-          <div className="container mx-auto flex items-center gap-2 px-4 py-1">
-            <Music className="h-4 w-4 text-gray-600" />
-            <span className="text-xs text-gray-500">Cargando configuración de música...</span>
-          </div>
+      <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
+        <div className="container mx-auto flex items-center gap-2 px-4 py-1">
+          <Music className="h-4 w-4 text-gray-600" />
+          <span className="text-xs text-gray-500">Cargando configuración de música...</span>
         </div>
-      </>
+      </div>
     ) : null;
   }
 
@@ -226,20 +255,17 @@ export default function BackgroundMusic() {
 
   if (settings.tracks.length === 0) {
     return isDev ? (
-      <>
-        <div className="h-9"></div>
-        <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
-          <div className="container mx-auto flex items-center gap-2 px-4 py-1">
-            <Music className="h-4 w-4 text-gray-600" />
-            <span className="text-xs text-gray-500">
-              No hay pistas - Sube música en{" "}
-              <a href="/admin/music" className="text-red-400 underline">
-                /admin/music
-              </a>
-            </span>
-          </div>
+      <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
+        <div className="container mx-auto flex items-center gap-2 px-4 py-1">
+          <Music className="h-4 w-4 text-gray-600" />
+          <span className="text-xs text-gray-500">
+            No hay pistas - Sube música en{" "}
+            <a href="/admin/music" className="text-red-400 underline">
+              /admin/music
+            </a>
+          </span>
         </div>
-      </>
+      </div>
     ) : null;
   }
 
@@ -266,10 +292,15 @@ export default function BackgroundMusic() {
         onEnded={handleTrackEnd}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
+        onLoadedData={() => {
+          // Aplicar volumen cuando el audio se carga
+          if (audioRef.current) {
+            const realVolume = getRealVolume();
+            audioRef.current.volume = realVolume;
+            console.log(`🎧 Audio cargado - Usuario: ${userVolume}% | Master: ${settings?.defaultVolume ?? 100}% | Real: ${(realVolume * 100).toFixed(1)}%`);
+          }
+        }}
       />
-
-      {/* Espaciador para compensar la barra fixed */}
-      <div className="h-9"></div>
 
       {/* Barra de Reproducción Superior */}
       <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
@@ -354,12 +385,12 @@ export default function BackgroundMusic() {
                   type="range"
                   min="0"
                   max="100"
-                  value={volume}
+                  value={userVolume}
                   onChange={(e) => handleVolumeChange(parseInt(e.target.value))}
                   className="h-1 w-20 cursor-pointer appearance-none rounded-lg bg-red-950/50 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-red-500"
                 />
                 <span className="text-xs font-bold text-gray-400">
-                  {volume}%
+                  {userVolume}%
                 </span>
               </div>
             )}

@@ -9,6 +9,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppWidget from "@/components/WhatsAppWidget";
 import BackgroundMusic from "@/components/BackgroundMusic";
+import MusicBarSpacer from "@/components/MusicBarSpacer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import PWAInstallPrompt from "@/components/PWAInstallPrompt";
 import { generateSiteMetadata, generateOrganizationSchema } from "@/lib/metadata";
@@ -65,14 +66,15 @@ export default function RootLayout({
             <WishlistProvider>
               <CartProvider>
                 <MusicProvider>
-                  <div className="flex min-h-screen flex-col">
+                  <div className="flex min-h-screen flex-col" suppressHydrationWarning>
+                    <BackgroundMusic />
                     <Header />
+                    <MusicBarSpacer />
                     <main className="flex-1">
                       <ErrorBoundary>{children}</ErrorBoundary>
                     </main>
                     <Footer />
                     <WhatsAppWidget />
-                    <BackgroundMusic />
                     <PWAInstallPrompt />
                   </div>
                 </MusicProvider>

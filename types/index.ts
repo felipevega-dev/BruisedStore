@@ -222,6 +222,9 @@ export interface HomeSettings {
   videoSize: 'small' | 'medium' | 'large'; // Tamaño del video
   videoPosition: 'left' | 'right'; // Posición del video (texto en lado opuesto)
 
+  // PWA Settings
+  showPWAPrompt: boolean; // Mostrar o ocultar el prompt de instalación de PWA
+
   // Metadata
   updatedAt: Date;
   updatedBy?: string; // userId del admin que actualizó
@@ -244,6 +247,7 @@ export const DEFAULT_HOME_SETTINGS: Omit<HomeSettings, 'id' | 'updatedAt'> = {
   backgroundStyle: 'gray',
   videoSize: 'medium',
   videoPosition: 'right',
+  showPWAPrompt: false, // Oculto por defecto
 };
 
 // Blog System Types
@@ -293,7 +297,8 @@ export interface MusicSettings {
   enabled: boolean; // Si la música está habilitada globalmente
   tracks: MusicTrack[]; // Array de pistas disponibles
   playMode: 'single' | 'loop' | 'playlist'; // single: toca una vez, loop: repite la misma, playlist: toca todas en orden
-  volume: number; // 0-100
+  volume: number; // 0-100 (volumen actual en la barra de reproducción)
+  defaultVolume: number; // 0-100 (volumen inicial para nuevos usuarios)
   currentTrackId?: string; // ID de la pista activa (para modo single/loop)
   updatedAt: Date;
   updatedBy?: string; // userId del admin
@@ -304,4 +309,5 @@ export const DEFAULT_MUSIC_SETTINGS: Omit<MusicSettings, 'id' | 'updatedAt'> = {
   tracks: [],
   playMode: 'loop',
   volume: 30, // Volumen por defecto al 30%
+  defaultVolume: 30, // Volumen inicial para nuevos usuarios
 };
