@@ -70,8 +70,8 @@ export default function BlogPage() {
       proceso: "bg-blue-100 text-blue-800 border-blue-800",
       inspiracion: "bg-purple-100 text-purple-800 border-purple-800",
       tecnica: "bg-green-100 text-green-800 border-green-800",
-      personal: "bg-yellow-100 text-yellow-800 border-yellow-800",
-      exposiciones: "bg-red-100 text-red-800 border-red-800",
+      personal: "bg-terra-100 text-terra-800 border-terra-800",
+      exposiciones: "bg-moss-100 text-moss-800 border-terra-800",
     };
     return colors[category as keyof typeof colors] || "bg-gray-100 text-gray-800 border-gray-800";
   };
@@ -80,7 +80,7 @@ export default function BlogPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
@@ -95,7 +95,7 @@ export default function BlogPage() {
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="mb-4 flex justify-center">
-            <BookOpen className="h-16 w-16 text-red-600" />
+            <BookOpen className="h-16 w-16 text-moss-600" />
           </div>
           <h1 className="mb-4 text-4xl font-black text-gray-900 sm:text-5xl">
             Blog
@@ -111,7 +111,7 @@ export default function BlogPage() {
             onClick={() => setSelectedCategory("all")}
             className={`rounded-lg border-2 px-4 py-2 font-bold transition-all ${
               selectedCategory === "all"
-                ? "border-black bg-red-600 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                ? "border-black bg-moss-500 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                 : "border-black bg-white text-gray-900 hover:bg-gray-50"
             }`}
           >
@@ -125,7 +125,7 @@ export default function BlogPage() {
                 onClick={() => setSelectedCategory(cat.value)}
                 className={`rounded-lg border-2 px-4 py-2 font-bold transition-all ${
                   selectedCategory === cat.value
-                    ? "border-black bg-red-600 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                    ? "border-black bg-moss-500 text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                     : "border-black bg-white text-gray-900 hover:bg-gray-50"
                 }`}
               >
@@ -176,7 +176,7 @@ export default function BlogPage() {
                   </div>
 
                   {/* Title */}
-                  <h2 className="mb-2 text-xl font-black text-gray-900 group-hover:text-red-600">
+                  <h2 className="mb-2 text-xl font-black text-gray-900 group-hover:text-moss-600">
                     {post.title}
                   </h2>
 

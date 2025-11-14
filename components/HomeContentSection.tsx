@@ -112,10 +112,10 @@ export default function HomeContentSection({
 
   // Background style mapping
   const backgroundClasses = {
-    gray: "bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300",
-    book: "bg-gradient-to-br from-amber-50 via-yellow-50 to-amber-100",
-    dark: "bg-gradient-to-br from-gray-900 via-gray-800 to-black",
-    light: "bg-gradient-to-br from-white via-gray-50 to-gray-100",
+    gray: "bg-linear-to-br from-gray-100 via-gray-200 to-gray-300",
+    book: "bg-linear-to-br from-amber-50 via-terra-100 to-amber-100",
+    dark: "bg-linear-to-br from-gray-900 via-gray-800 to-black",
+    light: "bg-linear-to-br from-white via-gray-50 to-gray-100",
   };
 
   const textColorClasses = {
@@ -126,10 +126,10 @@ export default function HomeContentSection({
   };
 
   const accentColorClasses = {
-    gray: "bg-red-600",
+    gray: "bg-moss-500",
     book: "bg-amber-600",
-    dark: "bg-red-500",
-    light: "bg-red-600",
+    dark: "bg-moss-500",
+    light: "bg-moss-500",
   };
 
   return (

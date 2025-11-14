@@ -180,7 +180,7 @@ export default function ImageZoom({ src, alt, aspectRatio }: ImageZoomProps) {
           {/* Close Button */}
           <button
             onClick={handleCloseFullscreen}
-            className="absolute right-4 top-4 z-10 rounded-lg border-4 border-white bg-red-600 p-3 text-white transition-all hover:bg-red-700"
+            className="absolute right-4 top-4 z-10 rounded-lg border-4 border-white bg-moss-500 p-3 text-white transition-all hover:bg-moss-600"
             aria-label="Cerrar"
           >
             <X className="h-6 w-6" />

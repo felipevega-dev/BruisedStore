@@ -74,35 +74,35 @@ export default class ErrorBoundary extends Component<
         return this.props.fallback;
       }
 
-      // Default error UI with brutalist design
+      // Default error UI with nature-inspired design
       return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black px-4 py-8">
-          <div className="w-full max-w-2xl rounded-lg border-4 border-red-600 bg-black p-6 shadow-[8px_8px_0px_0px_rgba(220,38,38,1)] sm:p-8">
+        <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-canvas-100 via-white to-moss-50 px-4 py-8">
+          <div className="w-full max-w-2xl rounded-2xl border border-moss-200 bg-white/95 p-6 shadow-xl shadow-moss-900/10 backdrop-blur sm:p-8">
             {/* Icon */}
             <div className="mb-6 flex justify-center">
-              <div className="rounded-full border-4 border-red-600 bg-red-950 p-4">
-                <AlertTriangle className="h-12 w-12 text-red-500" />
+              <div className="rounded-full border border-moss-200 bg-moss-50 p-4 shadow-inner shadow-moss-200/70">
+                <AlertTriangle className="h-12 w-12 text-moss-500" />
               </div>
             </div>
 
             {/* Title */}
-            <h1 className="mb-4 text-center text-3xl font-black text-red-100 sm:text-4xl">
+            <h1 className="mb-4 text-center text-3xl font-semibold text-slate-900 sm:text-4xl">
               ¡Algo salió mal!
             </h1>
 
             {/* Description */}
-            <p className="mb-6 text-center text-base text-red-300 sm:text-lg">
+            <p className="mb-6 text-center text-base text-slate-600 sm:text-lg">
               Lo sentimos, ocurrió un error inesperado. Por favor intenta nuevamente.
             </p>
 
             {/* Error details (only in development) */}
             {process.env.NODE_ENV === "development" && this.state.error && (
-              <div className="mb-6 overflow-auto rounded-lg border-2 border-red-900 bg-red-950/50 p-4">
-                <p className="mb-2 font-mono text-sm font-bold text-red-400">
+              <div className="mb-6 overflow-auto rounded-xl border border-terra-200 bg-terra-50/80 p-4">
+                <p className="mb-2 font-mono text-sm font-semibold text-terra-600">
                   {this.state.error.toString()}
                 </p>
                 {this.state.errorInfo && (
-                  <pre className="text-xs text-red-300">
+                  <pre className="text-xs text-terra-500">
                     {this.state.errorInfo.componentStack}
                   </pre>
                 )}
@@ -113,7 +113,7 @@ export default class ErrorBoundary extends Component<
             <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
               <button
                 onClick={this.handleReset}
-                className="flex items-center justify-center gap-2 rounded-lg border-4 border-red-600 bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
+                className="flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-moss-500 to-moss-400 px-6 py-3 font-semibold text-white shadow-lg shadow-moss-900/10 transition hover:shadow-xl"
               >
                 <RefreshCcw className="h-5 w-5" />
                 Intentar de nuevo
@@ -121,7 +121,7 @@ export default class ErrorBoundary extends Component<
 
               <button
                 onClick={this.handleReload}
-                className="flex items-center justify-center gap-2 rounded-lg border-4 border-red-900 bg-red-950 px-6 py-3 font-bold text-red-100 transition-all hover:bg-red-900 hover:shadow-[4px_4px_0px_0px_rgba(127,29,29,1)]"
+                className="flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-azure-500 to-azure-400 px-6 py-3 font-semibold text-white shadow-lg shadow-azure-900/10 transition hover:shadow-xl"
               >
                 <RefreshCcw className="h-5 w-5" />
                 Recargar página
@@ -129,7 +129,7 @@ export default class ErrorBoundary extends Component<
 
               <Link
                 href="/"
-                className="flex items-center justify-center gap-2 rounded-lg border-4 border-white bg-white px-6 py-3 font-bold text-black transition-all hover:bg-gray-100 hover:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
+                className="flex items-center justify-center gap-2 rounded-xl border border-moss-200 bg-white px-6 py-3 font-semibold text-slate-900 shadow-lg shadow-moss-900/10 transition hover:border-moss-300 hover:shadow-none"
               >
                 <Home className="h-5 w-5" />
                 Ir al inicio
@@ -137,13 +137,13 @@ export default class ErrorBoundary extends Component<
             </div>
 
             {/* Support link */}
-            <p className="mt-6 text-center text-sm text-red-400">
+            <p className="mt-6 text-center text-sm text-slate-500">
               Si el problema persiste, contáctanos vía{" "}
               <a
                 href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-bold underline hover:text-red-300"
+                className="font-semibold text-moss-600 underline hover:text-moss-700"
               >
                 WhatsApp
               </a>

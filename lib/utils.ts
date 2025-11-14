@@ -58,16 +58,22 @@ export function truncateText(text: string, maxLength: number): string {
 }
 
 /**
- * Generates a random order number
- * @returns Order number string (e.g., "ORD-20241110-001")
+ * Generates a collision-resistant order number using date + base36 entropy
+ * @returns Order number string (e.g., "ORD-20241110-K8Z4")
  */
 export function generateOrderNumber(): string {
   const date = new Date();
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  const random = String(Math.floor(Math.random() * 1000)).padStart(3, "0");
-  return `ORD-${year}${month}${day}-${random}`;
+  const entropyArray = new Uint32Array(1);
+  if (typeof crypto !== "undefined" && crypto.getRandomValues) {
+    crypto.getRandomValues(entropyArray);
+  } else {
+    entropyArray[0] = Math.floor(Math.random() * 0xffffffff);
+  }
+  const entropy = entropyArray[0].toString(36).toUpperCase().padStart(6, "0");
+  return `ORD-${year}${month}${day}-${entropy.slice(0, 4)}`;
 }
 
 /**

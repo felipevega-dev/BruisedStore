@@ -289,29 +289,29 @@ export default function AdminBlogPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
-        <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
-          <Loader2 className="h-12 w-12 animate-spin text-red-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
+        <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-8 backdrop-blur-sm">
+          <Loader2 className="h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
+    <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <BookOpen className="h-8 w-8 text-red-400" />
-            <h1 className="text-4xl font-black text-red-100">
+            <BookOpen className="h-8 w-8 text-terra-400" />
+            <h1 className="text-4xl font-black text-terra-100">
               Administrar Blog
             </h1>
           </div>
           {!showForm && (
             <button
               onClick={() => setShowForm(true)}
-              className="flex items-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50"
+              className="flex items-center gap-2 rounded-lg border-2 border-terra-900 bg-linear-to-r from-terra-900 to-terra-800 px-6 py-3 font-bold text-terra-100 transition-all hover:from-terra-800 hover:to-moss-600 hover:shadow-lg hover:shadow-terra-900/50"
             >
               <Plus className="h-5 w-5" />
               Nuevo Post
@@ -321,36 +321,36 @@ export default function AdminBlogPage() {
 
         {/* Form */}
         {showForm && (
-          <div className="mb-8 rounded-lg border-2 border-red-900/30 bg-black/60 p-6 shadow-xl shadow-red-900/20 backdrop-blur-sm">
-            <h2 className="mb-6 text-2xl font-black text-red-100">
+          <div className="mb-8 rounded-lg border-2 border-terra-900/30 bg-black/60 p-6 shadow-xl shadow-terra-900/20 backdrop-blur-sm">
+            <h2 className="mb-6 text-2xl font-black text-terra-100">
               {editingPost ? "Editar Post" : "Crear Nuevo Post"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Title */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Título *
                 </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => handleTitleChange(e.target.value)}
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                   required
                 />
               </div>
 
               {/* Slug */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Slug (URL)
                 </label>
                 <input
                   type="text"
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  className="w-full rounded-lg border-2 border-red-900/50 bg-gray-800 px-4 py-3 font-mono text-sm text-gray-400"
+                  className="w-full rounded-lg border-2 border-terra-900/50 bg-gray-800 px-4 py-3 font-mono text-sm text-gray-400"
                   readOnly
                 />
                 <p className="mt-1 text-sm text-gray-500">
@@ -360,7 +360,7 @@ export default function AdminBlogPage() {
 
               {/* Excerpt */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Extracto *
                 </label>
                 <textarea
@@ -369,7 +369,7 @@ export default function AdminBlogPage() {
                     setFormData({ ...formData, excerpt: e.target.value })
                   }
                   rows={3}
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                   required
                 />
                 <p className="mt-1 text-sm text-gray-400">
@@ -379,7 +379,7 @@ export default function AdminBlogPage() {
 
               {/* Category */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Categoría *
                 </label>
                 <select
@@ -390,7 +390,7 @@ export default function AdminBlogPage() {
                       category: e.target.value as BlogCategory,
                     })
                   }
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                 >
                   {BLOG_CATEGORIES.map((cat) => (
                     <option key={cat.value} value={cat.value}>
@@ -402,7 +402,7 @@ export default function AdminBlogPage() {
 
               {/* Tags */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">Tags</label>
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">Tags</label>
                 <input
                   type="text"
                   value={formData.tags}
@@ -410,7 +410,7 @@ export default function AdminBlogPage() {
                     setFormData({ ...formData, tags: e.target.value })
                   }
                   placeholder="acuarela, abstracto, naturaleza"
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                 />
                 <p className="mt-1 text-sm text-gray-400">
                   Separados por comas
@@ -419,11 +419,11 @@ export default function AdminBlogPage() {
 
               {/* Cover Image */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Imagen de Portada
                 </label>
                 {coverImagePreview && (
-                  <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg border-2 border-red-900">
+                  <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg border-2 border-terra-900">
                     <img
                       src={coverImagePreview}
                       alt="Preview"
@@ -436,13 +436,13 @@ export default function AdminBlogPage() {
                         setCoverImageFile(null);
                         setFormData({ ...formData, coverImage: "" });
                       }}
-                      className="absolute right-2 top-2 rounded-full border-2 border-red-900 bg-red-600 p-2 text-white transition-all hover:bg-red-700"
+                      className="absolute right-2 top-2 rounded-full border-2 border-terra-900 bg-moss-500 p-2 text-white transition-all hover:bg-moss-600"
                     >
                       <X className="h-4 w-4" />
                     </button>
                   </div>
                 )}
-                <label className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-red-900 bg-gray-800 px-6 py-3 font-bold text-red-100 transition-all hover:bg-gray-700">
+                <label className="flex cursor-pointer items-center gap-2 rounded-lg border-2 border-terra-900 bg-gray-800 px-6 py-3 font-bold text-terra-100 transition-all hover:bg-gray-700">
                   <ImageIcon className="h-5 w-5" />
                   {coverImagePreview ? "Cambiar Imagen" : "Subir Imagen"}
                   <input
@@ -459,7 +459,7 @@ export default function AdminBlogPage() {
 
               {/* Content Editor */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Contenido *
                 </label>
                 <TipTapEditor
@@ -479,9 +479,9 @@ export default function AdminBlogPage() {
                   onChange={(e) =>
                     setFormData({ ...formData, published: e.target.checked })
                   }
-                  className="h-6 w-6 rounded border-2 border-red-900 bg-gray-800 accent-red-600"
+                  className="h-6 w-6 rounded border-2 border-terra-900 bg-gray-800 accent-terra-600"
                 />
-                <label htmlFor="published" className="font-bold text-red-100">
+                <label htmlFor="published" className="font-bold text-terra-100">
                   Publicar inmediatamente
                 </label>
               </div>
@@ -491,7 +491,7 @@ export default function AdminBlogPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex items-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50 disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-lg border-2 border-terra-900 bg-linear-to-r from-terra-900 to-terra-800 px-6 py-3 font-bold text-terra-100 transition-all hover:from-terra-800 hover:to-moss-600 hover:shadow-lg hover:shadow-terra-900/50 disabled:opacity-50"
                 >
                   {submitting ? (
                     <>
@@ -508,7 +508,7 @@ export default function AdminBlogPage() {
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="rounded-lg border-2 border-red-900/50 bg-gray-800 px-6 py-3 font-bold text-red-100 transition-all hover:bg-gray-700"
+                  className="rounded-lg border-2 border-terra-900/50 bg-gray-800 px-6 py-3 font-bold text-terra-100 transition-all hover:bg-gray-700"
                 >
                   Cancelar
                 </button>
@@ -521,9 +521,9 @@ export default function AdminBlogPage() {
         {!showForm && (
           <div className="space-y-4">
             {posts.length === 0 ? (
-              <div className="rounded-lg border-2 border-red-900/30 bg-black/60 p-12 text-center shadow-xl shadow-red-900/20 backdrop-blur-sm">
-                <BookOpen className="mx-auto mb-4 h-16 w-16 text-red-400" />
-                <p className="text-lg font-bold text-red-100">
+              <div className="rounded-lg border-2 border-terra-900/30 bg-black/60 p-12 text-center shadow-xl shadow-terra-900/20 backdrop-blur-sm">
+                <BookOpen className="mx-auto mb-4 h-16 w-16 text-terra-400" />
+                <p className="text-lg font-bold text-terra-100">
                   No hay posts aún
                 </p>
                 <p className="text-gray-400">
@@ -534,11 +534,11 @@ export default function AdminBlogPage() {
               posts.map((post) => (
                 <div
                   key={post.id}
-                  className="flex items-center gap-4 rounded-lg border-2 border-red-900/30 bg-black/60 p-4 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40"
+                  className="flex items-center gap-4 rounded-lg border-2 border-terra-900/30 bg-black/60 p-4 shadow-xl shadow-terra-900/20 backdrop-blur-sm transition-all hover:border-moss-600 hover:shadow-2xl hover:shadow-terra-900/40"
                 >
                   {/* Cover Image */}
                   {post.coverImage && (
-                    <div className="aspect-video w-32 overflow-hidden rounded border-2 border-red-900">
+                    <div className="aspect-video w-32 overflow-hidden rounded border-2 border-terra-900">
                       <img
                         src={post.coverImage}
                         alt={post.title}
@@ -550,7 +550,7 @@ export default function AdminBlogPage() {
                   {/* Info */}
                   <div className="flex-1">
                     <div className="mb-2 flex items-center gap-2">
-                      <h3 className="text-xl font-black text-red-100">
+                      <h3 className="text-xl font-black text-terra-100">
                         {post.title}
                       </h3>
                       {post.published ? (
@@ -558,7 +558,7 @@ export default function AdminBlogPage() {
                           Publicado
                         </span>
                       ) : (
-                        <span className="rounded-full border-2 border-yellow-600 bg-yellow-900/50 px-3 py-1 text-xs font-bold text-yellow-400">
+                        <span className="rounded-full border-2 border-terra-600 bg-terra-900/50 px-3 py-1 text-xs font-bold text-terra-400">
                           Borrador
                         </span>
                       )}
@@ -580,28 +580,28 @@ export default function AdminBlogPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => togglePublished(post)}
-                      className="rounded border-2 border-red-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-red-700"
+                      className="rounded border-2 border-terra-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-moss-600"
                       title={post.published ? "Despublicar" : "Publicar"}
                     >
                       {post.published ? (
-                        <EyeOff className="h-5 w-5 text-yellow-400" />
+                        <EyeOff className="h-5 w-5 text-terra-400" />
                       ) : (
                         <Eye className="h-5 w-5 text-green-400" />
                       )}
                     </button>
                     <button
                       onClick={() => handleEdit(post)}
-                      className="rounded border-2 border-red-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-blue-600"
+                      className="rounded border-2 border-terra-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-blue-600"
                       title="Editar"
                     >
                       <Edit className="h-5 w-5 text-blue-400" />
                     </button>
                     <button
                       onClick={() => handleDelete(post.id)}
-                      className="rounded border-2 border-red-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-red-600"
+                      className="rounded border-2 border-terra-900 bg-gray-800 p-2 transition-all hover:bg-gray-700 hover:border-moss-500"
                       title="Eliminar"
                     >
-                      <Trash2 className="h-5 w-5 text-red-400" />
+                      <Trash2 className="h-5 w-5 text-terra-400" />
                     </button>
                   </div>
                 </div>

@@ -81,7 +81,7 @@ export default function VerifyEmailPage() {
   if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
-        <Loader2 className="h-8 w-8 animate-spin text-red-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-moss-600" />
       </div>
     );
   }
@@ -92,13 +92,13 @@ export default function VerifyEmailPage() {
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           {/* Header */}
           <div className="mb-6 text-center">
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border-4 border-black bg-yellow-100">
-              <Mail className="h-10 w-10 text-red-600" />
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full border-4 border-black bg-terra-100">
+              <Mail className="h-10 w-10 text-moss-600" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900">
               Verifica tu Email
             </h1>
-            <div className="mx-auto mt-3 h-1 w-16 bg-red-600"></div>
+            <div className="mx-auto mt-3 h-1 w-16 bg-moss-500"></div>
           </div>
 
           {/* Instructions */}
@@ -106,7 +106,7 @@ export default function VerifyEmailPage() {
             <p className="text-sm font-semibold text-gray-900">
               📬 Hemos enviado un correo de verificación a:
             </p>
-            <p className="text-sm font-bold text-red-600">
+            <p className="text-sm font-bold text-moss-600">
               {user?.email}
             </p>
             
@@ -142,14 +142,14 @@ export default function VerifyEmailPage() {
           </div>
 
           {/* Spam Warning */}
-          <div className="mb-6 rounded-lg border-2 border-yellow-400 bg-yellow-50 p-4">
+          <div className="mb-6 rounded-lg border-2 border-terra-400 bg-terra-100 p-4">
             <div className="flex gap-3">
-              <AlertCircle className="h-5 w-5 shrink-0 text-yellow-600" />
+              <AlertCircle className="h-5 w-5 shrink-0 text-terra-600" />
               <div className="text-xs">
-                <p className="font-bold text-yellow-900">
+                <p className="font-bold text-terra-900">
                   ⚠️ ¿No encuentras el email?
                 </p>
-                <ul className="mt-2 space-y-1 text-yellow-800">
+                <ul className="mt-2 space-y-1 text-terra-800">
                   <li>• Revisa tu carpeta de <strong>SPAM / Correo no deseado</strong></li>
                   <li>• El correo puede tardar 1-2 minutos en llegar</li>
                   <li>• Verifica que escribiste bien tu email: <strong>{user?.email}</strong></li>
@@ -167,7 +167,7 @@ export default function VerifyEmailPage() {
           )}
           
           {error && (
-            <div className="mb-4 rounded-lg border-2 border-red-600 bg-red-50 p-3 text-sm font-semibold text-red-600">
+            <div className="mb-4 rounded-lg border-2 border-moss-500 bg-moss-50 p-3 text-sm font-semibold text-moss-600">
               {error}
             </div>
           )}
@@ -177,7 +177,7 @@ export default function VerifyEmailPage() {
             <button
               onClick={handleCheckVerification}
               disabled={checking}
-              className="w-full rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {checking ? (
                 <span className="flex items-center justify-center gap-2">
@@ -215,7 +215,7 @@ export default function VerifyEmailPage() {
           <div className="mt-6 text-center">
             <Link
               href="/"
-              className="text-sm font-semibold text-gray-600 hover:text-red-600"
+              className="text-sm font-semibold text-gray-600 hover:text-moss-600"
             >
               ← Volver al inicio
             </Link>

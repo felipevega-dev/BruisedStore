@@ -239,7 +239,7 @@ export default function BackgroundMusic() {
   
   if (!settings) {
     return isDev ? (
-      <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
+      <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-linear-to-r from-moss-900 via-black to-moss-900 shadow-lg">
         <div className="container mx-auto flex items-center gap-2 px-4 py-1">
           <Music className="h-4 w-4 text-gray-600" />
           <span className="text-xs text-gray-500">Cargando configuración de música...</span>
@@ -255,12 +255,12 @@ export default function BackgroundMusic() {
 
   if (settings.tracks.length === 0) {
     return isDev ? (
-      <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
+      <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-linear-to-r from-moss-900 via-black to-moss-900 shadow-lg">
         <div className="container mx-auto flex items-center gap-2 px-4 py-1">
           <Music className="h-4 w-4 text-gray-600" />
           <span className="text-xs text-gray-500">
             No hay pistas - Sube música en{" "}
-            <a href="/admin/music" className="text-red-400 underline">
+            <a href="/admin/music" className="text-moss-600 underline">
               /admin/music
             </a>
           </span>
@@ -303,11 +303,11 @@ export default function BackgroundMusic() {
       />
 
       {/* Barra de Reproducción Superior */}
-      <div className="fixed left-0 right-0 top-0 z-50 border-b-2 border-black bg-gradient-to-r from-red-950 via-black to-red-950 shadow-lg">
+      <div className="fixed left-0 right-0 top-0 z-50 border-b border-moss-200 bg-linear-to-r from-moss-50 via-canvas-100 to-azure-50 shadow-md">
         <div className="container mx-auto flex items-center gap-2 px-4 py-1">
           {/* Icono de música */}
           <div className="flex items-center gap-2">
-            <Music className="h-4 w-4 text-red-400" />
+            <Music className="h-4 w-4 text-moss-500" />
           </div>
 
           {/* Controles de reproducción */}
@@ -315,7 +315,7 @@ export default function BackgroundMusic() {
             {settings.tracks.length > 1 && (
               <button
                 onClick={handlePrevious}
-                className="rounded p-1 text-gray-400 transition-colors hover:bg-red-900/30 hover:text-red-300"
+                className="rounded p-1 text-slate-500 transition-colors hover:bg-moss-100 hover:text-moss-600"
                 aria-label="Anterior"
               >
                 <SkipBack className="h-4 w-4" />
@@ -324,7 +324,7 @@ export default function BackgroundMusic() {
 
             <button
               onClick={isPlaying ? handlePause : handlePlay}
-              className="rounded bg-red-600 p-1 text-white transition-all hover:bg-red-700"
+              className="rounded bg-moss-500 p-1 text-white transition-all hover:bg-moss-600"
               aria-label={isPlaying ? "Pausar" : "Reproducir"}
             >
               {isPlaying ? (
@@ -337,7 +337,7 @@ export default function BackgroundMusic() {
             {settings.tracks.length > 1 && (
               <button
                 onClick={handleNext}
-                className="rounded p-1 text-gray-400 transition-colors hover:bg-red-900/30 hover:text-red-300"
+                className="rounded p-1 text-slate-500 transition-colors hover:bg-moss-100 hover:text-moss-600"
                 aria-label="Siguiente"
               >
                 <SkipForward className="h-4 w-4" />
@@ -347,14 +347,14 @@ export default function BackgroundMusic() {
 
           {/* Título de la pista */}
           <div className="flex-1 overflow-hidden">
-            <div className="truncate text-xs font-bold text-red-100">
+            <div className="truncate text-xs font-semibold text-slate-700">
               {currentTrack.title}
             </div>
           </div>
 
           {/* Barra de progreso */}
           <div className="hidden items-center gap-2 sm:flex sm:flex-1">
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-slate-500">
               {formatTime(currentTime)}
             </span>
             <input
@@ -363,9 +363,9 @@ export default function BackgroundMusic() {
               max={duration || 0}
               value={currentTime}
               onChange={handleSeek}
-              className="h-1 flex-1 cursor-pointer appearance-none rounded-lg bg-red-950/50 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-red-500"
+              className="h-1 flex-1 cursor-pointer appearance-none rounded-lg bg-moss-100 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-moss-500"
             />
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-slate-500">
               {formatTime(duration)}
             </span>
           </div>
@@ -374,7 +374,7 @@ export default function BackgroundMusic() {
           <div className="relative hidden items-center gap-2 md:flex">
             <button
               onClick={() => setShowVolumeSlider(!showVolumeSlider)}
-              className="rounded p-1 text-gray-400 transition-colors hover:bg-red-900/30 hover:text-red-300"
+              className="rounded p-1 text-slate-500 transition-colors hover:bg-moss-100 hover:text-moss-600"
               aria-label="Volumen"
             >
               <Volume2 className="h-4 w-4" />
@@ -387,9 +387,9 @@ export default function BackgroundMusic() {
                   max="100"
                   value={userVolume}
                   onChange={(e) => handleVolumeChange(parseInt(e.target.value))}
-                  className="h-1 w-20 cursor-pointer appearance-none rounded-lg bg-red-950/50 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-red-500"
+                  className="h-1 w-20 cursor-pointer appearance-none rounded-lg bg-moss-100 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-moss-500"
                 />
-                <span className="text-xs font-bold text-gray-400">
+                <span className="text-xs font-semibold text-slate-600">
                   {userVolume}%
                 </span>
               </div>
@@ -399,13 +399,13 @@ export default function BackgroundMusic() {
           {/* Botón de mute */}
           <button
             onClick={handleToggleMute}
-            className="rounded-full border-2 border-red-900 bg-red-950/50 p-1.5 transition-all hover:border-red-600 hover:bg-red-900"
+            className="rounded-full border border-moss-200 bg-white/70 p-1.5 transition hover:border-moss-300 hover:bg-moss-100"
             aria-label={isMuted ? "Activar música" : "Silenciar música"}
           >
             {isMuted || !isPlaying ? (
-              <VolumeX className="h-4 w-4 text-gray-400" />
+              <VolumeX className="h-4 w-4 text-slate-500" />
             ) : (
-              <Volume2 className="h-4 w-4 text-red-400" />
+              <Volume2 className="h-4 w-4 text-moss-500" />
             )}
           </button>
         </div>

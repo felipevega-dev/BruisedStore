@@ -79,8 +79,8 @@ export default function BlogPostPage() {
       proceso: "bg-blue-100 text-blue-800 border-blue-800",
       inspiracion: "bg-purple-100 text-purple-800 border-purple-800",
       tecnica: "bg-green-100 text-green-800 border-green-800",
-      personal: "bg-yellow-100 text-yellow-800 border-yellow-800",
-      exposiciones: "bg-red-100 text-red-800 border-red-800",
+      personal: "bg-terra-100 text-terra-800 border-terra-800",
+      exposiciones: "bg-moss-100 text-moss-800 border-terra-800",
     };
     return colors[category as keyof typeof colors] || "bg-gray-100 text-gray-800 border-gray-800";
   };
@@ -96,7 +96,7 @@ export default function BlogPostPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
@@ -237,7 +237,7 @@ export default function BlogPostPage() {
 
           {/* Content */}
           <div
-            className="prose prose-lg max-w-none prose-headings:font-black prose-h2:text-3xl prose-h3:text-2xl prose-p:text-gray-700 prose-a:text-red-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-img:rounded-lg prose-img:border-4 prose-img:border-black"
+            className="prose prose-lg max-w-none prose-headings:font-black prose-h2:text-3xl prose-h3:text-2xl prose-p:text-gray-700 prose-a:text-moss-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-img:rounded-lg prose-img:border-4 prose-img:border-black"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
@@ -274,7 +274,7 @@ export default function BlogPostPage() {
           <div className="mt-12 text-center">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             >
               <ArrowLeft className="h-4 w-4" />
               Ver Más Posts

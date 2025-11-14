@@ -58,7 +58,7 @@ export default function TipTapEditor({
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`rounded border-2 border-black p-2 transition-all hover:bg-gray-100 ${
-            editor.isActive("bold") ? "bg-red-600 text-white" : "bg-white"
+            editor.isActive("bold") ? "bg-moss-500 text-white" : "bg-white"
           }`}
           title="Negrita"
         >
@@ -68,7 +68,7 @@ export default function TipTapEditor({
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={`rounded border-2 border-black p-2 transition-all hover:bg-gray-100 ${
-            editor.isActive("italic") ? "bg-red-600 text-white" : "bg-white"
+            editor.isActive("italic") ? "bg-moss-500 text-white" : "bg-white"
           }`}
           title="Cursiva"
         >
@@ -82,7 +82,7 @@ export default function TipTapEditor({
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           className={`rounded border-2 border-black px-3 py-2 font-bold transition-all hover:bg-gray-100 ${
             editor.isActive("heading", { level: 2 })
-              ? "bg-red-600 text-white"
+              ? "bg-moss-500 text-white"
               : "bg-white"
           }`}
           title="Título 2"
@@ -94,7 +94,7 @@ export default function TipTapEditor({
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           className={`rounded border-2 border-black px-3 py-2 font-bold transition-all hover:bg-gray-100 ${
             editor.isActive("heading", { level: 3 })
-              ? "bg-red-600 text-white"
+              ? "bg-moss-500 text-white"
               : "bg-white"
           }`}
           title="Título 3"
@@ -108,7 +108,7 @@ export default function TipTapEditor({
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={`rounded border-2 border-black p-2 transition-all hover:bg-gray-100 ${
-            editor.isActive("bulletList") ? "bg-red-600 text-white" : "bg-white"
+            editor.isActive("bulletList") ? "bg-moss-500 text-white" : "bg-white"
           }`}
           title="Lista"
         >
@@ -118,7 +118,7 @@ export default function TipTapEditor({
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={`rounded border-2 border-black p-2 transition-all hover:bg-gray-100 ${
-            editor.isActive("orderedList") ? "bg-red-600 text-white" : "bg-white"
+            editor.isActive("orderedList") ? "bg-moss-500 text-white" : "bg-white"
           }`}
           title="Lista numerada"
         >
@@ -128,7 +128,7 @@ export default function TipTapEditor({
           type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={`rounded border-2 border-black p-2 transition-all hover:bg-gray-100 ${
-            editor.isActive("blockquote") ? "bg-red-600 text-white" : "bg-white"
+            editor.isActive("blockquote") ? "bg-moss-500 text-white" : "bg-white"
           }`}
           title="Cita"
         >

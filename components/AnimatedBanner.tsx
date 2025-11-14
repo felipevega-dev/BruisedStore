@@ -28,7 +28,7 @@ export default function AnimatedBanner({
   }, [images]);
 
   return (
-    <div className="relative h-[70vh] w-full overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-black">
+    <div className="relative h-[70vh] w-full overflow-hidden bg-linear-to-br from-gray-800 via-gray-900 to-black">
       {/* Animated Background Carousel */}
       <div className="absolute inset-0 opacity-20">
         <div
@@ -62,7 +62,7 @@ export default function AnimatedBanner({
       </div>
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+      <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/40 to-black/80" />
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
@@ -84,7 +84,7 @@ export default function AnimatedBanner({
                 </div>
               </div>
               {/* Back - Filtered Image */}
-              <div className="flip-card-back overflow-hidden rounded-full border-8 border-red-600 shadow-[8px_8px_0px_0px_rgba(220,38,38,0.5)]">
+              <div className="flip-card-back overflow-hidden rounded-full border-8 border-moss-500 shadow-[8px_8px_0px_0px_rgba(220,38,38,0.5)]">
                 <div className="relative h-32 w-32 sm:h-40 sm:w-40">
                   <Image
                     src={profileImage}
@@ -113,13 +113,13 @@ export default function AnimatedBanner({
         )}
 
         {/* Decorative line */}
-        <div className="mt-6 h-2 w-24 bg-red-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] sm:w-32" />
+        <div className="mt-6 h-2 w-24 bg-moss-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] sm:w-32" />
 
         {/* Call to Action Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <Link
             href="/obra-a-pedido"
-            className="group inline-flex items-center justify-center gap-2 rounded-lg border-4 border-white bg-red-600 px-6 py-3 text-lg font-black text-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)] transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-red-700 hover:shadow-none"
+            className="group inline-flex items-center justify-center gap-2 rounded-lg border-4 border-white bg-moss-500 px-6 py-3 text-lg font-black text-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)] transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-moss-600 hover:shadow-none"
           >
             <Palette className="h-5 w-5" />
             Obra a Pedido

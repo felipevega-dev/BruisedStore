@@ -46,10 +46,9 @@ service cloud.firestore {
       // Cualquiera puede crear órdenes (usuarios anónimos pueden comprar)
       allow create: if true;
 
-      // Lectura: Admin puede ver todas, usuarios solo las suyas
+      // Lectura: Admin puede ver todas, usuarios solo las suyas (lectura pública vía API segura)
       allow read: if isAdmin() || 
-                     (request.auth != null && resource.data.userId == request.auth.uid) ||
-                     (request.auth == null && true); // Permite lectura temporal para confirmación
+                     (request.auth != null && resource.data.userId == request.auth.uid);
 
       // Solo administradores pueden actualizar/eliminar
       allow update, delete: if isAdmin();

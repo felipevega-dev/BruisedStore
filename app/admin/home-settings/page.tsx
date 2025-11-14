@@ -234,14 +234,14 @@ export default function HomeSettingsPage() {
 
   if (loading || authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
-        <Loader2 className="h-12 w-12 animate-spin text-red-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
+        <Loader2 className="h-12 w-12 animate-spin text-moss-600" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
+    <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
       <ToastContainer />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -249,15 +249,15 @@ export default function HomeSettingsPage() {
           <div>
             <Link
               href="/admin"
-              className="mb-4 inline-flex items-center gap-2 text-red-300 transition-colors hover:text-red-400"
+              className="mb-4 inline-flex items-center gap-2 text-terra-300 transition-colors hover:text-terra-400"
             >
               <ArrowLeft className="h-5 w-5" />
               Volver al Panel
             </Link>
-            <h1 className="text-3xl font-black text-red-100 sm:text-4xl">
+            <h1 className="text-3xl font-black text-terra-100 sm:text-4xl">
               Configuración del Home
             </h1>
-            <p className="mt-2 text-red-300">Personaliza la página principal</p>
+            <p className="mt-2 text-terra-300">Personaliza la página principal</p>
           </div>
 
           <div className="flex gap-3">
@@ -272,7 +272,7 @@ export default function HomeSettingsPage() {
             <button
               onClick={handleSave}
               disabled={saving || uploading}
-              className="flex items-center gap-2 rounded-lg border-2 border-red-900 bg-red-600 px-6 py-2 font-bold text-white transition-all hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg border-2 border-terra-900 bg-moss-500 px-6 py-2 font-bold text-white transition-all hover:bg-moss-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving || uploading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -286,12 +286,12 @@ export default function HomeSettingsPage() {
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Banner Settings */}
-          <div className="rounded-lg border-2 border-red-900 bg-black/60 p-6 backdrop-blur-sm">
-            <h2 className="mb-4 text-2xl font-bold text-red-100">Banner Principal</h2>
+          <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 backdrop-blur-sm">
+            <h2 className="mb-4 text-2xl font-bold text-terra-100">Banner Principal</h2>
 
             {/* Profile Image */}
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-bold text-red-100">
+              <label className="mb-2 block text-sm font-bold text-terra-100">
                 Foto de Perfil
               </label>
               <div className="flex items-center gap-4">
@@ -315,7 +315,7 @@ export default function HomeSettingsPage() {
                   />
                   <button
                     onClick={() => profileImageRef.current?.click()}
-                    className="flex items-center gap-2 rounded border-2 border-red-900 bg-red-950 px-4 py-2 text-sm font-bold text-red-100 transition-all hover:bg-red-900"
+                    className="flex items-center gap-2 rounded border-2 border-terra-900 bg-moss-900 px-4 py-2 text-sm font-bold text-terra-100 transition-all hover:bg-terra-900"
                   >
                     <Upload className="h-4 w-4" />
                     {settings.profileImageUrl ? "Cambiar" : "Subir"}
@@ -326,7 +326,7 @@ export default function HomeSettingsPage() {
 
             {/* Hero Title */}
             <div className="mb-4">
-              <label className="mb-2 block text-sm font-bold text-red-100">
+              <label className="mb-2 block text-sm font-bold text-terra-100">
                 Título Principal *
               </label>
               <input
@@ -335,14 +335,14 @@ export default function HomeSettingsPage() {
                 onChange={(e) =>
                   setSettings({ ...settings, heroTitle: e.target.value })
                 }
-                className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
                 placeholder="José Vega"
               />
             </div>
 
             {/* Hero Subtitle */}
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-bold text-red-100">
+              <label className="mb-2 block text-sm font-bold text-terra-100">
                 Subtítulo
               </label>
               <input
@@ -351,14 +351,14 @@ export default function HomeSettingsPage() {
                 onChange={(e) =>
                   setSettings({ ...settings, heroSubtitle: e.target.value })
                 }
-                className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
                 placeholder="Arte Contemporáneo"
               />
             </div>
 
             {/* Banner Images */}
             <div>
-              <label className="mb-2 block text-sm font-bold text-red-100">
+              <label className="mb-2 block text-sm font-bold text-terra-100">
                 Imágenes del Carrusel ({settings.bannerImages.length}/12)
               </label>
               <div className="mb-3 grid grid-cols-3 gap-2">
@@ -368,11 +368,11 @@ export default function HomeSettingsPage() {
                       src={img}
                       alt={`Banner ${index + 1}`}
                       fill
-                      className="rounded border-2 border-red-900 object-cover"
+                      className="rounded border-2 border-terra-900 object-cover"
                     />
                     <button
                       onClick={() => removeBannerImage(index)}
-                      className="absolute right-1 top-1 rounded-full bg-red-600 p-1 opacity-0 transition-opacity group-hover:opacity-100"
+                      className="absolute right-1 top-1 rounded-full bg-moss-500 p-1 opacity-0 transition-opacity group-hover:opacity-100"
                     >
                       <X className="h-4 w-4 text-white" />
                     </button>
@@ -390,7 +390,7 @@ export default function HomeSettingsPage() {
               <button
                 onClick={() => bannerImagesRef.current?.click()}
                 disabled={settings.bannerImages.length >= 12}
-                className="flex w-full items-center justify-center gap-2 rounded border-2 border-red-900 bg-red-950 px-4 py-3 font-bold text-red-100 transition-all hover:bg-red-900 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded border-2 border-terra-900 bg-moss-900 px-4 py-3 font-bold text-terra-100 transition-all hover:bg-terra-900 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <ImageIcon className="h-5 w-5" />
                 Agregar Imágenes
@@ -404,12 +404,12 @@ export default function HomeSettingsPage() {
           </div>
 
           {/* Content Settings */}
-          <div className="rounded-lg border-2 border-red-900 bg-black/60 p-6 backdrop-blur-sm">
-            <h2 className="mb-4 text-2xl font-bold text-red-100">Contenido Principal</h2>
+          <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 backdrop-blur-sm">
+            <h2 className="mb-4 text-2xl font-bold text-terra-100">Contenido Principal</h2>
 
             {/* Content Title */}
             <div className="mb-4">
-              <label className="mb-2 block text-sm font-bold text-red-100">
+              <label className="mb-2 block text-sm font-bold text-terra-100">
                 Título de Sección *
               </label>
               <input
@@ -418,13 +418,13 @@ export default function HomeSettingsPage() {
                 onChange={(e) =>
                   setSettings({ ...settings, contentTitle: e.target.value })
                 }
-                className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
               />
             </div>
 
             {/* Content Text */}
             <div className="mb-6">
-              <label className="mb-2 block text-sm font-bold text-red-100">
+              <label className="mb-2 block text-sm font-bold text-terra-100">
                 Texto de Contenido (Markdown soportado) *
               </label>
               <textarea
@@ -433,16 +433,16 @@ export default function HomeSettingsPage() {
                   setSettings({ ...settings, contentText: e.target.value })
                 }
                 rows={6}
-                className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
               />
-              <p className="mt-1 text-xs text-red-300">
+              <p className="mt-1 text-xs text-terra-300">
                 Soporta **negrita**, *cursiva*, listas, etc.
               </p>
             </div>
 
             {/* Video Type */}
             <div className="mb-4">
-              <label className="mb-2 block text-sm font-bold text-red-100">
+              <label className="mb-2 block text-sm font-bold text-terra-100">
                 Tipo de Video
               </label>
               <select
@@ -453,7 +453,7 @@ export default function HomeSettingsPage() {
                     videoType: e.target.value as HomeSettings["videoType"],
                   })
                 }
-                className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
               >
                 <option value="none">Sin Video</option>
                 <option value="youtube">YouTube</option>
@@ -464,7 +464,7 @@ export default function HomeSettingsPage() {
             {/* Video URL */}
             {settings.videoType === "youtube" && (
               <div className="mb-4">
-                <label className="mb-2 block text-sm font-bold text-red-100">
+                <label className="mb-2 block text-sm font-bold text-terra-100">
                   URL del Video
                 </label>
                 <input
@@ -473,7 +473,7 @@ export default function HomeSettingsPage() {
                   onChange={(e) =>
                     setSettings({ ...settings, videoUrl: e.target.value })
                   }
-                  className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                  className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
                   placeholder="https://www.youtube.com/watch?v=..."
                 />
               </div>
@@ -482,13 +482,13 @@ export default function HomeSettingsPage() {
             {/* Video Upload */}
             {settings.videoType === "upload" && (
               <div className="mb-4">
-                <label className="mb-2 block text-sm font-bold text-red-100">
+                <label className="mb-2 block text-sm font-bold text-terra-100">
                   Archivo de Video (máx 50MB)
                 </label>
 
                 {/* Current video preview */}
                 {settings.videoFile && !videoUploadFile && (
-                  <div className="mb-4 overflow-hidden rounded-lg border-2 border-red-900 bg-black">
+                  <div className="mb-4 overflow-hidden rounded-lg border-2 border-terra-900 bg-black">
                     <video
                       src={settings.videoFile}
                       controls
@@ -498,7 +498,7 @@ export default function HomeSettingsPage() {
                       Tu navegador no soporta el elemento de video.
                     </video>
                     <div className="p-2 text-center">
-                      <p className="text-xs text-red-300">Video actual</p>
+                      <p className="text-xs text-terra-300">Video actual</p>
                     </div>
                   </div>
                 )}
@@ -524,7 +524,7 @@ export default function HomeSettingsPage() {
                 />
                 <button
                   onClick={() => videoFileRef.current?.click()}
-                  className="flex w-full items-center justify-center gap-2 rounded border-2 border-red-900 bg-red-950 px-4 py-3 font-bold text-red-100 transition-all hover:bg-red-900"
+                  className="flex w-full items-center justify-center gap-2 rounded border-2 border-terra-900 bg-moss-900 px-4 py-3 font-bold text-terra-100 transition-all hover:bg-terra-900"
                 >
                   <Upload className="h-5 w-5" />
                   {settings.videoFile ? "Cambiar Video" : "Seleccionar Video"}
@@ -535,7 +535,7 @@ export default function HomeSettingsPage() {
             {/* Video Size */}
             {settings.videoType !== "none" && (
               <div className="mb-4">
-                <label className="mb-2 block text-sm font-bold text-red-100">
+                <label className="mb-2 block text-sm font-bold text-terra-100">
                   Tamaño del Video
                 </label>
                 <select
@@ -546,7 +546,7 @@ export default function HomeSettingsPage() {
                       videoSize: e.target.value as HomeSettings["videoSize"],
                     })
                   }
-                  className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                  className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
                 >
                   <option value="small">Pequeño (256px)</option>
                   <option value="medium">Mediano (320px)</option>
@@ -558,7 +558,7 @@ export default function HomeSettingsPage() {
             {/* Video Position */}
             {settings.videoType !== "none" && (
               <div className="mb-4">
-                <label className="mb-2 block text-sm font-bold text-red-100">
+                <label className="mb-2 block text-sm font-bold text-terra-100">
                   Posición del Video
                 </label>
                 <select
@@ -569,12 +569,12 @@ export default function HomeSettingsPage() {
                       videoPosition: e.target.value as HomeSettings["videoPosition"],
                     })
                   }
-                  className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                  className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
                 >
                   <option value="left">Izquierda (texto a la derecha)</option>
                   <option value="right">Derecha (texto a la izquierda)</option>
                 </select>
-                <p className="mt-1 text-xs text-red-300">
+                <p className="mt-1 text-xs text-terra-300">
                   El video siempre aparece al lado del texto (no debajo)
                 </p>
               </div>
@@ -582,7 +582,7 @@ export default function HomeSettingsPage() {
 
             {/* Background Style */}
             <div>
-              <label className="mb-2 block text-sm font-bold text-red-100">
+              <label className="mb-2 block text-sm font-bold text-terra-100">
                 Estilo de Fondo
               </label>
               <select
@@ -593,7 +593,7 @@ export default function HomeSettingsPage() {
                     backgroundStyle: e.target.value as HomeSettings["backgroundStyle"],
                   })
                 }
-                className="w-full rounded border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100"
+                className="w-full rounded border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100"
               >
                 <option value="gray">Gris</option>
                 <option value="book">Libro (Beige)</option>

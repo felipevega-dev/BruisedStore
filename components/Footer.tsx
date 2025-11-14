@@ -28,7 +28,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-gray-600 transition-colors hover:text-red-600"
+                  className="text-gray-600 transition-colors hover:text-moss-600"
                 >
                   Galería
                 </Link>
@@ -36,7 +36,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/obra-a-pedido"
-                  className="text-gray-600 transition-colors hover:text-red-600"
+                  className="text-gray-600 transition-colors hover:text-moss-600"
                 >
                   Obra a Pedido
                 </Link>
@@ -44,7 +44,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/carrito"
-                  className="text-gray-600 transition-colors hover:text-red-600"
+                  className="text-gray-600 transition-colors hover:text-moss-600"
                 >
                   Carrito
                 </Link>

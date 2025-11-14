@@ -104,7 +104,7 @@ export default function EditProfilePage() {
   if (authLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
-        <Loader2 className="h-12 w-12 animate-spin text-red-600" />
+        <Loader2 className="h-12 w-12 animate-spin text-moss-600" />
       </div>
     );
   }
@@ -121,7 +121,7 @@ export default function EditProfilePage() {
           <div className="mb-8">
             <Link
               href="/profile"
-              className="group mb-4 inline-flex items-center gap-2 text-gray-700 transition-colors hover:text-red-600"
+              className="group mb-4 inline-flex items-center gap-2 text-gray-700 transition-colors hover:text-moss-600"
             >
               <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
               <span className="font-bold">Volver al Perfil</span>
@@ -148,7 +148,7 @@ export default function EditProfilePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, displayName: e.target.value })
                 }
-                className="w-full border-4 border-black bg-white px-4 py-3 font-semibold text-black transition-all placeholder:text-gray-400 focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                className="w-full border-4 border-black bg-white px-4 py-3 font-semibold text-black transition-all placeholder:text-gray-400 focus:border-moss-500 focus:outline-none focus:ring-4 focus:ring-moss-500/20"
                 placeholder="Tu nombre"
               />
             </div>
@@ -164,7 +164,7 @@ export default function EditProfilePage() {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                className="w-full border-4 border-black bg-white px-4 py-3 font-semibold text-black transition-all placeholder:text-gray-400 focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                className="w-full border-4 border-black bg-white px-4 py-3 font-semibold text-black transition-all placeholder:text-gray-400 focus:border-moss-500 focus:outline-none focus:ring-4 focus:ring-moss-500/20"
                 placeholder="tu@email.com"
               />
               <p className="mt-2 text-xs text-gray-600">
@@ -197,7 +197,7 @@ export default function EditProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, newPassword: e.target.value })
                     }
-                    className="w-full border-4 border-black bg-white px-4 py-3 font-semibold text-black transition-all placeholder:text-gray-400 focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                    className="w-full border-4 border-black bg-white px-4 py-3 font-semibold text-black transition-all placeholder:text-gray-400 focus:border-moss-500 focus:outline-none focus:ring-4 focus:ring-moss-500/20"
                     placeholder="••••••••"
                   />
                 </div>
@@ -215,7 +215,7 @@ export default function EditProfilePage() {
                         confirmPassword: e.target.value,
                       })
                     }
-                    className="w-full border-4 border-black bg-white px-4 py-3 font-semibold text-black transition-all placeholder:text-gray-400 focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                    className="w-full border-4 border-black bg-white px-4 py-3 font-semibold text-black transition-all placeholder:text-gray-400 focus:border-moss-500 focus:outline-none focus:ring-4 focus:ring-moss-500/20"
                     placeholder="••••••••"
                   />
                 </div>
@@ -227,7 +227,7 @@ export default function EditProfilePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex flex-1 items-center justify-center gap-2 border-4 border-black bg-red-600 px-6 py-3 font-black text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 disabled:bg-gray-400"
+                className="flex flex-1 items-center justify-center gap-2 border-4 border-black bg-moss-500 px-6 py-3 font-black text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 disabled:bg-gray-400"
               >
                 {loading ? (
                   <>

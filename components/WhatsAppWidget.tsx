@@ -91,7 +91,7 @@ export default function WhatsAppWidget() {
       <div className="flex items-center gap-2">
         <button
           onClick={handleDismiss}
-          className="flex h-12 w-12 items-center justify-center rounded-full border-4 border-black bg-red-600 text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
+          className="flex h-12 w-12 items-center justify-center rounded-full border-4 border-black bg-moss-500 text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
           aria-label="Cerrar chat"
         >
           <X className="h-5 w-5" />

@@ -51,7 +51,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
               <button
                 onClick={goToPrevious}
                 className="absolute left-4 top-1/2 z-20 -translate-y-1/2 border-4 border-black bg-white p-2 
-                           opacity-0 transition-opacity duration-200 hover:bg-yellow-300 active:translate-y-[-48%]
+                           opacity-0 transition-opacity duration-200 hover:bg-terra-300 active:translate-y-[-48%]
                            group-hover:opacity-100"
                 aria-label="Imagen anterior"
               >
@@ -62,7 +62,7 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
               <button
                 onClick={goToNext}
                 className="absolute right-4 top-1/2 z-20 -translate-y-1/2 border-4 border-black bg-white p-2 
-                           opacity-0 transition-opacity duration-200 hover:bg-yellow-300 active:translate-y-[-48%]
+                           opacity-0 transition-opacity duration-200 hover:bg-terra-300 active:translate-y-[-48%]
                            group-hover:opacity-100"
                 aria-label="Imagen siguiente"
               >
@@ -87,9 +87,9 @@ export default function ImageGallery({ images, title }: ImageGalleryProps) {
               onClick={() => goToImage(index)}
               className={`
                 relative aspect-square border-4 overflow-hidden
-                transition-all duration-200 hover:border-yellow-300
+                transition-all duration-200 hover:border-terra-300
                 ${index === currentIndex 
-                  ? 'border-yellow-400 ring-4 ring-yellow-400 ring-offset-2' 
+                  ? 'border-terra-400 ring-4 ring-terra-400 ring-offset-2' 
                   : 'border-black opacity-70 hover:opacity-100'
                 }
               `}

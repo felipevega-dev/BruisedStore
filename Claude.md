@@ -7,7 +7,7 @@ This file provides guidance to Claude Code when working with this repository.
 **Project:** José Vega Art Gallery - E-commerce for Chilean artist
 **Stack:** Next.js 16 + React 19 + TypeScript 5 + Tailwind 4 + Firebase 12
 **Design:** Brutalist (heavy borders, bold shadows, red/yellow accents)
-**Status:** ✅ Production-ready with 20+ features implemented
+**Status:** ✅ Production-ready with 25+ features implemented
 
 ### What Works
 ✅ Full e-commerce (cart, checkout, orders)
@@ -21,6 +21,9 @@ This file provides guidance to Claude Code when working with this repository.
 ✅ Error boundaries (graceful error handling)
 ✅ Inventory management (stock tracking & auto-decrement)
 ✅ PWA support (offline mode + installable)
+✅ Background music system with master volume control
+✅ Blog system with Markdown support
+✅ General site settings (colors, contact, social media)
 
 ### What Needs Work
 🔴 Payment gateway (manual only)
@@ -193,6 +196,84 @@ Admin panel (`app/admin`) uses Firestore `onSnapshot` listeners to track pending
 }
 ```
 
+**`homeSettings`** - Homepage configuration
+```typescript
+{
+  bannerTitle: string
+  bannerDescription: string
+  heroImageUrl: string
+  videoUrl?: string
+  videoTitle?: string
+  videoDescription?: string
+  content?: string          // Rich text (Markdown)
+  backgroundStyle?: string  // 'dark' | 'light' | 'gradient-red' | 'gradient-blue'
+  videoSize?: string        // 'small' | 'medium' | 'large'
+  videoPosition?: string    // 'left' | 'right'
+  updatedAt: Date
+}
+```
+
+**`generalSettings`** - Site-wide configuration
+```typescript
+{
+  // PWA Settings
+  showPWAPrompt: boolean
+
+  // Brand Colors
+  primaryColor: string      // Hex color
+  secondaryColor: string
+  accentColor: string
+
+  // Contact Information
+  contactEmail: string
+  contactPhone: string
+  whatsappNumber: string
+
+  // Social Media
+  instagramUrl?: string
+  tiktokUrl?: string
+  facebookUrl?: string
+
+  // Footer
+  footerText: string
+
+  // Banner Settings
+  bannerBackgroundColor?: string
+  bannerOverlayOpacity?: number  // 0-100
+
+  // UI Preferences
+  themeMode?: 'dark' | 'light'
+  enableAnimations?: boolean
+}
+```
+
+**`musicSettings`** - Background music configuration
+```typescript
+{
+  enabled: boolean
+  title: string
+  audioUrl: string
+  defaultVolume: number     // 0-100 (acts as master/ceiling for user volume)
+  updatedAt: Date
+}
+```
+
+**`blogPosts`** - Blog articles
+```typescript
+{
+  id: string
+  title: string
+  slug: string              // URL-friendly (auto-generated from title)
+  content: string           // Markdown format
+  excerpt?: string          // Short description
+  coverImageUrl?: string
+  author: string
+  published: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+```
+
 ### Security Rules Summary
 
 - **paintings:** Public read, admin-only write
@@ -201,6 +282,10 @@ Admin panel (`app/admin`) uses Firestore `onSnapshot` listeners to track pending
 - **reviews:** Approved reviews public, own reviews always visible, admin sees all
 - **wishlist:** User can only access their own items
 - **coupons:** Public read (for validation), admin-only write
+- **homeSettings:** Public read, admin-only write
+- **generalSettings:** Public read, admin-only write
+- **musicSettings:** Public read, admin-only write
+- **blogPosts:** Published posts public read, admin full access
 
 Full rules in [`firestore.rules`](firestore.rules).
 
@@ -227,13 +312,21 @@ See [`types/index.ts`](types/index.ts) for full definitions. Key points:
 - **`/login`, `/register`** - Authentication
 
 ### Admin Pages (auth + admin claim required)
-- **`/admin`** - Dashboard with metrics
+- **`/admin`** - Dashboard with metrics and real-time notifications
 - **`/admin/paintings`** - CRUD for paintings (multi-image upload)
 - **`/admin/orders-store`** - Manage e-commerce orders
 - **`/admin/orders`** - Manage custom commission requests
 - **`/admin/reviews`** - Moderate reviews (approve/hide/delete)
 - **`/admin/coupons`** - Manage discount codes
 - **`/admin/analytics`** - Sales dashboard (recharts graphs)
+- **`/admin/home-settings`** - Customize homepage (banner, video, content)
+- **`/admin/general-settings`** - Site-wide settings (colors, contact, social media, PWA)
+- **`/admin/music`** - Background music configuration
+- **`/admin/blog`** - Create and manage blog posts
+
+### Blog Pages
+- **`/blog`** - Blog listing page with all published articles
+- **`/blog/[slug]`** - Individual blog post with Markdown rendering
 
 ## Environment Variables
 
@@ -359,7 +452,7 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 ### Open Items
 - None currently reported
 
-## Feature Summary (All Sprints)
+## ✨ Complete Feature List
 
 ### ✅ Core E-commerce
 - Gallery with filters (category, price, search)
@@ -367,6 +460,7 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 - Guest & registered checkout with WhatsApp integration
 - Order management (2 types: store orders + custom commissions)
 - Coupon system with validation
+- Inventory management (stock tracking, auto-decrement)
 
 ### ✅ User System
 - Email/password + Google OAuth authentication
@@ -375,12 +469,15 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 - Review system with admin moderation (approve/hide/delete)
 
 ### ✅ Admin Panel
-- Dashboard with real-time metrics
+- Dashboard with real-time metrics and notifications
 - CRUD for paintings (multi-image upload, drag & drop)
 - Order management (status tracking, dual system)
-- Review moderation
+- Review moderation with bulk actions
 - Coupon management with comprehensive validation
 - Home page customization (banner, video, content)
+- General site settings (colors, contact, social media, PWA)
+- Background music configuration (master volume control)
+- Blog post management (Markdown editor)
 - Toast notifications across all admin operations
 - Loading states to prevent race conditions
 
@@ -392,6 +489,29 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 - Guest checkout + soft registration modal
 - Form validation with visual feedback
 
+### ✅ Content Management
+- Blog system with Markdown support
+- Rich text editor (TipTap)
+- SEO-optimized blog posts with dynamic metadata
+- Auto-slug generation from titles
+- Draft/Publish workflow
+
+### ✅ Site Configuration
+- General settings for site-wide preferences
+- Brand color customization with live preview
+- Contact information management
+- Social media integration
+- PWA settings (install prompt control)
+- Footer and banner customization
+
+### ✅ Audio System
+- Background music player with fixed bar
+- Master volume control (admin sets ceiling)
+- User volume preferences (localStorage)
+- Play/pause, track info display
+- Hydration-safe implementation
+- Automatic spacing management
+
 ### ✅ UX/UI Features
 - Brutalist design system
 - Fully responsive (mobile-first, hamburger menu)
@@ -399,18 +519,144 @@ await updateDoc(doc(db, 'paintings', paintingId), {
 - Toast notification system (replaced all alerts)
 - Lazy loading + image optimization (-75% size)
 - 4 background themes for homepage
+- Error boundaries with graceful fallback
+- PWA support (offline mode, installable)
 
 ### ✅ Technical Optimizations
 - Memory leak fix (Header.tsx nested listeners)
 - Parallel async operations (10x faster wishlist)
 - Consolidated utilities (removed duplicate formatPrice)
 - Real-time Firestore listeners with proper cleanup
-
-**Status:** ✅ Production-ready. 20+ major features. Build passing without errors.
+- Hydration mismatch prevention (SSR/CSR sync)
+- Service worker for offline support
 
 ---
 
-## Key Implementation Patterns
+## Recent Updates (November 2025)
+
+### ✅ Background Music System
+**Files:** `components/BackgroundMusic.tsx`, `contexts/MusicContext.tsx`, `app/admin/music/page.tsx`
+
+**Features:**
+- **Master Volume Control:** Admin sets `defaultVolume` (0-100) which acts as ceiling
+- **User Volume:** Users can adjust from 0-100%, but actual volume is capped at admin's setting
+  - Formula: `realVolume = (userVolume / 100) * (masterVolume / 100)`
+  - Example: Admin sets 50%, user sets 100% → actual audio plays at 50%
+- **Persistent Preferences:** User volume saved to localStorage
+- **Music Bar:** Fixed top bar with play/pause, volume slider, and track info
+- **Hydration Safe:** Uses `isMounted` pattern to prevent SSR/CSR mismatches
+- **Spacer Component:** `MusicBarSpacer` adds proper spacing below Header when music bar is active
+
+**Implementation Details:**
+```typescript
+// getRealVolume() calculates actual audio volume
+const getRealVolume = () => (userVolume / 100) * (masterVolume / 100);
+
+// Audio element receives the real volume
+if (audioRef.current) {
+  audioRef.current.volume = getRealVolume();
+}
+```
+
+**Admin Controls:**
+- Toggle music on/off site-wide
+- Upload audio file to Firebase Storage
+- Set track title
+- Configure master volume (default ceiling for all users)
+
+---
+
+### ✅ Blog System
+**Files:** `app/blog/`, `app/admin/blog/page.tsx`, `components/TipTapEditor.tsx`
+
+**Features:**
+- **Rich Text Editor:** TipTap editor with Markdown support
+- **Auto-Slug Generation:** URL-friendly slugs from titles (e.g., "Mi Arte" → "mi-arte")
+- **Draft/Publish:** Toggle published status
+- **Cover Images:** Optional cover image upload
+- **SEO Ready:** Dynamic metadata with OpenGraph tags
+- **Responsive Layout:** Mobile-first design with brutalist styling
+
+**Markdown Support:**
+- Headings (H1-H6)
+- Bold, Italic, Underline
+- Ordered/Unordered lists
+- Blockquotes
+- Code blocks
+- Links
+- Images
+
+**Usage:**
+1. Admin creates post in `/admin/blog`
+2. Write content in TipTap editor or paste Markdown
+3. Toggle "Publicar" to make visible
+4. Posts appear at `/blog`, individual posts at `/blog/[slug]`
+
+---
+
+### ✅ General Settings System
+**Files:** `app/admin/general-settings/page.tsx`, `components/PWAInstallPrompt.tsx`
+
+**Purpose:** Centralized site-wide configuration separate from page-specific settings
+
+**Sections:**
+1. **PWA Settings**
+   - Toggle install prompt visibility
+   - Control when users see "Add to Home Screen" prompt
+
+2. **Brand Colors** (with visual color pickers)
+   - Primary Color (default: #DC2626 red)
+   - Secondary Color
+   - Accent Color
+
+3. **Contact Information**
+   - Email address
+   - Phone number
+   - WhatsApp number (with format hints)
+
+4. **Social Media Links**
+   - Instagram URL
+   - TikTok URL
+   - Facebook URL
+
+5. **Footer Settings**
+   - Copyright text
+   - Footer content
+
+6. **Banner Settings**
+   - Background color
+   - Overlay opacity (0-100)
+
+7. **UI Preferences**
+   - Theme mode (dark/light)
+   - Animation toggles
+
+**Migration Note:** PWA prompt setting was moved from `homeSettings` to `generalSettings` for better organization.
+
+---
+
+### ✅ Hydration Fixes
+**Problem:** React hydration mismatches when music bar was enabled/disabled
+**Solution:**
+- Added `suppressHydrationWarning` to `app/layout.tsx` and `components/Header.tsx`
+- Implemented `isMounted` pattern in `MusicContext` and `BackgroundMusic`
+- Created `MusicBarSpacer` component for consistent spacing
+
+**Pattern:**
+```typescript
+const [isMounted, setIsMounted] = useState(false);
+
+useEffect(() => {
+  setIsMounted(true);
+}, []);
+
+// Only render dynamic content after mount
+{isMounted && hasMusicBar && <BackgroundMusic />}
+```
+
+---
+
+## Critical Implementation Patterns
 
 ### 1. Image Cropper System
 - **Library:** react-easy-crop for advanced cropping
@@ -493,147 +739,202 @@ return () => { unsub1(); unsub2(); };
 - **Code splitting:** Consolidated utilities (removed duplicates)
 - **Result:** -75% image size, -57% Time to Interactive
 
+### 9. Music System Architecture
+**Master Volume Pattern:**
+```typescript
+// Admin sets ceiling (0-100)
+const masterVolume = 50; // 50% max
+
+// User controls their volume (0-100)
+const userVolume = 100; // User thinks they're at 100%
+
+// Actual audio plays at combination
+const realVolume = (userVolume / 100) * (masterVolume / 100);
+// Result: 100% * 50% = 50% actual volume
+
+// Applied to audio element
+audioRef.current.volume = realVolume; // 0.0 - 1.0 range
+```
+
+**Why this approach?**
+- Admin controls maximum loudness site-wide
+- Users feel in control (slider goes 0-100%)
+- Prevents music from being too loud
+- User preference persists in localStorage
+
+**Hydration Safety:**
+```typescript
+// MusicContext provides isMounted state
+const { hasMusicBar, isMounted } = useMusicContext();
+
+// Only render after client mount
+{isMounted && hasMusicBar && <BackgroundMusic />}
+
+// Spacer ensures consistent layout
+<MusicBarSpacer /> {/* Adds h-9 when music bar active */}
+```
+
+### 10. Blog Content Workflow
+**Admin Side:**
+1. Create post in `/admin/blog`
+2. Enter title → slug auto-generated
+3. Write in TipTap or paste Markdown
+4. Upload cover image (optional)
+5. Toggle "Publicar" when ready
+6. Save to Firestore `blogPosts` collection
+
+**User Side:**
+1. Visit `/blog` to see all published posts
+2. Click post to read at `/blog/[slug]`
+3. Markdown renders with `react-markdown`
+4. SEO metadata includes title, excerpt, cover image
+
+**Slug Generation:**
+```typescript
+const generateSlug = (title: string) => 
+  title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Remove accents
+    .replace(/[^a-z0-9]+/g, "-")     // Replace non-alphanumeric
+    .replace(/^-+|-+$/g, "");        // Trim dashes
+
+// "Mi Arte Favorito 2024!" → "mi-arte-favorito-2024"
+```
+
 ---
 
 ## Areas for Improvement
 
 ### 🔴 High Priority
 
-#### 1. **Email Notifications (Firebase Functions)**
+#### 1. **Payment Gateway Integration**
+**Problem:** Only supports "transferencia" and "efectivo" (manual)
+**Solution:**
+- Integrate Transbank WebPay (Chile standard)
+- Or MercadoPago / Stripe for Latin America
+- Auto-update order status on payment confirmation
+**Impact:** Critical for scaling, automated payment flow, reduces manual work
+**Time:** 4-6 hours
+
+#### 2. **Email Notifications (Firebase Functions)**
 **Problem:** Users receive no confirmation emails after orders
 **Solution:**
 - Implement Firebase Cloud Functions + SendGrid/Resend
 - Send emails on: order creation, status updates, custom order acceptance
 - Templates: Order confirmation, shipping notification, payment received
-**Impact:** Professional UX, reduces support queries
+**Impact:** Professional UX, reduces support queries, builds trust
 **Time:** 2-3 hours
 
-#### 2. **Error Boundaries**
-**Problem:** React errors crash entire app, no fallback UI
-**Solution:**
-- Add Error Boundary components at route level
-- Implement fallback UI with "Try again" button
-- Log errors to Firebase (or Sentry for production)
-**Impact:** Better reliability, graceful degradation
-**Time:** 30-45 minutes
-
-#### 3. **Search Functionality Enhancement**
+#### 3. **Advanced Search with Algolia**
 **Problem:** Basic search only in gallery, no fuzzy matching
 **Solution:**
 - Add Algolia or Meilisearch for instant search
-- Search across: paintings, categories, descriptions
+- Search across: paintings, categories, descriptions, blog posts
 - Implement autocomplete suggestions
-**Impact:** Improved discoverability, better UX
+- Typo tolerance and relevance ranking
+**Impact:** Improved discoverability, better UX, SEO benefits
 **Time:** 2-3 hours
-
-#### 4. **Payment Gateway Integration**
-**Problem:** Only supports "transferencia" and "efectivo" (manual)
-**Solution:**
-- Integrate Transbank WebPay (Chile standard)
-- Or MercadoPago / Stripe for Latin America
-- Auto-update order status on payment
-**Impact:** Critical for scaling, automated payment flow
-**Time:** 4-6 hours
 
 ### 🟡 Medium Priority
 
-#### 5. **PWA Implementation**
-**Problem:** No offline support, not installable
-**Solution:**
-- Add service workers for offline mode
-- Create manifest.json with app icons
-- Implement install prompt
-- Cache critical assets
-**Impact:** App-like experience, works offline
-**Time:** 30-40 minutes
-
-#### 6. **Advanced Analytics**
-**Problem:** Basic dashboard, no conversion tracking
-**Solution:**
+#### 4. **Advanced Analytics Dashboard**
+**Current:** Basic dashboard with order counts
+**Improvements:**
 - Google Analytics 4 integration
 - Track: add to cart, checkout start, purchase complete
 - Conversion funnels, user behavior analysis
+- Revenue charts by category, time period
+- Top-selling paintings report
 **Impact:** Data-driven decisions, optimize conversion
-**Time:** 1-2 hours
+**Time:** 2-3 hours
 
-#### 7. **Inventory Management**
-**Problem:** No stock tracking for paintings (sold items still visible)
-**Solution:**
-- Add `stock` field to paintings
-- Decrement on purchase
-- Hide "Add to Cart" when stock = 0
-- Admin alerts on low stock
-**Impact:** Prevents double-selling, better inventory control
-**Time:** 1-2 hours
+#### 5. **Enhanced PWA Features**
+**Current:** Basic PWA with offline page
+**Improvements:**
+- Push notifications for order updates
+- Background sync for offline orders
+- More aggressive caching strategy
+- Update prompt when new version available
+**Impact:** App-like experience, better engagement
+**Time:** 2-3 hours
 
-#### 8. **Bulk Operations in Admin**
-**Problem:** Must update orders one-by-one
+#### 6. **Bulk Operations in Admin**
+**Problem:** Must update items one-by-one
 **Solution:**
-- Bulk select checkboxes
+- Bulk select checkboxes on orders/reviews/paintings
 - Batch actions: approve reviews, update order status, delete
 - Confirmation modal for bulk operations
-**Impact:** Admin efficiency, saves time
+- Progress indicators for long operations
+**Impact:** Admin efficiency, saves significant time
 **Time:** 1.5-2 hours
+
+#### 7. **Blog Enhancements**
+**Current:** Basic blog with Markdown
+**Improvements:**
+- Categories and tags system
+- Related posts suggestions
+- Comments section (with moderation)
+- RSS feed for subscribers
+- Reading time estimates
+- Social sharing buttons per post
+**Impact:** Better content organization, increased engagement
+**Time:** 2-3 hours
 
 ### 🟢 Low Priority / Nice to Have
 
-#### 9. **Blog System**
-**Why:** SEO, content marketing, artist stories
-**Features:** Rich text editor, categories, tags, comments
-**Time:** 1.5-2 hours
+#### 8. **Social Sharing System**
+**Features:** Share buttons on paintings, Open Graph optimization, automatic image generation
+**Time:** 30-45 minutes
+
+#### 9. **Wishlist Sharing**
+**Features:** Public wishlist URLs, shareable links, gift registries
+**Time:** 1 hour
 
 #### 10. **Advanced Discounts**
-**Why:** Marketing campaigns, quantity discounts
-**Features:** Buy 2 get 10%, category-based, user-specific
+**Features:** Buy 2 get 10%, category-based, user-specific, time-limited flash sales
 **Time:** 45-60 minutes
 
-#### 11. **Social Sharing**
-**Why:** Virality, user-generated marketing
-**Features:** Share buttons on paintings, Open Graph optimization
-**Time:** 30 minutes
-
-#### 12. **Wishlist Sharing**
-**Why:** Gift registries, social proof
-**Features:** Public wishlist URLs, shareable links
-**Time:** 1 hour
+#### 11. **Customer Service Chat**
+**Features:** Live chat widget, admin dashboard for conversations, canned responses
+**Time:** 2-3 hours (with third-party service) or 6-8 hours (custom)
 
 ### 🔧 Technical Debt
 
-#### 13. **Test Coverage**
+#### 12. **Test Coverage**
 **Current:** 0% test coverage
 **Goal:**
-- Unit tests for utilities (formatPrice, validation)
+- Unit tests for utilities (formatPrice, validation, slug generation)
 - Integration tests for checkout flow
-- E2E tests with Playwright (critical paths)
-**Time:** 4-6 hours initial setup
+- E2E tests with Playwright (critical paths: purchase, custom order, admin CRUD)
+**Time:** 6-8 hours initial setup + ongoing
 
-#### 14. **TypeScript Strict Mode**
-**Current:** Some `any` types remain (croppedAreaPixels, etc.)
+#### 13. **TypeScript Strict Mode**
+**Current:** Some `any` types remain
 **Goal:** Enable `strict: true` in tsconfig, fix all type errors
 **Time:** 2-3 hours
 
-#### 15. **Accessibility Audit**
-**Issues:** Missing ARIA labels, keyboard navigation gaps
-**Solution:** Run Lighthouse, fix contrast issues, add alt texts
+#### 14. **Accessibility Audit**
+**Issues:** Missing ARIA labels, keyboard navigation gaps, color contrast
+**Solution:** Run Lighthouse, fix contrast issues, add alt texts, keyboard focus indicators
 **Time:** 2-3 hours
 
-#### 16. **Security Hardening**
+#### 15. **Security Hardening**
 - Rate limiting on forms (prevent spam)
 - Input sanitization (XSS prevention)
 - CSRF tokens for state-changing operations
 - Security headers (CSP, HSTS)
+- Regular dependency updates
 **Time:** 3-4 hours
 
 ---
 
-## ✨ Sprint 12: Critical Features (Nov 2025)
+## Recent Sprint Completions
 
-### Completed Features
+### ✅ Sprint 12: Critical Infrastructure (November 2025)
 
-#### 1. Error Boundaries ✅
+#### 1. Error Boundaries
 **Location:** `components/ErrorBoundary.tsx`
-**Purpose:** Prevents app crashes, graceful error handling
-
 **Features:**
 - Catches React errors at component boundaries
 - Shows user-friendly error UI with brutalist design
@@ -642,7 +943,7 @@ return () => { unsub1(); unsub2(); };
 - Actions: Retry, Reload, or Go Home
 - WhatsApp contact link for persistent issues
 
-**Implementation:**
+**Integration:**
 ```tsx
 // Already integrated in app/layout.tsx
 <ErrorBoundary>
@@ -652,14 +953,7 @@ return () => { unsub1(); unsub2(); };
 </ErrorBoundary>
 ```
 
-**Usage:**
-- Wrap critical sections with `<ErrorBoundary>`
-- Provide custom `fallback` prop for custom error UI
-- Errors are logged to console (ready for Sentry integration)
-
----
-
-#### 2. Inventory Management ✅
+#### 2. Inventory Management
 **Files Modified:**
 - `types/index.ts` - Added `stock` and `lowStockThreshold` fields
 - `app/admin/paintings/page.tsx` - Admin UI for stock management
@@ -682,25 +976,7 @@ interface Painting {
 }
 ```
 
-**Firestore Rules Update Needed:**
-```javascript
-// Add to firestore.rules
-match /paintings/{paintingId} {
-  allow update: if request.auth.token.role == 'admin'
-                || (request.resource.data.diff(resource.data).affectedKeys()
-                    .hasOnly(['stock']));  // Allow stock updates from checkout
-}
-```
-
-**UX Features:**
-- **PaintingCard:** Shows low stock badge, hides "Add to Cart" if out of stock
-- **Admin Panel:** Stock input with "vacío = ilimitado" hint
-- **Checkout:** Parallel stock updates with `Promise.all()` for performance
-- **Cart Validation:** Prevents adding out-of-stock items
-
----
-
-#### 3. PWA Support ✅
+#### 3. PWA Support
 **Files Created:**
 - `public/manifest.json` - App manifest with icons and theme
 - `public/sw.js` - Service worker for offline caching
@@ -710,54 +986,29 @@ match /paintings/{paintingId} {
 **Features:**
 - **Installable:** Users can add to home screen
 - **Offline Mode:** Service worker caches pages and assets
-- **Install Prompt:** Shows after 3 seconds (dismissable)
+- **Install Prompt:** Shows after 3 seconds (dismissable, controlled via generalSettings)
 - **Theme:** Red (#DC2626) for brutalist design
-- **Manifest:** Proper icons (192x192, 512x512 needed)
+- **Manifest:** Proper icons and metadata
 
-**Implementation Details:**
-```typescript
-// Service Worker Strategy: Network First, Cache Fallback
-// - Static assets cached on install
-// - Runtime cache for visited pages
-// - Offline page shown when network fails
-```
+**Service Worker Strategy:**
+- Network First, Cache Fallback
+- Static assets cached on install
+- Runtime cache for visited pages
+- Offline page shown when network fails
 
-**Metadata Added to layout.tsx:**
-```typescript
-export const metadata: Metadata = {
-  manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'José Vega Art',
-  },
-};
-```
-
-**TODO: Create App Icons**
-Place in `public/`:
-- `icon-192.png` (192x192px)
-- `icon-512.png` (512x512px)
-Use red (#DC2626) background with white "JV" or logo
-
-**Testing:**
-1. Run `npm run build && npm start`
-2. Open Chrome DevTools → Application → Service Workers
-3. Verify manifest.json loads correctly
-4. Test "Add to Home Screen" on mobile
-5. Turn off network to test offline mode
+**TODO:** Create app icons (192x192 and 512x512) with red background and "JV" or logo
 
 ---
 
 ## Recommended Next Steps (Priority Order)
 
-1. **Payment Gateway** (critical for revenue)
-2. **Email Notifications** (critical for UX)
-3. **Advanced Analytics** (data-driven optimization)
-4. **Create PWA Icons** (complete PWA setup)
+1. **Payment Gateway Integration** - Critical for revenue (~4-6 hours)
+2. **Email Notifications** - Critical for UX (~2-3 hours)
+3. **Advanced Search** - High impact on discovery (~2-3 hours)
+4. **Create PWA Icons** - Complete PWA setup (~30 minutes)
+5. **Advanced Analytics** - Data-driven optimization (~2-3 hours)
 
-**Completed:** Error Boundaries, Inventory Management, PWA
-**Remaining estimated time for top 4:** ~12-15 hours
+**Current Status:** 25+ features complete. Production-ready. Estimated time for top 5 priorities: ~13-18 hours.
 
 ---
 

@@ -251,7 +251,7 @@ export default function AdminCouponsPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
@@ -271,12 +271,12 @@ export default function AdminCouponsPage() {
           <div className="flex items-center gap-4">
             <Link
               href="/admin"
-              className="text-gray-700 transition-colors hover:text-red-600"
+              className="text-gray-700 transition-colors hover:text-moss-600"
             >
               <ArrowLeft className="h-6 w-6" />
             </Link>
             <div className="flex items-center gap-3">
-              <Tag className="h-8 w-8 text-red-600" />
+              <Tag className="h-8 w-8 text-moss-600" />
               <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
                 Gestión de Cupones
               </h1>
@@ -284,7 +284,7 @@ export default function AdminCouponsPage() {
           </div>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="flex items-center gap-2 rounded-lg border-2 border-black bg-red-600 px-4 py-2 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            className="flex items-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-4 py-2 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           >
             <Plus className="h-5 w-5" />
             <span className="hidden sm:inline">Nuevo Cupón</span>
@@ -332,14 +332,14 @@ export default function AdminCouponsPage() {
                     }}
                     className={`w-full rounded-lg border-2 p-3 font-mono font-bold uppercase transition-colors focus:outline-none ${
                       errors.code
-                        ? "border-red-600 focus:border-red-600"
+                        ? "border-moss-500 focus:border-moss-500"
                         : "border-gray-300 focus:border-black"
                     }`}
                     placeholder="VERANO2024"
                     required
                   />
                   {errors.code && (
-                    <p className="mt-1 text-sm font-bold text-red-600">{errors.code}</p>
+                    <p className="mt-1 text-sm font-bold text-moss-600">{errors.code}</p>
                   )}
                 </div>
 
@@ -386,7 +386,7 @@ export default function AdminCouponsPage() {
                     }}
                     className={`w-full rounded-lg border-2 p-3 font-medium transition-colors focus:outline-none ${
                       errors.discountValue
-                        ? "border-red-600 focus:border-red-600"
+                        ? "border-moss-500 focus:border-moss-500"
                         : "border-gray-300 focus:border-black"
                     }`}
                     placeholder={discountType === "percentage" ? "10" : "5000"}
@@ -395,7 +395,7 @@ export default function AdminCouponsPage() {
                     required
                   />
                   {errors.discountValue ? (
-                    <p className="mt-1 text-sm font-bold text-red-600">{errors.discountValue}</p>
+                    <p className="mt-1 text-sm font-bold text-moss-600">{errors.discountValue}</p>
                   ) : (
                     <p className="mt-1 text-xs text-gray-500">
                       {discountType === "percentage" ? "Ej: 10 para 10%" : "Ej: 5000 para $5.000"}
@@ -450,13 +450,13 @@ export default function AdminCouponsPage() {
                     }}
                     className={`w-full rounded-lg border-2 p-3 font-medium transition-colors focus:outline-none ${
                       errors.validFrom
-                        ? "border-red-600 focus:border-red-600"
+                        ? "border-moss-500 focus:border-moss-500"
                         : "border-gray-300 focus:border-black"
                     }`}
                     required
                   />
                   {errors.validFrom && (
-                    <p className="mt-1 text-sm font-bold text-red-600">{errors.validFrom}</p>
+                    <p className="mt-1 text-sm font-bold text-moss-600">{errors.validFrom}</p>
                   )}
                 </div>
 
@@ -473,13 +473,13 @@ export default function AdminCouponsPage() {
                     }}
                     className={`w-full rounded-lg border-2 p-3 font-medium transition-colors focus:outline-none ${
                       errors.validUntil
-                        ? "border-red-600 focus:border-red-600"
+                        ? "border-moss-500 focus:border-moss-500"
                         : "border-gray-300 focus:border-black"
                     }`}
                     required
                   />
                   {errors.validUntil && (
-                    <p className="mt-1 text-sm font-bold text-red-600">{errors.validUntil}</p>
+                    <p className="mt-1 text-sm font-bold text-moss-600">{errors.validUntil}</p>
                   )}
                 </div>
 
@@ -518,7 +518,7 @@ export default function AdminCouponsPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex items-center gap-2 rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50"
+                  className="flex items-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50"
                 >
                   {submitting ? (
                     <>
@@ -570,7 +570,7 @@ export default function AdminCouponsPage() {
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex-1">
                       <div className="mb-2 flex items-center gap-3">
-                        <span className="rounded-lg border-2 border-red-600 bg-red-50 px-4 py-2 font-mono text-xl font-bold text-red-600">
+                        <span className="rounded-lg border-2 border-moss-500 bg-moss-50 px-4 py-2 font-mono text-xl font-bold text-moss-600">
                           {coupon.code}
                         </span>
                         {coupon.isActive && !expired && !limitReached && (
@@ -579,7 +579,7 @@ export default function AdminCouponsPage() {
                           </span>
                         )}
                         {expired && (
-                          <span className="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-800">
+                          <span className="inline-flex items-center rounded-full bg-moss-100 px-3 py-1 text-xs font-bold text-moss-800">
                             EXPIRADO
                           </span>
                         )}
@@ -595,14 +595,14 @@ export default function AdminCouponsPage() {
                         <div className="flex items-center gap-2">
                           {coupon.discountType === "percentage" ? (
                             <>
-                              <Percent className="h-4 w-4 text-red-600" />
+                              <Percent className="h-4 w-4 text-moss-600" />
                               <span className="font-semibold">
                                 {coupon.discountValue}% de descuento
                               </span>
                             </>
                           ) : (
                             <>
-                              <DollarSign className="h-4 w-4 text-red-600" />
+                              <DollarSign className="h-4 w-4 text-moss-600" />
                               <span className="font-semibold">
                                 {formatCLP(coupon.discountValue)} de descuento
                               </span>
@@ -635,7 +635,7 @@ export default function AdminCouponsPage() {
                         onClick={() => toggleActive(coupon)}
                         className={`flex items-center justify-center gap-2 rounded-lg border-2 px-4 py-2 font-bold transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${
                           coupon.isActive
-                            ? "border-yellow-600 bg-yellow-50 text-yellow-700 hover:bg-yellow-100"
+                            ? "border-terra-600 bg-terra-100 text-terra-700 hover:bg-terra-100"
                             : "border-green-600 bg-green-50 text-green-700 hover:bg-green-100"
                         }`}
                         title={coupon.isActive ? "Desactivar" : "Activar"}
@@ -660,7 +660,7 @@ export default function AdminCouponsPage() {
                       </button>
                       <button
                         onClick={() => handleDelete(coupon.id)}
-                        className="flex items-center justify-center gap-2 rounded-lg border-2 border-red-600 bg-red-50 px-4 py-2 font-bold text-red-700 transition-all hover:bg-red-100 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                        className="flex items-center justify-center gap-2 rounded-lg border-2 border-moss-500 bg-moss-50 px-4 py-2 font-bold text-moss-700 transition-all hover:bg-moss-100 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                         aria-label="Eliminar cupón"
                       >
                         <Trash2 className="h-5 w-5" />

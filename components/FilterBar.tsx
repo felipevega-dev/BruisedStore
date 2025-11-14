@@ -76,7 +76,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
             placeholder="Buscar obras por título..."
             value={filters.search || ''}
             onChange={(e) => handleFilterChange('search', e.target.value)}
-            className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-4 text-gray-900 placeholder-gray-500 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+            className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-4 text-gray-900 placeholder-gray-500 transition-all focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
           />
         </div>
 
@@ -85,14 +85,14 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
           onClick={() => setShowFilters(!showFilters)}
           className={`flex items-center gap-2 rounded-lg border-2 px-6 py-3 font-semibold transition-all ${
             showFilters || hasActiveFilters
-              ? 'border-red-600 bg-red-600 text-white'
+              ? 'border-moss-500 bg-moss-500 text-white'
               : 'border-black bg-white text-gray-900 hover:bg-gray-50'
           }`}
         >
           <SlidersHorizontal className="h-5 w-5" />
           <span className="hidden sm:inline">Filtros</span>
           {hasActiveFilters && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-red-600">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-moss-600">
               !
             </span>
           )}
@@ -107,7 +107,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
             {hasActiveFilters && (
               <button
                 onClick={handleReset}
-                className="flex items-center gap-1 text-sm font-semibold text-red-600 hover:text-red-700"
+                className="flex items-center gap-1 text-sm font-semibold text-moss-600 hover:text-moss-700"
               >
                 <X className="h-4 w-4" />
                 Limpiar filtros
@@ -124,7 +124,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
               <select
                 value={filters.category || 'all'}
                 onChange={(e) => handleFilterChange('category', e.target.value as PaintingCategory | 'all')}
-                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
               >
                 <option value="all">Todas las categorías</option>
                 {PAINTING_CATEGORIES.map((cat) => (
@@ -143,7 +143,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
               <select
                 value={filters.sortBy || 'recent'}
                 onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
               >
                 <option value="recent">Más recientes</option>
                 <option value="price-asc">Precio: Menor a Mayor</option>
@@ -164,7 +164,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
                 min="0"
                 value={filters.minPrice || ''}
                 onChange={(e) => handleFilterChange('minPrice', e.target.value ? Number(e.target.value) : 0)}
-                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
               />
             </div>
 
@@ -178,7 +178,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
                 min="0"
                 value={filters.maxPrice || ''}
                 onChange={(e) => handleFilterChange('maxPrice', e.target.value ? Number(e.target.value) : 0)}
-                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
               />
             </div>
           </div>

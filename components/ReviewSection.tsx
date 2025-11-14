@@ -165,7 +165,7 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
             <Star
               className={`${size} ${
                 star <= (interactive ? hoveredRating || rating : count)
-                  ? "fill-yellow-400 text-yellow-400"
+                  ? "fill-terra-400 text-terra-400"
                   : "fill-gray-200 text-gray-300"
               }`}
             />
@@ -242,7 +242,7 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
 
             {/* Error/Success messages */}
             {error && (
-              <div className="flex items-center gap-2 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+              <div className="flex items-center gap-2 rounded-lg bg-moss-50 p-3 text-sm text-moss-600">
                 <AlertCircle className="h-4 w-4" />
                 <span>{error}</span>
               </div>
@@ -258,7 +258,7 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
             <button
               type="submit"
               disabled={submitting || rating === 0 || comment.trim().length < 10}
-              className="flex items-center gap-2 rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {submitting ? (
                 <>
@@ -282,7 +282,7 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
           </p>
           <a
             href="/login"
-            className="inline-block rounded-lg border-2 border-black bg-red-600 px-6 py-2 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            className="inline-block rounded-lg border-2 border-black bg-moss-500 px-6 py-2 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           >
             Iniciar Sesión
           </a>
@@ -293,7 +293,7 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
       <div className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-red-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-moss-600" />
           </div>
         ) : reviews.length === 0 ? (
           <div className="py-12 text-center">
@@ -311,7 +311,7 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
               key={review.id}
               className={`rounded-lg border-2 p-6 transition-all ${
                 !review.approved
-                  ? "border-yellow-400 bg-yellow-50 hover:border-yellow-500"
+                  ? "border-terra-400 bg-terra-100 hover:border-terra-500"
                   : "border-gray-300 bg-white hover:border-black"
               }`}
             >
@@ -320,7 +320,7 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
                   <div className="flex items-center gap-2">
                     <p className="font-bold text-gray-900">{review.userName}</p>
                     {!review.approved && (
-                      <span className="inline-flex items-center gap-1 rounded-full border-2 border-yellow-600 bg-yellow-100 px-3 py-1 text-xs font-bold text-yellow-800">
+                      <span className="inline-flex items-center gap-1 rounded-full border-2 border-terra-600 bg-terra-100 px-3 py-1 text-xs font-bold text-terra-800">
                         <span className="animate-pulse">⏳</span>
                         Pendiente de aprobación
                       </span>
@@ -334,8 +334,8 @@ export default function ReviewSection({ paintingId }: ReviewSectionProps) {
               </div>
               <p className="text-gray-700">{review.comment}</p>
               {!review.approved && user?.uid === review.userId && (
-                <div className="mt-3 rounded-md border-2 border-yellow-400 bg-yellow-50 p-3">
-                  <p className="text-xs font-semibold text-yellow-800">
+                <div className="mt-3 rounded-md border-2 border-terra-400 bg-terra-100 p-3">
+                  <p className="text-xs font-semibold text-terra-800">
                     💡 Tu reseña está siendo revisada. Será visible para todos una vez que el administrador la apruebe.
                   </p>
                 </div>

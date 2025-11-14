@@ -373,7 +373,7 @@ export default function CustomOrderPage() {
           </p>
           <button
             onClick={() => setSuccess(false)}
-            className="border-4 border-black bg-red-600 px-6 py-3 font-black text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1"
+            className="border-4 border-black bg-moss-500 px-6 py-3 font-black text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-1"
           >
             Crear Otro Pedido
           </button>
@@ -383,7 +383,15 @@ export default function CustomOrderPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-6 sm:py-8 lg:py-12">
+    <div
+      className="min-h-screen bg-white py-6 sm:py-8 lg:py-12"
+      style={{
+        backgroundImage: 'url(/img/fondodibujado.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
       {/* Modal de Registro */}
       {showRegisterModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -396,11 +404,11 @@ export default function CustomOrderPage() {
             </button>
 
             <div className="mb-6 text-center">
-              <UserPlus className="mx-auto mb-4 h-16 w-16 text-red-600" />
+              <UserPlus className="mx-auto mb-4 h-16 w-16 text-moss-600" />
               <h2 className="mb-2 text-2xl font-black text-black">
                 ¡Pedido Enviado!
               </h2>
-              <div className="mx-auto mt-3 h-1 w-16 bg-red-600"></div>
+              <div className="mx-auto mt-3 h-1 w-16 bg-moss-500"></div>
             </div>
 
             <div className="mb-6 space-y-3 text-sm">
@@ -451,10 +459,10 @@ export default function CustomOrderPage() {
                     if (registerError) setRegisterError("");
                   }}
                   placeholder="Mínimo 6 caracteres"
-                  className="w-full rounded-lg border-2 border-black bg-white px-4 py-3 text-gray-900 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+                  className="w-full rounded-lg border-2 border-black bg-white px-4 py-3 text-gray-900 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
                 />
                 {registerError && (
-                  <p className="mt-2 text-sm font-bold text-red-600">
+                  <p className="mt-2 text-sm font-bold text-moss-600">
                     {registerError}
                   </p>
                 )}
@@ -468,7 +476,7 @@ export default function CustomOrderPage() {
               <button
                 onClick={handleRegisterUser}
                 disabled={registerLoading}
-                className="w-full rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {registerLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -513,7 +521,7 @@ export default function CustomOrderPage() {
               Convierte tus visiones en realidad. Cada obra es única, cada
               trazo cuenta una historia.
             </p>
-            <div className="mx-auto mt-3 h-1 w-20 bg-red-600 sm:mt-4 sm:h-2 sm:w-24"></div>
+            <div className="mx-auto mt-3 h-1 w-20 bg-moss-500 sm:mt-4 sm:h-2 sm:w-24"></div>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
@@ -562,12 +570,12 @@ export default function CustomOrderPage() {
                 </div>
 
                 {/* Info */}
-                <div className="space-y-0 border-4 border-black bg-yellow-50">
+                <div className="space-y-0 border-4 border-black bg-terra-100">
                   <div className="flex items-center justify-between border-b-4 border-black p-3 bg-white sm:p-4">
                     <span className="text-sm font-bold text-black sm:text-base">
                       Tamaño:
                     </span>
-                    <span className="text-base font-black text-red-600 sm:text-lg">
+                    <span className="text-base font-black text-moss-600 sm:text-lg">
                       {selectedSize.name}
                     </span>
                   </div>
@@ -587,7 +595,7 @@ export default function CustomOrderPage() {
                       {orientation === "horizontal" ? "Horizontal" : orientation === "cuadrado" ? "Cuadrado" : "Vertical"}
                     </span>
                   </div>
-                  <div className="flex flex-col items-center justify-between gap-2 p-4 bg-red-600 sm:flex-row sm:gap-0 sm:p-5">
+                  <div className="flex flex-col items-center justify-between gap-2 p-4 bg-moss-500 sm:flex-row sm:gap-0 sm:p-5">
                     <span className="text-lg font-black text-white sm:text-xl">
                       Precio Total:
                     </span>
@@ -643,7 +651,7 @@ export default function CustomOrderPage() {
                               e.stopPropagation();
                               fileInputRef.current?.click();
                             }}
-                            className="flex flex-1 items-center justify-center gap-2 rounded border-2 border-red-600 bg-white px-4 py-2 text-sm font-bold text-red-600 transition-all hover:bg-red-50"
+                            className="flex flex-1 items-center justify-center gap-2 rounded border-2 border-moss-500 bg-white px-4 py-2 text-sm font-bold text-moss-600 transition-all hover:bg-moss-50"
                           >
                             <Upload className="h-4 w-4" />
                             Cambiar
@@ -667,7 +675,7 @@ export default function CustomOrderPage() {
                             priority
                           />
                           {/* Gradient overlay at bottom */}
-                          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
+                          <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-black/60 to-transparent"></div>
                         </div>
                         <div className="mt-4 grid grid-cols-2 gap-3">
                           <button
@@ -687,7 +695,7 @@ export default function CustomOrderPage() {
                               e.stopPropagation();
                               fileInputRef.current?.click();
                             }}
-                            className="flex items-center justify-center gap-2 border-4 border-red-600 bg-white px-4 py-3 font-bold text-red-600 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+                            className="flex items-center justify-center gap-2 border-4 border-moss-500 bg-white px-4 py-3 font-bold text-moss-600 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
                           >
                             <Upload className="h-5 w-5" />
                             Cambiar Imagen
@@ -701,9 +709,9 @@ export default function CustomOrderPage() {
                   {!imagePreview && (
                     <div
                       onClick={() => fileInputRef.current?.click()}
-                      className="group cursor-pointer overflow-hidden border-4 border-dashed border-black bg-gray-50 p-6 transition-all hover:border-red-600 hover:bg-yellow-50 sm:p-8"
+                      className="group cursor-pointer overflow-hidden border-4 border-dashed border-black bg-gray-50 p-6 transition-all hover:border-moss-500 hover:bg-terra-100 sm:p-8"
                     >
-                      <Upload className="mx-auto mb-3 h-12 w-12 text-red-600 transition-transform group-hover:scale-110" />
+                      <Upload className="mx-auto mb-3 h-12 w-12 text-moss-600 transition-transform group-hover:scale-110" />
                       <p className="mb-2 text-center font-bold text-black">
                         drag.jpg
                       </p>
@@ -747,21 +755,21 @@ export default function CustomOrderPage() {
                       onClick={() => handleOrientationChange("vertical")}
                       className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
                         orientation === "vertical"
-                          ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
+                          ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
                           : "border-black bg-white hover:bg-gray-50"
                       }`}
                     >
                       <div
                         className={`h-14 w-10 border-4 sm:h-16 sm:w-12 ${
                           orientation === "vertical"
-                            ? "border-red-600 bg-red-100"
+                            ? "border-moss-500 bg-moss-100"
                             : "border-black bg-gray-100"
                         }`}
                       ></div>
                       <span
                         className={`text-xs font-black sm:text-sm ${
                           orientation === "vertical"
-                            ? "text-red-600"
+                            ? "text-moss-600"
                             : "text-black"
                         }`}
                       >
@@ -774,21 +782,21 @@ export default function CustomOrderPage() {
                       onClick={() => handleOrientationChange("cuadrado")}
                       className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
                         orientation === "cuadrado"
-                          ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
+                          ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
                           : "border-black bg-white hover:bg-gray-50"
                       }`}
                     >
                       <div
                         className={`h-12 w-12 border-4 sm:h-14 sm:w-14 ${
                           orientation === "cuadrado"
-                            ? "border-red-600 bg-red-100"
+                            ? "border-moss-500 bg-moss-100"
                             : "border-black bg-gray-100"
                         }`}
                       ></div>
                       <span
                         className={`text-xs font-black sm:text-sm ${
                           orientation === "cuadrado"
-                            ? "text-red-600"
+                            ? "text-moss-600"
                             : "text-black"
                         }`}
                       >
@@ -801,21 +809,21 @@ export default function CustomOrderPage() {
                       onClick={() => handleOrientationChange("horizontal")}
                       className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
                         orientation === "horizontal"
-                          ? "border-red-600 bg-red-50 shadow-[4px_4px_0px_0px_rgba(220,38,38,1)]"
+                          ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
                           : "border-black bg-white hover:bg-gray-50"
                       }`}
                     >
                       <div
                         className={`h-10 w-14 border-4 sm:h-12 sm:w-16 ${
                           orientation === "horizontal"
-                            ? "border-red-600 bg-red-100"
+                            ? "border-moss-500 bg-moss-100"
                             : "border-black bg-gray-100"
                         }`}
                       ></div>
                       <span
                         className={`text-xs font-black sm:text-sm ${
                           orientation === "horizontal"
-                            ? "text-red-600"
+                            ? "text-moss-600"
                             : "text-black"
                         }`}
                       >
@@ -838,7 +846,7 @@ export default function CustomOrderPage() {
                         selectedSizeIndex: parseInt(e.target.value),
                       })
                     }
-                    className="w-full border-4 border-black bg-white px-4 py-3 font-bold text-black transition-all focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                    className="w-full border-4 border-black bg-white px-4 py-3 font-bold text-black transition-all focus:border-moss-500 focus:outline-none focus:ring-4 focus:ring-moss-500/20"
                     required
                   >
                     {filteredSizes.map((item) => (
@@ -865,14 +873,14 @@ export default function CustomOrderPage() {
                     }}
                     className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
                       errors.customerName
-                        ? "border-red-600 focus:border-red-600 focus:ring-red-600/20"
-                        : "border-black focus:border-red-600 focus:ring-red-600/20"
+                        ? "border-moss-500 focus:border-moss-500 focus:ring-moss-500/20"
+                        : "border-black focus:border-moss-500 focus:ring-moss-500/20"
                     }`}
                     placeholder="Tu nombre"
                     required
                   />
                   {errors.customerName && (
-                    <p className="mt-2 text-sm font-bold text-red-600">
+                    <p className="mt-2 text-sm font-bold text-moss-600">
                       {errors.customerName}
                     </p>
                   )}
@@ -894,14 +902,14 @@ export default function CustomOrderPage() {
                     }}
                     className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
                       errors.email
-                        ? "border-red-600 focus:border-red-600 focus:ring-red-600/20"
-                        : "border-black focus:border-red-600 focus:ring-red-600/20"
+                        ? "border-moss-500 focus:border-moss-500 focus:ring-moss-500/20"
+                        : "border-black focus:border-moss-500 focus:ring-moss-500/20"
                     }`}
                     placeholder="tu@email.com"
                     required
                   />
                   {errors.email && (
-                    <p className="mt-2 text-sm font-bold text-red-600">
+                    <p className="mt-2 text-sm font-bold text-moss-600">
                       {errors.email}
                     </p>
                   )}
@@ -923,14 +931,14 @@ export default function CustomOrderPage() {
                     }}
                     className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
                       errors.phone
-                        ? "border-red-600 focus:border-red-600 focus:ring-red-600/20"
-                        : "border-black focus:border-red-600 focus:ring-red-600/20"
+                        ? "border-moss-500 focus:border-moss-500 focus:ring-moss-500/20"
+                        : "border-black focus:border-moss-500 focus:ring-moss-500/20"
                     }`}
                     placeholder="+56 9 1234 5678"
                     required
                   />
                   {errors.phone && (
-                    <p className="mt-2 text-sm font-bold text-red-600">
+                    <p className="mt-2 text-sm font-bold text-moss-600">
                       {errors.phone}
                     </p>
                   )}
@@ -947,7 +955,7 @@ export default function CustomOrderPage() {
                       setFormData({ ...formData, notes: e.target.value })
                     }
                     rows={4}
-                    className="w-full border-4 border-black bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:border-red-600 focus:outline-none focus:ring-4 focus:ring-red-600/20"
+                    className="w-full border-4 border-black bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:border-moss-500 focus:outline-none focus:ring-4 focus:ring-moss-500/20"
                     placeholder="Cuéntanos tu visión: colores, estilo, emociones que deseas plasmar..."
                   />
                 </div>
@@ -956,7 +964,7 @@ export default function CustomOrderPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex w-full items-center justify-center gap-3 border-4 border-black bg-red-600 px-6 py-4 text-lg font-black text-white transition-all hover:bg-red-700 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 disabled:bg-gray-400 disabled:text-gray-700"
+                  className="flex w-full items-center justify-center gap-3 border-4 border-black bg-moss-500 px-6 py-4 text-lg font-black text-white transition-all hover:bg-moss-600 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 disabled:bg-gray-400 disabled:text-gray-700"
                 >
                   {loading ? (
                     <>

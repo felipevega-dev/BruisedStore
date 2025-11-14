@@ -8,7 +8,11 @@
       "Bash(move:*)",
       "Bash(npm test:*)",
       "Bash(npx vitest run lib/simple.test.ts)",
-      "Bash(npm test:coverage:*)"
+      "Bash(npm test:coverage:*)",
+      "Bash(chmod:*)",
+      "Bash(bash:*)",
+      "Bash(node migrate-colors.js:*)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

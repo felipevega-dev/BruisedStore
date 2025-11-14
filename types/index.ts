@@ -145,6 +145,9 @@ export interface Order {
   subtotal: number;
   shippingCost: number;
   total: number;
+  discount?: number;
+  couponCode?: string | null;
+  publicAccessToken?: string;
   shippingInfo: ShippingInfo;
   paymentInfo: PaymentInfo;
   status: OrderStatus;
@@ -316,8 +319,8 @@ export interface GeneralSettings {
   showPWAPrompt: boolean;
   
   // Brand Colors
-  primaryColor: string; // Color principal (ej: #DC2626 - red-600)
-  secondaryColor: string; // Color secundario (ej: #991B1B - red-800)
+  primaryColor: string; // Color principal (ej: #5B7F2D - moss-500)
+  secondaryColor: string; // Color secundario (ej: #1F5BA5 - azure-500)
   accentColor: string; // Color de acento para botones, links, etc.
   
   // Contact Info
@@ -350,10 +353,10 @@ export interface GeneralSettings {
 export const DEFAULT_GENERAL_SETTINGS: Omit<GeneralSettings, 'id' | 'updatedAt'> = {
   showPWAPrompt: false,
   
-  // Colores actuales de la marca
-  primaryColor: '#DC2626', // red-600
-  secondaryColor: '#991B1B', // red-800
-  accentColor: '#EF4444', // red-500
+  // Colores actuales de la marca (paleta naturaleza)
+  primaryColor: '#5B7F2D', // moss-500
+  secondaryColor: '#1F5BA5', // azure-500
+  accentColor: '#8FBF4A', // moss-400
   
   // Contacto
   contactEmail: 'contacto@josevega.art',

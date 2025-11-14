@@ -120,12 +120,12 @@ export default function ProfilePage() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
-      pending: { bg: "bg-yellow-100", text: "text-yellow-800", label: "Pendiente" },
+      pending: { bg: "bg-terra-100", text: "text-terra-800", label: "Pendiente" },
       confirmed: { bg: "bg-blue-100", text: "text-blue-800", label: "Confirmado" },
       processing: { bg: "bg-purple-100", text: "text-purple-800", label: "Procesando" },
       shipped: { bg: "bg-indigo-100", text: "text-indigo-800", label: "Enviado" },
       delivered: { bg: "bg-green-100", text: "text-green-800", label: "Entregado" },
-      cancelled: { bg: "bg-red-100", text: "text-red-800", label: "Cancelado" },
+      cancelled: { bg: "bg-moss-100", text: "text-moss-800", label: "Cancelado" },
       "in-progress": { bg: "bg-blue-100", text: "text-blue-800", label: "En Progreso" },
       completed: { bg: "bg-green-100", text: "text-green-800", label: "Completado" },
     };
@@ -144,7 +144,7 @@ export default function ProfilePage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
@@ -163,7 +163,7 @@ export default function ProfilePage() {
         <div className="mb-8 flex items-center gap-4">
           <Link
             href="/"
-            className="text-gray-700 transition-colors hover:text-red-600"
+            className="text-gray-700 transition-colors hover:text-moss-600"
           >
             <ArrowLeft className="h-6 w-6" />
           </Link>
@@ -179,7 +179,7 @@ export default function ProfilePage() {
               {/* Card de perfil */}
               <div className="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
                 <div className="mb-6 flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-red-600">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-moss-500">
                     <User className="h-8 w-8 text-white" />
                   </div>
                   <div className="flex-1">
@@ -201,11 +201,11 @@ export default function ProfilePage() {
 
                 <div className="space-y-4 border-t-2 border-gray-200 pt-4">
                   <div className="flex items-center gap-3 text-gray-700">
-                    <Mail className="h-5 w-5 text-red-600" />
+                    <Mail className="h-5 w-5 text-moss-600" />
                     <span className="text-sm">{user.email}</span>
                   </div>
                   <div className="flex items-center gap-3 text-gray-700">
-                    <Calendar className="h-5 w-5 text-red-600" />
+                    <Calendar className="h-5 w-5 text-moss-600" />
                     <span className="text-sm">
                       Miembro desde{" "}
                       {user.metadata.creationTime
@@ -224,7 +224,7 @@ export default function ProfilePage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <ShoppingBag className="h-5 w-5 text-red-600" />
+                      <ShoppingBag className="h-5 w-5 text-moss-600" />
                       <span className="text-sm font-medium text-gray-700">
                         Total de pedidos
                       </span>
@@ -235,7 +235,7 @@ export default function ProfilePage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-5 w-5 text-red-600" />
+                      <DollarSign className="h-5 w-5 text-moss-600" />
                       <span className="text-sm font-medium text-gray-700">
                         Total gastado
                       </span>
@@ -258,7 +258,7 @@ export default function ProfilePage() {
                   onClick={() => setActiveTab("orders")}
                   className={`flex-1 px-6 py-4 text-center font-bold transition-colors ${
                     activeTab === "orders"
-                      ? "bg-red-600 text-white"
+                      ? "bg-moss-500 text-white"
                       : "bg-white text-gray-700 hover:bg-gray-50"
                   }`}
                 >
@@ -271,7 +271,7 @@ export default function ProfilePage() {
                   onClick={() => setActiveTab("custom")}
                   className={`flex-1 px-6 py-4 text-center font-bold transition-colors ${
                     activeTab === "custom"
-                      ? "bg-red-600 text-white"
+                      ? "bg-moss-500 text-white"
                       : "bg-white text-gray-700 hover:bg-gray-50"
                   }`}
                 >
@@ -297,7 +297,7 @@ export default function ProfilePage() {
                         </p>
                         <Link
                           href="/"
-                          className="mt-6 inline-block rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                          className="mt-6 inline-block rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                         >
                           Ver Galería
                         </Link>
@@ -354,7 +354,7 @@ export default function ProfilePage() {
                             <span className="font-bold text-gray-700">
                               Total
                             </span>
-                            <span className="text-xl font-bold text-red-600">
+                            <span className="text-xl font-bold text-moss-600">
                               {formatPrice(order.total)}
                             </span>
                           </div>
@@ -375,7 +375,7 @@ export default function ProfilePage() {
                         </p>
                         <Link
                           href="/obra-a-pedido"
-                          className="mt-6 inline-block rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                          className="mt-6 inline-block rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                         >
                           Solicitar Obra
                         </Link>
@@ -430,7 +430,7 @@ export default function ProfilePage() {
                             <span className="font-bold text-gray-700">
                               Total
                             </span>
-                            <span className="text-xl font-bold text-red-600">
+                            <span className="text-xl font-bold text-moss-600">
                               {formatPrice(order.totalPrice)}
                             </span>
                           </div>

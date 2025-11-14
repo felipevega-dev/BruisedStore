@@ -109,7 +109,7 @@ export default function AdminReviewsPage() {
             key={star}
             className={`h-4 w-4 ${
               star <= count
-                ? "fill-yellow-400 text-yellow-400"
+                ? "fill-terra-400 text-terra-400"
                 : "fill-gray-200 text-gray-300"
             }`}
           />
@@ -132,7 +132,7 @@ export default function AdminReviewsPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
@@ -151,7 +151,7 @@ export default function AdminReviewsPage() {
         <div className="mb-8 flex items-center gap-4">
           <Link
             href="/admin"
-            className="text-gray-700 transition-colors hover:text-red-600"
+            className="text-gray-700 transition-colors hover:text-moss-600"
           >
             <ArrowLeft className="h-6 w-6" />
           </Link>
@@ -176,17 +176,17 @@ export default function AdminReviewsPage() {
             </div>
           </div>
 
-          <div className="rounded-lg border-4 border-black bg-yellow-50 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="rounded-lg border-4 border-black bg-terra-100 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-yellow-800">
+                <p className="text-sm font-semibold text-terra-800">
                   Pendientes
                 </p>
-                <p className="text-3xl font-bold text-yellow-900">
+                <p className="text-3xl font-bold text-terra-900">
                   {pendingCount}
                 </p>
               </div>
-              <MessageCircle className="h-12 w-12 text-yellow-400" />
+              <MessageCircle className="h-12 w-12 text-terra-400" />
             </div>
           </div>
 
@@ -211,7 +211,7 @@ export default function AdminReviewsPage() {
             onClick={() => setFilter("all")}
             className={`rounded-lg border-2 border-black px-4 py-2 font-bold transition-all ${
               filter === "all"
-                ? "bg-red-600 text-white"
+                ? "bg-moss-500 text-white"
                 : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -221,7 +221,7 @@ export default function AdminReviewsPage() {
             onClick={() => setFilter("pending")}
             className={`rounded-lg border-2 border-black px-4 py-2 font-bold transition-all ${
               filter === "pending"
-                ? "bg-yellow-500 text-white"
+                ? "bg-terra-500 text-white"
                 : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -253,7 +253,7 @@ export default function AdminReviewsPage() {
               <div
                 key={review.id}
                 className={`rounded-lg border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${
-                  review.approved ? "bg-white" : "bg-yellow-50"
+                  review.approved ? "bg-white" : "bg-terra-100"
                 }`}
               >
                 <div className="mb-4 flex items-start justify-between">
@@ -266,7 +266,7 @@ export default function AdminReviewsPage() {
                         className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${
                           review.approved
                             ? "bg-green-100 text-green-800"
-                            : "bg-yellow-100 text-yellow-800"
+                            : "bg-terra-100 text-terra-800"
                         }`}
                       >
                         {review.approved ? "Aprobada" : "Pendiente"}
@@ -284,7 +284,7 @@ export default function AdminReviewsPage() {
                   <p className="font-medium text-gray-900">ID Obra:</p>
                   <Link
                     href={`/obra/${review.paintingId}`}
-                    className="text-sm text-red-600 hover:underline"
+                    className="text-sm text-moss-600 hover:underline"
                   >
                     {review.paintingId}
                   </Link>
@@ -306,7 +306,7 @@ export default function AdminReviewsPage() {
                   {review.approved && (
                     <button
                       onClick={() => handleReject(review.id)}
-                      className="flex items-center gap-2 rounded-lg border-2 border-black bg-yellow-500 px-4 py-2 font-bold text-white transition-all hover:bg-yellow-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                      className="flex items-center gap-2 rounded-lg border-2 border-black bg-terra-500 px-4 py-2 font-bold text-white transition-all hover:bg-terra-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                     >
                       <X className="h-4 w-4" />
                       <span>Ocultar</span>
@@ -314,7 +314,7 @@ export default function AdminReviewsPage() {
                   )}
                   <button
                     onClick={() => handleDelete(review.id)}
-                    className="flex items-center gap-2 rounded-lg border-2 border-black bg-red-600 px-4 py-2 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                    className="flex items-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-4 py-2 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                   >
                     <Trash2 className="h-4 w-4" />
                     <span>Eliminar</span>

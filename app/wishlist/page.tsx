@@ -84,7 +84,7 @@ export default function WishlistPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
@@ -101,12 +101,12 @@ export default function WishlistPage() {
         <div className="mb-8 flex items-center gap-4">
           <Link
             href="/"
-            className="text-gray-700 transition-colors hover:text-red-600"
+            className="text-gray-700 transition-colors hover:text-moss-600"
           >
             <ArrowLeft className="h-6 w-6" />
           </Link>
           <div className="flex items-center gap-3">
-            <Heart className="h-8 w-8 fill-red-600 text-red-600" />
+            <Heart className="h-8 w-8 fill-terra-600 text-moss-600" />
             <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
               Mi Lista de Deseos
             </h1>
@@ -125,7 +125,7 @@ export default function WishlistPage() {
             </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+              className="inline-flex items-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             >
               <ArrowLeft className="h-5 w-5" />
               <span>Ver Galería</span>
@@ -168,7 +168,7 @@ export default function WishlistPage() {
                         />
                         {!painting.available && (
                           <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-                            <span className="border-4 border-white bg-red-600 px-4 py-2 text-sm font-bold text-white">
+                            <span className="border-4 border-white bg-moss-500 px-4 py-2 text-sm font-bold text-white">
                               No Disponible
                             </span>
                           </div>
@@ -178,7 +178,7 @@ export default function WishlistPage() {
 
                     <div className="border-t-4 border-black p-4">
                       <Link href={`/obra/${painting.id}`}>
-                        <h3 className="mb-2 text-lg font-bold text-black transition-colors hover:text-red-600">
+                        <h3 className="mb-2 text-lg font-bold text-black transition-colors hover:text-moss-600">
                           {painting.title}
                         </h3>
                       </Link>
@@ -186,7 +186,7 @@ export default function WishlistPage() {
                         {painting.dimensions.width} x {painting.dimensions.height}{" "}
                         cm
                       </p>
-                      <p className="mb-4 text-2xl font-black text-red-600">
+                      <p className="mb-4 text-2xl font-black text-moss-600">
                         {formatPrice(painting.price)}
                       </p>
 
@@ -194,7 +194,7 @@ export default function WishlistPage() {
                         {painting.available && (
                           <button
                             onClick={() => handleAddToCart(painting)}
-                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-black bg-red-600 px-4 py-2 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-4 py-2 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
                           >
                             <ShoppingCart className="h-4 w-4" />
                             <span>Agregar</span>

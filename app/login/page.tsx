@@ -77,7 +77,7 @@ export default function LoginPage() {
         {/* Back button */}
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-2 text-gray-700 transition-colors hover:text-red-600"
+          className="mb-6 inline-flex items-center gap-2 text-gray-700 transition-colors hover:text-moss-600"
         >
           <ArrowLeft className="h-5 w-5" />
           Volver a la tienda
@@ -85,7 +85,7 @@ export default function LoginPage() {
 
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <div className="mb-6 flex items-center justify-center gap-3">
-            <LogIn className="h-8 w-8 text-red-600" />
+            <LogIn className="h-8 w-8 text-moss-600" />
             <h1 className="text-3xl font-bold text-gray-900">Iniciar Sesión</h1>
           </div>
 
@@ -105,7 +105,7 @@ export default function LoginPage() {
                     if (error) setError("");
                   }}
                   required
-                  className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-4 text-gray-900 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+                  className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-4 text-gray-900 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
                   placeholder="correo@ejemplo.com"
                 />
               </div>
@@ -126,7 +126,7 @@ export default function LoginPage() {
                     if (error) setError("");
                   }}
                   required
-                  className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-12 text-gray-900 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/20"
+                  className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-12 text-gray-900 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
                   placeholder="••••••••"
                 />
                 <button
@@ -145,7 +145,7 @@ export default function LoginPage() {
 
             {/* Error Message */}
             {error && (
-              <div className="rounded-lg border-2 border-red-600 bg-red-50 p-3 text-sm font-semibold text-red-600">
+              <div className="rounded-lg border-2 border-moss-500 bg-moss-50 p-3 text-sm font-semibold text-moss-600">
                 {error}
               </div>
             )}
@@ -154,7 +154,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg border-2 border-black bg-red-600 px-6 py-3 font-bold text-white transition-all hover:bg-red-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -207,7 +207,7 @@ export default function LoginPage() {
               ¿No tienes cuenta?{" "}
               <Link
                 href="/register"
-                className="font-bold text-red-600 hover:text-red-700"
+                className="font-bold text-moss-600 hover:text-moss-700"
               >
                 Regístrate
               </Link>

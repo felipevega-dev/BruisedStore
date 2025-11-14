@@ -118,8 +118,8 @@ export default function Home() {
 
   if (loading || !homeSettings) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-        <Loader2 className="h-12 w-12 animate-spin text-red-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-moss-50 via-white to-slate-100">
+        <Loader2 className="h-12 w-12 animate-spin text-moss-500" />
       </div>
     );
   }
@@ -148,13 +148,13 @@ export default function Home() {
 
       {/* Featured/New Paintings */}
       {allPaintings.length > 0 && (
-        <section className="bg-gradient-to-br from-gray-900 via-black to-red-950 py-16">
+        <section className="bg-linear-to-br from-moss-100 via-white to-slate-100 py-16">
           <div className="container mx-auto px-4">
             <div className="mb-12 text-center">
-              <h2 className="mb-4 text-4xl font-black text-white sm:text-5xl">
+              <h2 className="mb-4 text-4xl font-semibold text-slate-900 sm:text-5xl">
                 Últimas Obras
               </h2>
-              <p className="mx-auto max-w-2xl text-lg text-gray-300">
+              <p className="mx-auto max-w-2xl text-lg text-slate-600">
                 Obras recién agregadas a la colección. No te pierdas estas piezas únicas.
               </p>
             </div>
@@ -166,7 +166,7 @@ export default function Home() {
             <div className="mt-8 text-center">
               <a
                 href="#galeria"
-                className="inline-flex items-center gap-2 rounded-lg border-4 border-white bg-white px-6 py-3 text-lg font-black text-black shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+                className="inline-flex items-center gap-2 rounded-xl border border-moss-200 bg-white px-6 py-3 text-lg font-semibold text-slate-900 shadow-lg shadow-moss-900/10 transition hover:border-moss-300 hover:shadow-none"
               >
                 Ver Todas las Obras
                 <ArrowRight className="h-6 w-6" />
@@ -177,19 +177,19 @@ export default function Home() {
       )}
 
       {/* Call to Action - Obra a Pedido */}
-      <section className="border-y-8 border-black bg-gradient-to-br from-red-600 via-red-700 to-red-900 py-16">
+      <section className="border-y-8 border-moss-100 bg-linear-to-br from-moss-200 via-white to-moss-100 py-16">
         <div className="container mx-auto px-4 text-center">
           <div className="mx-auto max-w-3xl">
-            <h2 className="mb-4 text-4xl font-black text-white sm:text-5xl md:text-6xl drop-shadow-[4px_4px_0px_rgba(0,0,0,0.5)]">
+            <h2 className="mb-4 text-4xl font-semibold text-slate-900 sm:text-5xl md:text-6xl">
               ¿Tienes una visión única?
             </h2>
-            <p className="mb-8 text-xl font-bold text-white/95 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
+            <p className="mb-8 text-xl font-medium text-slate-700">
               Trabajaré contigo para crear algo completamente único basado en tu idea,
               con tu estilo y dimensiones preferidas.
             </p>
             <Link
               href="/obra-a-pedido"
-              className="inline-flex items-center gap-2 rounded-lg border-4 border-white bg-white px-8 py-4 text-lg font-black text-black shadow-[8px_8px_0px_0px_rgba(0,0,0,0.4)] transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-yellow-300 hover:shadow-none"
+              className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-moss-500 via-moss-500 to-moss-500 px-8 py-4 text-lg font-semibold text-white shadow-xl shadow-moss-900/10 transition hover:shadow-2xl"
             >
               Obra a Pedido
               <ArrowRight className="h-6 w-6" />
@@ -199,11 +199,11 @@ export default function Home() {
       </section>
 
       {/* Gallery Section */}
-      <section id="galeria" className="border-t-8 border-black bg-white py-16 sm:py-20">
+      <section id="galeria" className="border-t-8 border-moss-100 bg-white py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-block rounded-full border-4 border-black bg-gradient-to-r from-red-600 to-red-800 px-6 py-2 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-              <span className="text-xl font-black text-white">
+            <div className="mb-4 inline-block rounded-full border border-moss-200 bg-linear-to-r from-moss-500 to-moss-400 px-6 py-2 shadow-lg shadow-moss-900/10">
+              <span className="text-xl font-semibold text-white">
                 🎨 GALERÍA COMPLETA
               </span>
             </div>

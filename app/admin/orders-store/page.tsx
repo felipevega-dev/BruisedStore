@@ -186,12 +186,12 @@ export default function AdminStoreOrdersPage() {
 
   const getStatusColor = (status: OrderStatus) => {
     const colors = {
-      pending: "bg-yellow-900/30 border-yellow-900 text-yellow-300",
+      pending: "bg-terra-900/30 border-terra-900 text-terra-300",
       confirmed: "bg-blue-900/30 border-blue-900 text-blue-300",
       processing: "bg-purple-900/30 border-purple-900 text-purple-300",
       shipped: "bg-indigo-900/30 border-indigo-900 text-indigo-300",
       delivered: "bg-green-900/30 border-green-900 text-green-300",
-      cancelled: "bg-red-900/30 border-red-900 text-red-300",
+      cancelled: "bg-terra-900/30 border-terra-900 text-terra-300",
     };
     return colors[status];
   };
@@ -202,7 +202,7 @@ export default function AdminStoreOrdersPage() {
       processing: "bg-blue-900/30 border-blue-900 text-blue-300",
       shipped: "bg-purple-900/30 border-purple-900 text-purple-300",
       delivered: "bg-green-900/30 border-green-900 text-green-300",
-      cancelled: "bg-red-900/30 border-red-900 text-red-300",
+      cancelled: "bg-terra-900/30 border-terra-900 text-terra-300",
     };
     return colors[status];
   };
@@ -242,9 +242,9 @@ export default function AdminStoreOrdersPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
-        <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
+        <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-8 backdrop-blur-sm">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
@@ -253,18 +253,18 @@ export default function AdminStoreOrdersPage() {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
+      <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <Link
               href="/admin"
-              className="text-gray-300 transition-colors hover:text-red-400"
+              className="text-gray-300 transition-colors hover:text-terra-400"
             >
               <ArrowLeft className="h-6 w-6" />
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">
+              <h1 className="text-3xl font-bold text-terra-100 sm:text-4xl">
                 Órdenes de Compra
               </h1>
               <p className="text-gray-400">Pinturas de la galería</p>
@@ -272,9 +272,9 @@ export default function AdminStoreOrdersPage() {
           </div>
 
           {pendingCount > 0 && (
-            <div className="flex items-center gap-2 rounded-lg border-2 border-yellow-900 bg-yellow-950/30 px-4 py-2">
-              <Bell className="h-5 w-5 text-yellow-400" />
-              <span className="font-bold text-yellow-300">
+            <div className="flex items-center gap-2 rounded-lg border-2 border-terra-900 bg-moss-950/30 px-4 py-2">
+              <Bell className="h-5 w-5 text-terra-400" />
+              <span className="font-bold text-terra-300">
                 {pendingCount} pendiente{pendingCount !== 1 ? "s" : ""}
               </span>
             </div>
@@ -300,14 +300,14 @@ export default function AdminStoreOrdersPage() {
                     }}
                     className={`relative cursor-pointer rounded-lg border-2 bg-black/60 p-4 backdrop-blur-sm transition-all hover:shadow-xl ${
                       selectedOrder?.id === order.id
-                        ? "border-red-700 shadow-2xl shadow-red-900/40"
-                        : "border-red-900/30 hover:border-red-700 hover:shadow-red-900/20"
+                        ? "border-moss-600 shadow-2xl shadow-terra-900/40"
+                        : "border-terra-900/30 hover:border-moss-600 hover:shadow-terra-900/20"
                     }`}
                   >
                     {/* Badge NUEVO */}
                     {isNew && (
                       <div className="absolute -right-2 -top-2 z-10 animate-pulse">
-                        <span className="inline-flex items-center gap-1 rounded-full border-2 border-yellow-400 bg-yellow-500 px-2 py-1 text-xs font-black text-black shadow-lg">
+                        <span className="inline-flex items-center gap-1 rounded-full border-2 border-terra-400 bg-terra-500 px-2 py-1 text-xs font-black text-black shadow-lg">
                           <Bell className="h-3 w-3" />
                           NUEVO
                         </span>
@@ -316,7 +316,7 @@ export default function AdminStoreOrdersPage() {
                     
                     <div className="mb-2 flex items-start justify-between">
                       <div>
-                        <h3 className="font-bold text-red-100">
+                        <h3 className="font-bold text-terra-100">
                           {order.orderNumber}
                         </h3>
                         <p className="text-sm text-gray-400">
@@ -335,7 +335,7 @@ export default function AdminStoreOrdersPage() {
                       {order.items.length} item{order.items.length !== 1 ? "s" : ""}
                     </p>
                     <div className="flex items-center justify-between">
-                      <p className="font-bold text-red-500">
+                      <p className="font-bold text-terra-500">
                         {formatPrice(order.total)}
                       </p>
                       <Eye className="h-4 w-4 text-gray-400" />
@@ -345,9 +345,9 @@ export default function AdminStoreOrdersPage() {
               })}
 
               {orders.length === 0 && (
-                <div className="rounded-lg border-2 border-red-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">
-                  <Package className="mx-auto mb-4 h-16 w-16 text-red-600" />
-                  <p className="text-xl font-semibold text-red-100">
+                <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-terra-900/30">
+                  <Package className="mx-auto mb-4 h-16 w-16 text-moss-600" />
+                  <p className="text-xl font-semibold text-terra-100">
                     No hay órdenes de compra
                   </p>
                   <p className="mt-2 text-sm text-gray-400">
@@ -361,10 +361,10 @@ export default function AdminStoreOrdersPage() {
           {/* Order Details */}
           <div className="lg:col-span-2">
             {selectedOrder ? (
-              <div className="rounded-lg border-2 border-red-900 bg-black/60 p-6 shadow-2xl shadow-red-900/30 backdrop-blur-sm">
+              <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 shadow-2xl shadow-terra-900/30 backdrop-blur-sm">
                 <div className="mb-6 flex items-start justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold text-red-100">
+                    <h2 className="text-2xl font-bold text-terra-100">
                       Orden {selectedOrder.orderNumber}
                     </h2>
                     <p className="text-sm text-gray-400">
@@ -373,15 +373,15 @@ export default function AdminStoreOrdersPage() {
                   </div>
                   <button
                     onClick={() => handleDelete(selectedOrder.id!)}
-                    className="text-red-400 transition-colors hover:text-red-300"
+                    className="text-terra-400 transition-colors hover:text-terra-300"
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>
                 </div>
 
                 {/* Status Update - MOVIDO ARRIBA */}
-                <div className="mb-6 rounded-lg border-2 border-yellow-900/50 bg-yellow-950/20 p-4">
-                  <h3 className="mb-3 flex items-center gap-2 font-bold text-yellow-300">
+                <div className="mb-6 rounded-lg border-2 border-terra-900/50 bg-moss-950/20 p-4">
+                  <h3 className="mb-3 flex items-center gap-2 font-bold text-terra-300">
                     <Package className="h-5 w-5" />
                     Estado del Pedido
                   </h3>
@@ -406,7 +406,7 @@ export default function AdminStoreOrdersPage() {
                     )}
                   </div>
                   {updatingStatus && (
-                    <p className="mt-2 text-sm text-yellow-300">
+                    <p className="mt-2 text-sm text-terra-300">
                       Actualizando estado...
                     </p>
                   )}
@@ -414,14 +414,14 @@ export default function AdminStoreOrdersPage() {
 
                 {/* Items */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-bold text-red-100">Productos</h3>
+                  <h3 className="mb-3 font-bold text-terra-100">Productos</h3>
                   <div className="space-y-3">
                     {selectedOrder.items.map((item) => (
                       <div
                         key={item.painting.id}
-                        className="flex gap-4 rounded-lg border-2 border-red-900/30 bg-red-950/20 p-3"
+                        className="flex gap-4 rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-3"
                       >
-                        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 border-red-900/30">
+                        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 border-terra-900/30">
                           <Image
                             src={item.painting.imageUrl}
                             alt={item.painting.title}
@@ -431,7 +431,7 @@ export default function AdminStoreOrdersPage() {
                           />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-bold text-red-100">
+                          <h4 className="font-bold text-terra-100">
                             {item.painting.title}
                           </h4>
                           <p className="text-sm text-gray-400">
@@ -442,7 +442,7 @@ export default function AdminStoreOrdersPage() {
                             <span className="text-sm text-gray-400">
                               Cantidad: {item.quantity}
                             </span>
-                            <span className="font-bold text-red-400">
+                            <span className="font-bold text-terra-400">
                               {formatPrice(item.painting.price * item.quantity)}
                             </span>
                           </div>
@@ -454,43 +454,43 @@ export default function AdminStoreOrdersPage() {
 
                 {/* Customer Info */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-bold text-red-100">
+                  <h3 className="mb-3 font-bold text-terra-100">
                     Información del Cliente
                   </h3>
-                  <div className="space-y-2 rounded-lg border-2 border-red-900/30 bg-red-950/20 p-4">
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                  <div className="space-y-2 rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-4">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Nombre:</span>
-                      <span className="font-semibold text-red-100">
+                      <span className="font-semibold text-terra-100">
                         {selectedOrder.shippingInfo.fullName}
                       </span>
                     </div>
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Email:</span>
-                      <span className="font-semibold text-red-100">
+                      <span className="font-semibold text-terra-100">
                         {selectedOrder.shippingInfo.email}
                       </span>
                     </div>
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Teléfono:</span>
-                      <span className="font-semibold text-red-100">
+                      <span className="font-semibold text-terra-100">
                         {selectedOrder.shippingInfo.phone}
                       </span>
                     </div>
-                    <div className="flex flex-col gap-1 border-b border-red-900/20 pb-2 sm:flex-row sm:justify-between">
+                    <div className="flex flex-col gap-1 border-b border-terra-900/20 pb-2 sm:flex-row sm:justify-between">
                       <span className="text-gray-400">Dirección:</span>
-                      <span className="font-semibold text-red-100 break-words sm:text-right sm:max-w-[60%]">
+                      <span className="font-semibold text-terra-100 break-words sm:text-right sm:max-w-[60%]">
                         {selectedOrder.shippingInfo.address}
                       </span>
                     </div>
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Ciudad:</span>
-                      <span className="font-semibold text-red-100">
+                      <span className="font-semibold text-terra-100">
                         {selectedOrder.shippingInfo.city}
                       </span>
                     </div>
                     <div className="flex justify-between pb-2">
                       <span className="text-gray-400">Región:</span>
-                      <span className="font-semibold text-red-100">
+                      <span className="font-semibold text-terra-100">
                         {selectedOrder.shippingInfo.region}
                       </span>
                     </div>
@@ -499,25 +499,25 @@ export default function AdminStoreOrdersPage() {
 
                 {/* Payment Info */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-bold text-red-100">
+                  <h3 className="mb-3 font-bold text-terra-100">
                     Información de Pago
                   </h3>
-                  <div className="space-y-2 rounded-lg border-2 border-red-900/30 bg-red-950/20 p-4">
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                  <div className="space-y-2 rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-4">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Método:</span>
-                      <span className="font-semibold text-red-100">
+                      <span className="font-semibold text-terra-100">
                         {getPaymentMethodLabel(selectedOrder.paymentInfo.method)}
                       </span>
                     </div>
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Estado:</span>
                       <span
                         className={`rounded px-2 py-1 text-xs font-bold ${
                           selectedOrder.paymentInfo.status === "paid"
                             ? "bg-green-900/30 text-green-300"
                             : selectedOrder.paymentInfo.status === "failed"
-                            ? "bg-red-900/30 text-red-300"
-                            : "bg-yellow-900/30 text-yellow-300"
+                            ? "bg-terra-900/30 text-terra-300"
+                            : "bg-terra-900/30 text-terra-300"
                         }`}
                       >
                         {selectedOrder.paymentInfo.status === "paid"
@@ -529,7 +529,7 @@ export default function AdminStoreOrdersPage() {
                     </div>
                     <div className="flex justify-between pb-2">
                       <span className="text-gray-400">ID Transacción:</span>
-                      <span className="font-mono text-sm text-red-100">
+                      <span className="font-mono text-sm text-terra-100">
                         {selectedOrder.paymentInfo.transactionId || "N/A"}
                       </span>
                     </div>
@@ -538,27 +538,27 @@ export default function AdminStoreOrdersPage() {
 
                 {/* Order Summary */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-bold text-red-100">
+                  <h3 className="mb-3 font-bold text-terra-100">
                     Resumen del Pedido
                   </h3>
-                  <div className="space-y-2 rounded-lg border-2 border-red-900/30 bg-red-950/20 p-4">
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                  <div className="space-y-2 rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-4">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Subtotal:</span>
-                      <span className="font-semibold text-red-100">
+                      <span className="font-semibold text-terra-100">
                         {formatPrice(selectedOrder.subtotal)}
                       </span>
                     </div>
-                    <div className="flex justify-between border-b border-red-900/20 pb-2">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Envío:</span>
-                      <span className="font-semibold text-red-100">
+                      <span className="font-semibold text-terra-100">
                         {formatPrice(selectedOrder.shippingCost)}
                       </span>
                     </div>
-                    <div className="flex justify-between border-t border-red-900/30 pt-3">
+                    <div className="flex justify-between border-t border-terra-900/30 pt-3">
                       <span className="text-lg font-medium text-gray-300">
                         Total:
                       </span>
-                      <span className="text-2xl font-bold text-red-500">
+                      <span className="text-2xl font-bold text-terra-500">
                         {formatPrice(selectedOrder.total)}
                       </span>
                     </div>
@@ -568,10 +568,10 @@ export default function AdminStoreOrdersPage() {
                 {/* Notes */}
                 {selectedOrder.shippingInfo.notes && (
                   <div className="mb-6">
-                    <h3 className="mb-3 font-bold text-red-100">
+                    <h3 className="mb-3 font-bold text-terra-100">
                       Notas del Cliente
                     </h3>
-                    <div className="rounded-lg border-2 border-red-900/30 bg-red-950/20 p-4">
+                    <div className="rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-4">
                       <p className="text-gray-300">
                         {selectedOrder.shippingInfo.notes}
                       </p>
@@ -581,7 +581,7 @@ export default function AdminStoreOrdersPage() {
 
                 {/* Shipping Status Update */}
                 <div>
-                  <h3 className="mb-3 font-bold text-red-100">
+                  <h3 className="mb-3 font-bold text-terra-100">
                     Estado de Envío
                   </h3>
                   <div className="flex flex-wrap gap-2">
@@ -605,14 +605,14 @@ export default function AdminStoreOrdersPage() {
                     )}
                   </div>
                   {updatingShipping && (
-                    <p className="mt-2 text-sm text-yellow-300">
+                    <p className="mt-2 text-sm text-terra-300">
                       Actualizando estado de envío...
                     </p>
                   )}
                 </div>
               </div>
             ) : (
-              <div className="flex h-full items-center justify-center rounded-lg border-2 border-red-900/30 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">
+              <div className="flex h-full items-center justify-center rounded-lg border-2 border-terra-900/30 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-terra-900/30">
                 <p className="text-xl font-semibold text-gray-400">
                   Selecciona una orden para ver los detalles
                 </p>

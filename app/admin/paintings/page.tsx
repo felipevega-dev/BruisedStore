@@ -358,9 +358,9 @@ export default function AdminPaintingsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 via-red-950 to-black">
-        <div className="rounded-lg border-2 border-red-900 bg-black/60 p-8 backdrop-blur-sm">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
+        <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-8 backdrop-blur-sm">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
     );
@@ -369,24 +369,24 @@ export default function AdminPaintingsPage() {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-950 to-black py-8">
+      <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-4">
               <Link
                 href="/admin"
-                className="text-gray-300 transition-colors hover:text-red-400"
+                className="text-gray-300 transition-colors hover:text-terra-400"
               >
                 <ArrowLeft className="h-6 w-6" />
             </Link>
-            <h1 className="text-3xl font-bold text-red-100 sm:text-4xl">Gestionar Pinturas</h1>
+            <h1 className="text-3xl font-bold text-terra-100 sm:text-4xl">Gestionar Pinturas</h1>
           </div>
           <button
             onClick={() => {
               resetForm();
               setShowModal(true);
             }}
-            className="flex items-center justify-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-4 py-2 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50"
+            className="flex items-center justify-center gap-2 rounded-lg border-2 border-terra-900 bg-linear-to-r from-terra-900 to-terra-800 px-4 py-2 font-bold text-terra-100 transition-all hover:from-terra-800 hover:to-moss-600 hover:shadow-lg hover:shadow-terra-900/50"
           >
             <Plus className="h-5 w-5" />
             Nueva Pintura
@@ -395,8 +395,8 @@ export default function AdminPaintingsPage() {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {paintings.map((painting) => (
-            <div key={painting.id} className="rounded-lg border-2 border-red-900/30 bg-black/60 p-4 shadow-xl shadow-red-900/20 backdrop-blur-sm transition-all hover:border-red-700 hover:shadow-2xl hover:shadow-red-900/40">
-              <div className="relative mb-3 aspect-[3/4] overflow-hidden rounded-md border border-red-900/30">
+            <div key={painting.id} className="rounded-lg border-2 border-terra-900/30 bg-black/60 p-4 shadow-xl shadow-terra-900/20 backdrop-blur-sm transition-all hover:border-moss-600 hover:shadow-2xl hover:shadow-terra-900/40">
+              <div className="relative mb-3 aspect-[3/4] overflow-hidden rounded-md border border-terra-900/30">
                 <Image
                   src={painting.imageUrl}
                   alt={painting.title}
@@ -405,24 +405,24 @@ export default function AdminPaintingsPage() {
                   sizes="300px"
                 />
               </div>
-              <h3 className="mb-1 font-bold text-red-100">{painting.title}</h3>
+              <h3 className="mb-1 font-bold text-terra-100">{painting.title}</h3>
               <p className="mb-2 text-sm text-gray-400">
                 {painting.dimensions.width} x {painting.dimensions.height} cm
               </p>
-              <p className="mb-3 font-bold text-red-500">
+              <p className="mb-3 font-bold text-terra-500">
                 {formatPrice(painting.price)}
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEdit(painting)}
-                  className="flex flex-1 items-center justify-center gap-1 rounded-lg border-2 border-red-900 bg-red-900/20 px-3 py-2 text-sm font-semibold text-red-100 transition-all hover:bg-red-900/40"
+                  className="flex flex-1 items-center justify-center gap-1 rounded-lg border-2 border-terra-900 bg-terra-900/20 px-3 py-2 text-sm font-semibold text-terra-100 transition-all hover:bg-terra-900/40"
                 >
                   <Edit className="h-4 w-4" />
                   Editar
                 </button>
                 <button
                   onClick={() => handleDelete(painting)}
-                  className="flex items-center justify-center rounded-lg border-2 border-red-900 bg-red-950/30 px-3 py-2 text-red-400 transition-all hover:bg-red-900/40"
+                  className="flex items-center justify-center rounded-lg border-2 border-terra-900 bg-moss-900/30 px-3 py-2 text-terra-400 transition-all hover:bg-terra-900/40"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -432,8 +432,8 @@ export default function AdminPaintingsPage() {
         </div>
 
         {paintings.length === 0 && (
-          <div className="rounded-lg border-2 border-red-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-red-900/30">
-            <p className="text-xl font-semibold text-red-100">
+          <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-terra-900/30">
+            <p className="text-xl font-semibold text-terra-100">
               No hay pinturas. Crea una nueva para comenzar.
             </p>
           </div>
@@ -443,9 +443,9 @@ export default function AdminPaintingsPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm overflow-y-auto">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border-2 border-red-900 bg-black/90 p-4 sm:p-6 shadow-2xl shadow-red-900/50 backdrop-blur-md my-4 scrollbar-thin scrollbar-thumb-red-900 scrollbar-track-red-950">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg border-2 border-terra-900 bg-black/90 p-4 sm:p-6 shadow-2xl shadow-terra-900/50 backdrop-blur-md my-4 scrollbar-thin scrollbar-thumb-terra-900 scrollbar-track-moss-900">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-red-100">
+              <h2 className="text-2xl font-bold text-terra-100">
                 {editingPainting ? "Editar Pintura" : "Nueva Pintura"}
               </h2>
               <button
@@ -453,7 +453,7 @@ export default function AdminPaintingsPage() {
                   setShowModal(false);
                   resetForm();
                 }}
-                className="text-gray-400 transition-colors hover:text-red-400"
+                className="text-gray-400 transition-colors hover:text-terra-400"
               >
                 <X className="h-6 w-6" />
               </button>
@@ -462,11 +462,11 @@ export default function AdminPaintingsPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Multiple Images Upload */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Imágenes * (Puedes subir múltiples)
                 </label>
                 {compressing && (
-                  <div className="mb-3 rounded-lg border-2 border-yellow-900 bg-yellow-950/20 p-3 text-yellow-300">
+                  <div className="mb-3 rounded-lg border-2 border-terra-900 bg-moss-950/20 p-3 text-terra-300">
                     <Loader2 className="mr-2 inline h-4 w-4 animate-spin" />
                     Optimizando imágenes...
                   </div>
@@ -475,7 +475,7 @@ export default function AdminPaintingsPage() {
                   <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
                     {imagePreviews.map((preview, index) => (
                       <div key={index} className="relative group">
-                        <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md border-2 border-red-900/30">
+                        <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md border-2 border-terra-900/30">
                           <Image
                             src={preview}
                             alt={`Preview ${index + 1}`}
@@ -487,7 +487,7 @@ export default function AdminPaintingsPage() {
                         <button
                           type="button"
                           onClick={() => removeImage(index)}
-                          className="absolute -right-2 -top-2 rounded-full bg-red-900 p-1 text-red-100 opacity-0 transition-opacity group-hover:opacity-100"
+                          className="absolute -right-2 -top-2 rounded-full bg-terra-900 p-1 text-terra-100 opacity-0 transition-opacity group-hover:opacity-100"
                         >
                           <X className="h-4 w-4" />
                         </button>
@@ -501,7 +501,7 @@ export default function AdminPaintingsPage() {
                   accept="image/*"
                   multiple
                   onChange={handleImageChange}
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-2 text-red-100 file:mr-4 file:rounded-lg file:border-2 file:border-red-900 file:bg-red-900/20 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-red-100 file:hover:bg-red-900/40"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-2 text-terra-100 file:mr-4 file:rounded-lg file:border-2 file:border-terra-900 file:bg-terra-900/20 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-terra-100 file:hover:bg-terra-900/40"
                   required={imagePreviews.length === 0 && !editingPainting}
                   disabled={compressing}
                 />
@@ -512,14 +512,14 @@ export default function AdminPaintingsPage() {
 
               {/* Title */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Título *
                 </label>
                 <input
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                   placeholder="Título de la obra"
                   required
                 />
@@ -527,13 +527,13 @@ export default function AdminPaintingsPage() {
 
               {/* Description */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Descripción
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                   rows={3}
                   placeholder="Descripción de la obra"
                 />
@@ -541,14 +541,14 @@ export default function AdminPaintingsPage() {
 
               {/* Price */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Precio (CLP) *
                 </label>
                 <input
                   type="number"
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                   placeholder="0"
                   required
                 />
@@ -557,27 +557,27 @@ export default function AdminPaintingsPage() {
               {/* Dimensions */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                  <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                     Ancho (cm) *
                   </label>
                   <input
                     type="number"
                     value={formData.width}
                     onChange={(e) => setFormData({ ...formData, width: e.target.value })}
-                    className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                    className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                     placeholder="0"
                     required
                   />
                 </div>
                 <div>
-                  <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                  <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                     Alto (cm) *
                   </label>
                   <input
                     type="number"
                     value={formData.height}
                     onChange={(e) => setFormData({ ...formData, height: e.target.value })}
-                    className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all placeholder:text-gray-500 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                    className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                     placeholder="0"
                     required
                   />
@@ -586,7 +586,7 @@ export default function AdminPaintingsPage() {
 
               {/* Orientation */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Orientación *
                 </label>
                 <div className="grid grid-cols-2 gap-4">
@@ -595,21 +595,21 @@ export default function AdminPaintingsPage() {
                     onClick={() => setFormData({ ...formData, orientation: "vertical" })}
                     className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
                       formData.orientation === "vertical"
-                        ? "border-red-600 bg-red-950/50 shadow-lg shadow-red-900/50"
-                        : "border-red-900/30 bg-gray-900/30 hover:border-red-800"
+                        ? "border-moss-500 bg-moss-900/50 shadow-lg shadow-terra-900/50"
+                        : "border-terra-900/30 bg-gray-900/30 hover:border-terra-800"
                     }`}
                   >
                     <div
                       className={`h-16 w-12 rounded border-2 ${
                         formData.orientation === "vertical"
-                          ? "border-red-500 bg-red-900/30"
+                          ? "border-terra-500 bg-terra-900/30"
                           : "border-gray-600 bg-gray-800"
                       }`}
                     ></div>
                     <span
                       className={`text-sm font-semibold ${
                         formData.orientation === "vertical"
-                          ? "text-red-100"
+                          ? "text-terra-100"
                           : "text-gray-400"
                       }`}
                     >
@@ -622,21 +622,21 @@ export default function AdminPaintingsPage() {
                     onClick={() => setFormData({ ...formData, orientation: "horizontal" })}
                     className={`flex flex-col items-center gap-2 rounded-lg border-2 p-4 transition-all ${
                       formData.orientation === "horizontal"
-                        ? "border-red-600 bg-red-950/50 shadow-lg shadow-red-900/50"
-                        : "border-red-900/30 bg-gray-900/30 hover:border-red-800"
+                        ? "border-moss-500 bg-moss-900/50 shadow-lg shadow-terra-900/50"
+                        : "border-terra-900/30 bg-gray-900/30 hover:border-terra-800"
                     }`}
                   >
                     <div
                       className={`h-12 w-16 rounded border-2 ${
                         formData.orientation === "horizontal"
-                          ? "border-red-500 bg-red-900/30"
+                          ? "border-terra-500 bg-terra-900/30"
                           : "border-gray-600 bg-gray-800"
                       }`}
                     ></div>
                     <span
                       className={`text-sm font-semibold ${
                         formData.orientation === "horizontal"
-                          ? "text-red-100"
+                          ? "text-terra-100"
                           : "text-gray-400"
                       }`}
                     >
@@ -648,13 +648,13 @@ export default function AdminPaintingsPage() {
 
               {/* Category */}
               <div>
-                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-red-100">
+                <label className="mb-2 block text-sm font-bold uppercase tracking-wide text-terra-100">
                   Categoría
                 </label>
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 transition-all focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                  className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 transition-all focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                 >
                   <option value="">Sin categoría</option>
                   {PAINTING_CATEGORIES.map((cat) => (
@@ -672,9 +672,9 @@ export default function AdminPaintingsPage() {
                   id="available"
                   checked={formData.available}
                   onChange={(e) => setFormData({ ...formData, available: e.target.checked })}
-                  className="h-5 w-5 rounded border-2 border-red-900 bg-gray-900 text-red-600 focus:ring-2 focus:ring-red-600/50"
+                  className="h-5 w-5 rounded border-2 border-terra-900 bg-gray-900 text-moss-600 focus:ring-2 focus:ring-moss-500/50"
                 />
-                <label htmlFor="available" className="text-sm font-semibold text-red-100">
+                <label htmlFor="available" className="text-sm font-semibold text-terra-100">
                   Disponible
                 </label>
               </div>
@@ -682,8 +682,8 @@ export default function AdminPaintingsPage() {
               {/* Stock Management */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="stock" className="mb-2 block text-sm font-semibold text-red-100">
-                    Stock <span className="text-xs text-red-400">(vacío = ilimitado)</span>
+                  <label htmlFor="stock" className="mb-2 block text-sm font-semibold text-terra-100">
+                    Stock <span className="text-xs text-terra-400">(vacío = ilimitado)</span>
                   </label>
                   <input
                     type="number"
@@ -692,11 +692,11 @@ export default function AdminPaintingsPage() {
                     onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
                     placeholder="Ej: 5"
                     min="0"
-                    className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 placeholder-red-700 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                    className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 placeholder-terra-700 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                   />
                 </div>
                 <div>
-                  <label htmlFor="lowStockThreshold" className="mb-2 block text-sm font-semibold text-red-100">
+                  <label htmlFor="lowStockThreshold" className="mb-2 block text-sm font-semibold text-terra-100">
                     Alerta de Stock Bajo
                   </label>
                   <input
@@ -705,7 +705,7 @@ export default function AdminPaintingsPage() {
                     value={formData.lowStockThreshold}
                     onChange={(e) => setFormData({ ...formData, lowStockThreshold: e.target.value })}
                     min="0"
-                    className="w-full rounded-lg border-2 border-red-900 bg-gray-900 px-4 py-3 text-red-100 placeholder-red-700 focus:border-red-600 focus:outline-none focus:ring-2 focus:ring-red-600/50"
+                    className="w-full rounded-lg border-2 border-terra-900 bg-gray-900 px-4 py-3 text-terra-100 placeholder-terra-700 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/50"
                   />
                 </div>
               </div>
@@ -715,7 +715,7 @@ export default function AdminPaintingsPage() {
                 <button
                   type="submit"
                   disabled={uploading}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-red-900 bg-gradient-to-r from-red-900 to-red-800 px-6 py-3 font-bold text-red-100 transition-all hover:from-red-800 hover:to-red-700 hover:shadow-lg hover:shadow-red-900/50 disabled:from-gray-800 disabled:to-gray-700 disabled:text-gray-400"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-lg border-2 border-terra-900 bg-linear-to-r from-terra-900 to-terra-800 px-6 py-3 font-bold text-terra-100 transition-all hover:from-terra-800 hover:to-moss-600 hover:shadow-lg hover:shadow-terra-900/50 disabled:from-gray-800 disabled:to-gray-700 disabled:text-gray-400"
                 >
                   {uploading ? (
                     <>
@@ -732,7 +732,7 @@ export default function AdminPaintingsPage() {
                     setShowModal(false);
                     resetForm();
                   }}
-                  className="rounded-lg border-2 border-red-900 bg-red-900/20 px-6 py-3 font-semibold text-red-100 transition-all hover:bg-red-900/40"
+                  className="rounded-lg border-2 border-terra-900 bg-terra-900/20 px-6 py-3 font-semibold text-terra-100 transition-all hover:bg-terra-900/40"
                 >
                   Cancelar
                 </button>

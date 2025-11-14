@@ -78,7 +78,7 @@ export default function PaintingDetailPage() {
     return (
       <div className="flex min-h-screen items-center justify-center bg-white">
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-red-600" />
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
           <p className="mt-4 text-center font-semibold text-gray-900">Cargando obra...</p>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default function PaintingDetailPage() {
           </h1>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 font-semibold text-red-600 transition-colors hover:text-red-700 hover:underline"
+            className="inline-flex items-center gap-2 font-semibold text-moss-600 transition-colors hover:text-moss-700 hover:underline"
           >
             <ArrowLeft className="h-5 w-5" />
             Volver a la galería
@@ -117,7 +117,7 @@ export default function PaintingDetailPage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <button
           onClick={() => router.back()}
-          className="group mb-6 flex items-center gap-2 font-semibold text-gray-700 transition-colors hover:text-red-600"
+          className="group mb-6 flex items-center gap-2 font-semibold text-gray-700 transition-colors hover:text-moss-600"
         >
           <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
           <span>Volver</span>
@@ -157,7 +157,7 @@ export default function PaintingDetailPage() {
                     className={`font-bold ${
                       painting.available
                         ? "text-green-600"
-                        : "text-red-600"
+                        : "text-moss-600"
                     }`}
                   >
                     {painting.available ? "Disponible" : "No disponible"}
@@ -184,7 +184,7 @@ export default function PaintingDetailPage() {
               </div>
 
               <div className="mb-8 border-t-4 border-black pt-6">
-                <p className="text-5xl font-black text-red-600">
+                <p className="text-5xl font-black text-moss-600">
                   {formatPrice(painting.price)}
                 </p>
               </div>
@@ -193,7 +193,7 @@ export default function PaintingDetailPage() {
                 <button
                   onClick={handleAddToCart}
                   disabled={addedToCart}
-                  className="group flex w-full items-center justify-center gap-3 border-4 border-black bg-red-600 px-6 py-4 text-lg font-black text-white transition-all hover:bg-red-700 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] disabled:bg-green-600 disabled:text-white"
+                  className="group flex w-full items-center justify-center gap-3 border-4 border-black bg-moss-500 px-6 py-4 text-lg font-black text-white transition-all hover:bg-moss-600 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] disabled:bg-green-600 disabled:text-white"
                 >
                   {addedToCart ? (
                     <>

@@ -3,48 +3,85 @@ rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
 
-    // Helper function para verificar si el usuario es admin
+    // ========== HELPER FUNCTIONS ==========
+
+    // Verificar si el usuario es admin
     function isAdmin() {
       return request.auth != null && request.auth.token.role == 'admin';
     }
 
-    // Reglas para imágenes de pinturas
-    match /paintings/{allPaths=**} {
-      // Cualquiera puede leer
-      allow read: if true;
-
-      // Solo administradores pueden subir/eliminar
-      allow create, delete: if isAdmin();
+    // Verificar si el archivo es una imagen válida
+    function isValidImage() {
+      return request.resource.size < 10 * 1024 * 1024 // < 10MB
+        && request.resource.contentType.matches('image/.*');
     }
 
-    // Reglas para imágenes de pedidos personalizados
-    match /custom-orders/{allPaths=**} {
-      // Cualquiera puede subir (para el formulario público)
-      allow create: if true;
+    // Verificar si el archivo es audio válido
+    function isValidAudio() {
+      return request.resource.size < 50 * 1024 * 1024 // < 50MB
+        && request.resource.contentType.matches('audio/.*');
+    }
 
-      // Cualquiera puede leer
+    // Verificar si el archivo es video válido
+    function isValidVideo() {
+      return request.resource.size < 100 * 1024 * 1024 // < 100MB
+        && request.resource.contentType.matches('video/.*');
+    }
+
+    // ========== STORAGE BUCKETS ==========
+
+    // Imágenes de pinturas (galería principal)
+    match /paintings/{allPaths=**} {
+      // Lectura pública necesaria para la galería
       allow read: if true;
 
-      // Solo administradores pueden eliminar
+      // Solo admin puede subir/eliminar (con validación de imagen)
+      allow create, delete: if isAdmin() && isValidImage();
+    }
+
+    // Imágenes de pedidos personalizados (obra a pedido)
+    match /custom-orders/{allPaths=**} {
+      // Lectura pública (para que admin vea las refs subidas por clientes)
+      allow read: if true;
+
+      // Escritura pública CONTROLADA (formulario público, máx 10MB, solo imágenes)
+      allow create: if isValidImage();
+
+      // Solo admin puede eliminar
       allow delete: if isAdmin();
     }
 
-    // Reglas para configuración del home (fotos de perfil, banner, videos)
+    // Configuración del home (banner, hero, videos)
     match /home-settings/{allPaths=**} {
-      // Cualquiera puede leer (para mostrar en el home)
+      // Lectura pública (banner/hero visible para todos)
       allow read: if true;
 
-      // Solo administradores pueden subir/actualizar/eliminar
-      allow create, update, delete: if isAdmin();
+      // Solo admin puede modificar (validar imágenes o videos)
+      allow create, update, delete: if isAdmin()
+        && (isValidImage() || isValidVideo());
     }
 
-    // Reglas para archivos de música de fondo
+    // Archivos de música de fondo
     match /music/{allPaths=**} {
-      // Cualquiera puede leer (para reproducir en el sitio)
+      // Lectura pública (para reproducir en el sitio)
       allow read: if true;
 
-      // Solo administradores pueden subir/actualizar/eliminar
-      allow create, update, delete: if isAdmin();
+      // Solo admin puede modificar (validar audio)
+      allow create, update, delete: if isAdmin() && isValidAudio();
+    }
+
+    // Imágenes del blog
+    match /blog/{allPaths=**} {
+      // Lectura pública (posts visibles para todos)
+      allow read: if true;
+
+      // Solo admin puede modificar
+      allow create, update, delete: if isAdmin() && isValidImage();
+    }
+
+    // Bloquear cualquier otro path no explícitamente permitido
+    match /{allPaths=**} {
+      allow read, write: if false;
     }
   }
 }
