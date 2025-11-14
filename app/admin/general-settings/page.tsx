@@ -58,6 +58,12 @@ export default function GeneralSettingsPage() {
           bannerOverlayOpacity: data.bannerOverlayOpacity ?? DEFAULT_GENERAL_SETTINGS.bannerOverlayOpacity,
           enableAnimations: data.enableAnimations ?? true,
           buttonStyle: data.buttonStyle || DEFAULT_GENERAL_SETTINGS.buttonStyle,
+          bankName: data.bankName,
+          bankAccountType: data.bankAccountType,
+          bankAccountNumber: data.bankAccountNumber,
+          bankAccountHolder: data.bankAccountHolder,
+          bankRut: data.bankRut,
+          bankEmail: data.bankEmail,
           updatedBy: data.updatedBy,
         });
       }
@@ -495,6 +501,103 @@ export default function GeneralSettingsPage() {
                   <option value="pill">Pastilla (muy redondeados)</option>
                 </select>
               </div>
+            </div>
+          </div>
+
+          {/* Bank Transfer Information */}
+          <div className="rounded-lg border-2 border-azure-500 bg-black/60 p-6 backdrop-blur-sm">
+            <h2 className="mb-2 text-xl font-bold text-azure-100">💳 Datos de Transferencia Bancaria</h2>
+            <p className="mb-4 text-sm text-azure-300">
+              Estos datos se mostrarán a los clientes cuando seleccionen "Transferencia" como método de pago
+            </p>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block text-sm font-bold text-azure-100">
+                  Banco
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: Banco de Chile"
+                  value={settings.bankName || ""}
+                  onChange={(e) => setSettings({ ...settings, bankName: e.target.value })}
+                  className="w-full rounded border-2 border-azure-900 bg-gray-900 px-4 py-2 text-azure-100 placeholder-gray-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-bold text-azure-100">
+                  Tipo de Cuenta
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: Cuenta Corriente"
+                  value={settings.bankAccountType || ""}
+                  onChange={(e) => setSettings({ ...settings, bankAccountType: e.target.value })}
+                  className="w-full rounded border-2 border-azure-900 bg-gray-900 px-4 py-2 text-azure-100 placeholder-gray-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-bold text-azure-100">
+                  Número de Cuenta
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: 12345678"
+                  value={settings.bankAccountNumber || ""}
+                  onChange={(e) => setSettings({ ...settings, bankAccountNumber: e.target.value })}
+                  className="w-full rounded border-2 border-azure-900 bg-gray-900 px-4 py-2 text-azure-100 placeholder-gray-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-bold text-azure-100">
+                  Titular de la Cuenta
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: José Vega Ramírez"
+                  value={settings.bankAccountHolder || ""}
+                  onChange={(e) => setSettings({ ...settings, bankAccountHolder: e.target.value })}
+                  className="w-full rounded border-2 border-azure-900 bg-gray-900 px-4 py-2 text-azure-100 placeholder-gray-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-bold text-azure-100">
+                  RUT del Titular
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ej: 12.345.678-9"
+                  value={settings.bankRut || ""}
+                  onChange={(e) => setSettings({ ...settings, bankRut: e.target.value })}
+                  className="w-full rounded border-2 border-azure-900 bg-gray-900 px-4 py-2 text-azure-100 placeholder-gray-500"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-sm font-bold text-azure-100">
+                  Email para Notificaciones
+                </label>
+                <input
+                  type="email"
+                  placeholder="Ej: pagos@josevega.art"
+                  value={settings.bankEmail || ""}
+                  onChange={(e) => setSettings({ ...settings, bankEmail: e.target.value })}
+                  className="w-full rounded border-2 border-azure-900 bg-gray-900 px-4 py-2 text-azure-100 placeholder-gray-500"
+                />
+                <p className="mt-1 text-xs text-azure-400">
+                  Email donde recibirás notificaciones de transferencias
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-lg border border-azure-700 bg-azure-950/30 p-4">
+              <p className="text-sm text-azure-200">
+                <strong>Vista previa:</strong> Estos datos se mostrarán al cliente después de confirmar su pedido cuando elija "Transferencia".
+              </p>
             </div>
           </div>
         </div>

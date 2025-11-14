@@ -79,6 +79,19 @@ service firebase.storage {
       allow create, update, delete: if isAdmin() && isValidImage();
     }
 
+    // Comprobantes de transferencia (payment proofs)
+    match /payment-proofs/{orderId}/{fileName} {
+      // Lectura: solo admin o usuario autenticado (para ver su propio comprobante)
+      allow read: if isAdmin() || request.auth != null;
+
+      // Escritura pública CONTROLADA (usuarios suben comprobantes, máx 5MB, solo imágenes)
+      allow create: if request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+
+      // Solo admin puede eliminar
+      allow delete: if isAdmin();
+    }
+
     // Bloquear cualquier otro path no explícitamente permitido
     match /{allPaths=**} {
       allow read, write: if false;

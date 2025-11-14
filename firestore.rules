@@ -133,5 +133,17 @@ service cloud.firestore {
       // Solo administradores pueden eliminar (no recomendado)
       allow delete: if isAdmin();
     }
+
+    // Reglas para generalSettings (configuración general del sitio)
+    match /generalSettings/{settingsId} {
+      // Todos pueden leer configuración general (para datos de transferencia, colores, etc.)
+      allow read: if true;
+
+      // Solo administradores pueden crear/actualizar
+      allow create, update: if isAdmin();
+
+      // Solo administradores pueden eliminar
+      allow delete: if isAdmin();
+    }
   }
 }

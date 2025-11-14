@@ -131,6 +131,9 @@ export interface PaymentInfo {
   status: PaymentStatus;
   transactionId?: string;
   paidAt?: Date;
+  // Para transferencias bancarias
+  transferProofUrl?: string; // URL del comprobante subido por el usuario
+  transferProofUploadedAt?: Date;
 }
 
 export type PaymentStatus = 'pending' | 'paid' | 'failed' | 'refunded';
@@ -344,7 +347,15 @@ export interface GeneralSettings {
   // UI Preferences
   enableAnimations: boolean; // Habilitar/deshabilitar animaciones
   buttonStyle: 'rounded' | 'square' | 'pill'; // Estilo de botones
-  
+
+  // Bank Transfer Info (para mostrar en checkout)
+  bankName?: string; // Ej: "Banco de Chile"
+  bankAccountType?: string; // Ej: "Cuenta Corriente"
+  bankAccountNumber?: string; // Número de cuenta
+  bankAccountHolder?: string; // Titular de la cuenta
+  bankRut?: string; // RUT del titular
+  bankEmail?: string; // Email para notificaciones de transferencia
+
   // Metadata
   updatedAt: Date;
   updatedBy?: string;
@@ -379,4 +390,12 @@ export const DEFAULT_GENERAL_SETTINGS: Omit<GeneralSettings, 'id' | 'updatedAt'>
   // UI
   enableAnimations: true,
   buttonStyle: 'rounded',
+
+  // Bank Transfer (se configura en admin/general-settings)
+  bankName: undefined,
+  bankAccountType: undefined,
+  bankAccountNumber: undefined,
+  bankAccountHolder: undefined,
+  bankRut: undefined,
+  bankEmail: undefined,
 };
