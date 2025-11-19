@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/useToast";
 import { formatPrice as formatCLP } from "@/lib/utils";
+import { AdminLogHelpers } from "@/lib/adminLogs";
 
 export default function AdminCouponsPage() {
   const router = useRouter();
@@ -195,12 +196,34 @@ export default function AdminCouponsPage() {
 
       if (editingCoupon) {
         await updateDoc(doc(db, "coupons", editingCoupon.id), couponData);
+        
+        // Registrar log de actividad
+        if (user?.email && user?.uid) {
+          await AdminLogHelpers.logCouponUpdated(
+            user.email,
+            user.uid,
+            editingCoupon.id,
+            code.toUpperCase()
+          );
+        }
+        
         showToast(`Cupón "${code.toUpperCase()}" actualizado exitosamente`, "success");
       } else {
-        await addDoc(collection(db, "coupons"), {
+        const docRef = await addDoc(collection(db, "coupons"), {
           ...couponData,
           createdAt: serverTimestamp(),
         });
+        
+        // Registrar log de actividad
+        if (user?.email && user?.uid) {
+          await AdminLogHelpers.logCouponCreated(
+            user.email,
+            user.uid,
+            docRef.id,
+            code.toUpperCase()
+          );
+        }
+        
         showToast(`Cupón "${code.toUpperCase()}" creado exitosamente`, "success");
       }
 
@@ -217,7 +240,20 @@ export default function AdminCouponsPage() {
     if (!confirm("¿Estás seguro de eliminar este cupón?")) return;
 
     try {
+      const coupon = coupons.find(c => c.id === id);
+      
       await deleteDoc(doc(db, "coupons", id));
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid && coupon) {
+        await AdminLogHelpers.logCouponDeleted(
+          user.email,
+          user.uid,
+          id,
+          coupon.code
+        );
+      }
+      
       showToast("Cupón eliminado exitosamente", "success");
     } catch (error) {
       console.error("Error deleting coupon:", error);

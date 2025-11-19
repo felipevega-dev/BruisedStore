@@ -17,10 +17,11 @@ import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { Order, OrderStatus, ShippingStatus } from "@/types";
 import Image from "next/image";
-import { Loader2, ArrowLeft, Trash2, Eye, Package, Bell } from "lucide-react";
+import { Loader2, ArrowLeft, Trash2, Eye, Package, Bell, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
 import { formatPrice } from "@/lib/utils";
+import { AdminLogHelpers, logAdminAction } from "@/lib/adminLogs";
 
 export default function AdminStoreOrdersPage() {
   const router = useRouter();
@@ -93,6 +94,7 @@ export default function AdminStoreOrdersPage() {
             paymentInfo: {
               ...data.paymentInfo,
               paidAt: data.paymentInfo?.paidAt?.toDate(),
+              transferProofUploadedAt: data.paymentInfo?.transferProofUploadedAt?.toDate(),
             },
           } as Order;
         });
@@ -113,10 +115,35 @@ export default function AdminStoreOrdersPage() {
   ) => {
     setUpdatingStatus(true);
     try {
+      const order = orders.find(o => o.id === orderId);
+      const oldStatus = order?.status;
+      
+      console.log("📦 Cambiando estado de orden:", { orderId, oldStatus, newStatus, order: order?.orderNumber });
+
       await updateDoc(doc(db, "orders", orderId), {
         status: newStatus,
         updatedAt: new Date(),
       });
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid && order) {
+        console.log("📝 Creando log de cambio de estado...");
+        await AdminLogHelpers.logOrderStatusChange(
+          user.email,
+          user.uid,
+          orderId,
+          order.orderNumber,
+          oldStatus || 'unknown',
+          newStatus
+        );
+        console.log("✅ Log de cambio de estado creado");
+      } else {
+        console.warn("⚠️ No se pudo crear log de estado:", { 
+          hasEmail: !!user?.email, 
+          hasUid: !!user?.uid, 
+          hasOrder: !!order 
+        });
+      }
       
       // Actualizar el estado local inmediatamente
       setSelectedOrder(prev => prev ? { ...prev, status: newStatus } : null);
@@ -126,7 +153,7 @@ export default function AdminStoreOrdersPage() {
       
       showToast("Estado del pedido actualizado exitosamente", "success");
     } catch (error) {
-      console.error("Error updating order status:", error);
+      console.error("❌ Error updating order status:", error);
       showToast("Error al actualizar el estado", "error");
     } finally {
       setUpdatingStatus(false);
@@ -165,11 +192,37 @@ export default function AdminStoreOrdersPage() {
     }
 
     try {
+      const order = orders.find(o => o.id === orderId);
+      console.log("🗑️ Eliminando orden:", { orderId, order, user: user?.email });
+      
       await deleteDoc(doc(db, "orders", orderId));
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid && order) {
+        console.log("📝 Creando log de eliminación...");
+        await logAdminAction(
+          'order_deleted',
+          user.email,
+          user.uid,
+          {
+            orderId,
+            orderNumber: order.orderNumber,
+            description: `Pedido #${order.orderNumber} eliminado`,
+          }
+        );
+        console.log("✅ Log creado exitosamente");
+      } else {
+        console.warn("⚠️ No se pudo crear log:", { 
+          hasEmail: !!user?.email, 
+          hasUid: !!user?.uid, 
+          hasOrder: !!order 
+        });
+      }
+      
       setSelectedOrder(null);
       showToast("Pedido eliminado exitosamente", "success");
     } catch (error) {
-      console.error("Error deleting order:", error);
+      console.error("❌ Error deleting order:", error);
       showToast("Error al eliminar el pedido", "error");
     }
   };
@@ -238,6 +291,23 @@ export default function AdminStoreOrdersPage() {
       efectivo: "Efectivo",
     };
     return labels[method as keyof typeof labels] || method;
+  };
+
+  const handleWhatsAppContact = (order: Order) => {
+    const phoneNumber = order.shippingInfo.phone.replace(/\s/g, "").replace(/^56/, "");
+    const formattedPhone = phoneNumber.startsWith("+") ? phoneNumber : `+56${phoneNumber}`;
+
+    const message = encodeURIComponent(
+      `Hola ${order.shippingInfo.fullName}! 👋\n\n` +
+      `Te escribo sobre tu pedido #${order.orderNumber}\n\n` +
+      `Detalles:\n` +
+      `• ${order.items.length} producto(s)\n` +
+      `• Total: ${formatPrice(order.total)}\n` +
+      `• Estado: ${getStatusLabel(order.status)}\n\n` +
+      `¿En qué puedo ayudarte?`
+    );
+
+    window.open(`https://wa.me/${formattedPhone.replace("+", "")}?text=${message}`, "_blank");
   };
 
   if (authLoading || loading) {
@@ -454,9 +524,18 @@ export default function AdminStoreOrdersPage() {
 
                 {/* Customer Info */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-bold text-terra-100">
-                    Información del Cliente
-                  </h3>
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="font-bold text-terra-100">
+                      Información del Cliente
+                    </h3>
+                    <button
+                      onClick={() => handleWhatsAppContact(selectedOrder)}
+                      className="flex items-center gap-2 rounded-lg border-2 border-moss-500 bg-moss-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-moss-900/20 transition hover:bg-moss-600 hover:border-moss-600"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Contactar
+                    </button>
+                  </div>
                   <div className="space-y-2 rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-4">
                     <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Nombre:</span>
@@ -527,12 +606,50 @@ export default function AdminStoreOrdersPage() {
                           : "Pendiente"}
                       </span>
                     </div>
-                    <div className="flex justify-between pb-2">
+                    <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">ID Transacción:</span>
                       <span className="font-mono text-sm text-terra-100">
                         {selectedOrder.paymentInfo.transactionId || "N/A"}
                       </span>
                     </div>
+
+                    {/* Transfer Proof */}
+                    {selectedOrder.paymentInfo.method === "transferencia" && (
+                      <div className="border-t border-terra-900/20 pt-3">
+                        <span className="mb-2 block text-sm font-semibold text-gray-400">
+                          Comprobante de Transferencia:
+                        </span>
+                        {selectedOrder.paymentInfo.transferProofUrl ? (
+                          <div className="space-y-2">
+                            <a
+                              href={selectedOrder.paymentInfo.transferProofUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block overflow-hidden rounded-lg border-2 border-azure-500/50 transition hover:border-azure-500"
+                            >
+                              <div className="relative h-48 w-full">
+                                <Image
+                                  src={selectedOrder.paymentInfo.transferProofUrl}
+                                  alt="Comprobante de transferencia"
+                                  fill
+                                  className="object-contain bg-black/20"
+                                  sizes="400px"
+                                />
+                              </div>
+                            </a>
+                            {selectedOrder.paymentInfo.transferProofUploadedAt && (
+                              <p className="text-xs text-gray-400">
+                                Subido el {formatDate(selectedOrder.paymentInfo.transferProofUploadedAt)}
+                              </p>
+                            )}
+                          </div>
+                        ) : (
+                          <p className="text-sm text-gray-400">
+                            No se ha subido comprobante aún
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -399,3 +399,67 @@ export const DEFAULT_GENERAL_SETTINGS: Omit<GeneralSettings, 'id' | 'updatedAt'>
   bankRut: undefined,
   bankEmail: undefined,
 };
+
+// ========================================
+// Admin Activity Logs
+// ========================================
+
+export type AdminAction =
+  | 'order_status_updated'
+  | 'order_deleted'
+  | 'custom_order_status_updated'
+  | 'custom_order_deleted'
+  | 'painting_created'
+  | 'painting_updated'
+  | 'painting_deleted'
+  | 'review_approved'
+  | 'review_rejected'
+  | 'review_deleted'
+  | 'coupon_created'
+  | 'coupon_updated'
+  | 'coupon_deleted'
+  | 'blog_post_created'
+  | 'blog_post_updated'
+  | 'blog_post_deleted'
+  | 'blog_post_published'
+  | 'blog_post_unpublished'
+  | 'home_settings_updated'
+  | 'music_settings_updated'
+  | 'general_settings_updated';
+
+export interface AdminLog {
+  id: string;
+  action: AdminAction;
+  adminEmail: string;
+  adminUid: string;
+  timestamp: Date;
+  
+  // Metadata específica según la acción
+  metadata?: {
+    // Para órdenes
+    orderId?: string;
+    orderNumber?: string;
+    oldStatus?: string;
+    newStatus?: string;
+    
+    // Para pinturas
+    paintingId?: string;
+    paintingTitle?: string;
+    
+    // Para reviews
+    reviewId?: string;
+    reviewerName?: string;
+    
+    // Para cupones
+    couponId?: string;
+    couponCode?: string;
+    
+    // Para blog posts
+    postId?: string;
+    postTitle?: string;
+    postSlug?: string;
+    
+    // Información adicional
+    description?: string;
+  };
+}

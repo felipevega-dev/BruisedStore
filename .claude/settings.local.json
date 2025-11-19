@@ -12,7 +12,10 @@
       "Bash(chmod:*)",
       "Bash(bash:*)",
       "Bash(node migrate-colors.js:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(firebase deploy:*)",
+      "Bash(npx firebase deploy:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

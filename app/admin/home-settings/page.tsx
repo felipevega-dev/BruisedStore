@@ -17,6 +17,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/hooks/useToast";
 import { compressImage } from "@/lib/utils";
+import { AdminLogHelpers } from "@/lib/adminLogs";
 
 const SETTINGS_DOC_ID = "main";
 
@@ -220,6 +221,14 @@ export default function HomeSettingsPage() {
       }
 
       await setDoc(docRef, dataToSave);
+
+      // Registrar log de actividad
+      if (user.email) {
+        await AdminLogHelpers.logHomeSettingsUpdated(
+          user.email,
+          user.uid
+        );
+      }
 
       showToast("Configuración guardada exitosamente", "success");
       await fetchSettings();

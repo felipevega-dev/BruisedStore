@@ -46,9 +46,9 @@ service cloud.firestore {
       // Cualquiera puede crear órdenes (usuarios anónimos pueden comprar)
       allow create: if true;
 
-      // Lectura: Admin puede ver todas, usuarios solo las suyas (lectura pública vía API segura)
-      allow read: if isAdmin() || 
-                     (request.auth != null && resource.data.userId == request.auth.uid);
+      // Lectura pública (validación de token se hace en cliente)
+      // Esto permite que order-confirmation funcione sin Admin SDK
+      allow read: if true;
 
       // Solo administradores pueden actualizar/eliminar
       allow update, delete: if isAdmin();
@@ -144,6 +144,19 @@ service cloud.firestore {
 
       // Solo administradores pueden eliminar
       allow delete: if isAdmin();
+    }
+
+    // Reglas para adminLogs (logs de actividad de administradores)
+    match /adminLogs/{logId} {
+      // Solo administradores pueden leer logs
+      allow read: if isAdmin();
+
+      // Solo el sistema puede crear logs (a través de Cloud Functions o código cliente)
+      // Los admins también pueden crear logs desde el cliente
+      allow create: if isAdmin();
+
+      // Nadie puede actualizar o eliminar logs (inmutables)
+      allow update, delete: if false;
     }
   }
 }

@@ -32,6 +32,7 @@ import {
   Save,
   Loader2,
 } from "lucide-react";
+import { AdminLogHelpers, logAdminAction } from "@/lib/adminLogs";
 
 export default function AdminBlogPage() {
   const { user, isAdmin } = useAuth();
@@ -191,15 +192,49 @@ export default function AdminBlogPage() {
       if (editingPost) {
         // Update existing post
         await updateDoc(doc(db, "blogPosts", editingPost.id), postData);
+        
+        // Registrar log de actividad
+        if (user?.email) {
+          await logAdminAction(
+            'blog_post_updated',
+            user.email,
+            user.uid,
+            {
+              postId: editingPost.id,
+              postTitle: formData.title,
+              postSlug: formData.slug,
+              description: `Post "${formData.title}" actualizado`,
+            }
+          );
+        }
+        
         showToast("Post actualizado correctamente", "success");
       } else {
         // Create new post
-        await addDoc(collection(db, "blogPosts"), {
+        const docRef = await addDoc(collection(db, "blogPosts"), {
           ...postData,
           createdAt: Timestamp.now(),
           publishedAt: formData.published ? Timestamp.now() : null,
           viewCount: 0,
         });
+        
+        // Registrar log de actividad
+        if (user?.email) {
+          await logAdminAction(
+            formData.published ? 'blog_post_published' : 'blog_post_created',
+            user.email,
+            user.uid,
+            {
+              postId: docRef.id,
+              postTitle: formData.title,
+              postSlug: formData.slug,
+              description: formData.published 
+                ? `Post "${formData.title}" creado y publicado`
+                : `Post "${formData.title}" creado como borrador`,
+            }
+          );
+        }
+        
         showToast("Post creado correctamente", "success");
       }
 
@@ -234,7 +269,25 @@ export default function AdminBlogPage() {
     if (!confirm("¿Estás seguro de eliminar este post?")) return;
 
     try {
+      const post = posts.find(p => p.id === postId);
+      
       await deleteDoc(doc(db, "blogPosts", postId));
+      
+      // Registrar log de actividad
+      if (user?.email && post) {
+        await logAdminAction(
+          'blog_post_deleted',
+          user.email,
+          user.uid,
+          {
+            postId,
+            postTitle: post.title,
+            postSlug: post.slug,
+            description: `Post "${post.title}" eliminado`,
+          }
+        );
+      }
+      
       showToast("Post eliminado correctamente", "success");
       fetchPosts();
     } catch (error) {
@@ -251,6 +304,24 @@ export default function AdminBlogPage() {
         publishedAt: newPublished ? Timestamp.now() : null,
         updatedAt: Timestamp.now(),
       });
+      
+      // Registrar log de actividad
+      if (user?.email) {
+        await logAdminAction(
+          newPublished ? 'blog_post_published' : 'blog_post_unpublished',
+          user.email,
+          user.uid,
+          {
+            postId: post.id,
+            postTitle: post.title,
+            postSlug: post.slug,
+            description: newPublished 
+              ? `Post "${post.title}" publicado`
+              : `Post "${post.title}" despublicado`,
+          }
+        );
+      }
+      
       showToast(
         newPublished ? "Post publicado" : "Post despublicado",
         "success"

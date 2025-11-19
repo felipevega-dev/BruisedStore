@@ -22,6 +22,7 @@ import Image from "next/image";
 import { Trash2, Plus, Loader2, Edit, X, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
+import { AdminLogHelpers } from "@/lib/adminLogs";
 
 export default function AdminPaintingsPage() {
   const router = useRouter();
@@ -302,13 +303,35 @@ export default function AdminPaintingsPage() {
       if (editingPainting) {
         // Update existing painting
         await updateDoc(doc(db, "paintings", editingPainting.id), paintingData);
+        
+        // Registrar log de actividad
+        if (user?.email && user?.uid) {
+          await AdminLogHelpers.logPaintingUpdated(
+            user.email,
+            user.uid,
+            editingPainting.id,
+            formData.title
+          );
+        }
+        
         showToast(`"${formData.title}" actualizada exitosamente`, "success");
       } else {
         // Create new painting
-        await addDoc(collection(db, "paintings"), {
+        const docRef = await addDoc(collection(db, "paintings"), {
           ...paintingData,
           createdAt: serverTimestamp(),
         });
+        
+        // Registrar log de actividad
+        if (user?.email && user?.uid) {
+          await AdminLogHelpers.logPaintingCreated(
+            user.email,
+            user.uid,
+            docRef.id,
+            formData.title
+          );
+        }
+        
         showToast(`"${formData.title}" creada exitosamente`, "success");
       }
 
@@ -341,6 +364,17 @@ export default function AdminPaintingsPage() {
 
       // Delete document from Firestore
       await deleteDoc(doc(db, "paintings", painting.id));
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid) {
+        await AdminLogHelpers.logPaintingDeleted(
+          user.email,
+          user.uid,
+          painting.id,
+          painting.title
+        );
+      }
+      
       await fetchPaintings();
       showToast(`"${painting.title}" eliminada exitosamente`, "success");
     } catch (error) {

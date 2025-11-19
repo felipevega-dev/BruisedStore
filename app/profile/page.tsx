@@ -349,14 +349,25 @@ export default function ProfilePage() {
                             ))}
                           </div>
 
-                          {/* Total */}
-                          <div className="flex items-center justify-between border-t-2 border-gray-300 pt-4">
-                            <span className="font-bold text-gray-700">
-                              Total
-                            </span>
-                            <span className="text-xl font-bold text-moss-600">
-                              {formatPrice(order.total)}
-                            </span>
+                          {/* Total and Actions */}
+                          <div className="border-t-2 border-gray-300 pt-4">
+                            <div className="mb-3 flex items-center justify-between">
+                              <span className="font-bold text-gray-700">
+                                Total
+                              </span>
+                              <span className="text-xl font-bold text-moss-600">
+                                {formatPrice(order.total)}
+                              </span>
+                            </div>
+                            {order.publicAccessToken && (
+                              <Link
+                                href={`/order-confirmation/${order.id}?token=${order.publicAccessToken}`}
+                                className="flex items-center justify-center gap-2 rounded-lg border-2 border-moss-500 bg-moss-500 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-moss-600"
+                              >
+                                <ShoppingBag className="h-4 w-4" />
+                                Ver Detalle del Pedido
+                              </Link>
+                            )}
                           </div>
                         </div>
                       ))

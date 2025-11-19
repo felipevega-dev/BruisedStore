@@ -20,6 +20,17 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/useToast";
 
+// Helper function to format dates
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat("es-CL", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+};
+
 // Datos bancarios para transferencia
 const BANK_INFO = {
   banco: "Banco Estado",
@@ -50,31 +61,36 @@ export default function OrderConfirmationPage() {
           return;
         }
 
-        const response = await fetch(`/api/orders/${orderId}?token=${accessToken}`, {
-          cache: "no-store",
-        });
+        // Import Firebase client SDK dynamically
+        const { db } = await import("@/lib/firebase");
+        const { doc, getDoc } = await import("firebase/firestore");
 
-        if (!response.ok) {
-          if (response.status === 404) {
-            setError("Orden no encontrada");
-          } else if (response.status === 401) {
-            setError("Este enlace de confirmación no es válido o ha expirado");
-          } else {
-            setError("Error al cargar la orden");
-          }
+        const orderRef = doc(db, "orders", orderId);
+        const orderSnap = await getDoc(orderRef);
+
+        if (!orderSnap.exists()) {
+          setError("Orden no encontrada");
           setLoading(false);
           return;
         }
 
-        const data = await response.json();
+        const data = orderSnap.data();
+
+        if (!data?.publicAccessToken || data.publicAccessToken !== accessToken) {
+          setError("Este enlace de confirmación no es válido o ha expirado");
+          setLoading(false);
+          return;
+        }
 
         setOrder({
+          id: orderSnap.id,
           ...data,
-          createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
-          updatedAt: data.updatedAt ? new Date(data.updatedAt) : new Date(),
+          createdAt: data.createdAt?.toDate() || new Date(),
+          updatedAt: data.updatedAt?.toDate() || new Date(),
           paymentInfo: {
             ...data.paymentInfo,
-            paidAt: data.paymentInfo?.paidAt ? new Date(data.paymentInfo.paidAt) : undefined,
+            paidAt: data.paymentInfo?.paidAt?.toDate(),
+            transferProofUploadedAt: data.paymentInfo?.transferProofUploadedAt?.toDate(),
           },
         } as Order);
       } catch (err) {
@@ -241,14 +257,64 @@ export default function OrderConfirmationPage() {
                     </div>
                   </div>
 
-                  {/* WhatsApp Button */}
-                  <button
-                    onClick={handleWhatsAppContact}
-                    className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-moss-500 to-moss-500 px-6 py-4 text-lg font-semibold text-white shadow-lg shadow-moss-900/20 transition hover:shadow-xl"
-                  >
-                    <MessageCircle className="h-6 w-6" />
-                    Confirmar Pago por WhatsApp
-                  </button>
+                  {/* Comprobante Ya Subido */}
+                  {order.paymentInfo.transferProofUrl && (
+                    <div className="mt-6 rounded-xl border-2 border-moss-500 bg-moss-50 p-4">
+                      <h3 className="mb-3 flex items-center gap-2 font-semibold text-moss-900">
+                        <CreditCard className="h-5 w-5" />
+                        ✅ Comprobante Recibido
+                      </h3>
+                      <a
+                        href={order.paymentInfo.transferProofUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block overflow-hidden rounded-lg border-2 border-moss-300 transition hover:border-moss-500"
+                      >
+                        <div className="relative h-48 w-full">
+                          <Image
+                            src={order.paymentInfo.transferProofUrl}
+                            alt="Comprobante de transferencia"
+                            fill
+                            className="object-contain bg-white"
+                            sizes="400px"
+                          />
+                        </div>
+                      </a>
+                      {order.paymentInfo.transferProofUploadedAt && (
+                        <p className="mt-2 text-xs text-moss-700">
+                          Subido el {formatDate(order.paymentInfo.transferProofUploadedAt)}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                    {!order.paymentInfo.transferProofUrl ? (
+                      <Link
+                        href={`/order-confirmation/${orderId}/upload-proof?token=${accessToken}`}
+                        className="flex items-center justify-center gap-2 rounded-xl border-2 border-azure-500 bg-azure-500 px-6 py-4 text-lg font-semibold text-white shadow-lg shadow-azure-900/20 transition hover:bg-azure-600 hover:border-azure-600 hover:shadow-xl"
+                      >
+                        <CreditCard className="h-6 w-6" />
+                        Subir Comprobante
+                      </Link>
+                    ) : (
+                      <Link
+                        href={`/order-confirmation/${orderId}/upload-proof?token=${accessToken}`}
+                        className="flex items-center justify-center gap-2 rounded-xl border-2 border-slate-300 bg-slate-100 px-6 py-4 text-lg font-semibold text-slate-700 shadow-lg transition hover:bg-slate-200 hover:border-slate-400"
+                      >
+                        <CreditCard className="h-6 w-6" />
+                        Cambiar Comprobante
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleWhatsAppContact}
+                      className="flex items-center justify-center gap-2 rounded-xl border-2 border-moss-500 bg-moss-500 px-6 py-4 text-lg font-semibold text-white shadow-lg shadow-moss-900/20 transition hover:bg-moss-600 hover:border-moss-600 hover:shadow-xl"
+                    >
+                      <MessageCircle className="h-6 w-6" />
+                      Contactar
+                    </button>
+                  </div>
 
                   {/* Instructions */}
                   <div className="mt-6 rounded-xl border border-amber-200 bg-amber-100/80 p-4">

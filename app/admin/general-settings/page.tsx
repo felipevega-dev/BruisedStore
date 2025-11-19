@@ -9,6 +9,7 @@ import { db } from "@/lib/firebase";
 import { ArrowLeft, Save, Loader2, Palette, Mail, Phone, Share2, Settings as SettingsIcon } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
+import { AdminLogHelpers } from "@/lib/adminLogs";
 
 const SETTINGS_DOC_ID = "main";
 
@@ -89,6 +90,15 @@ export default function GeneralSettingsPage() {
       };
 
       await setDoc(docRef, dataToSave);
+      
+      // Registrar log de actividad
+      if (user.email) {
+        await AdminLogHelpers.logGeneralSettingsUpdated(
+          user.email,
+          user.uid
+        );
+      }
+      
       showToast("Configuración guardada exitosamente", "success");
     } catch (error) {
       console.error("Error saving settings:", error);

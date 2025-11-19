@@ -15,8 +15,9 @@ import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { CustomOrder } from "@/types";
 import Image from "next/image";
-import { Loader2, ArrowLeft, Trash2, Eye, Bell, Package } from "lucide-react";
+import { Loader2, ArrowLeft, Trash2, Eye, Bell, Package, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import { AdminLogHelpers, logAdminAction } from "@/lib/adminLogs";
 
 export default function AdminOrdersPage() {
   const router = useRouter();
@@ -103,9 +104,23 @@ export default function AdminOrdersPage() {
   const handleStatusChange = async (orderId: string, newStatus: CustomOrder["status"]) => {
     setUpdatingStatus(true);
     try {
+      const order = orders.find(o => o.id === orderId);
+      const oldStatus = order?.status;
+
       await updateDoc(doc(db, "customOrders", orderId), {
         status: newStatus,
       });
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid && order) {
+        await AdminLogHelpers.logCustomOrderStatusChange(
+          user.email,
+          user.uid,
+          orderId,
+          oldStatus || 'unknown',
+          newStatus
+        );
+      }
       
       // Actualizar el estado local inmediatamente
       setSelectedOrder(prev => prev ? { ...prev, status: newStatus } : null);
@@ -126,7 +141,23 @@ export default function AdminOrdersPage() {
     }
 
     try {
+      const order = orders.find(o => o.id === orderId);
+      
       await deleteDoc(doc(db, "customOrders", orderId));
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid && order) {
+        await logAdminAction(
+          'custom_order_deleted',
+          user.email,
+          user.uid,
+          {
+            orderId,
+            description: `Pedido personalizado de ${order.customerName} eliminado`,
+          }
+        );
+      }
+      
       await fetchOrders();
       setSelectedOrder(null);
     } catch (error) {
@@ -170,6 +201,24 @@ export default function AdminOrdersPage() {
       cancelled: "Cancelado",
     };
     return labels[status];
+  };
+
+  const handleWhatsAppContact = (order: CustomOrder) => {
+    const phoneNumber = order.phone.replace(/\s/g, "").replace(/^56/, "");
+    const formattedPhone = phoneNumber.startsWith("+") ? phoneNumber : `+56${phoneNumber}`;
+
+    const message = encodeURIComponent(
+      `Hola ${order.customerName}! 👋\n\n` +
+      `Te escribo sobre tu pedido de obra personalizada\n\n` +
+      `Detalles:\n` +
+      `• Tamaño: ${order.selectedSize.name}\n` +
+      `• Dimensiones: ${order.selectedSize.width}x${order.selectedSize.height} cm\n` +
+      `• Total: ${formatPrice(order.totalPrice)}\n` +
+      `• Estado: ${getStatusLabel(order.status)}\n\n` +
+      `¿En qué puedo ayudarte?`
+    );
+
+    window.open(`https://wa.me/${formattedPhone.replace("+", "")}?text=${message}`, "_blank");
   };
 
   if (authLoading || loading) {
@@ -358,9 +407,18 @@ export default function AdminOrdersPage() {
 
                 {/* Customer Info */}
                 <div className="mb-6">
-                  <h3 className="mb-3 font-bold text-terra-100">
-                    Información del Cliente
-                  </h3>
+                  <div className="mb-3 flex items-center justify-between">
+                    <h3 className="font-bold text-terra-100">
+                      Información del Cliente
+                    </h3>
+                    <button
+                      onClick={() => handleWhatsAppContact(selectedOrder)}
+                      className="flex items-center gap-2 rounded-lg border-2 border-moss-500 bg-moss-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-moss-900/20 transition hover:bg-moss-600 hover:border-moss-600"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Contactar
+                    </button>
+                  </div>
                   <div className="space-y-2 rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-4 backdrop-blur-sm">
                     <div className="flex justify-between border-b border-terra-900/20 pb-2">
                       <span className="text-gray-400">Nombre:</span>

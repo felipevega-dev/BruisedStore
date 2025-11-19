@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { ShippingInfo, PaymentInfo, Order, Coupon } from "@/types";
-import { collection, serverTimestamp, query, where, getDocs, doc, runTransaction } from "firebase/firestore";
+import { ShippingInfo, PaymentInfo, Order, Coupon, GeneralSettings } from "@/types";
+import { collection, serverTimestamp, query, where, getDocs, doc, runTransaction, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +19,10 @@ export default function CheckoutPage() {
   const { user } = useAuth();
   const { showToast, ToastContainer } = useToast();
   const [loading, setLoading] = useState(false);
+
+  // Bank transfer info state
+  const [bankInfo, setBankInfo] = useState<GeneralSettings | null>(null);
+
   useEffect(() => {
     if (user?.email) {
       setShippingInfo((prev) =>
@@ -26,6 +30,22 @@ export default function CheckoutPage() {
       );
     }
   }, [user?.email]);
+
+  // Fetch bank transfer information
+  useEffect(() => {
+    const fetchBankInfo = async () => {
+      try {
+        const docRef = doc(db, "generalSettings", "main");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setBankInfo(docSnap.data() as GeneralSettings);
+        }
+      } catch (error) {
+        console.error("Error fetching bank info:", error);
+      }
+    };
+    fetchBankInfo();
+  }, []);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState("");
@@ -524,6 +544,56 @@ export default function CheckoutPage() {
                     </div>
                   </label>
                 </div>
+
+                {/* Bank Transfer Information */}
+                {paymentMethod === "transferencia" && bankInfo && (
+                  <div className="mt-4 rounded-xl border-2 border-azure-500 bg-azure-50 p-4">
+                    <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-azure-900">
+                      <CreditCard className="h-5 w-5" />
+                      💳 Datos para Transferencia
+                    </h3>
+                    <div className="space-y-2 text-sm">
+                      {bankInfo.bankName && (
+                        <p className="text-azure-900">
+                          <strong className="font-semibold">Banco:</strong> {bankInfo.bankName}
+                        </p>
+                      )}
+                      {bankInfo.bankAccountType && (
+                        <p className="text-azure-900">
+                          <strong className="font-semibold">Tipo de Cuenta:</strong> {bankInfo.bankAccountType}
+                        </p>
+                      )}
+                      {bankInfo.bankAccountNumber && (
+                        <p className="text-azure-900">
+                          <strong className="font-semibold">Número de Cuenta:</strong> {bankInfo.bankAccountNumber}
+                        </p>
+                      )}
+                      {bankInfo.bankAccountHolder && (
+                        <p className="text-azure-900">
+                          <strong className="font-semibold">Titular:</strong> {bankInfo.bankAccountHolder}
+                        </p>
+                      )}
+                      {bankInfo.bankRut && (
+                        <p className="text-azure-900">
+                          <strong className="font-semibold">RUT:</strong> {bankInfo.bankRut}
+                        </p>
+                      )}
+                      {bankInfo.bankEmail && (
+                        <p className="text-azure-900">
+                          <strong className="font-semibold">Email:</strong> {bankInfo.bankEmail}
+                        </p>
+                      )}
+                    </div>
+                    <div className="mt-4 rounded-lg border border-azure-600 bg-azure-100/50 p-3">
+                      <p className="flex items-start gap-2 text-xs text-azure-900">
+                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                        <span>
+                          <strong>Importante:</strong> Después de realizar la transferencia, podrás subir tu comprobante de pago en la página de confirmación del pedido.
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Botón de Envío */}

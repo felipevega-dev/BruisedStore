@@ -17,6 +17,7 @@ import { Review } from "@/types";
 import Link from "next/link";
 import { ArrowLeft, Star, Check, X, Trash2, Loader2, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/useToast";
+import { AdminLogHelpers, logAdminAction } from "@/lib/adminLogs";
 
 export default function AdminReviewsPage() {
   const router = useRouter();
@@ -56,9 +57,22 @@ export default function AdminReviewsPage() {
 
   const handleApprove = async (reviewId: string) => {
     try {
+      const review = reviews.find(r => r.id === reviewId);
+      
       await updateDoc(doc(db, "reviews", reviewId), {
         approved: true,
       });
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid && review) {
+        await AdminLogHelpers.logReviewApproved(
+          user.email,
+          user.uid,
+          reviewId,
+          review.userName
+        );
+      }
+      
       showToast("Reseña aprobada exitosamente", "success");
     } catch (error) {
       console.error("Error approving review:", error);
@@ -68,9 +82,22 @@ export default function AdminReviewsPage() {
 
   const handleReject = async (reviewId: string) => {
     try {
+      const review = reviews.find(r => r.id === reviewId);
+      
       await updateDoc(doc(db, "reviews", reviewId), {
         approved: false,
       });
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid && review) {
+        await AdminLogHelpers.logReviewRejected(
+          user.email,
+          user.uid,
+          reviewId,
+          review.userName
+        );
+      }
+      
       showToast("Reseña ocultada", "info");
     } catch (error) {
       console.error("Error rejecting review:", error);
@@ -84,7 +111,20 @@ export default function AdminReviewsPage() {
     }
 
     try {
+      const review = reviews.find(r => r.id === reviewId);
+      
       await deleteDoc(doc(db, "reviews", reviewId));
+      
+      // Registrar log de actividad
+      if (user?.email && user?.uid && review) {
+        await AdminLogHelpers.logReviewDeleted(
+          user.email,
+          user.uid,
+          reviewId,
+          review.userName
+        );
+      }
+      
       showToast("Reseña eliminada exitosamente", "success");
     } catch (error) {
       console.error("Error deleting review:", error);

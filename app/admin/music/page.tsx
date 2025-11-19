@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
+import { AdminLogHelpers } from "@/lib/adminLogs";
 
 export default function AdminMusicSettingsPage() {
   const router = useRouter();
@@ -185,6 +186,14 @@ export default function AdminMusicSettingsPage() {
         },
         { merge: true }
       );
+
+      // Registrar log de actividad
+      if (user?.email && user?.uid) {
+        await AdminLogHelpers.logMusicSettingsUpdated(
+          user.email,
+          user.uid
+        );
+      }
 
       showToast("Configuración guardada exitosamente", "success");
     } catch (error) {

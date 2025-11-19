@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag, BarChart3, Home, BookOpen, Bell, Music, Settings } from "lucide-react";
+import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag, BarChart3, Home, BookOpen, Bell, Music, Settings, FileText } from "lucide-react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 export default function AdminPage() {
@@ -461,6 +461,25 @@ export default function AdminPage() {
                 </h2>
                 <p className="text-slate-600">
                   Métricas de ventas y estadísticas
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/activity-logs"
+            className="group rounded-2xl border border-azure-200 bg-white/95 p-6 shadow-lg shadow-azure-900/10 backdrop-blur transition hover:border-azure-300 hover:shadow-xl"
+          >
+            <div className="flex items-center gap-4">
+              <div className="rounded-xl border border-azure-200 bg-azure-50 p-4 transition group-hover:border-azure-300 group-hover:bg-white">
+                <FileText className="h-8 w-8 text-azure-500" />
+              </div>
+              <div>
+                <h2 className="mb-2 text-xl font-semibold text-slate-900">
+                  Registro de Actividad
+                </h2>
+                <p className="text-slate-600">
+                  Historial de acciones de administradores
                 </p>
               </div>
             </div>
