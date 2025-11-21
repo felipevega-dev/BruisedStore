@@ -91,8 +91,8 @@ export default function ActivityLogsPage() {
         return {
           id: doc.id,
           ...data,
-          timestamp: data.timestamp instanceof Timestamp 
-            ? data.timestamp.toDate() 
+          timestamp: data.timestamp instanceof Timestamp
+            ? data.timestamp.toDate()
             : new Date(data.timestamp),
         } as AdminLog;
       });
@@ -130,22 +130,22 @@ export default function ActivityLogsPage() {
 
   const getActionColor = (action: AdminAction): string => {
     if (action.includes("created") || action.includes("approved") || action.includes("published")) {
-      return "bg-green-100 text-green-800 border-green-300";
+      return "bg-primary-100 text-primary-800 border-primary-300";
     }
     if (action.includes("deleted") || action.includes("rejected")) {
-      return "bg-red-100 text-red-800 border-red-300";
+      return "bg-orange-100 text-orange-800 border-orange-300";
     }
     if (action.includes("updated")) {
-      return "bg-blue-100 text-blue-800 border-blue-300";
+      return "bg-secondary-100 text-secondary-800 border-secondary-300";
     }
-    return "bg-gray-100 text-gray-800 border-gray-300";
+    return "bg-surface-100 text-surface-800 border-surface-300";
   };
 
   const uniqueAdmins = Array.from(new Set(logs.map((log) => log.adminEmail)));
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-cream-50 p-8">
+      <div className="min-h-screen bg-surface-50 p-8">
         <div className="mx-auto max-w-7xl">
           <div className="animate-pulse space-y-4">
             <div className="h-8 w-64 bg-gray-300 rounded"></div>
@@ -157,7 +157,7 @@ export default function ActivityLogsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-cream-50 p-8">
+    <div className="min-h-screen bg-surface-50 p-8">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
         <div className="mb-8">
@@ -180,7 +180,7 @@ export default function ActivityLogsPage() {
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value as any)}
-            className="rounded-md border-2 border-black px-4 py-2 font-medium shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none focus:ring-2 focus:ring-moss-500"
+            className="rounded-md border-2 border-black px-4 py-2 font-medium shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="all">Todas las Categorías</option>
             <option value="orders">Pedidos</option>
@@ -195,7 +195,7 @@ export default function ActivityLogsPage() {
           <select
             value={filterAdmin}
             onChange={(e) => setFilterAdmin(e.target.value)}
-            className="rounded-md border-2 border-black px-4 py-2 font-medium shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none focus:ring-2 focus:ring-moss-500"
+            className="rounded-md border-2 border-black px-4 py-2 font-medium shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="all">Todos los Admins</option>
             {uniqueAdmins.map((admin) => (
@@ -223,15 +223,15 @@ export default function ActivityLogsPage() {
         {/* Stats */}
         <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-lg border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <div className="text-2xl font-black text-moss-500">{filteredLogs.length}</div>
+            <div className="text-2xl font-black text-primary-500">{filteredLogs.length}</div>
             <div className="text-sm text-gray-600">Acciones Registradas</div>
           </div>
           <div className="rounded-lg border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <div className="text-2xl font-black text-azure-500">{uniqueAdmins.length}</div>
+            <div className="text-2xl font-black text-secondary-500">{uniqueAdmins.length}</div>
             <div className="text-sm text-gray-600">Administradores Activos</div>
           </div>
           <div className="rounded-lg border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <div className="text-2xl font-black text-amber-500">
+            <div className="text-2xl font-black text-orange-500">
               {logs.length > 0 ? formatDate(logs[0].timestamp).replace("hace ", "") : "N/A"}
             </div>
             <div className="text-sm text-gray-600">Última Actividad</div>
@@ -298,11 +298,11 @@ export default function ActivityLogsPage() {
 
         {/* Pagination Info */}
         {logs.length >= 100 && (
-          <div className="mt-6 rounded-lg border-4 border-yellow-400 bg-yellow-50 p-4 text-center">
-            <p className="font-bold text-yellow-800">
+          <div className="mt-6 rounded-lg border-4 border-orange-400 bg-orange-50 p-4 text-center">
+            <p className="font-bold text-orange-800">
               ⚠️ Mostrando las últimas 100 acciones
             </p>
-            <p className="text-sm text-yellow-700">
+            <p className="text-sm text-orange-700">
               Los registros más antiguos están archivados en Firestore
             </p>
           </div>

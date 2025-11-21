@@ -40,7 +40,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#5B7F2D', // Moss Base
+  themeColor: '#6366f1', // Primary Base
 };
 
 export default function RootLayout({

@@ -94,8 +94,8 @@ export default function PWAInstallPrompt() {
     <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-md animate-in slide-in-from-bottom duration-500">
       <div className="rounded-lg border-4 border-black bg-white p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
         <div className="flex items-start gap-3">
-          <div className="rounded-full border-2 border-moss-500 bg-moss-50 p-2">
-            <Download className="h-5 w-5 text-moss-600" />
+          <div className="rounded-full border-2 border-primary-500 bg-primary-50 p-2">
+            <Download className="h-5 w-5 text-primary-600" />
           </div>
 
           <div className="flex-1">
@@ -109,7 +109,7 @@ export default function PWAInstallPrompt() {
             <div className="flex gap-2">
               <button
                 onClick={handleInstall}
-                className="flex-1 rounded border-2 border-black bg-moss-500 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                className="flex-1 rounded border-2 border-black bg-primary-500 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
               >
                 Instalar
               </button>

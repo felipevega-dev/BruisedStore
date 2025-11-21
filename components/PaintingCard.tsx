@@ -61,7 +61,7 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
   return (
     <div className="group relative overflow-hidden border-4 border-black bg-white transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
       <Link href={`/obra/${painting.id}`}>
-        <div 
+        <div
           className="relative w-full overflow-hidden bg-gray-100"
           style={{
             aspectRatio: painting.orientation === "horizontal" ? "4/3" : "3/4",
@@ -76,7 +76,7 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
           />
           {/* Multiple images indicator */}
           {hasMultipleImages && (
-            <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full border-2 border-white bg-black/70 px-2 py-1 text-white">
+            <div className="absolute bottom-2 left-2 z-10 flex items-center gap-1 rounded-full border-2 border-white bg-black/70 px-2 py-1">
               <Images className="h-4 w-4" />
               <span className="text-xs font-bold">{painting.images?.length}</span>
             </div>
@@ -84,29 +84,27 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
           {/* Wishlist button */}
           <button
             onClick={handleWishlistToggle}
-            className={`absolute right-2 top-2 z-10 rounded-full border-2 p-2 transition-all ${
-              inWishlist
-                ? "border-moss-500 bg-moss-500 text-white hover:bg-moss-600"
-                : "border-white bg-white/90 text-gray-700 hover:bg-white"
-            }`}
+            className={`absolute right-2 top-2 z-10 rounded-full border-2 p-2 transition-all ${inWishlist
+              ? "border-primary-500 bg-primary-500  hover:bg-primary-600"
+              : "border-white bg-white/90 text-gray-700 hover:bg-white"
+              }`}
             aria-label={inWishlist ? "Quitar de favoritos" : "Agregar a favoritos"}
           >
             <Heart
-              className={`h-5 w-5 transition-transform hover:scale-110 ${
-                inWishlist ? "fill-current" : ""
-              }`}
+              className={`h-5 w-5 transition-transform hover:scale-110 ${inWishlist ? "fill-current" : ""
+                }`}
             />
           </button>
           {!painting.available && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-              <span className="border-4 border-white bg-moss-500 px-4 py-2 text-sm font-bold text-white">
+              <span className="border-4 border-white bg-primary-500 px-4 py-2 text-sm font-bold">
                 No Disponible
               </span>
             </div>
           )}
           {isOutOfStock && painting.available && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-              <span className="border-4 border-white bg-moss-500 px-4 py-2 text-sm font-bold text-white">
+              <span className="border-4 border-white bg-primary-500 px-4 py-2 text-sm font-bold ">
                 Agotado
               </span>
             </div>
@@ -116,7 +114,7 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
 
       <div className="border-t-4 border-black bg-white p-4 sm:p-5">
         <Link href={`/obra/${painting.id}`}>
-          <h3 className="mb-2 text-lg font-bold text-black transition-colors hover:text-moss-600 sm:text-xl">
+          <h3 className="mb-2 text-lg font-bold text-black transition-colors hover:text-primary-600 sm:text-xl">
             {painting.title}
           </h3>
         </Link>
@@ -125,25 +123,25 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
             {painting.dimensions.width} x {painting.dimensions.height} cm
           </p>
           {isLowStock && !isOutOfStock && (
-            <div className="flex items-center gap-1 rounded-full border-2 border-terra-600 bg-terra-100 px-2 py-0.5">
-              <AlertTriangle className="h-3 w-3 text-terra-600" />
-              <span className="text-xs font-bold text-terra-700">
+            <div className="flex items-center gap-1 rounded-full border-2 border-orange-600 bg-orange-100 px-2 py-0.5">
+              <AlertTriangle className="h-3 w-3 text-orange-600" />
+              <span className="text-xs font-bold text-orange-700">
                 ¡Solo {painting.stock}!
               </span>
             </div>
           )}
         </div>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-2xl font-black text-moss-600">
+          <p className="text-2xl font-black text-primary-600">
             {formatPrice(painting.price)}
           </p>
           {painting.available && !isOutOfStock && (
             <button
               onClick={handleAddToCart}
-              className="group/btn flex items-center justify-center gap-2 border-4 border-black bg-moss-500 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
+              className="group/btn flex items-center justify-center gap-2 border-4 border-black bg-primary-500 px-4 py-2 text-sm font-bold transition-all hover:bg-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
             >
-              <ShoppingCart className="h-4 w-4 transition-transform group-hover/btn:scale-110" />
-              <span>Agregar</span>
+              <ShoppingCart className="h-4 w-4 transition-transform group-hover/btn:scale-110 text-white" />
+              <span className="text-white">Agregar</span>
             </button>
           )}
         </div>

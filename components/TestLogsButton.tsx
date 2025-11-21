@@ -44,7 +44,7 @@ export default function TestLogsButton() {
     <button
       onClick={createTestLog}
       disabled={creating}
-      className="rounded-lg border-2 border-moss-500 bg-moss-500 px-4 py-2 font-bold text-white hover:bg-moss-600 disabled:opacity-50"
+      className="rounded-lg border-2 border-primary-500 bg-primary-500 px-4 py-2 font-bold text-white hover:bg-primary-600 disabled:opacity-50"
     >
       {creating ? "Creando..." : "🧪 Crear Log de Prueba"}
     </button>

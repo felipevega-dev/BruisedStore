@@ -33,11 +33,11 @@ export default function Header() {
       // Obtener los IDs de órdenes ya vistas
       const viewedOrderIds = new Set<string>();
       const viewedCustomOrderIds = new Set<string>();
-      
+
       try {
         const storedOrders = localStorage.getItem("viewedOrderIds");
         const storedCustomOrders = localStorage.getItem("viewedCustomOrderIds");
-        
+
         if (storedOrders) {
           JSON.parse(storedOrders).forEach((id: string) => viewedOrderIds.add(id));
         }
@@ -131,21 +131,21 @@ export default function Header() {
     <header className={`sticky ${headerTopClass} z-30 w-full border-b-4 border-black bg-white shadow-lg`} suppressHydrationWarning>
       {/* Email Verification Banner */}
       {user && !user.emailVerified && (
-        <div className="border-b-2 border-terra-500 bg-terra-100 py-2 text-center">
-          <p className="text-sm font-bold text-terra-900">
+        <div className="border-b-2 border-orange-500 bg-orange-100 py-2 text-center">
+          <p className="text-sm font-bold text-orange-900">
             ⚠️ Tu email no está verificado.{" "}
-            <Link href="/verify-email" className="underline hover:text-terra-700">
+            <Link href="/verify-email" className="underline hover:text-orange-700">
               Verificar ahora
             </Link>
           </p>
         </div>
       )}
-      
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between lg:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group z-50" onClick={closeMobileMenu}>
-            <h1 className="text-xl font-black text-gray-900 transition-all group-hover:text-moss-500 sm:text-2xl lg:text-3xl">
+            <h1 className="text-xl font-black text-gray-900 transition-all group-hover:text-primary-500 sm:text-2xl lg:text-3xl">
               José Vega
             </h1>
           </Link>
@@ -154,21 +154,21 @@ export default function Header() {
           <nav className="hidden items-center gap-6 lg:flex">
             <Link
               href="/"
-              className="flex items-center gap-2 text-base font-bold text-gray-700 transition-colors hover:text-moss-500"
+              className="flex items-center gap-2 text-base font-bold text-gray-700 transition-colors hover:text-primary-500"
             >
               <Home className="h-4 w-4" />
               <span>Obras</span>
             </Link>
             <Link
               href="/obra-a-pedido"
-              className="flex items-center gap-2 text-base font-bold text-gray-700 transition-colors hover:text-moss-500"
+              className="flex items-center gap-2 text-base font-bold text-gray-700 transition-colors hover:text-primary-500"
             >
               <Palette className="h-4 w-4" />
               <span>Obra a Pedido</span>
             </Link>
             <Link
               href="/blog"
-              className="flex items-center gap-2 text-base font-bold text-gray-700 transition-colors hover:text-moss-500"
+              className="flex items-center gap-2 text-base font-bold text-gray-700 transition-colors hover:text-primary-500"
             >
               <BookOpen className="h-4 w-4" />
               <span>Blog</span>
@@ -178,22 +178,22 @@ export default function Header() {
             <div className="flex items-center gap-4">
               <Link
                 href="/wishlist"
-                className="relative flex items-center justify-center rounded-lg border-2 border-gray-300 bg-white p-2 transition-all hover:border-moss-500 hover:bg-moss-50"
+                className="relative flex items-center justify-center rounded-lg border-2 border-gray-300 bg-white p-2 transition-all hover:border-primary-500 hover:bg-primary-50"
               >
                 <Heart className="h-5 w-5 text-gray-700" />
                 {wishlistCount > 0 && (
-                  <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-moss-500 text-xs font-bold text-white shadow-lg">
+                  <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-500 text-xs font-bold text-white shadow-lg">
                     {wishlistCount}
                   </span>
                 )}
               </Link>
               <Link
                 href="/carrito"
-                className="relative flex items-center justify-center rounded-lg border-2 border-gray-300 bg-white p-2 transition-all hover:border-moss-500 hover:bg-moss-50"
+                className="relative flex items-center justify-center rounded-lg border-2 border-gray-300 bg-white p-2 transition-all hover:border-primary-500 hover:bg-primary-50"
               >
                 <ShoppingCart className="h-5 w-5 text-gray-700" />
                 {itemCount > 0 && (
-                  <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-moss-500 text-xs font-bold text-white shadow-lg">
+                  <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-500 text-xs font-bold text-white shadow-lg">
                     {itemCount}
                   </span>
                 )}
@@ -204,12 +204,12 @@ export default function Header() {
             {isAdmin && (
               <Link
                 href="/admin"
-                className="relative flex items-center gap-2 rounded-lg bg-azure-500 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-azure-600 hover:shadow-md"
+                className="relative flex items-center gap-2 rounded-lg bg-secondary-500 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-secondary-600 hover:shadow-md"
               >
                 <Shield className="h-4 w-4" />
                 <span>Admin</span>
                 {pendingOrdersCount > 0 && (
-                  <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-terra-500 text-xs font-bold text-white shadow-lg animate-pulse">
+                  <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white shadow-lg animate-pulse">
                     {pendingOrdersCount}
                   </span>
                 )}
@@ -263,7 +263,7 @@ export default function Header() {
                         )}
                         <button
                           onClick={handleSignOut}
-                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-bold text-moss-600 transition-colors hover:bg-gray-100"
+                          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-bold text-primary-600 transition-colors hover:bg-gray-100"
                         >
                           <LogOut className="h-4 w-4" />
                           <span>Cerrar Sesión</span>
@@ -311,7 +311,7 @@ export default function Header() {
               {user && (
                 <div className="mb-6 border-b-4 border-black pb-4">
                   <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-moss-500">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-500">
                       <User className="h-5 w-5 text-white" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -329,7 +329,7 @@ export default function Header() {
                 <Link
                   href="/"
                   onClick={closeMobileMenu}
-                  className="flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-moss-500 hover:bg-moss-50 hover:text-moss-600"
+                  className="flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600"
                 >
                   <Home className="h-5 w-5" />
                   <span>Obras</span>
@@ -337,7 +337,7 @@ export default function Header() {
                 <Link
                   href="/obra-a-pedido"
                   onClick={closeMobileMenu}
-                  className="flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-moss-500 hover:bg-moss-50 hover:text-moss-600"
+                  className="flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600"
                 >
                   <Palette className="h-5 w-5" />
                   <span>Obra a Pedido</span>
@@ -345,7 +345,7 @@ export default function Header() {
                 <Link
                   href="/blog"
                   onClick={closeMobileMenu}
-                  className="flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-moss-500 hover:bg-moss-50 hover:text-moss-600"
+                  className="flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600"
                 >
                   <BookOpen className="h-5 w-5" />
                   <span>Blog</span>
@@ -353,14 +353,14 @@ export default function Header() {
                 <Link
                   href="/wishlist"
                   onClick={closeMobileMenu}
-                  className="flex items-center justify-between gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-moss-500 hover:bg-moss-50 hover:text-moss-600"
+                  className="flex items-center justify-between gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600"
                 >
                   <div className="flex items-center gap-3">
                     <Heart className="h-5 w-5" />
                     <span>Lista de Deseos</span>
                   </div>
                   {wishlistCount > 0 && (
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-moss-500 text-xs font-bold text-white">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-500 text-xs font-bold text-white">
                       {wishlistCount}
                     </span>
                   )}
@@ -368,14 +368,14 @@ export default function Header() {
                 <Link
                   href="/carrito"
                   onClick={closeMobileMenu}
-                  className="flex items-center justify-between gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-moss-500 hover:bg-moss-50 hover:text-moss-600"
+                  className="flex items-center justify-between gap-3 rounded-lg border-2 border-gray-200 bg-white px-4 py-3 font-bold text-gray-700 transition-all hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600"
                 >
                   <div className="flex items-center gap-3">
                     <ShoppingCart className="h-5 w-5" />
                     <span>Carrito</span>
                   </div>
                   {itemCount > 0 && (
-                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-moss-500 text-xs font-bold text-white">
+                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-500 text-xs font-bold text-white">
                       {itemCount}
                     </span>
                   )}
@@ -399,14 +399,14 @@ export default function Header() {
                       <Link
                         href="/admin"
                         onClick={closeMobileMenu}
-                        className="relative flex items-center justify-between gap-3 rounded-lg border-2 border-azure-500 bg-azure-500 px-4 py-3 font-bold text-white transition-all hover:bg-azure-600"
+                        className="relative flex items-center justify-between gap-3 rounded-lg border-2 border-secondary-500 bg-secondary-500 px-4 py-3 font-bold text-white transition-all hover:bg-secondary-600"
                       >
                         <div className="flex items-center gap-3">
                           <Shield className="h-5 w-5" />
                           <span>Panel Admin</span>
                         </div>
                         {pendingOrdersCount > 0 && (
-                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-terra-500 text-xs font-bold text-white">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
                             {pendingOrdersCount}
                           </span>
                         )}
@@ -414,7 +414,7 @@ export default function Header() {
                     )}
                     <button
                       onClick={handleSignOut}
-                      className="flex w-full items-center gap-3 rounded-lg border-2 border-moss-200 bg-moss-50 px-4 py-3 text-left font-bold text-moss-600 transition-all hover:border-moss-500 hover:bg-moss-100"
+                      className="flex w-full items-center gap-3 rounded-lg border-2 border-primary-200 bg-primary-50 px-4 py-3 text-left font-bold text-primary-600 transition-all hover:border-primary-500 hover:bg-primary-100"
                     >
                       <LogOut className="h-5 w-5" />
                       <span>Cerrar Sesión</span>

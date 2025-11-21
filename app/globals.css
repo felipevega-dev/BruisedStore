@@ -1,79 +1,61 @@
 @import "tailwindcss";
 
-:root {
-  --background: #F2F4E9;       /* Neutral Canvas - light cream */
-  --foreground: #1E3A1A;       /* Deep Canopy - dark green */
-
-  /* Paleta inspirada en naturaleza del cuadro */
-  --moss-base: #5B7F2D;        /* Verde musgo base */
-  --verdant-glow: #8FBF4A;     /* Verde vibrante */
-  --deep-canopy: #1E3A1A;      /* Verde oscuro profundo */
-  --azure-pulse: #1F5BA5;      /* Azul eléctrico */
-  --indigo-drift: #27406D;     /* Índigo apagado */
-  --warm-terra: #C85B45;       /* Terracota cálido */
-  --soft-clay: #E3B59D;        /* Arcilla suave */
-  --neutral-canvas: #F2F4E9;   /* Lienzo neutro */
-}
-
-@theme inline {
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Moss Green Scale (Primary) - Base natural */
-  --color-moss-50: #f4f7f0;
-  --color-moss-100: #e8eede;
-  --color-moss-200: #d1ddc0;
-  --color-moss-300: #b0c693;
-  --color-moss-400: #8FBF4A;   /* Verdant Glow */
-  --color-moss-500: #5B7F2D;   /* Moss Base - PRIMARY */
-  --color-moss-600: #4a6624;
-  --color-moss-700: #3a4f1c;
-  --color-moss-800: #2f3f18;
-  --color-moss-900: #1E3A1A;   /* Deep Canopy */
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+  --color-primary-950: #1e1b4b;
 
-  /* Azure Blue Scale (Secondary) - Acciones secundarias */
-  --color-azure-50: #eff6ff;
-  --color-azure-100: #dbeafe;
-  --color-azure-200: #bfdbfe;
-  --color-azure-300: #93c5fd;
-  --color-azure-400: #60a5fa;
-  --color-azure-500: #1F5BA5;  /* Azure Pulse - SECONDARY */
-  --color-azure-600: #1a4d8a;
-  --color-azure-700: #27406D;  /* Indigo Drift */
-  --color-azure-800: #1e3a5f;
-  --color-azure-900: #1a2e4a;
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-300: #cbd5e1;
+  --color-surface-400: #94a3b8;
+  --color-surface-500: #64748b;
+  --color-surface-600: #475569;
+  --color-surface-700: #334155;
+  --color-surface-800: #1e293b;
+  --color-surface-900: #0f172a;
+  --color-surface-950: #020617;
 
-  /* Warm Terra Scale (Accent) - Alertas/Warnings */
-  --color-terra-50: #fef2ee;
-  --color-terra-100: #fde4dc;
-  --color-terra-200: #fbc9b9;
-  --color-terra-300: #f8a690;
-  --color-terra-400: #E3B59D;  /* Soft Clay */
-  --color-terra-500: #C85B45;  /* Warm Terra - ACCENT */
-  --color-terra-600: #a84a38;
-  --color-terra-700: #8a3d2e;
-  --color-terra-800: #713328;
-  --color-terra-900: #5d2b24;
+  --color-secondary-50: #f0f9ff;
+  --color-secondary-100: #e0f2fe;
+  --color-secondary-200: #bae6fd;
+  --color-secondary-300: #7dd3fc;
+  --color-secondary-400: #38bdf8;
+  --color-secondary-500: #0ea5e9;
+  --color-secondary-600: #0284c7;
+  --color-secondary-700: #0369a1;
+  --color-secondary-800: #075985;
+  --color-secondary-900: #0c4a6e;
+  --color-secondary-950: #082f49;
+}
 
-  /* Neutral Canvas Scale - Backgrounds */
-  --color-canvas-50: #fafbf8;
-  --color-canvas-100: #F2F4E9;  /* Neutral Canvas */
-  --color-canvas-200: #e8ebe0;
-  --color-canvas-300: #d4d9c8;
-  --color-canvas-400: #b8c0a8;
-  --color-canvas-500: #9aa590;
-  --color-canvas-600: #7d8876;
-  --color-canvas-700: #656d5f;
-  --color-canvas-800: #52594e;
-  --color-canvas-900: #454a41;
+:root {
+  --background: #f8fafc;
+  /* surface-50 */
+  --foreground: #0f172a;
+  /* surface-900 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #1E3A1A;     /* Deep Canopy for dark mode */
-    --foreground: #F2F4E9;     /* Neutral Canvas for dark mode text */
+    --background: #0f172a;
+    /* surface-900 */
+    --foreground: #f8fafc;
+    /* surface-50 */
   }
 }
 

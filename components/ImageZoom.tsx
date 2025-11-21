@@ -180,7 +180,7 @@ export default function ImageZoom({ src, alt, aspectRatio }: ImageZoomProps) {
           {/* Close Button */}
           <button
             onClick={handleCloseFullscreen}
-            className="absolute right-4 top-4 z-10 rounded-lg border-4 border-white bg-moss-500 p-3 text-white transition-all hover:bg-moss-600"
+            className="absolute right-4 top-4 z-10 rounded-lg border-4 border-white bg-primary-500 p-3 text-white transition-all hover:bg-primary-600"
             aria-label="Cerrar"
           >
             <X className="h-6 w-6" />
@@ -209,9 +209,8 @@ export default function ImageZoom({ src, alt, aspectRatio }: ImageZoomProps) {
             <div
               className="relative transition-transform duration-200"
               style={{
-                transform: `scale(${scale}) translate(${position.x / scale}px, ${
-                  position.y / scale
-                }px)`,
+                transform: `scale(${scale}) translate(${position.x / scale}px, ${position.y / scale
+                  }px)`,
                 transformOrigin: "center center",
                 width: scale > 1 ? "100%" : "90%",
                 height: scale > 1 ? "100%" : "90%",

@@ -35,7 +35,7 @@ export default function LoginPage() {
       router.push("/");
     } catch (error: any) {
       console.error("Login error:", error);
-      
+
       switch (error.code) {
         case "auth/user-not-found":
         case "auth/wrong-password":
@@ -77,7 +77,7 @@ export default function LoginPage() {
         {/* Back button */}
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-2 text-gray-700 transition-colors hover:text-moss-600"
+          className="mb-6 inline-flex items-center gap-2 text-surface-700 transition-colors hover:text-primary-600"
         >
           <ArrowLeft className="h-5 w-5" />
           Volver a la tienda
@@ -85,18 +85,18 @@ export default function LoginPage() {
 
         <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <div className="mb-6 flex items-center justify-center gap-3">
-            <LogIn className="h-8 w-8 text-moss-600" />
-            <h1 className="text-3xl font-bold text-gray-900">Iniciar Sesión</h1>
+            <LogIn className="h-8 w-8 text-primary-600" />
+            <h1 className="text-3xl font-bold text-surface-900">Iniciar Sesión</h1>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email */}
             <div>
-              <label className="mb-2 block text-sm font-bold text-gray-900">
+              <label className="mb-2 block text-sm font-bold text-surface-900">
                 Email
               </label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-surface-400" />
                 <input
                   type="email"
                   value={formData.email}
@@ -105,7 +105,7 @@ export default function LoginPage() {
                     if (error) setError("");
                   }}
                   required
-                  className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-4 text-gray-900 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
+                  className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-4 text-surface-900 transition-all placeholder:text-surface-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   placeholder="correo@ejemplo.com"
                 />
               </div>
@@ -113,11 +113,11 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <label className="mb-2 block text-sm font-bold text-gray-900">
+              <label className="mb-2 block text-sm font-bold text-surface-900">
                 Contraseña
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-surface-400" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
@@ -126,13 +126,13 @@ export default function LoginPage() {
                     if (error) setError("");
                   }}
                   required
-                  className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-12 text-gray-900 transition-all placeholder:text-gray-500 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500/20"
+                  className="w-full rounded-lg border-2 border-black bg-white py-3 pl-12 pr-12 text-surface-900 transition-all placeholder:text-surface-500 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition-colors hover:text-gray-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-surface-400 transition-colors hover:text-surface-600"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -145,7 +145,7 @@ export default function LoginPage() {
 
             {/* Error Message */}
             {error && (
-              <div className="rounded-lg border-2 border-moss-500 bg-moss-50 p-3 text-sm font-semibold text-moss-600">
+              <div className="rounded-lg border-2 border-orange-500 bg-orange-50 p-3 text-sm font-semibold text-orange-600">
                 {error}
               </div>
             )}
@@ -154,7 +154,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg border-2 border-black bg-primary-500 px-6 py-3 font-bold text-white transition-all hover:bg-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -169,16 +169,16 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="my-6 flex items-center gap-4">
-            <div className="h-px flex-1 bg-gray-300"></div>
-            <span className="text-sm font-semibold text-gray-500">O</span>
-            <div className="h-px flex-1 bg-gray-300"></div>
+            <div className="h-px flex-1 bg-surface-300"></div>
+            <span className="text-sm font-semibold text-surface-500">O</span>
+            <div className="h-px flex-1 bg-surface-300"></div>
           </div>
 
           {/* Google Login */}
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="flex w-full items-center justify-center gap-3 rounded-lg border-2 border-black bg-white px-6 py-3 font-bold text-gray-900 transition-all hover:bg-gray-50 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-3 rounded-lg border-2 border-black bg-white px-6 py-3 font-bold text-surface-900 transition-all hover:bg-surface-50 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24">
               <path
@@ -203,11 +203,11 @@ export default function LoginPage() {
 
           {/* Register Link */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-surface-600">
               ¿No tienes cuenta?{" "}
               <Link
                 href="/register"
-                className="font-bold text-moss-600 hover:text-moss-700"
+                className="font-bold text-primary-600 hover:text-primary-700"
               >
                 Regístrate
               </Link>

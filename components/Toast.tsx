@@ -37,13 +37,13 @@ export default function Toast({ message, type = "info", duration = 3000, onClose
   const getStyles = () => {
     switch (type) {
       case "success":
-        return "border-moss-600 bg-moss-50 text-moss-900";
+        return "border-primary-600 bg-primary-50 text-primary-900";
       case "error":
-        return "border-terra-600 bg-terra-50 text-terra-900";
+        return "border-orange-600 bg-orange-50 text-orange-900";
       case "warning":
-        return "border-terra-400 bg-terra-100 text-terra-900";
+        return "border-orange-400 bg-orange-100 text-orange-900";
       default:
-        return "border-azure-600 bg-azure-50 text-azure-900";
+        return "border-secondary-600 bg-secondary-50 text-secondary-900";
     }
   };
 

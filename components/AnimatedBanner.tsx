@@ -28,7 +28,7 @@ export default function AnimatedBanner({
   }, [images]);
 
   return (
-    <div className="relative h-[70vh] w-full overflow-hidden bg-linear-to-br from-gray-800 via-gray-900 to-black">
+    <div className="relative h-[70vh] w-full overflow-hidden bg-black bg-linear-to-br from-slate-800 via-slate-900 to-black">
       {/* Animated Background Carousel */}
       <div className="absolute inset-0 opacity-20">
         <div
@@ -84,7 +84,7 @@ export default function AnimatedBanner({
                 </div>
               </div>
               {/* Back - Filtered Image */}
-              <div className="flip-card-back overflow-hidden rounded-full border-8 border-moss-500 shadow-[8px_8px_0px_0px_rgba(220,38,38,0.5)]">
+              <div className="flip-card-back overflow-hidden rounded-full border-8 border-primary-500 shadow-[8px_8px_0px_0px_rgba(220,38,38,0.5)]">
                 <div className="relative h-32 w-32 sm:h-40 sm:w-40">
                   <Image
                     src={profileImage}
@@ -101,25 +101,25 @@ export default function AnimatedBanner({
         )}
 
         {/* Hero Title */}
-        <h1 className="mb-4 text-5xl font-black text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,0.8)] sm:text-6xl md:text-7xl lg:text-8xl">
+        <h1 className="mb-4 text-5xl font-black text-surface-50 drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] sm:text-6xl md:text-7xl lg:text-8xl">
           {heroTitle}
         </h1>
 
         {/* Subtitle */}
         {heroSubtitle && (
-          <p className="text-xl font-bold text-white/90 drop-shadow-[2px_2px_0px_rgba(0,0,0,0.8)] sm:text-2xl md:text-3xl">
+          <p className="text-xl font-bold text-surface-100 drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] sm:text-2xl md:text-3xl">
             {heroSubtitle}
           </p>
         )}
 
         {/* Decorative line */}
-        <div className="mt-6 h-2 w-24 bg-moss-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] sm:w-32" />
+        <div className="mt-6 h-2 w-24 bg-primary-500 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.5)] sm:w-32" />
 
         {/* Call to Action Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row gap-4">
           <Link
             href="/obra-a-pedido"
-            className="group inline-flex items-center justify-center gap-2 rounded-lg border-4 border-white bg-moss-500 px-6 py-3 text-lg font-black text-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)] transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-moss-600 hover:shadow-none"
+            className="group inline-flex items-center justify-center gap-2 rounded-lg border-4 border-white bg-primary-500 px-6 py-3 text-lg font-black text-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)] transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-primary-600 hover:shadow-none"
           >
             <Palette className="h-5 w-5" />
             Obra a Pedido
@@ -155,7 +155,7 @@ export default function AnimatedBanner({
               fill="currentColor"
               viewBox="0 0 24 24"
             >
-              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/>
+              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z" />
             </svg>
           </a>
         </div>

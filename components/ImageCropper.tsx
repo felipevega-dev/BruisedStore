@@ -153,7 +153,7 @@ export default function ImageCropper({
             <select
               value={currentSizeIndex}
               onChange={(e) => onSizeChange(parseInt(e.target.value))}
-              className="flex-1 rounded border-2 border-white bg-black px-2 py-1.5 text-xs font-bold text-white transition-all focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-500 sm:text-sm"
+              className="flex-1 rounded border-2 border-white bg-black px-2 py-1.5 text-xs font-bold text-white transition-all focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500 sm:text-sm"
             >
               {CUSTOM_ORDER_SIZES.map((size, index) => {
                 const orientation =

@@ -80,8 +80,8 @@ export default function HomeContentSection({
     if (videoType === "upload" && videoFile) {
       const aspectClass =
         videoAspectRatio === "vertical" ? "aspect-[9/16]" :
-        videoAspectRatio === "horizontal" ? "aspect-video" :
-        "aspect-square";
+          videoAspectRatio === "horizontal" ? "aspect-video" :
+            "aspect-square";
 
       return (
         <div className={`${aspectClass} w-full overflow-hidden rounded-lg border-4 border-black bg-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`}>
@@ -113,7 +113,7 @@ export default function HomeContentSection({
   // Background style mapping
   const backgroundClasses = {
     gray: "bg-linear-to-br from-gray-100 via-gray-200 to-gray-300",
-    book: "bg-linear-to-br from-amber-50 via-terra-100 to-amber-100",
+    book: "bg-linear-to-br from-amber-50 via-orange-100 to-amber-100",
     dark: "bg-linear-to-br from-gray-900 via-gray-800 to-black",
     light: "bg-linear-to-br from-white via-gray-50 to-gray-100",
   };
@@ -126,10 +126,10 @@ export default function HomeContentSection({
   };
 
   const accentColorClasses = {
-    gray: "bg-moss-500",
+    gray: "bg-primary-500",
     book: "bg-amber-600",
-    dark: "bg-moss-500",
-    light: "bg-moss-500",
+    dark: "bg-primary-500",
+    light: "bg-primary-500",
   };
 
   return (
