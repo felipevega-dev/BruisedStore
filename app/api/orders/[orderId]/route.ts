@@ -1,23 +1,5 @@
 import { NextResponse } from "next/server";
-import { initializeApp, getApps, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
-
-// Initialize Firebase Admin
-if (!getApps().length) {
-  try {
-    initializeApp({
-      credential: cert({
-        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-      }),
-    });
-  } catch (error) {
-    console.error("Firebase Admin initialization error:", error);
-  }
-}
-
-const adminDb = getFirestore();
+import { adminDb } from "@/lib/firebaseAdmin";
 
 function toIso(value: any): string | null {
   if (!value) return null;
@@ -36,6 +18,14 @@ export async function GET(
   { params }: { params: Promise<{ orderId: string }> }
 ) {
   try {
+    // Check if Firebase Admin is initialized
+    if (!adminDb) {
+      return NextResponse.json(
+        { message: "Servicio no disponible temporalmente" },
+        { status: 503 }
+      );
+    }
+
     const { orderId } = await params;
     const { searchParams } = new URL(request.url);
     const token = searchParams.get("token");
@@ -65,10 +55,10 @@ export async function GET(
       updatedAt: toIso(data.updatedAt),
       paymentInfo: rest.paymentInfo
         ? {
-            ...rest.paymentInfo,
-            paidAt: toIso(rest.paymentInfo.paidAt),
-            transferProofUploadedAt: toIso(rest.paymentInfo.transferProofUploadedAt),
-          }
+          ...rest.paymentInfo,
+          paidAt: toIso(rest.paymentInfo.paidAt),
+          transferProofUploadedAt: toIso(rest.paymentInfo.transferProofUploadedAt),
+        }
         : null,
     };
 
@@ -81,3 +71,4 @@ export async function GET(
     }, { status: 500 });
   }
 }
+
