@@ -28,9 +28,9 @@ export default function AnimatedBanner({
   }, [images]);
 
   return (
-    <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] w-full overflow-hidden bg-black bg-linear-to-br from-slate-800 via-slate-900 to-black">
-      {/* Animated Background Carousel */}
-      <div className="absolute inset-0 opacity-20">
+    <div className="relative h-[70vh] sm:h-[60vh] md:h-[90vh] w-full overflow-hidden bg-black bg-linear-to-br from-slate-800 via-slate-900 to-black">
+      {/* Animated Background Carousel - Positioned behind everything */}
+      <div className="absolute inset-0 z-0 opacity-20">
         <div
           className="flex h-full gap-8"
           style={{
@@ -62,10 +62,10 @@ export default function AnimatedBanner({
       </div>
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-linear-to-b from-black/60 via-black/40 to-black/80" />
+      <div className="absolute inset-0 z-0 bg-linear-to-b from-black/60 via-black/40 to-black/80" />
 
-      {/* Content */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center">
+      {/* Content - With padding to push down from header and compensate at bottom */}
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pt-6 pb-0 sm:pt-28 sm:pb-0 text-center">
         {/* Profile Image with Flip Effect */}
         {profileImage && (
           <div className="flip-card mb-6">

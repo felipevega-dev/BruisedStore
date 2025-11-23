@@ -128,7 +128,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-surface-50">
-      {/* Animated Banner */}
+      {/* Animated Banner - Simple, just with padding for header */}
       <AnimatedBanner
         images={homeSettings.bannerImages}
         profileImage={homeSettings.profileImageUrl}
