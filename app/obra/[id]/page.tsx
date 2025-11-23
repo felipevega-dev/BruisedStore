@@ -143,7 +143,7 @@ export default function PaintingDetailPage() {
                 </p>
               )}
 
-              <div className="mb-6 space-y-4 border-t-4 border-black pt-4">
+              <div className="mb-6 space-y-4 border-t-4 border-black pt-6 sm:pt-4">
                 <div className="flex items-center justify-between border-b-2 border-gray-200 pb-3">
                   <span className="font-semibold text-gray-600">Dimensiones</span>
                   <span className="font-bold text-black">
@@ -193,7 +193,7 @@ export default function PaintingDetailPage() {
                 <button
                   onClick={handleAddToCart}
                   disabled={addedToCart}
-                  className="group flex w-full items-center justify-center gap-3 border-4 border-black bg-moss-500 px-6 py-4 text-lg font-black text-white transition-all hover:bg-moss-600 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] disabled:bg-green-600 disabled:text-white"
+                  className="group flex w-full items-center justify-center gap-3 border-4 border-black bg-moss-500 px-6 py-4 text-base sm:text-lg font-black text-white transition-all hover:bg-moss-600 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] disabled:bg-green-600 disabled:text-white"
                 >
                   {addedToCart ? (
                     <>

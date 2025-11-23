@@ -350,7 +350,7 @@ export default function CheckoutPage() {
                   </h2>
                 </div>
 
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-6 sm:gap-4 sm:grid-cols-2">
                   <div className="sm:col-span-2">
                     <label className="mb-2 block text-base font-semibold text-slate-700 sm:text-sm">
                       Nombre Completo *
@@ -547,12 +547,12 @@ export default function CheckoutPage() {
 
                 {/* Bank Transfer Information */}
                 {paymentMethod === "transferencia" && bankInfo && (
-                  <div className="mt-4 rounded-xl border-2 border-azure-500 bg-azure-50 p-4">
+                  <div className="mt-4 rounded-xl border-2 border-azure-500 bg-azure-50 p-5 sm:p-4">
                     <h3 className="mb-3 flex items-center gap-2 text-lg font-bold text-azure-900">
                       <CreditCard className="h-5 w-5" />
                       💳 Datos para Transferencia
                     </h3>
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-3 text-sm sm:space-y-2">
                       {bankInfo.bankName && (
                         <p className="text-azure-900">
                           <strong className="font-semibold">Banco:</strong> {bankInfo.bankName}
@@ -700,7 +700,7 @@ export default function CheckoutPage() {
                         value={couponCode}
                         onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                         placeholder="CÓDIGO"
-                        className="flex-1 rounded-lg border border-moss-200 bg-white px-4 py-3 font-mono text-base font-semibold uppercase text-slate-900 transition focus:border-moss-300 focus:outline-none sm:px-3 sm:py-2 sm:text-sm"
+                        className="flex-1 rounded-lg border border-moss-200 bg-white px-4 py-3 font-mono text-sm font-semibold uppercase text-slate-900 transition focus:border-moss-300 focus:outline-none sm:text-base"
                         disabled={validatingCoupon}
                       />
                       <button

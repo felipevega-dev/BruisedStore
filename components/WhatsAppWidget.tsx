@@ -58,7 +58,7 @@ export default function WhatsAppWidget() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9998] flex flex-col items-end gap-2">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9998] flex flex-col items-end gap-2">
       {/* Expanded Message Bubble */}
       {isExpanded && (
         <div className="animate-in slide-in-from-bottom-2 mb-2 max-w-[280px] border-4 border-black bg-white p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -91,14 +91,14 @@ export default function WhatsAppWidget() {
       <div className="flex items-center gap-2">
         <button
           onClick={handleDismiss}
-          className="flex h-12 w-12 items-center justify-center rounded-full border-4 border-black bg-primary-500 text-white transition-all hover:bg-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
+          className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border-4 border-black bg-primary-500 text-white transition-all hover:bg-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
           aria-label="Cerrar chat"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-black bg-green-500 text-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-green-600 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] active:scale-95 sm:h-16 sm:w-16"
+          className="flex h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 items-center justify-center rounded-full border-4 border-black bg-green-500 text-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-green-600 hover:shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] active:scale-95"
           aria-label="Abrir chat"
         >
           <MessageCircle className="h-7 w-7 sm:h-8 sm:w-8" />

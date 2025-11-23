@@ -305,7 +305,7 @@ export default function Header() {
             className="fixed inset-0 z-40 bg-black/50 lg:hidden"
             onClick={closeMobileMenu}
           />
-          <div className="fixed right-0 top-9 z-40 h-full w-[280px] overflow-y-auto border-l-4 border-black bg-white shadow-2xl lg:hidden">
+          <div className={`fixed right-0 ${isMounted && hasMusicBar ? 'top-[calc(4rem+2.25rem)]' : 'top-16'} z-40 h-full w-[280px] overflow-y-auto border-l-4 border-black bg-white shadow-2xl lg:hidden`}>
             <div className="flex flex-col p-6 pt-20">
               {/* User Info (if logged in) */}
               {user && (

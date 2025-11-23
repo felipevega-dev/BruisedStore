@@ -28,7 +28,7 @@ export default function AnimatedBanner({
   }, [images]);
 
   return (
-    <div className="relative h-[70vh] w-full overflow-hidden bg-black bg-linear-to-br from-slate-800 via-slate-900 to-black">
+    <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] w-full overflow-hidden bg-black bg-linear-to-br from-slate-800 via-slate-900 to-black">
       {/* Animated Background Carousel */}
       <div className="absolute inset-0 opacity-20">
         <div

@@ -50,7 +50,7 @@ export default function CartPage() {
                   className="flex gap-4 rounded-2xl border border-moss-200 bg-white/95 p-4 shadow-lg shadow-moss-900/10 backdrop-blur sm:gap-6"
                 >
                   {/* Image */}
-                  <div className="relative h-32 w-24 flex-shrink-0 overflow-hidden rounded-xl border border-moss-100 sm:h-40 sm:w-32">
+                  <div className="relative h-36 w-28 shrink-0 overflow-hidden rounded-xl border border-moss-100 sm:h-40 sm:w-32">
                     <Image
                       src={item.painting.imageUrl}
                       alt={item.painting.title}

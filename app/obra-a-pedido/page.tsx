@@ -539,8 +539,8 @@ export default function CustomOrderPage() {
                     style={{
                       width: `${canvasWidth * 6}px`,
                       height: `${canvasHeight * 6}px`,
-                      maxWidth: "min(calc(100vw - 120px), 500px)",
-                      maxHeight: "min(70vh, 600px)",
+                      maxWidth: "min(calc(100vw - 80px), 500px)",
+                      maxHeight: "min(60vh, 600px)",
                       aspectRatio: `${canvasWidth} / ${canvasHeight}`,
                     }}
                   >
@@ -753,7 +753,7 @@ export default function CustomOrderPage() {
                     <button
                       type="button"
                       onClick={() => handleOrientationChange("vertical")}
-                      className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
+                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 ${
                         orientation === "vertical"
                           ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
                           : "border-black bg-white hover:bg-gray-50"
@@ -780,7 +780,7 @@ export default function CustomOrderPage() {
                     <button
                       type="button"
                       onClick={() => handleOrientationChange("cuadrado")}
-                      className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
+                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 ${
                         orientation === "cuadrado"
                           ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
                           : "border-black bg-white hover:bg-gray-50"
@@ -807,7 +807,7 @@ export default function CustomOrderPage() {
                     <button
                       type="button"
                       onClick={() => handleOrientationChange("horizontal")}
-                      className={`flex flex-col items-center gap-2 border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
+                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 ${
                         orientation === "horizontal"
                           ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
                           : "border-black bg-white hover:bg-gray-50"

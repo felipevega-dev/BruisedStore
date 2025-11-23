@@ -138,7 +138,7 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
           {painting.available && !isOutOfStock && (
             <button
               onClick={handleAddToCart}
-              className="group/btn flex items-center justify-center gap-2 border-4 border-black bg-primary-500 px-4 py-2 text-sm font-bold transition-all hover:bg-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
+              className="group/btn flex items-center justify-center gap-2 border-4 border-black bg-primary-500 px-4 py-3 text-base sm:text-sm sm:py-2 font-bold transition-all hover:bg-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:scale-95"
             >
               <ShoppingCart className="h-4 w-4 transition-transform group-hover/btn:scale-110 text-white" />
               <span className="text-white">Agregar</span>

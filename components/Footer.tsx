@@ -24,7 +24,7 @@ export default function Footer() {
             <h3 className="mb-4 text-lg font-bold text-black">
               Enlaces
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-3 text-sm sm:space-y-2">
               <li>
                 <Link
                   href="/"

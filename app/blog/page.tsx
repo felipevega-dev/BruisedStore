@@ -106,7 +106,7 @@ export default function BlogPage() {
         </div>
 
         {/* Category Filter */}
-        <div className="mb-8 flex flex-wrap items-center justify-center gap-2">
+        <div className="mb-8 flex flex-wrap items-center justify-center gap-2 px-4 sm:gap-3 sm:px-0">
           <button
             onClick={() => setSelectedCategory("all")}
             className={`rounded-lg border-2 px-4 py-2 font-bold transition-all ${

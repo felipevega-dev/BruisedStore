@@ -89,7 +89,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
             }`}
         >
           <SlidersHorizontal className="h-5 w-5" />
-          <span className="hidden sm:inline">Filtros</span>
+          <span>Filtros</span>
           {hasActiveFilters && (
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-primary-600">
               !
@@ -163,7 +163,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
                 min="0"
                 value={filters.minPrice || ''}
                 onChange={(e) => handleFilterChange('minPrice', e.target.value ? Number(e.target.value) : 0)}
-                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-base sm:text-sm text-gray-900 transition-all focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
 
@@ -177,7 +177,7 @@ export default function FilterBar({ onFilterChange, totalResults }: FilterBarPro
                 min="0"
                 value={filters.maxPrice || ''}
                 onChange={(e) => handleFilterChange('maxPrice', e.target.value ? Number(e.target.value) : 0)}
-                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-gray-900 transition-all focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+                className="w-full rounded-lg border-2 border-black bg-white px-4 py-2 text-base sm:text-sm text-gray-900 transition-all focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
               />
             </div>
           </div>

@@ -162,7 +162,7 @@ export default function Home() {
               <div className="mb-4 inline-block animate-pulse rounded-full border-2 border-primary-300 bg-primary-100 px-6 py-2 shadow-lg">
                 <span className="text-sm font-black uppercase tracking-wider text-primary-700">✨ Recién Agregadas</span>
               </div>
-              <h2 className="mb-6 bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-600 bg-clip-text text-5xl font-black text-transparent sm:text-6xl md:text-7xl">
+              <h2 className="mb-6 bg-gradient-to-r from-primary-600 via-primary-500 to-secondary-600 bg-clip-text text-3xl font-black text-transparent sm:text-5xl md:text-6xl lg:text-7xl">
                 Últimas Obras
               </h2>
               <p className="mx-auto max-w-2xl text-xl font-medium text-surface-700">
@@ -177,7 +177,7 @@ export default function Home() {
             <div className="mt-12 text-center">
               <a
                 href="#galeria"
-                className="group inline-flex items-center gap-3 rounded-2xl border-2 border-primary-500 bg-gradient-to-r from-primary-500 to-primary-600 px-8 py-4 text-lg font-black shadow-2xl shadow-primary-500/30 transition-all hover:scale-105 hover:shadow-3xl hover:shadow-primary-500/50"
+                className="group inline-flex items-center gap-3 rounded-2xl border-2 border-primary-500 bg-gradient-to-r from-primary-500 to-primary-600 px-6 py-3 text-base sm:px-8 sm:py-4 sm:text-lg font-black shadow-2xl shadow-primary-500/30 transition-all hover:scale-105 hover:shadow-3xl hover:shadow-primary-500/50"
               >
                 Ver Todas las Obras
                 <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-1" />
@@ -200,7 +200,7 @@ export default function Home() {
             <div className="mb-6 inline-block rounded-full border-4 border-white/30 bg-white/10 px-6 py-2 backdrop-blur-sm">
               <span className="text-sm font-black uppercase tracking-widest ">🎨 Personalización Total</span>
             </div>
-            <h2 className="mb-6 text-5xl font-black drop-shadow-2xl sm:text-6xl md:text-7xl">
+            <h2 className="mb-6 text-3xl font-black drop-shadow-2xl sm:text-5xl md:text-6xl lg:text-7xl">
               ¿Tienes una visión única?
             </h2>
             <p className="mb-10 text-2xl font-bold  drop-shadow-lg">
@@ -231,7 +231,7 @@ export default function Home() {
                 🎨 GALERÍA COMPLETA
               </span>
             </div>
-            <h2 className="mb-6 bg-gradient-to-r from-surface-900 via-primary-700 to-surface-900 bg-clip-text text-5xl font-black text-transparent sm:text-6xl md:text-7xl">
+            <h2 className="mb-6 bg-gradient-to-r from-surface-900 via-primary-700 to-surface-900 bg-clip-text text-3xl font-black text-transparent sm:text-5xl md:text-6xl lg:text-7xl">
               Todas las Obras
             </h2>
             <p className="mx-auto max-w-3xl text-xl font-semibold text-surface-600">
