@@ -39,7 +39,7 @@ import { AdminLogHelpers, logAdminAction } from "@/lib/adminLogs";
 export default function AdminBlogPage() {
   const { user, isAdmin } = useAuth();
   const router = useRouter();
-  const { showToast } = useToast();
+  const { showToast, ToastContainer } = useToast();
 
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -371,8 +371,10 @@ export default function AdminBlogPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8">
-      <div className="container mx-auto px-4">
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8">
+        <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-pink-500 to-pink-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <div className="flex items-center justify-between">
@@ -696,6 +698,7 @@ export default function AdminBlogPage() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </>
   );
 }

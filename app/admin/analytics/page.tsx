@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Order, Review, Painting } from "@/types";
 import { ArrowLeft, TrendingUp, DollarSign, ShoppingCart, Star, Package, Users, BarChart3,Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/hooks/useToast";
 
 interface AnalyticsData {
   totalRevenue: number;
@@ -32,6 +33,7 @@ interface AnalyticsData {
 export default function AnalyticsPage() {
   const router = useRouter();
   const { user, isAdmin, loading: authLoading } = useAuth();
+  const { ToastContainer } = useToast();
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [dateRange, setDateRange] = useState<"all" | "month" | "week">("all");
@@ -210,7 +212,9 @@ export default function AnalyticsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8">
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-emerald-500 to-emerald-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -395,6 +399,7 @@ export default function AnalyticsPage() {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

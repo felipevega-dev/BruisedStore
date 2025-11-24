@@ -252,9 +252,10 @@ export default function HomeSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
+    <>
       <ToastContainer />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-moss-500 to-moss-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <div className="flex items-center gap-3 mb-4">
@@ -619,6 +620,7 @@ export default function HomeSettingsPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

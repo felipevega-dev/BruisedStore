@@ -18,10 +18,12 @@ import Image from "next/image";
 import { Loader2, ArrowLeft, Trash2, Eye, Bell, Package, MessageCircle, Palette } from "lucide-react";
 import Link from "next/link";
 import { AdminLogHelpers, logAdminAction } from "@/lib/adminLogs";
+import { useToast } from "@/hooks/useToast";
 
-export default function AdminOrdersPage() {
+export default function AdminCustomOrdersPage() {
   const router = useRouter();
   const { user, isAdmin, loading: authLoading } = useAuth();
+  const { showToast, ToastContainer } = useToast();
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<CustomOrder[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<CustomOrder | null>(null);
@@ -232,8 +234,10 @@ export default function AdminOrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-purple-500 to-purple-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <div className="flex items-center gap-3">
@@ -501,6 +505,7 @@ export default function AdminOrdersPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
