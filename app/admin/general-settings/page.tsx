@@ -117,10 +117,12 @@ export default function GeneralSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8">
-      <div className="container mx-auto max-w-5xl px-4">
-        {/* Header */}
-        <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-cyan-500 to-cyan-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+    <>
+      <ToastContainer />
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8">
+        <div className="container mx-auto max-w-5xl px-4">
+          {/* Header */}
+          <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-cyan-500 to-cyan-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link
@@ -615,8 +617,8 @@ export default function GeneralSettingsPage() {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
+    </>
   );
 }

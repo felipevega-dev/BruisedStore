@@ -324,27 +324,27 @@ export default function AdminStoreOrdersPage() {
     <>
       <ToastContainer />
       <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-green-500 to-green-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/admin"
-              className="text-white transition-colors hover:text-green-100"
-            >
-              <ArrowLeft className="h-6 w-6" />
-            </Link>
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-white">
-              <Package className="h-8 w-8 text-green-600" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] sm:text-4xl">
-                Órdenes de Compra
-              </h1>
-              <p className="text-green-100 font-semibold">Pinturas de la galería</p>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-green-500 to-green-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div className="flex items-center gap-3">
+              <Link
+                href="/admin"
+                className="text-white transition-colors hover:text-green-100"
+              >
+                <ArrowLeft className="h-6 w-6" />
+              </Link>
+              <div className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-white">
+                <Package className="h-8 w-8 text-green-600" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] sm:text-4xl">
+                  Órdenes de Compra
+                </h1>
+                <p className="text-green-100 font-semibold">Pinturas de la galería</p>
+              </div>
             </div>
           </div>
-        </div>
 
         {pendingCount > 0 && (
           <div className="mb-6 flex items-center gap-2 rounded-xl border-4 border-black bg-orange-400 px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
@@ -743,7 +743,8 @@ export default function AdminStoreOrdersPage() {
           </div>
         </div>
       </div>
-    </div>
     </>
+  );
+}
   );
 }
