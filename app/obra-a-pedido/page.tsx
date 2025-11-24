@@ -20,6 +20,8 @@ import ImageCropper from "@/components/ImageCropper";
 import { useToast } from "@/hooks/useToast";
 import { isValidFileSize, compressImage } from "@/lib/utils";
 import { MAX_IMAGE_SIZE_MB } from "@/lib/constants";
+import HowItWorksSection from "@/components/HowItWorksSection";
+import FAQSection from "@/components/FAQSection";
 
 export default function CustomOrderPage() {
   const router = useRouter();
@@ -507,21 +509,61 @@ export default function CustomOrderPage() {
         </div>
       )}
 
+      {/* Hero Banner with Gradient */}
+      <div className="relative mb-8 overflow-hidden border-b-4 border-black bg-linear-to-r from-moss-500 via-moss-600 to-moss-700 py-12 sm:py-16">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
+        {/* Dark overlay for better text contrast */}
+        <div className="absolute inset-0 bg-black/20"></div>
+
+        <div className="container relative mx-auto px-4 text-center sm:px-6 lg:px-8">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-4 border-black bg-yellow-400 px-6 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <span className="text-2xl">🎨</span>
+            <span className="text-sm font-black uppercase tracking-wider text-black sm:text-base">
+              Arte Personalizado
+            </span>
+          </div>
+
+          <h1 className="mb-4 text-4xl font-black text-white drop-shadow-[6px_6px_0px_rgba(0,0,0,0.8)] sm:text-5xl lg:text-6xl" style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.8), -1px -1px 0px rgba(0,0,0,0.5)' }}>
+            Crea Tu Obra Única
+          </h1>
+
+          <p className="mx-auto max-w-2xl px-4 text-lg font-bold text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,0.8)] sm:text-xl" style={{ textShadow: '3px 3px 0px rgba(0,0,0,0.8), -1px -1px 0px rgba(0,0,0,0.5)' }}>
+            Transforma tus recuerdos, ideas y visiones en arte profesional.
+            <br />
+            <span className="text-yellow-200">
+              Cada obra es única, cada trazo cuenta una historia.
+            </span>
+          </p>
+
+          {/* Price Range Badge */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <div className="rounded-lg border-4 border-white bg-white px-5 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+              <div className="text-xs font-bold uppercase tracking-wide text-gray-600">
+                Desde
+              </div>
+              <div className="text-2xl font-black text-moss-600">
+                $20.000
+              </div>
+            </div>
+            <div className="text-2xl font-black text-white">→</div>
+            <div className="rounded-lg border-4 border-white bg-white px-5 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+              <div className="text-xs font-bold uppercase tracking-wide text-gray-600">
+                Hasta
+              </div>
+              <div className="text-2xl font-black text-moss-600">
+                $432.000
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          {/* Header */}
-          <div className="mb-6 text-center sm:mb-8">
-            <div className="mb-3 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3">
-             
-              <h1 className="text-3xl font-black text-black sm:text-4xl lg:text-5xl">
-                🎨 Obra a Pedido
-              </h1>
-            </div>
-            <p className="px-4 text-base text-gray-700 font-semibold sm:text-lg">
-              Convierte tus visiones en realidad. Cada obra es única, cada
-              trazo cuenta una historia.
-            </p>
-            <div className="mx-auto mt-3 h-1 w-20 bg-moss-500 sm:mt-4 sm:h-2 sm:w-24"></div>
+
+          {/* How It Works Section */}
+          <div className="mb-8">
+            <HowItWorksSection />
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
@@ -980,6 +1022,11 @@ export default function CustomOrderPage() {
                 </button>
               </form>
             </div>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="mt-8">
+            <FAQSection />
           </div>
         </div>
       </div>
