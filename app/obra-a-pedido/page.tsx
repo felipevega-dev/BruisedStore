@@ -510,47 +510,49 @@ export default function CustomOrderPage() {
       )}
 
       {/* Hero Banner with Gradient */}
-      <div className="relative mb-8 overflow-hidden border-b-4 border-black bg-linear-to-r from-moss-500 via-moss-600 to-moss-700 py-12 sm:py-16">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-30"></div>
-        {/* Dark overlay for better text contrast */}
-        <div className="absolute inset-0 bg-black/20"></div>
+      <div className="relative mb-8 overflow-hidden border-b-4 border-black bg-linear-to-br from-moss-500 via-moss-600 to-moss-700 py-16 sm:py-20">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute -left-20 top-0 h-96 w-96 rounded-full bg-moss-300 blur-3xl"></div>
+          <div className="absolute -right-20 bottom-0 h-96 w-96 rounded-full bg-moss-800 blur-3xl"></div>
+        </div>
 
         <div className="container relative mx-auto px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border-4 border-black bg-yellow-400 px-6 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border-4 border-black bg-yellow-400 px-6 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <span className="text-2xl">🎨</span>
             <span className="text-sm font-black uppercase tracking-wider text-black sm:text-base">
               Arte Personalizado
             </span>
           </div>
 
-          <h1 className="mb-4 text-4xl font-black text-white drop-shadow-[6px_6px_0px_rgba(0,0,0,0.8)] sm:text-5xl lg:text-6xl" style={{ textShadow: '4px 4px 0px rgba(0,0,0,0.8), -1px -1px 0px rgba(0,0,0,0.5)' }}>
+          <h1 className="mb-6 text-5xl font-black text-black sm:text-6xl lg:text-7xl">
             Crea Tu Obra Única
           </h1>
 
-          <p className="mx-auto max-w-2xl px-4 text-lg font-bold text-white drop-shadow-[4px_4px_0px_rgba(0,0,0,0.8)] sm:text-xl" style={{ textShadow: '3px 3px 0px rgba(0,0,0,0.8), -1px -1px 0px rgba(0,0,0,0.5)' }}>
-            Transforma tus recuerdos, ideas y visiones en arte profesional.
-            <br />
-            <span className="text-yellow-200">
-              Cada obra es única, cada trazo cuenta una historia.
-            </span>
+          <p className="mx-auto mb-8 max-w-3xl text-xl font-bold text-gray-900 sm:text-2xl">
+            Transforma tus recuerdos, ideas y visiones en arte profesional
+          </p>
+          
+          <p className="mx-auto mb-10 max-w-2xl text-lg font-semibold text-gray-800 sm:text-xl">
+            Cada obra es única, cada trazo cuenta una historia
           </p>
 
           {/* Price Range Badge */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <div className="rounded-lg border-4 border-white bg-white px-5 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
-              <div className="text-xs font-bold uppercase tracking-wide text-gray-600">
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="rounded-2xl border-4 border-black bg-white px-8 py-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <div className="text-xs font-black uppercase tracking-wider text-gray-600">
                 Desde
               </div>
-              <div className="text-2xl font-black text-moss-600">
+              <div className="text-3xl font-black text-moss-600">
                 $20.000
               </div>
             </div>
-            <div className="text-2xl font-black text-white">→</div>
-            <div className="rounded-lg border-4 border-white bg-white px-5 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
-              <div className="text-xs font-bold uppercase tracking-wide text-gray-600">
+            <div className="text-3xl font-black text-black">→</div>
+            <div className="rounded-2xl border-4 border-black bg-white px-8 py-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <div className="text-xs font-black uppercase tracking-wider text-gray-600">
                 Hasta
               </div>
-              <div className="text-2xl font-black text-moss-600">
+              <div className="text-3xl font-black text-moss-600">
                 $432.000
               </div>
             </div>

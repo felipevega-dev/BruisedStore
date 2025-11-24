@@ -67,6 +67,15 @@ export default function HowItWorksSection() {
     "text-pink-700",
   ];
 
+  const numberBgColors = [
+    "bg-orange-500",
+    "bg-yellow-500",
+    "bg-black",
+    "bg-blue-500",
+    "bg-purple-500",
+    "bg-pink-500",
+  ];
+
   return (
     <div className="relative overflow-hidden border-4 border-black bg-linear-to-br from-orange-50 via-yellow-50 to-moss-50 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:p-8">
       {/* Decorative circles */}
@@ -92,7 +101,7 @@ export default function HowItWorksSection() {
               className={`group relative border-4 ${cardColors[index]} p-5 transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5`}
             >
               {/* Step Number Badge */}
-              <div className={`absolute -left-3 -top-3 flex h-10 w-10 items-center justify-center border-4 border-black ${cardColors[index].split(' ')[1].replace('border-', 'bg-')} font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]`}>
+              <div className={`absolute -left-3 -top-3 flex h-10 w-10 items-center justify-center border-4 border-black ${numberBgColors[index]} font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]`}>
                 {index + 1}
               </div>
 

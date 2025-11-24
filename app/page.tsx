@@ -188,7 +188,7 @@ export default function Home() {
       )}
 
       {/* Call to Action - Obra a Pedido */}
-      <section className="relative overflow-hidden border-y-4 border-primary-500 bg-gradient-to-br from-primary-600 via-primary-500 to-secondary-600 py-24">
+      <section className="relative overflow-hidden border-y-4 border-primary-500 bg-gradient-to-br from-primary-600 via-primary-500 to-secondary-600 py-12 sm:py-16">
         {/* Animated background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute left-0 top-0 h-full w-1/3 bg-gradient-to-r from-white to-transparent"></div>
@@ -197,22 +197,22 @@ export default function Home() {
 
         <div className="container relative mx-auto px-4 text-center">
           <div className="mx-auto max-w-4xl">
-            <div className="mb-6 inline-block rounded-full border-4 border-white/30 bg-white/10 px-6 py-2 backdrop-blur-sm">
-              <span className="text-sm font-black uppercase tracking-widest ">🎨 Personalización Total</span>
+            <div className="mb-4 inline-block rounded-full border-4 border-white/30 bg-white/10 px-4 py-1.5 backdrop-blur-sm">
+              <span className="text-xs font-black uppercase tracking-widest sm:text-sm">Personalización Total</span>
             </div>
-            <h2 className="mb-6 text-3xl font-black drop-shadow-2xl sm:text-5xl md:text-6xl lg:text-7xl">
+            <h2 className="mb-4 text-2xl font-black drop-shadow-2xl sm:text-4xl md:text-5xl">
               ¿Tienes una visión única?
             </h2>
-            <p className="mb-10 text-2xl font-bold  drop-shadow-lg">
+            <p className="mb-6 text-lg font-bold drop-shadow-lg sm:text-xl">
               Trabajaré contigo para crear algo completamente único basado en tu idea,
               con tu estilo y dimensiones preferidas.
             </p>
             <Link
               href="/obra-a-pedido"
-              className="group inline-flex items-center gap-3 rounded-2xl border-4 border-white bg-white px-10 py-5 text-xl font-black text-primary-600 shadow-2xl transition-all hover:scale-110 hover:shadow-[0_20px_60px_rgba(255,255,255,0.4)]"
+              className="group inline-flex items-center gap-2 rounded-2xl border-4 border-white bg-white px-6 py-3 text-lg font-black text-primary-600 shadow-2xl transition-all hover:scale-110 hover:shadow-[0_20px_60px_rgba(255,255,255,0.4)] sm:px-8 sm:py-4"
             >
               Obra a Pedido
-              <ArrowRight className="h-7 w-7 transition-transform group-hover:translate-x-2" />
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-2 sm:h-6 sm:w-6" />
             </Link>
           </div>
         </div>
