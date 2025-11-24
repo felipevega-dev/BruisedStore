@@ -312,8 +312,8 @@ export default function AdminStoreOrdersPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
-        <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-8 backdrop-blur-sm">
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-100 via-gray-50 to-slate-50">
+        <div className="rounded-2xl border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
@@ -323,32 +323,37 @@ export default function AdminStoreOrdersPage() {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-4">
+        {/* Header */}
+        <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-green-500 to-green-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex items-center gap-3">
             <Link
               href="/admin"
-              className="text-gray-300 transition-colors hover:text-terra-400"
+              className="text-white transition-colors hover:text-green-100"
             >
               <ArrowLeft className="h-6 w-6" />
             </Link>
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-white">
+              <Package className="h-8 w-8 text-green-600" />
+            </div>
             <div>
-              <h1 className="text-3xl font-bold text-terra-100 sm:text-4xl">
+              <h1 className="text-3xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] sm:text-4xl">
                 Órdenes de Compra
               </h1>
-              <p className="text-gray-400">Pinturas de la galería</p>
+              <p className="text-green-100 font-semibold">Pinturas de la galería</p>
             </div>
           </div>
+        </div>
 
-          {pendingCount > 0 && (
-            <div className="flex items-center gap-2 rounded-lg border-2 border-terra-900 bg-moss-950/30 px-4 py-2">
-              <Bell className="h-5 w-5 text-terra-400" />
-              <span className="font-bold text-terra-300">
-                {pendingCount} pendiente{pendingCount !== 1 ? "s" : ""}
-              </span>
-            </div>
-          )}
+        {pendingCount > 0 && (
+          <div className="mb-6 flex items-center gap-2 rounded-xl border-4 border-black bg-orange-400 px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <Bell className="h-5 w-5 text-black" />
+            <span className="font-black text-black">
+              {pendingCount} pendiente{pendingCount !== 1 ? "s" : ""}
+            </span>
+          </div>
+        )}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">

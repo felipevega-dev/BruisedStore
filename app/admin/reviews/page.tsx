@@ -149,7 +149,7 @@ export default function AdminReviewsPage() {
             key={star}
             className={`h-4 w-4 ${
               star <= count
-                ? "fill-terra-400 text-terra-400"
+                ? "fill-orange-500 text-orange-500"
                 : "fill-gray-200 text-gray-300"
             }`}
           />
@@ -170,9 +170,9 @@ export default function AdminReviewsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
-        <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-100 via-gray-50 to-slate-50">
+        <div className="rounded-2xl border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-orange-600" />
         </div>
       </div>
     );
@@ -185,52 +185,64 @@ export default function AdminReviewsPage() {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen bg-white py-8 sm:py-12">
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 flex items-center gap-4">
-          <Link
-            href="/admin"
-            className="text-gray-700 transition-colors hover:text-moss-600"
-          >
-            <ArrowLeft className="h-6 w-6" />
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-            Moderación de Reseñas
-          </h1>
+        <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-orange-500 to-orange-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/admin"
+                className="rounded-xl border-2 border-white bg-white/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-white/30"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Link>
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-white">
+                <MessageCircle className="h-7 w-7 text-orange-600" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-black text-white">
+                  Moderación de Reseñas
+                </h1>
+                <p className="text-sm text-white/90">
+                  Gestiona y modera las reseñas de clientes
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Stats */}
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
-          <div className="rounded-lg border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="rounded-2xl border-4 border-black bg-linear-to-br from-blue-50 to-blue-100 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-gray-600">
+                <p className="text-sm font-semibold text-blue-800">
                   Total Reseñas
                 </p>
-                <p className="text-3xl font-bold text-gray-900">
+                <p className="text-3xl font-bold text-blue-900">
                   {reviews.length}
                 </p>
               </div>
-              <MessageCircle className="h-12 w-12 text-gray-400" />
+              <MessageCircle className="h-12 w-12 text-blue-500" />
             </div>
           </div>
 
-          <div className="rounded-lg border-4 border-black bg-terra-100 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="rounded-2xl border-4 border-black bg-linear-to-br from-orange-50 to-orange-100 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-terra-800">
+                <p className="text-sm font-semibold text-orange-800">
                   Pendientes
                 </p>
-                <p className="text-3xl font-bold text-terra-900">
+                <p className="text-3xl font-bold text-orange-900">
                   {pendingCount}
                 </p>
               </div>
-              <MessageCircle className="h-12 w-12 text-terra-400" />
+              <MessageCircle className="h-12 w-12 text-orange-500" />
             </div>
           </div>
 
-          <div className="rounded-lg border-4 border-black bg-green-50 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="rounded-2xl border-4 border-black bg-linear-to-br from-green-50 to-green-100 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-semibold text-green-800">
@@ -240,7 +252,7 @@ export default function AdminReviewsPage() {
                   {approvedCount}
                 </p>
               </div>
-              <Check className="h-12 w-12 text-green-400" />
+              <Check className="h-12 w-12 text-green-500" />
             </div>
           </div>
         </div>
@@ -249,9 +261,9 @@ export default function AdminReviewsPage() {
         <div className="mb-6 flex gap-2">
           <button
             onClick={() => setFilter("all")}
-            className={`rounded-lg border-2 border-black px-4 py-2 font-bold transition-all ${
+            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
               filter === "all"
-                ? "bg-moss-500 text-white"
+                ? "bg-blue-500 text-white"
                 : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -259,9 +271,9 @@ export default function AdminReviewsPage() {
           </button>
           <button
             onClick={() => setFilter("pending")}
-            className={`rounded-lg border-2 border-black px-4 py-2 font-bold transition-all ${
+            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
               filter === "pending"
-                ? "bg-terra-500 text-white"
+                ? "bg-orange-500 text-white"
                 : "bg-white text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -269,7 +281,7 @@ export default function AdminReviewsPage() {
           </button>
           <button
             onClick={() => setFilter("approved")}
-            className={`rounded-lg border-2 border-black px-4 py-2 font-bold transition-all ${
+            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
               filter === "approved"
                 ? "bg-green-600 text-white"
                 : "bg-white text-gray-700 hover:bg-gray-50"
@@ -282,7 +294,7 @@ export default function AdminReviewsPage() {
         {/* Reviews List */}
         <div className="space-y-4">
           {filteredReviews.length === 0 ? (
-            <div className="rounded-lg border-4 border-black bg-white p-12 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div className="rounded-2xl border-4 border-black bg-white p-12 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <MessageCircle className="mx-auto mb-4 h-16 w-16 text-gray-400" />
               <p className="text-lg font-bold text-gray-900">
                 No hay reseñas para mostrar
@@ -292,8 +304,8 @@ export default function AdminReviewsPage() {
             filteredReviews.map((review) => (
               <div
                 key={review.id}
-                className={`rounded-lg border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${
-                  review.approved ? "bg-white" : "bg-terra-100"
+                className={`rounded-2xl border-4 border-black p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${
+                  review.approved ? "bg-white" : "bg-orange-50"
                 }`}
               >
                 <div className="mb-4 flex items-start justify-between">
@@ -303,10 +315,10 @@ export default function AdminReviewsPage() {
                         {review.userName}
                       </h3>
                       <span
-                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${
+                        className={`inline-flex items-center rounded-full border-2 border-black px-3 py-1 text-xs font-bold ${
                           review.approved
                             ? "bg-green-100 text-green-800"
-                            : "bg-terra-100 text-terra-800"
+                            : "bg-orange-100 text-orange-800"
                         }`}
                       >
                         {review.approved ? "Aprobada" : "Pendiente"}
@@ -320,11 +332,11 @@ export default function AdminReviewsPage() {
                   {renderStars(review.rating)}
                 </div>
 
-                <div className="mb-4 rounded-lg bg-gray-50 p-4">
+                <div className="mb-4 rounded-xl border-2 border-gray-200 bg-gray-50 p-4">
                   <p className="font-medium text-gray-900">ID Obra:</p>
                   <Link
                     href={`/obra/${review.paintingId}`}
-                    className="text-sm text-moss-600 hover:underline"
+                    className="text-sm text-blue-600 hover:underline"
                   >
                     {review.paintingId}
                   </Link>
@@ -337,7 +349,7 @@ export default function AdminReviewsPage() {
                   {!review.approved && (
                     <button
                       onClick={() => handleApprove(review.id)}
-                      className="flex items-center gap-2 rounded-lg border-2 border-black bg-green-600 px-4 py-2 font-bold text-white transition-all hover:bg-green-700 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                      className="flex items-center gap-2 rounded-xl border-4 border-black bg-green-600 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                     >
                       <Check className="h-4 w-4" />
                       <span>Aprobar</span>
@@ -346,7 +358,7 @@ export default function AdminReviewsPage() {
                   {review.approved && (
                     <button
                       onClick={() => handleReject(review.id)}
-                      className="flex items-center gap-2 rounded-lg border-2 border-black bg-terra-500 px-4 py-2 font-bold text-white transition-all hover:bg-terra-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                      className="flex items-center gap-2 rounded-xl border-4 border-black bg-orange-500 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                     >
                       <X className="h-4 w-4" />
                       <span>Ocultar</span>
@@ -354,7 +366,7 @@ export default function AdminReviewsPage() {
                   )}
                   <button
                     onClick={() => handleDelete(review.id)}
-                    className="flex items-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-4 py-2 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                    className="flex items-center gap-2 rounded-xl border-4 border-black bg-red-500 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                   >
                     <Trash2 className="h-4 w-4" />
                     <span>Eliminar</span>

@@ -256,9 +256,9 @@ export default function AdminMusicSettingsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
-        <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-8 backdrop-blur-sm">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-100 via-gray-50 to-slate-50">
+        <div className="rounded-2xl border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-purple-600" />
         </div>
       </div>
     );
@@ -267,30 +267,56 @@ export default function AdminMusicSettingsPage() {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex items-center gap-4">
-            <Link
-              href="/admin"
-              className="text-gray-300 transition-colors hover:text-terra-400"
-            >
-              <ArrowLeft className="h-6 w-6" />
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold text-terra-100 sm:text-4xl">
-                Configuración de Música
-              </h1>
-              <p className="text-gray-400">Música de fondo para el sitio</p>
+          {/* Header */}
+          <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-purple-500 to-purple-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/admin"
+                  className="rounded-xl border-2 border-white bg-white/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-white/30"
+                >
+                  <ArrowLeft className="h-5 w-5" />
+                </Link>
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-white">
+                  <Music className="h-7 w-7 text-purple-600" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-black text-white">
+                    Configuración de Música
+                  </h1>
+                  <p className="text-sm text-white/90">Música de fondo para el sitio</p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="flex items-center gap-2 rounded-xl border-4 border-white bg-white px-6 py-3 font-bold text-purple-600 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.5)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.5)] disabled:opacity-50"
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    Guardando...
+                  </>
+                ) : (
+                  <>
+                    <Save className="h-5 w-5" />
+                    Guardar
+                  </>
+                )}
+              </button>
             </div>
           </div>
 
           <div className="space-y-6">
             {/* Enable/Disable */}
-            <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-terra-100">Activar Música</h3>
-                  <p className="text-sm text-gray-400">
+                  <h3 className="text-xl font-bold text-black">Activar Música</h3>
+                  <p className="text-sm text-gray-600">
                     Reproducir música de fondo en el sitio
                   </p>
                 </div>
@@ -303,14 +329,14 @@ export default function AdminMusicSettingsPage() {
                     }
                     className="peer sr-only"
                   />
-                  <div className="peer h-8 w-14 rounded-full border-4 border-terra-900 bg-gray-700 after:absolute after:left-[4px] after:top-[4px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-moss-500 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
+                  <div className="peer h-8 w-14 rounded-full border-4 border-gray-300 bg-gray-300 after:absolute after:left-1 after:top-1 after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-purple-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
                 </label>
               </div>
             </div>
 
             {/* Play Mode */}
-            <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 backdrop-blur-sm">
-              <h3 className="mb-4 text-xl font-bold text-terra-100">
+            <div className="rounded-2xl border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <h3 className="mb-4 text-xl font-bold text-black">
                 Modo de Reproducción
               </h3>
               <div className="grid gap-3 sm:grid-cols-3">
@@ -318,8 +344,8 @@ export default function AdminMusicSettingsPage() {
                   onClick={() => setSettings({ ...settings, playMode: "single" })}
                   className={`rounded-lg border-4 px-4 py-3 font-bold transition-all ${
                     settings.playMode === "single"
-                      ? "border-moss-500 bg-moss-500 text-white shadow-lg"
-                      : "border-terra-900 bg-moss-900/30 text-terra-100 hover:bg-terra-900/30"
+                      ? "border-purple-500 bg-purple-500 text-white shadow-lg"
+                      : "border-black bg-gray-100 text-black hover:bg-gray-200"
                   }`}
                 >
                   Una vez
@@ -328,8 +354,8 @@ export default function AdminMusicSettingsPage() {
                   onClick={() => setSettings({ ...settings, playMode: "loop" })}
                   className={`rounded-lg border-4 px-4 py-3 font-bold transition-all ${
                     settings.playMode === "loop"
-                      ? "border-moss-500 bg-moss-500 text-white shadow-lg"
-                      : "border-terra-900 bg-moss-900/30 text-terra-100 hover:bg-terra-900/30"
+                      ? "border-purple-500 bg-purple-500 text-white shadow-lg"
+                      : "border-black bg-gray-100 text-black hover:bg-gray-200"
                   }`}
                 >
                   Repetir
@@ -338,14 +364,14 @@ export default function AdminMusicSettingsPage() {
                   onClick={() => setSettings({ ...settings, playMode: "playlist" })}
                   className={`rounded-lg border-4 px-4 py-3 font-bold transition-all ${
                     settings.playMode === "playlist"
-                      ? "border-moss-500 bg-moss-500 text-white shadow-lg"
-                      : "border-terra-900 bg-moss-900/30 text-terra-100 hover:bg-terra-900/30"
+                      ? "border-purple-500 bg-purple-500 text-white shadow-lg"
+                      : "border-black bg-gray-100 text-black hover:bg-gray-200"
                   }`}
                 >
                   Playlist
                 </button>
               </div>
-              <p className="mt-3 text-sm text-gray-400">
+              <p className="mt-3 text-sm text-gray-600">
                 {settings.playMode === "single" &&
                   "Reproduce la pista seleccionada una vez"}
                 {settings.playMode === "loop" &&
@@ -356,14 +382,14 @@ export default function AdminMusicSettingsPage() {
             </div>
 
             {/* Volume Control */}
-            <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-terra-100">Volumen de la Barra</h3>
-                <span className="text-2xl font-black text-terra-500">
+                <h3 className="text-xl font-bold text-black">Volumen de la Barra</h3>
+                <span className="text-2xl font-black text-purple-600">
                   {settings.volume}%
                 </span>
               </div>
-              <p className="mb-3 text-sm text-gray-400">
+              <p className="mb-3 text-sm text-gray-600">
                 Volumen actual de la barra de reproducción (se sincroniza con los controles de la barra)
               </p>
               <input
@@ -374,19 +400,19 @@ export default function AdminMusicSettingsPage() {
                 onChange={(e) =>
                   setSettings({ ...settings, volume: parseInt(e.target.value) })
                 }
-                className="h-3 w-full cursor-pointer appearance-none rounded-lg bg-moss-900/50 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-moss-500"
+                className="h-3 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-purple-600"
               />
             </div>
 
             {/* Default Volume Control */}
-            <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-terra-100">Volumen Inicial</h3>
-                <span className="text-2xl font-black text-terra-500">
+                <h3 className="text-xl font-bold text-black">Volumen Inicial</h3>
+                <span className="text-2xl font-black text-purple-600">
                   {settings.defaultVolume}%
                 </span>
               </div>
-              <p className="mb-3 text-sm text-gray-400">
+              <p className="mb-3 text-sm text-gray-600">
                 Volumen con el que empezarán los nuevos visitantes (primera vez). Después cada usuario guardará su preferencia.
               </p>
               <input
@@ -397,25 +423,25 @@ export default function AdminMusicSettingsPage() {
                 onChange={(e) =>
                   setSettings({ ...settings, defaultVolume: parseInt(e.target.value) })
                 }
-                className="h-3 w-full cursor-pointer appearance-none rounded-lg bg-moss-900/50 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-moss-500"
+                className="h-3 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-purple-600"
               />
             </div>
 
             {/* Upload Music */}
-            <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 backdrop-blur-sm">
-              <h3 className="mb-4 text-xl font-bold text-terra-100">
+            <div className="rounded-2xl border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+              <h3 className="mb-4 text-xl font-bold text-black">
                 Subir Música
               </h3>
-              <label className="flex cursor-pointer items-center justify-center gap-3 rounded-lg border-4 border-dashed border-terra-900 bg-moss-900/20 py-8 transition-all hover:border-moss-500 hover:bg-moss-900/30">
+              <label className="flex cursor-pointer items-center justify-center gap-3 rounded-lg border-4 border-dashed border-black bg-gray-100 py-8 transition-all hover:border-purple-500 hover:bg-purple-50">
                 {uploading ? (
                   <>
-                    <Loader2 className="h-6 w-6 animate-spin text-terra-500" />
-                    <span className="font-bold text-terra-100">Subiendo...</span>
+                    <Loader2 className="h-6 w-6 animate-spin text-purple-600" />
+                    <span className="font-bold text-black">Subiendo...</span>
                   </>
                 ) : (
                   <>
-                    <Upload className="h-6 w-6 text-terra-500" />
-                    <span className="font-bold text-terra-100">
+                    <Upload className="h-6 w-6 text-purple-600" />
+                    <span className="font-bold text-black">
                       Seleccionar archivo de audio
                     </span>
                   </>
@@ -428,28 +454,28 @@ export default function AdminMusicSettingsPage() {
                   className="hidden"
                 />
               </label>
-              <p className="mt-2 text-xs text-gray-400">
+              <p className="mt-2 text-xs text-gray-600">
                 Formatos: MP3, WAV, OGG. Máximo 10MB
               </p>
             </div>
 
             {/* Music List */}
-            <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-6 backdrop-blur-sm">
+            <div className="rounded-2xl border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
               <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-terra-100">
+                <h3 className="text-xl font-bold text-black">
                   Pistas ({settings.tracks.length})
                 </h3>
                 {settings.tracks.length > 0 && (
-                  <p className="text-sm text-gray-400">
+                  <p className="text-sm text-gray-600">
                     💡 Arrastra para reordenar
                   </p>
                 )}
               </div>
 
               {settings.tracks.length === 0 ? (
-                <div className="rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-8 text-center">
-                  <Music className="mx-auto mb-3 h-12 w-12 text-moss-600/50" />
-                  <p className="text-gray-400">
+                <div className="rounded-lg border-4 border-black bg-gray-100 p-8 text-center">
+                  <Music className="mx-auto mb-3 h-12 w-12 text-gray-400" />
+                  <p className="text-gray-600">
                     No hay música subida. Sube tu primera pista arriba.
                   </p>
                 </div>
@@ -462,21 +488,21 @@ export default function AdminMusicSettingsPage() {
                       onDragStart={() => handleDragStart(track.id)}
                       onDragOver={(e) => handleDragOver(e, track.id)}
                       onDragEnd={handleDragEnd}
-                      className={`flex cursor-move items-center gap-3 rounded-lg border-2 bg-moss-900/20 p-4 transition-all ${
+                      className={`flex cursor-move items-center gap-3 rounded-lg border-4 bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all ${
                         draggedTrack === track.id
-                          ? "border-moss-500 opacity-50"
-                          : "border-terra-900/30 hover:border-moss-600"
+                          ? "border-purple-500 opacity-50"
+                          : "border-black hover:border-purple-600"
                       }`}
                     >
                       {/* Número de orden */}
-                      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-terra-900 bg-moss-900/50 text-sm font-bold text-terra-100">
+                      <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-black bg-gray-100 text-sm font-bold text-black">
                         {index + 1}
                       </div>
 
                       {/* Botón preview */}
                       <button
                         onClick={() => handlePreview(track.fileUrl)}
-                        className="flex-shrink-0 rounded-full border-2 border-terra-900 bg-moss-900/50 p-2 text-terra-100 transition-all hover:bg-moss-500 hover:text-white"
+                        className="flex-shrink-0 rounded-full border-2 border-black bg-purple-600 p-2 text-white transition-all hover:bg-purple-700"
                       >
                         {previewTrack === track.fileUrl ? (
                           <Pause className="h-5 w-5" />
@@ -500,12 +526,12 @@ export default function AdminMusicSettingsPage() {
                               ),
                             })
                           }
-                          className="w-full rounded border-2 border-terra-900/30 bg-transparent px-2 py-1 font-bold text-terra-100 focus:border-moss-500 focus:outline-none"
+                          className="w-full rounded border-2 border-gray-300 bg-transparent px-2 py-1 font-bold text-black focus:border-purple-500 focus:outline-none"
                         />
-                        <div className="mt-1 flex items-center gap-2 text-xs text-gray-400">
+                        <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
                           <span>⏱️ {formatDuration(track.duration)}</span>
                           {index === 0 && (
-                            <span className="rounded border border-green-600 bg-green-950/50 px-2 py-0.5 text-green-400">
+                            <span className="rounded border border-green-600 bg-green-50 px-2 py-0.5 text-green-600">
                               Primera
                             </span>
                           )}
@@ -517,7 +543,7 @@ export default function AdminMusicSettingsPage() {
                         {index !== 0 && (
                           <button
                             onClick={() => handleSetFirstTrack(track.id)}
-                            className="rounded-lg border-2 border-green-900 bg-green-950/50 px-3 py-2 text-xs font-bold text-green-400 transition-all hover:bg-green-900/70"
+                            className="rounded-lg border-2 border-green-600 bg-green-50 px-3 py-2 text-xs font-bold text-green-600 transition-all hover:bg-green-100"
                             title="Marcar como primera"
                           >
                             ⬆️ Primera
@@ -525,7 +551,7 @@ export default function AdminMusicSettingsPage() {
                         )}
 
                         {settings.playMode === "single" && (
-                          <label className="flex items-center gap-2 text-sm text-gray-400">
+                          <label className="flex items-center gap-2 text-sm text-gray-600">
                             <input
                               type="radio"
                               name="currentTrack"
@@ -536,7 +562,7 @@ export default function AdminMusicSettingsPage() {
                                   currentTrackId: track.id,
                                 })
                               }
-                              className="h-4 w-4 accent-terra-600"
+                              className="h-4 w-4 accent-purple-600"
                             />
                             Activa
                           </label>
@@ -544,7 +570,7 @@ export default function AdminMusicSettingsPage() {
 
                         <button
                           onClick={() => handleDeleteTrack(track)}
-                          className="rounded-lg border-2 border-terra-900 bg-moss-900/50 p-2 text-terra-400 transition-all hover:bg-moss-500 hover:text-white"
+                          className="rounded-lg border-2 border-black bg-gray-100 p-2 text-black transition-all hover:bg-gray-200"
                         >
                           <Trash2 className="h-5 w-5" />
                         </button>
@@ -560,7 +586,7 @@ export default function AdminMusicSettingsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex items-center gap-2 rounded-lg border-4 border-white bg-moss-500 px-8 py-3 font-black text-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)] transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-moss-600 hover:shadow-none disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex items-center gap-2 rounded-lg border-4 border-black bg-purple-500 px-8 py-3 font-black text-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-purple-600 hover:shadow-none disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {saving ? (
                   <Loader2 className="h-5 w-5 animate-spin" />

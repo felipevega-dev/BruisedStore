@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
-import { ArrowLeft, Save, Upload, Trash2, Loader2, Eye, X, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, Save, Upload, Trash2, Loader2, Eye, X, Image as ImageIcon, Home } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useToast } from "@/hooks/useToast";
@@ -252,30 +252,34 @@ export default function HomeSettingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
       <ToastContainer />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
+        <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-moss-500 to-moss-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex items-center gap-3 mb-4">
             <Link
               href="/admin"
-              className="mb-4 inline-flex items-center gap-2 text-terra-300 transition-colors hover:text-terra-400"
+              className="text-white transition-colors hover:text-moss-100"
             >
-              <ArrowLeft className="h-5 w-5" />
-              Volver al Panel
+              <ArrowLeft className="h-6 w-6" />
             </Link>
-            <h1 className="text-3xl font-black text-terra-100 sm:text-4xl">
-              Configuración del Home
-            </h1>
-            <p className="mt-2 text-terra-300">Personaliza la página principal</p>
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-white">
+              <Home className="h-8 w-8 text-moss-600" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] sm:text-4xl">
+                Configuración del Home
+              </h1>
+              <p className="text-moss-100 font-semibold">Personaliza la página principal</p>
+            </div>
           </div>
 
           <div className="flex gap-3">
             <Link
               href="/"
               target="_blank"
-              className="flex items-center gap-2 rounded-lg border-2 border-blue-900 bg-blue-950 px-4 py-2 font-bold text-blue-300 transition-all hover:bg-blue-900"
+              className="flex items-center gap-2 rounded-lg border-4 border-black bg-blue-400 px-4 py-2 font-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
             >
               <Eye className="h-5 w-5" />
               Vista Previa
@@ -283,7 +287,7 @@ export default function HomeSettingsPage() {
             <button
               onClick={handleSave}
               disabled={saving || uploading}
-              className="flex items-center gap-2 rounded-lg border-2 border-terra-900 bg-moss-500 px-6 py-2 font-bold text-white transition-all hover:bg-moss-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex items-center gap-2 rounded-lg border-4 border-black bg-moss-500 px-6 py-2 font-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving || uploading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
