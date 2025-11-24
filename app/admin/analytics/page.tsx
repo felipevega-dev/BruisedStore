@@ -6,7 +6,7 @@ import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { Order, Review, Painting } from "@/types";
-import { ArrowLeft, TrendingUp, DollarSign, ShoppingCart, Star, Package, Users, BarChart3 } from "lucide-react";
+import { ArrowLeft, TrendingUp, DollarSign, ShoppingCart, Star, Package, Users, BarChart3,Loader2 } from "lucide-react";
 import Link from "next/link";
 
 interface AnalyticsData {

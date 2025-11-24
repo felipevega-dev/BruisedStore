@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { collection, query, orderBy, limit, getDocs, where, Timestamp } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { AdminLog, AdminAction } from "@/types";
-import { FileText, Calendar, User, Filter, X } from "lucide-react";
+import { FileText, Calendar, User, Filter, X, Loader2 } from "lucide-react";
 
 const ACTION_LABELS: Record<AdminAction, string> = {
   order_status_updated: "Pedido Actualizado",
