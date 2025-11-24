@@ -41,7 +41,7 @@ export default function AnimatedBanner({
           {duplicatedImages.map((img, index) => (
             <div
               key={`${img}-${index}`}
-              className="relative h-full w-[350px] flex-shrink-0"
+              className="relative h-full w-[400px]"
             >
               <div className="h-full w-full border-8 border-black bg-white p-4 shadow-2xl">
                 <div className="relative h-full w-full">
@@ -50,7 +50,7 @@ export default function AnimatedBanner({
                     alt="Painting"
                     fill
                     className="object-cover"
-                    sizes="350px"
+                    sizes="400px"
                     priority={index < 3}
                     loading={index < 3 ? undefined : "lazy"}
                   />
@@ -62,10 +62,10 @@ export default function AnimatedBanner({
       </div>
 
       {/* Gradient overlay */}
-      <div className="absolute inset-0 z-0 bg-linear-to-b from-black/60 via-black/40 to-black/80" />
+      <div className="inset-0 z-0 bg-linear-to-b from-black/60 via-black/40 to-black/80" />
 
       {/* Content - With padding to push down from header and compensate at bottom */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pt-6 pb-0 sm:pt-28 sm:pb-0 text-center">
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pt-8 pb-0 sm:pt-8 sm:pb-0 text-center">
         {/* Profile Image with Flip Effect */}
         {profileImage && (
           <div className="flip-card mb-6">
