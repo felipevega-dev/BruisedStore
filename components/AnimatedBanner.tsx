@@ -62,7 +62,7 @@ export default function AnimatedBanner({
       </div>
 
       {/* Gradient overlay */}
-      <div className="inset-0 z-0 bg-linear-to-b from-black/60 via-black/40 to-black/80" />
+      <div className="absolute inset-0 z-0 bg-linear-to-b from-black/60 via-black/40 to-black/80" />
 
       {/* Content - With padding to push down from header and compensate at bottom */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 pt-8 pb-0 sm:pt-8 sm:pb-0 text-center">
@@ -72,7 +72,7 @@ export default function AnimatedBanner({
             <div className="flip-card-inner">
               {/* Front - Normal Image */}
               <div className="flip-card-front overflow-hidden rounded-full border-8 border-white shadow-[8px_8px_0px_0px_rgba(255,255,255,0.3)]">
-                <div className="relative h-32 w-32 sm:h-40 sm:w-40">
+                <div className="relative h-32 w-32 sm:h-36 sm:w-36">
                   <Image
                     src={profileImage}
                     alt={heroTitle}
@@ -85,7 +85,7 @@ export default function AnimatedBanner({
               </div>
               {/* Back - Filtered Image */}
               <div className="flip-card-back overflow-hidden rounded-full border-8 border-primary-500 shadow-[8px_8px_0px_0px_rgba(220,38,38,0.5)]">
-                <div className="relative h-32 w-32 sm:h-40 sm:w-40">
+                <div className="relative h-32 w-32 sm:h-36 sm:w-36">
                   <Image
                     src={profileImage}
                     alt={`${heroTitle} - Bruised`}
