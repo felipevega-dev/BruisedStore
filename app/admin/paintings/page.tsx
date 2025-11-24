@@ -19,7 +19,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Painting, Orientation, PAINTING_CATEGORIES, PaintingCategory } from "@/types";
 import imageCompression from "browser-image-compression";
 import Image from "next/image";
-import { Trash2, Plus, Loader2, Edit, X, ArrowLeft } from "lucide-react";
+import { Trash2, Plus, Loader2, Edit, X, ArrowLeft, Palette } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
 import { AdminLogHelpers } from "@/lib/adminLogs";
@@ -392,8 +392,8 @@ export default function AdminPaintingsPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
-        <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-8 backdrop-blur-sm">
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-100 via-gray-50 to-slate-50">
+        <div className="rounded-2xl border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
           <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
         </div>
       </div>
@@ -403,24 +403,31 @@ export default function AdminPaintingsPage() {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-4">
+          {/* Header */}
+          <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-blue-500 to-blue-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div className="flex items-center gap-3">
               <Link
                 href="/admin"
-                className="text-gray-300 transition-colors hover:text-terra-400"
+                className="text-white transition-colors hover:text-blue-100"
               >
                 <ArrowLeft className="h-6 w-6" />
-            </Link>
-            <h1 className="text-3xl font-bold text-terra-100 sm:text-4xl">Gestionar Pinturas</h1>
+              </Link>
+              <div className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-white">
+                <Palette className="h-8 w-8 text-blue-600" />
+              </div>
+              <h1 className="text-3xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] sm:text-4xl">Gestionar Pinturas</h1>
+            </div>
           </div>
+
+          <div className="mb-6 flex justify-end">
           <button
             onClick={() => {
               resetForm();
               setShowModal(true);
             }}
-            className="flex items-center justify-center gap-2 rounded-lg border-2 border-terra-900 bg-linear-to-r from-terra-900 to-terra-800 px-4 py-2 font-bold text-terra-100 transition-all hover:from-terra-800 hover:to-moss-600 hover:shadow-lg hover:shadow-terra-900/50"
+            className="flex items-center justify-center gap-2 rounded-xl border-4 border-black bg-blue-500 px-6 py-3 font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <Plus className="h-5 w-5" />
             Nueva Pintura
@@ -429,8 +436,8 @@ export default function AdminPaintingsPage() {
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {paintings.map((painting) => (
-            <div key={painting.id} className="rounded-lg border-2 border-terra-900/30 bg-black/60 p-4 shadow-xl shadow-terra-900/20 backdrop-blur-sm transition-all hover:border-moss-600 hover:shadow-2xl hover:shadow-terra-900/40">
-              <div className="relative mb-3 aspect-[3/4] overflow-hidden rounded-md border border-terra-900/30">
+            <div key={painting.id} className="group rounded-xl border-4 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+              <div className="relative mb-3 aspect-3/4 overflow-hidden rounded-lg border-4 border-black">
                 <Image
                   src={painting.imageUrl}
                   alt={painting.title}
@@ -439,24 +446,24 @@ export default function AdminPaintingsPage() {
                   sizes="300px"
                 />
               </div>
-              <h3 className="mb-1 font-bold text-terra-100">{painting.title}</h3>
-              <p className="mb-2 text-sm text-gray-400">
+              <h3 className="mb-1 font-black text-gray-900">{painting.title}</h3>
+              <p className="mb-2 text-sm font-semibold text-gray-600">
                 {painting.dimensions.width} x {painting.dimensions.height} cm
               </p>
-              <p className="mb-3 font-bold text-terra-500">
+              <p className="mb-3 text-lg font-black text-blue-600">
                 {formatPrice(painting.price)}
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEdit(painting)}
-                  className="flex flex-1 items-center justify-center gap-1 rounded-lg border-2 border-terra-900 bg-terra-900/20 px-3 py-2 text-sm font-semibold text-terra-100 transition-all hover:bg-terra-900/40"
+                  className="flex flex-1 items-center justify-center gap-1 rounded-lg border-4 border-black bg-yellow-400 px-3 py-2 text-sm font-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 >
                   <Edit className="h-4 w-4" />
                   Editar
                 </button>
                 <button
                   onClick={() => handleDelete(painting)}
-                  className="flex items-center justify-center rounded-lg border-2 border-terra-900 bg-moss-900/30 px-3 py-2 text-terra-400 transition-all hover:bg-terra-900/40"
+                  className="flex items-center justify-center rounded-lg border-4 border-black bg-red-400 px-3 py-2 text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -466,8 +473,9 @@ export default function AdminPaintingsPage() {
         </div>
 
         {paintings.length === 0 && (
-          <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-12 text-center backdrop-blur-sm shadow-2xl shadow-terra-900/30">
-            <p className="text-xl font-semibold text-terra-100">
+          <div className="rounded-2xl border-4 border-black bg-white p-12 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <Palette className="mx-auto mb-4 h-16 w-16 text-gray-400" />
+            <p className="text-xl font-black text-gray-900">
               No hay pinturas. Crea una nueva para comenzar.
             </p>
           </div>

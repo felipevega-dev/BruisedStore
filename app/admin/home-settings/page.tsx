@@ -243,8 +243,10 @@ export default function HomeSettingsPage() {
 
   if (loading || authLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
-        <Loader2 className="h-12 w-12 animate-spin text-moss-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-100 via-gray-50 to-slate-50">
+        <div className="rounded-2xl border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
+        </div>
       </div>
     );
   }

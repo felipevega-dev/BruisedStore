@@ -206,29 +206,37 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-primary-50 via-white to-surface-100 py-8 sm:py-12">
+    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8 sm:py-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-semibold text-surface-900 sm:text-5xl">
-            Panel de Administración
-          </h1>
-          <p className="mt-2 text-surface-600">Bienvenido, {user?.email}</p>
+        {/* Header with better contrast */}
+        <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-primary-500 to-primary-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex items-center gap-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white bg-white">
+              <Shield className="h-8 w-8 text-primary-600" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-black text-white drop-shadow-[2px_2px_0px_rgba(0,0,0,0.3)] sm:text-4xl">
+                Panel de Administración
+              </h1>
+              <p className="mt-1 font-semibold text-primary-100">Bienvenido, {user?.email}</p>
+            </div>
+          </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           <Link
             href="/admin/paintings"
-            className="group rounded-2xl border border-primary-200 bg-white/95 p-6 shadow-lg shadow-primary-900/10 backdrop-blur transition hover:border-primary-300 hover:shadow-xl"
+            className="group rounded-xl border-4 border-black bg-blue-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-primary-200 bg-primary-50 p-4 transition group-hover:border-primary-300 group-hover:bg-white">
-                <Palette className="h-8 w-8 text-primary-500" />
+              <div className="rounded-full border-4 border-blue-500 bg-blue-100 p-4 transition group-hover:scale-105">
+                <Palette className="h-8 w-8 text-blue-700" />
               </div>
               <div>
-                <h2 className="mb-2 text-xl font-semibold text-surface-900">
+                <h2 className="mb-2 text-xl font-black text-black">
                   Gestionar Pinturas
                 </h2>
-                <p className="text-surface-600">
+                <p className="font-semibold text-gray-800">
                   Agregar, editar o eliminar obras de la galería
                 </p>
               </div>
@@ -237,35 +245,35 @@ export default function AdminPage() {
 
           <Link
             href="/admin/orders-store"
-            className={`group relative rounded-2xl border p-6 shadow-lg backdrop-blur transition ${ordersCount > 0
-                ? "border-orange-300 bg-orange-50/80 shadow-orange-900/10 hover:border-orange-400 hover:shadow-orange-900/20 animate-pulse"
-                : "border-primary-200 bg-white/95 shadow-primary-900/10 hover:border-primary-300 hover:shadow-xl"
+            className={`group relative rounded-xl border-4 border-black p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] ${ordersCount > 0
+                ? "bg-orange-100 animate-pulse"
+                : "bg-green-50"
               }`}
           >
             {ordersCount > 0 && (
-              <div className="absolute -right-2 -top-2 z-10">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-orange-300 bg-orange-400 text-sm font-semibold text-orange-900 shadow">
+              <div className="absolute -right-3 -top-3 z-10">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-black bg-orange-400 text-base font-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   {ordersCount}
                 </span>
               </div>
             )}
             <div className="flex items-center gap-4">
-              <div className={`rounded-xl border p-4 transition ${ordersCount > 0
-                  ? "border-orange-300 bg-orange-100/60 group-hover:border-orange-400 group-hover:bg-orange-50"
-                  : "border-primary-200 bg-primary-50 group-hover:border-primary-300 group-hover:bg-white"
+              <div className={`rounded-full border-4 p-4 transition group-hover:scale-105 ${ordersCount > 0
+                  ? "border-orange-500 bg-orange-200"
+                  : "border-green-500 bg-green-100"
                 }`}>
-                <Package className={`h-8 w-8 ${ordersCount > 0 ? "text-orange-500" : "text-primary-500"}`} />
+                <Package className={`h-8 w-8 ${ordersCount > 0 ? "text-orange-700" : "text-green-700"}`} />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h2 className={`mb-2 text-xl font-semibold ${ordersCount > 0 ? "text-orange-800" : "text-surface-900"}`}>
+                  <h2 className="mb-2 text-xl font-black text-black">
                     Órdenes de Compra
                   </h2>
                   {ordersCount > 0 && (
-                    <Bell className="h-5 w-5 text-orange-500 animate-bounce" />
+                    <Bell className="h-5 w-5 text-orange-600 animate-bounce" />
                   )}
                 </div>
-                <p className={ordersCount > 0 ? "text-orange-700" : "text-surface-600"}>
+                <p className={`font-semibold ${ordersCount > 0 ? "text-orange-800" : "text-gray-800"}`}>
                   Ver y gestionar pedidos de pinturas
                 </p>
               </div>
@@ -274,35 +282,35 @@ export default function AdminPage() {
 
           <Link
             href="/admin/orders"
-            className={`group relative rounded-2xl border p-6 shadow-lg backdrop-blur transition ${customOrdersCount > 0
-                ? "border-orange-300 bg-orange-50/80 shadow-orange-900/10 hover:border-orange-400 hover:shadow-orange-900/20 animate-pulse"
-                : "border-primary-200 bg-white/95 shadow-primary-900/10 hover:border-primary-300 hover:shadow-xl"
+            className={`group relative rounded-xl border-4 border-black p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] ${customOrdersCount > 0
+                ? "bg-orange-100 animate-pulse"
+                : "bg-purple-50"
               }`}
           >
             {customOrdersCount > 0 && (
-              <div className="absolute -right-2 -top-2 z-10">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-orange-300 bg-orange-400 text-sm font-semibold text-orange-900 shadow">
+              <div className="absolute -right-3 -top-3 z-10">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-black bg-orange-400 text-base font-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   {customOrdersCount}
                 </span>
               </div>
             )}
             <div className="flex items-center gap-4">
-              <div className={`rounded-xl border p-4 transition ${customOrdersCount > 0
-                  ? "border-orange-300 bg-orange-100/60 group-hover:border-orange-400 group-hover:bg-orange-50"
-                  : "border-primary-200 bg-primary-50 group-hover:border-primary-300 group-hover:bg-white"
+              <div className={`rounded-full border-4 p-4 transition group-hover:scale-105 ${customOrdersCount > 0
+                  ? "border-orange-500 bg-orange-200"
+                  : "border-purple-500 bg-purple-100"
                 }`}>
-                <Palette className={`h-8 w-8 ${customOrdersCount > 0 ? "text-orange-500" : "text-primary-500"}`} />
+                <Palette className={`h-8 w-8 ${customOrdersCount > 0 ? "text-orange-700" : "text-purple-700"}`} />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h2 className={`mb-2 text-xl font-semibold ${customOrdersCount > 0 ? "text-orange-800" : "text-surface-900"}`}>
+                  <h2 className="mb-2 text-xl font-black text-black">
                     Pedidos Personalizados
                   </h2>
                   {customOrdersCount > 0 && (
-                    <Bell className="h-5 w-5 text-orange-500 animate-bounce" />
+                    <Bell className="h-5 w-5 text-orange-600 animate-bounce" />
                   )}
                 </div>
-                <p className={customOrdersCount > 0 ? "text-orange-700" : "text-surface-600"}>
+                <p className={`font-semibold ${customOrdersCount > 0 ? "text-orange-800" : "text-gray-800"}`}>
                   Ver y gestionar pedidos de obras a pedido
                 </p>
               </div>
@@ -311,35 +319,35 @@ export default function AdminPage() {
 
           <Link
             href="/admin/reviews"
-            className={`group relative rounded-2xl border p-6 shadow-lg backdrop-blur transition ${reviewsCount > 0
-                ? "border-orange-300 bg-orange-50/80 shadow-orange-900/10 hover:border-orange-400 hover:shadow-orange-900/20 animate-pulse"
-                : "border-primary-200 bg-white/95 shadow-primary-900/10 hover:border-primary-300 hover:shadow-xl"
+            className={`group relative rounded-xl border-4 border-black p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] ${reviewsCount > 0
+                ? "bg-orange-100 animate-pulse"
+                : "bg-yellow-50"
               }`}
           >
             {reviewsCount > 0 && (
-              <div className="absolute -right-2 -top-2 z-10">
-                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-orange-300 bg-orange-400 text-sm font-semibold text-orange-900 shadow">
+              <div className="absolute -right-3 -top-3 z-10">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full border-4 border-black bg-orange-400 text-base font-black text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                   {reviewsCount}
                 </span>
               </div>
             )}
             <div className="flex items-center gap-4">
-              <div className={`rounded-xl border p-4 transition ${reviewsCount > 0
-                  ? "border-orange-300 bg-orange-100/60 group-hover:border-orange-400 group-hover:bg-orange-50"
-                  : "border-primary-200 bg-primary-50 group-hover:border-primary-300 group-hover:bg-white"
+              <div className={`rounded-full border-4 p-4 transition group-hover:scale-105 ${reviewsCount > 0
+                  ? "border-orange-500 bg-orange-200"
+                  : "border-yellow-500 bg-yellow-100"
                 }`}>
-                <MessageCircle className={`h-8 w-8 ${reviewsCount > 0 ? "text-orange-500" : "text-primary-500"}`} />
+                <MessageCircle className={`h-8 w-8 ${reviewsCount > 0 ? "text-orange-700" : "text-yellow-700"}`} />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <h2 className={`mb-2 text-xl font-semibold ${reviewsCount > 0 ? "text-orange-800" : "text-surface-900"}`}>
+                  <h2 className="mb-2 text-xl font-black text-black">
                     Moderación de Reseñas
                   </h2>
                   {reviewsCount > 0 && (
-                    <Bell className="h-5 w-5 text-orange-500 animate-bounce" />
+                    <Bell className="h-5 w-5 text-orange-600 animate-bounce" />
                   )}
                 </div>
-                <p className={reviewsCount > 0 ? "text-orange-700" : "text-surface-600"}>
+                <p className={`font-semibold ${reviewsCount > 0 ? "text-orange-800" : "text-gray-800"}`}>
                   Aprobar, rechazar y gestionar comentarios
                 </p>
               </div>
@@ -348,17 +356,17 @@ export default function AdminPage() {
 
           <Link
             href="/admin/blog"
-            className="group rounded-2xl border border-primary-200 bg-white/95 p-6 shadow-lg shadow-primary-900/10 backdrop-blur transition hover:border-primary-300 hover:shadow-xl"
+            className="group rounded-xl border-4 border-black bg-pink-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-primary-200 bg-primary-50 p-4 transition group-hover:border-primary-300 group-hover:bg-white">
-                <BookOpen className="h-8 w-8 text-primary-500" />
+              <div className="rounded-full border-4 border-pink-500 bg-pink-100 p-4 transition group-hover:scale-105">
+                <BookOpen className="h-8 w-8 text-pink-700" />
               </div>
               <div>
-                <h2 className="mb-2 text-xl font-semibold text-surface-900">
+                <h2 className="mb-2 text-xl font-black text-black">
                   Administrar Blog
                 </h2>
-                <p className="text-surface-600">
+                <p className="font-semibold text-gray-800">
                   Crear, editar y publicar posts del blog
                 </p>
               </div>
@@ -367,17 +375,17 @@ export default function AdminPage() {
 
           <Link
             href="/admin/home-settings"
-            className="group rounded-2xl border border-primary-200 bg-white/95 p-6 shadow-lg shadow-primary-900/10 backdrop-blur transition hover:border-primary-300 hover:shadow-xl"
+            className="group rounded-xl border-4 border-black bg-moss-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-primary-200 bg-primary-50 p-4 transition group-hover:border-primary-300 group-hover:bg-white">
-                <Home className="h-8 w-8 text-primary-500" />
+              <div className="rounded-full border-4 border-moss-500 bg-moss-100 p-4 transition group-hover:scale-105">
+                <Home className="h-8 w-8 text-moss-700" />
               </div>
               <div>
-                <h2 className="mb-2 text-xl font-semibold text-surface-900">
+                <h2 className="mb-2 text-xl font-black text-black">
                   Configuración del Home
                 </h2>
-                <p className="text-surface-600">
+                <p className="font-semibold text-gray-800">
                   Personalizar banner, contenido y videos
                 </p>
               </div>
@@ -386,17 +394,17 @@ export default function AdminPage() {
 
           <Link
             href="/admin/general-settings"
-            className="group rounded-2xl border border-primary-200 bg-white/95 p-6 shadow-lg shadow-primary-900/10 backdrop-blur transition hover:border-primary-300 hover:shadow-xl"
+            className="group rounded-xl border-4 border-black bg-cyan-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-primary-200 bg-primary-50 p-4 transition group-hover:border-primary-300 group-hover:bg-white">
-                <Settings className="h-8 w-8 text-primary-500" />
+              <div className="rounded-full border-4 border-cyan-500 bg-cyan-100 p-4 transition group-hover:scale-105">
+                <Settings className="h-8 w-8 text-cyan-700" />
               </div>
               <div>
-                <h2 className="mb-2 text-xl font-semibold text-surface-900">
+                <h2 className="mb-2 text-xl font-black text-black">
                   Configuraciones Generales
                 </h2>
-                <p className="text-surface-600">
+                <p className="font-semibold text-gray-800">
                   Colores, contacto, redes sociales y más
                 </p>
               </div>
@@ -405,17 +413,17 @@ export default function AdminPage() {
 
           <Link
             href="/admin/music"
-            className="group rounded-2xl border border-primary-200 bg-white/95 p-6 shadow-lg shadow-primary-900/10 backdrop-blur transition hover:border-primary-300 hover:shadow-xl"
+            className="group rounded-xl border-4 border-black bg-indigo-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-primary-200 bg-primary-50 p-4 transition group-hover:border-primary-300 group-hover:bg-white">
-                <Music className="h-8 w-8 text-primary-500" />
+              <div className="rounded-full border-4 border-indigo-500 bg-indigo-100 p-4 transition group-hover:scale-105">
+                <Music className="h-8 w-8 text-indigo-700" />
               </div>
               <div>
-                <h2 className="mb-2 text-xl font-semibold text-surface-900">
+                <h2 className="mb-2 text-xl font-black text-black">
                   Música de Fondo
                 </h2>
-                <p className="text-surface-600">
+                <p className="font-semibold text-gray-800">
                   Configurar música ambiente del sitio
                 </p>
               </div>
@@ -424,17 +432,17 @@ export default function AdminPage() {
 
           <Link
             href="/admin/coupons"
-            className="group rounded-2xl border border-primary-200 bg-white/95 p-6 shadow-lg shadow-primary-900/10 backdrop-blur transition hover:border-primary-300 hover:shadow-xl"
+            className="group rounded-xl border-4 border-black bg-amber-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-primary-200 bg-primary-50 p-4 transition group-hover:border-primary-300 group-hover:bg-white">
-                <Tag className="h-8 w-8 text-primary-500" />
+              <div className="rounded-full border-4 border-amber-500 bg-amber-100 p-4 transition group-hover:scale-105">
+                <Tag className="h-8 w-8 text-amber-700" />
               </div>
               <div>
-                <h2 className="mb-2 text-xl font-semibold text-surface-900">
+                <h2 className="mb-2 text-xl font-black text-black">
                   Cupones de Descuento
                 </h2>
-                <p className="text-surface-600">
+                <p className="font-semibold text-gray-800">
                   Crear y gestionar cupones promocionales
                 </p>
               </div>
@@ -443,17 +451,17 @@ export default function AdminPage() {
 
           <Link
             href="/admin/analytics"
-            className="group rounded-2xl border border-primary-200 bg-white/95 p-6 shadow-lg shadow-primary-900/10 backdrop-blur transition hover:border-primary-300 hover:shadow-xl"
+            className="group rounded-xl border-4 border-black bg-emerald-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-primary-200 bg-primary-50 p-4 transition group-hover:border-primary-300 group-hover:bg-white">
-                <BarChart3 className="h-8 w-8 text-primary-500" />
+              <div className="rounded-full border-4 border-emerald-500 bg-emerald-100 p-4 transition group-hover:scale-105">
+                <BarChart3 className="h-8 w-8 text-emerald-700" />
               </div>
               <div>
-                <h2 className="mb-2 text-xl font-semibold text-surface-900">
+                <h2 className="mb-2 text-xl font-black text-black">
                   Dashboard de Analytics
                 </h2>
-                <p className="text-surface-600">
+                <p className="font-semibold text-gray-800">
                   Métricas de ventas y estadísticas
                 </p>
               </div>
@@ -462,17 +470,17 @@ export default function AdminPage() {
 
           <Link
             href="/admin/activity-logs"
-            className="group rounded-2xl border border-secondary-200 bg-white/95 p-6 shadow-lg shadow-secondary-900/10 backdrop-blur transition hover:border-secondary-300 hover:shadow-xl"
+            className="group rounded-xl border-4 border-black bg-slate-100 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
           >
             <div className="flex items-center gap-4">
-              <div className="rounded-xl border border-secondary-200 bg-secondary-50 p-4 transition group-hover:border-secondary-300 group-hover:bg-white">
-                <FileText className="h-8 w-8 text-secondary-500" />
+              <div className="rounded-full border-4 border-slate-500 bg-slate-200 p-4 transition group-hover:scale-105">
+                <FileText className="h-8 w-8 text-slate-700" />
               </div>
               <div>
-                <h2 className="mb-2 text-xl font-semibold text-surface-900">
+                <h2 className="mb-2 text-xl font-black text-black">
                   Registro de Actividad
                 </h2>
-                <p className="text-surface-600">
+                <p className="font-semibold text-gray-800">
                   Historial de acciones de administradores
                 </p>
               </div>
