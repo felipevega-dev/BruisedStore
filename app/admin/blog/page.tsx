@@ -360,34 +360,47 @@ export default function AdminBlogPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-gray-900 via-moss-900 to-black">
-        <div className="rounded-lg border-2 border-terra-900 bg-black/60 p-8 backdrop-blur-sm">
-          <Loader2 className="h-12 w-12 animate-spin text-moss-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-100 via-gray-50 to-slate-50">
+        <div className="rounded-2xl border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-pink-600" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-900 via-moss-900 to-black py-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 py-8">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <BookOpen className="h-8 w-8 text-terra-400" />
-            <h1 className="text-4xl font-black text-terra-100">
-              Administrar Blog
-            </h1>
+        <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-pink-500 to-pink-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/admin"
+                className="rounded-xl border-2 border-white bg-white/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-white/30"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Link>
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-white">
+                <BookOpen className="h-7 w-7 text-pink-600" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-black text-white">
+                  Administrar Blog
+                </h1>
+                <p className="text-sm text-white/90">Crear, editar y publicar posts del blog</p>
+              </div>
+            </div>
+            {!showForm && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="flex items-center gap-2 rounded-xl border-4 border-white bg-white px-6 py-3 font-bold text-pink-600 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.5)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.5)]"
+              >
+                <Plus className="h-5 w-5" />
+                Nuevo Post
+              </button>
+            )}
           </div>
-          {!showForm && (
-            <button
-              onClick={() => setShowForm(true)}
-              className="flex items-center gap-2 rounded-lg border-2 border-terra-900 bg-linear-to-r from-terra-900 to-terra-800 px-6 py-3 font-bold text-terra-100 transition-all hover:from-terra-800 hover:to-moss-600 hover:shadow-lg hover:shadow-terra-900/50"
-            >
-              <Plus className="h-5 w-5" />
-              Nuevo Post
-            </button>
-          )}
         </div>
 
         {/* Form */}

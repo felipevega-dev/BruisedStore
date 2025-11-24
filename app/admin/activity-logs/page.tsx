@@ -145,11 +145,10 @@ export default function ActivityLogsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-surface-50 p-8">
+      <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 p-8">
         <div className="mx-auto max-w-7xl">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 w-64 bg-gray-300 rounded"></div>
-            <div className="h-64 bg-white rounded-lg border-4 border-black"></div>
+          <div className="rounded-2xl border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <Loader2 className="mx-auto h-12 w-12 animate-spin text-slate-600" />
           </div>
         </div>
       </div>
@@ -157,16 +156,23 @@ export default function ActivityLogsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-50 p-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-100 via-gray-50 to-slate-50 p-8">
       <div className="mx-auto max-w-7xl">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="mb-2 text-4xl font-black text-black">
-            📋 Registro de Actividad
-          </h1>
-          <p className="text-gray-600">
-            Historial de acciones realizadas por administradores (últimas 100)
-          </p>
+        <div className="mb-8 rounded-2xl border-4 border-black bg-linear-to-r from-slate-500 to-slate-600 p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+          <div className="flex items-center gap-4">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-white">
+              <FileText className="h-7 w-7 text-slate-600" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-black text-white">
+                Registro de Actividad
+              </h1>
+              <p className="text-sm text-white/90">
+                Historial de acciones realizadas por administradores (últimas 100)
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Filters */}
