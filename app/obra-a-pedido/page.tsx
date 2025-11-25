@@ -510,49 +510,49 @@ export default function CustomOrderPage() {
       )}
 
       {/* Hero Banner with Gradient */}
-      <div className="relative mb-8 overflow-hidden border-b-4 border-black bg-linear-to-br from-moss-500 via-moss-600 to-moss-700 py-16 sm:py-20">
+      <div className="relative mb-8 overflow-hidden border-y-4 border-black bg-linear-to-br from-primary-500 via-primary-600 to-blue-700 py-8 sm:py-12 lg:py-16">
         {/* Decorative background elements */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute -left-20 top-0 h-96 w-96 rounded-full bg-moss-300 blur-3xl"></div>
-          <div className="absolute -right-20 bottom-0 h-96 w-96 rounded-full bg-moss-800 blur-3xl"></div>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute -left-20 top-0 h-96 w-96 rounded-full bg-blue-300 blur-3xl"></div>
+          <div className="absolute -right-20 bottom-0 h-96 w-96 rounded-full bg-primary-800 blur-3xl"></div>
         </div>
 
         <div className="container relative mx-auto px-4 text-center sm:px-6 lg:px-8">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border-4 border-black bg-yellow-400 px-6 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <span className="text-2xl">🎨</span>
-            <span className="text-sm font-black uppercase tracking-wider text-black sm:text-base">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-lg border-4 border-black bg-yellow-400 px-4 py-1.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:mb-4 sm:px-5 sm:py-2">
+            <span className="text-lg sm:text-xl">🎨</span>
+            <span className="text-xs font-black uppercase tracking-wider text-black sm:text-sm">
               Arte Personalizado
             </span>
           </div>
 
-          <h1 className="mb-6 text-5xl font-black text-black sm:text-6xl lg:text-7xl">
+          <h1 className="mb-3 text-3xl font-black text-white sm:mb-4 sm:text-5xl lg:text-6xl">
             Crea Tu Obra Única
           </h1>
 
-          <p className="mx-auto mb-8 max-w-3xl text-xl font-bold text-gray-900 sm:text-2xl">
+          <p className="mx-auto mb-3 max-w-3xl text-base font-bold text-white/90 sm:mb-4 sm:text-lg lg:text-xl">
             Transforma tus recuerdos, ideas y visiones en arte profesional
           </p>
           
-          <p className="mx-auto mb-10 max-w-2xl text-lg font-semibold text-gray-800 sm:text-xl">
+          <p className="mx-auto mb-6 max-w-2xl text-sm font-semibold text-white/80 sm:mb-8 sm:text-base lg:text-lg">
             Cada obra es única, cada trazo cuenta una historia
           </p>
 
-          {/* Price Range Badge */}
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <div className="rounded-2xl border-4 border-black bg-white px-8 py-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <div className="text-xs font-black uppercase tracking-wider text-gray-600">
+          {/* Price Range Badge - Mobile: stacked, Desktop: horizontal */}
+          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+            <div className="w-full max-w-[200px] rounded-lg border-4 border-black bg-white px-5 py-2.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:w-auto sm:max-w-none sm:px-6 sm:py-3 lg:px-8 lg:py-4">
+              <div className="text-xs font-black uppercase tracking-wider text-slate-600">
                 Desde
               </div>
-              <div className="text-3xl font-black text-moss-600">
+              <div className="text-2xl font-black text-primary-600 sm:text-3xl">
                 $20.000
               </div>
             </div>
-            <div className="text-3xl font-black text-black">→</div>
-            <div className="rounded-2xl border-4 border-black bg-white px-8 py-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-              <div className="text-xs font-black uppercase tracking-wider text-gray-600">
+            <div className="hidden text-2xl font-black text-white sm:block sm:text-3xl">→</div>
+            <div className="w-full max-w-[200px] rounded-lg border-4 border-black bg-white px-5 py-2.5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:w-auto sm:max-w-none sm:px-6 sm:py-3 lg:px-8 lg:py-4">
+              <div className="text-xs font-black uppercase tracking-wider text-slate-600">
                 Hasta
               </div>
-              <div className="text-3xl font-black text-moss-600">
+              <div className="text-2xl font-black text-primary-600 sm:text-3xl">
                 $432.000
               </div>
             </div>
@@ -569,17 +569,17 @@ export default function CustomOrderPage() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-            {/* Preview Section */}
-            <div className="order-2 lg:order-1">
-              <div className="lg:sticky lg:top-24 border-4 border-black bg-white p-4 sm:p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <h2 className="mb-4 text-xl font-black text-black border-b-4 border-black pb-2 sm:mb-6 sm:text-2xl sm:pb-3">
+            {/* Preview Section - Hidden on mobile, shown on desktop */}
+            <div className="order-2 lg:order-1 hidden lg:block">
+              <div className="lg:sticky lg:top-24 rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-4 sm:p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                <h2 className="mb-4 text-xl font-black text-slate-900 border-b-4 border-black pb-2 sm:mb-5 sm:text-2xl sm:pb-3">
                   Vista Previa del Lienzo
                 </h2>
 
                 {/* Canvas Preview - Proporciones realistas del tamaño seleccionado */}
-                <div className="mb-4 flex items-center justify-center bg-gray-50 p-3 border-4 border-black sm:mb-6 sm:p-6">
+                <div className="mb-4 flex items-center justify-center bg-slate-100 p-3 rounded-lg border-4 border-black sm:mb-5 sm:p-6">
                   <div
-                    className="relative overflow-hidden border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+                    className="relative overflow-hidden rounded-lg border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
                     style={{
                       width: `${canvasWidth * 6}px`,
                       height: `${canvasHeight * 6}px`,
@@ -598,13 +598,13 @@ export default function CustomOrderPage() {
                         priority
                       />
                     ) : (
-                      <div className="flex h-full items-center justify-center bg-gray-100">
+                      <div className="flex h-full items-center justify-center bg-slate-50">
                         <div className="text-center px-4">
-                          <Upload className="mx-auto mb-2 h-12 w-12 text-gray-400 sm:mb-3 sm:h-16 sm:w-16" />
-                          <p className="text-sm font-bold text-gray-600 sm:text-lg">
+                          <Upload className="mx-auto mb-2 h-12 w-12 text-slate-400 sm:mb-3 sm:h-16 sm:w-16" />
+                          <p className="text-sm font-bold text-slate-700 sm:text-lg">
                             Tu imagen aparecerá aquí
                           </p>
-                          <p className="text-xs text-gray-500 mt-1 sm:text-sm">
+                          <p className="text-xs text-slate-500 mt-1 sm:text-sm">
                             Sube una imagen de referencia
                           </p>
                         </div>
@@ -614,32 +614,32 @@ export default function CustomOrderPage() {
                 </div>
 
                 {/* Info */}
-                <div className="space-y-0 border-4 border-black bg-terra-100">
+                <div className="space-y-0 rounded-lg border-4 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                   <div className="flex items-center justify-between border-b-4 border-black p-3 bg-white sm:p-4">
-                    <span className="text-sm font-bold text-black sm:text-base">
+                    <span className="text-sm font-bold text-slate-700 sm:text-base">
                       Tamaño:
                     </span>
-                    <span className="text-base font-black text-moss-600 sm:text-lg">
+                    <span className="text-base font-black text-primary-600 sm:text-lg">
                       {selectedSize.name}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between border-b-4 border-black p-3 sm:p-4">
-                    <span className="text-sm font-bold text-black sm:text-base">
+                  <div className="flex items-center justify-between border-b-4 border-black p-3 bg-blue-50 sm:p-4">
+                    <span className="text-sm font-bold text-slate-700 sm:text-base">
                       Dimensiones:
                     </span>
-                    <span className="text-sm font-black text-black sm:text-base">
-                      {canvasHeight} x {canvasWidth} cm
+                    <span className="text-sm font-black text-slate-900 sm:text-base">
+                      {canvasHeight} × {canvasWidth} cm
                     </span>
                   </div>
                   <div className="flex items-center justify-between border-b-4 border-black p-3 bg-white sm:p-4">
-                    <span className="text-sm font-bold text-black sm:text-base">
+                    <span className="text-sm font-bold text-slate-700 sm:text-base">
                       Orientación:
                     </span>
-                    <span className="text-sm font-black capitalize text-black sm:text-base">
+                    <span className="text-sm font-black capitalize text-slate-900 sm:text-base">
                       {orientation === "horizontal" ? "Horizontal" : orientation === "cuadrado" ? "Cuadrado" : "Vertical"}
                     </span>
                   </div>
-                  <div className="flex flex-col items-center justify-between gap-2 p-4 bg-moss-500 sm:flex-row sm:gap-0 sm:p-5">
+                  <div className="flex flex-col items-center justify-between gap-2 p-4 bg-primary-500 sm:flex-row sm:gap-0 sm:p-5">
                     <span className="text-lg font-black text-white sm:text-xl">
                       Precio Total:
                     </span>
@@ -663,75 +663,64 @@ export default function CustomOrderPage() {
                     Imagen de Referencia *
                   </label>
 
-                  {/* Mobile Preview (only shows when image is uploaded) */}
+                  {/* Mobile Canvas Preview - Full info card (only shows when image is uploaded) */}
                   {imagePreview && (
                     <div className="mb-4 lg:hidden">
-                      <div className="relative border-4 border-black bg-white p-3">
-                        <div className="relative aspect-square w-full overflow-hidden border-2 border-black">
-                          <Image
-                            src={imagePreview}
-                            alt="Preview"
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 1024px) 90vw, 500px"
-                            priority
-                          />
-                        </div>
-                        <div className="mt-3 flex gap-2">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setShowCropper(true);
+                      {/* Canvas Preview */}
+                      <div className="mb-3 rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                        <p className="mb-2 text-center text-xs font-black uppercase text-slate-700">
+                          Vista Previa del Lienzo
+                        </p>
+                        <div className="flex items-center justify-center bg-slate-100 p-3 rounded-lg">
+                          <div
+                            className="relative overflow-hidden rounded-lg border-4 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                            style={{
+                              width: `${canvasWidth * 4}px`,
+                              height: `${canvasHeight * 4}px`,
+                              maxWidth: "calc(100vw - 120px)",
+                              maxHeight: "300px",
+                              aspectRatio: `${canvasWidth} / ${canvasHeight}`,
                             }}
-                            className="flex flex-1 items-center justify-center gap-2 rounded border-2 border-black bg-white px-4 py-2 text-sm font-bold text-black transition-all hover:bg-gray-50"
                           >
-                            <Crop className="h-4 w-4" />
-                            Ajustar Imagen
-                          </button>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              fileInputRef.current?.click();
-                            }}
-                            className="flex flex-1 items-center justify-center gap-2 rounded border-2 border-moss-500 bg-white px-4 py-2 text-sm font-bold text-moss-600 transition-all hover:bg-moss-50"
-                          >
-                            <Upload className="h-4 w-4" />
-                            Cambiar
-                          </button>
+                            <Image
+                              src={imagePreview}
+                              alt="Preview"
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 1024px) 90vw, 500px"
+                              priority
+                            />
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  )}
+                        
+                        {/* Info compact */}
+                        <div className="mt-3 space-y-2 text-xs">
+                          <div className="flex justify-between rounded border-2 border-black bg-white px-2 py-1.5">
+                            <span className="font-bold text-slate-700">Tamaño:</span>
+                            <span className="font-black text-primary-600">{selectedSize.name}</span>
+                          </div>
+                          <div className="flex justify-between rounded border-2 border-black bg-blue-50 px-2 py-1.5">
+                            <span className="font-bold text-slate-700">Dimensiones:</span>
+                            <span className="font-black text-slate-900">{canvasHeight} × {canvasWidth} cm</span>
+                          </div>
+                          <div className="flex justify-between rounded border-2 border-black bg-primary-500 px-2 py-2">
+                            <span className="font-black text-white">Precio:</span>
+                            <span className="font-black text-white">{formatPrice(totalPrice)}</span>
+                          </div>
+                        </div>
 
-                  {/* Desktop Preview (when image is uploaded) */}
-                  {imagePreview && (
-                    <div className="hidden lg:block">
-                      <div className="border-4 border-black bg-white p-4">
-                        <div className="relative h-48 w-full overflow-hidden border-2 border-black bg-gray-100">
-                          <Image
-                            src={imagePreview}
-                            alt="Imagen de referencia"
-                            fill
-                            className="object-cover object-top"
-                            sizes="500px"
-                            priority
-                          />
-                          {/* Gradient overlay at bottom */}
-                          <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-black/60 to-transparent"></div>
-                        </div>
-                        <div className="mt-4 grid grid-cols-2 gap-3">
+                        {/* Action buttons */}
+                        <div className="mt-3 grid grid-cols-2 gap-2">
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               setShowCropper(true);
                             }}
-                            className="flex items-center justify-center gap-2 border-4 border-black bg-white px-4 py-3 font-bold text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+                            className="flex items-center justify-center gap-1.5 rounded-lg border-2 border-black bg-white px-3 py-2 text-xs font-bold text-black transition-all hover:bg-slate-50"
                           >
-                            <Crop className="h-5 w-5" />
-                            Editar Recorte
+                            <Crop className="h-3.5 w-3.5" />
+                            Ajustar
                           </button>
                           <button
                             type="button"
@@ -739,10 +728,10 @@ export default function CustomOrderPage() {
                               e.stopPropagation();
                               fileInputRef.current?.click();
                             }}
-                            className="flex items-center justify-center gap-2 border-4 border-moss-500 bg-white px-4 py-3 font-bold text-moss-600 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)] transition-all hover:translate-x-1 hover:translate-y-1 hover:shadow-none"
+                            className="flex items-center justify-center gap-1.5 rounded-lg border-2 border-primary-500 bg-white px-3 py-2 text-xs font-bold text-primary-600 transition-all hover:bg-primary-50"
                           >
-                            <Upload className="h-5 w-5" />
-                            Cambiar Imagen
+                            <Upload className="h-3.5 w-3.5" />
+                            Cambiar
                           </button>
                         </div>
                       </div>
@@ -790,31 +779,31 @@ export default function CustomOrderPage() {
 
                 {/* Orientation Selection */}
                 <div>
-                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-slate-900 sm:text-sm">
                     Orientación del Lienzo *
                   </label>
                   <div className="grid grid-cols-3 gap-2 sm:gap-3">
                     <button
                       type="button"
                       onClick={() => handleOrientationChange("vertical")}
-                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 ${
+                      className={`flex flex-col items-center gap-2 rounded-lg border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
                         orientation === "vertical"
-                          ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
-                          : "border-black bg-white hover:bg-gray-50"
+                          ? "border-primary-500 bg-primary-50 shadow-[4px_4px_0px_0px_rgba(59,130,246,1)]"
+                          : "border-black bg-white hover:bg-slate-50"
                       }`}
                     >
                       <div
-                        className={`h-14 w-10 border-4 sm:h-16 sm:w-12 ${
+                        className={`h-14 w-10 border-4 rounded sm:h-16 sm:w-12 ${
                           orientation === "vertical"
-                            ? "border-moss-500 bg-moss-100"
-                            : "border-black bg-gray-100"
+                            ? "border-primary-500 bg-primary-100"
+                            : "border-black bg-slate-100"
                         }`}
                       ></div>
                       <span
                         className={`text-xs font-black sm:text-sm ${
                           orientation === "vertical"
-                            ? "text-moss-600"
-                            : "text-black"
+                            ? "text-primary-600"
+                            : "text-slate-900"
                         }`}
                       >
                         Vertical
@@ -824,24 +813,24 @@ export default function CustomOrderPage() {
                     <button
                       type="button"
                       onClick={() => handleOrientationChange("cuadrado")}
-                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 ${
+                      className={`flex flex-col items-center gap-2 rounded-lg border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
                         orientation === "cuadrado"
-                          ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
-                          : "border-black bg-white hover:bg-gray-50"
+                          ? "border-primary-500 bg-primary-50 shadow-[4px_4px_0px_0px_rgba(59,130,246,1)]"
+                          : "border-black bg-white hover:bg-slate-50"
                       }`}
                     >
                       <div
-                        className={`h-12 w-12 border-4 sm:h-14 sm:w-14 ${
+                        className={`h-12 w-12 border-4 rounded sm:h-14 sm:w-14 ${
                           orientation === "cuadrado"
-                            ? "border-moss-500 bg-moss-100"
-                            : "border-black bg-gray-100"
+                            ? "border-primary-500 bg-primary-100"
+                            : "border-black bg-slate-100"
                         }`}
                       ></div>
                       <span
                         className={`text-xs font-black sm:text-sm ${
                           orientation === "cuadrado"
-                            ? "text-moss-600"
-                            : "text-black"
+                            ? "text-primary-600"
+                            : "text-slate-900"
                         }`}
                       >
                         Cuadrado
@@ -851,24 +840,24 @@ export default function CustomOrderPage() {
                     <button
                       type="button"
                       onClick={() => handleOrientationChange("horizontal")}
-                      className={`flex flex-col items-center gap-2 border-4 p-4 transition-all sm:gap-3 ${
+                      className={`flex flex-col items-center gap-2 rounded-lg border-4 p-3 transition-all sm:gap-3 sm:p-4 ${
                         orientation === "horizontal"
-                          ? "border-moss-500 bg-moss-50 shadow-[4px_4px_0px_0px_rgba(14,165,233,1)]"
-                          : "border-black bg-white hover:bg-gray-50"
+                          ? "border-primary-500 bg-primary-50 shadow-[4px_4px_0px_0px_rgba(59,130,246,1)]"
+                          : "border-black bg-white hover:bg-slate-50"
                       }`}
                     >
                       <div
-                        className={`h-10 w-14 border-4 sm:h-12 sm:w-16 ${
+                        className={`h-10 w-14 border-4 rounded sm:h-12 sm:w-16 ${
                           orientation === "horizontal"
-                            ? "border-moss-500 bg-moss-100"
-                            : "border-black bg-gray-100"
+                            ? "border-primary-500 bg-primary-100"
+                            : "border-black bg-slate-100"
                         }`}
                       ></div>
                       <span
                         className={`text-xs font-black sm:text-sm ${
                           orientation === "horizontal"
-                            ? "text-moss-600"
-                            : "text-black"
+                            ? "text-primary-600"
+                            : "text-slate-900"
                         }`}
                       >
                         Horizontal
@@ -879,7 +868,7 @@ export default function CustomOrderPage() {
 
                 {/* Size Selection */}
                 <div>
-                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-slate-900 sm:text-sm">
                     Tamaño del Lienzo *
                   </label>
                   <select
@@ -890,7 +879,7 @@ export default function CustomOrderPage() {
                         selectedSizeIndex: parseInt(e.target.value),
                       })
                     }
-                    className="w-full border-4 border-black bg-white px-4 py-3 font-bold text-black transition-all focus:border-moss-500 focus:outline-none focus:ring-4 focus:ring-moss-500/20"
+                    className="w-full rounded-lg border-4 border-black bg-white px-4 py-3 font-bold text-slate-900 transition-all focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20"
                     required
                   >
                     {filteredSizes.map((item) => (
@@ -903,7 +892,7 @@ export default function CustomOrderPage() {
 
                 {/* Name */}
                 <div>
-                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-slate-900 sm:text-sm">
                     Nombre Completo *
                   </label>
                   <input
@@ -915,16 +904,16 @@ export default function CustomOrderPage() {
                         setErrors({ ...errors, customerName: "" });
                       }
                     }}
-                    className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
+                    className={`w-full rounded-lg border-4 bg-white px-4 py-3 text-slate-900 font-semibold transition-all placeholder:text-slate-400 focus:outline-none focus:ring-4 ${
                       errors.customerName
-                        ? "border-moss-500 focus:border-moss-500 focus:ring-moss-500/20"
-                        : "border-black focus:border-moss-500 focus:ring-moss-500/20"
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                        : "border-black focus:border-primary-500 focus:ring-primary-500/20"
                     }`}
                     placeholder="Tu nombre"
                     required
                   />
                   {errors.customerName && (
-                    <p className="mt-2 text-sm font-bold text-moss-600">
+                    <p className="mt-2 text-sm font-bold text-red-600">
                       {errors.customerName}
                     </p>
                   )}
@@ -932,7 +921,7 @@ export default function CustomOrderPage() {
 
                 {/* Email */}
                 <div>
-                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-slate-900 sm:text-sm">
                     Correo Electrónico *
                   </label>
                   <input
@@ -944,16 +933,16 @@ export default function CustomOrderPage() {
                         setErrors({ ...errors, email: "" });
                       }
                     }}
-                    className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
+                    className={`w-full rounded-lg border-4 bg-white px-4 py-3 text-slate-900 font-semibold transition-all placeholder:text-slate-400 focus:outline-none focus:ring-4 ${
                       errors.email
-                        ? "border-moss-500 focus:border-moss-500 focus:ring-moss-500/20"
-                        : "border-black focus:border-moss-500 focus:ring-moss-500/20"
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                        : "border-black focus:border-primary-500 focus:ring-primary-500/20"
                     }`}
                     placeholder="tu@email.com"
                     required
                   />
                   {errors.email && (
-                    <p className="mt-2 text-sm font-bold text-moss-600">
+                    <p className="mt-2 text-sm font-bold text-red-600">
                       {errors.email}
                     </p>
                   )}
@@ -961,7 +950,7 @@ export default function CustomOrderPage() {
 
                 {/* Phone */}
                 <div>
-                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-slate-900 sm:text-sm">
                     Teléfono *
                   </label>
                   <input
@@ -973,16 +962,16 @@ export default function CustomOrderPage() {
                         setErrors({ ...errors, phone: "" });
                       }
                     }}
-                    className={`w-full border-4 bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:outline-none focus:ring-4 ${
+                    className={`w-full rounded-lg border-4 bg-white px-4 py-3 text-slate-900 font-semibold transition-all placeholder:text-slate-400 focus:outline-none focus:ring-4 ${
                       errors.phone
-                        ? "border-moss-500 focus:border-moss-500 focus:ring-moss-500/20"
-                        : "border-black focus:border-moss-500 focus:ring-moss-500/20"
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                        : "border-black focus:border-primary-500 focus:ring-primary-500/20"
                     }`}
                     placeholder="+56 9 1234 5678"
                     required
                   />
                   {errors.phone && (
-                    <p className="mt-2 text-sm font-bold text-moss-600">
+                    <p className="mt-2 text-sm font-bold text-red-600">
                       {errors.phone}
                     </p>
                   )}
@@ -990,7 +979,7 @@ export default function CustomOrderPage() {
 
                 {/* Notes */}
                 <div>
-                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-slate-900 sm:text-sm">
                     Detalles Adicionales (Opcional)
                   </label>
                   <textarea
@@ -999,7 +988,7 @@ export default function CustomOrderPage() {
                       setFormData({ ...formData, notes: e.target.value })
                     }
                     rows={4}
-                    className="w-full border-4 border-black bg-white px-4 py-3 text-black font-semibold transition-all placeholder:text-gray-400 focus:border-moss-500 focus:outline-none focus:ring-4 focus:ring-moss-500/20"
+                    className="w-full rounded-lg border-4 border-black bg-white px-4 py-3 text-slate-900 font-semibold transition-all placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20"
                     placeholder="Cuéntanos tu visión: colores, estilo, emociones que deseas plasmar..."
                   />
                 </div>
@@ -1008,7 +997,7 @@ export default function CustomOrderPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex w-full items-center justify-center gap-3 border-4 border-black bg-moss-500 px-6 py-4 text-lg font-black text-white transition-all hover:bg-moss-600 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-y-1 disabled:bg-gray-400 disabled:text-gray-700"
+                  className="flex w-full items-center justify-center gap-2.5 rounded-lg border-4 border-black bg-primary-500 px-6 py-4 text-lg font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 active:translate-x-0 active:translate-y-0 disabled:bg-slate-400 disabled:text-slate-700 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>

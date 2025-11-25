@@ -92,34 +92,34 @@ export default function HowItWorksSection() {
         </p>
       </div>
 
-      <div className="relative grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="relative grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:gap-6">
         {steps.map((step, index) => {
           const Icon = step.icon;
           return (
             <div
               key={index}
-              className={`group relative border-4 ${cardColors[index]} p-5 transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5`}
+              className={`group relative rounded-lg border-4 ${cardColors[index]} p-3 transition-all hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 sm:p-4`}
             >
               {/* Step Number Badge */}
-              <div className={`absolute -left-3 -top-3 flex h-10 w-10 items-center justify-center border-4 border-black ${numberBgColors[index]} font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]`}>
+              <div className={`absolute -left-2 -top-2 flex h-8 w-8 items-center justify-center rounded border-4 border-black ${numberBgColors[index]} text-sm font-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] sm:h-10 sm:w-10 sm:text-base`}>
                 {index + 1}
               </div>
 
               {/* Icon */}
-              <div className="mb-4 mt-2 flex items-center justify-between">
-                <div className={`flex h-14 w-14 items-center justify-center rounded-full border-4 ${iconBgColors[index]} transition-transform group-hover:scale-110`}>
-                  <Icon className={`h-7 w-7 ${iconColors[index]}`} />
+              <div className="mb-3 mt-3 flex items-start justify-between sm:mb-4">
+                <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border-4 ${iconBgColors[index]} transition-transform group-hover:scale-110 sm:h-14 sm:w-14`}>
+                  <Icon className={`h-5 w-5 ${iconColors[index]} sm:h-7 sm:w-7`} />
                 </div>
-                <div className={`rounded-full border-2 ${cardColors[index].split(' ')[1]} ${cardColors[index].split(' ')[0].replace('50', '100')} px-3 py-1 text-xs font-bold ${iconColors[index]}`}>
+                <div className={`rounded-full border-2 ${cardColors[index].split(' ')[1]} ${cardColors[index].split(' ')[0].replace('50', '100')} px-2 py-0.5 text-xs font-bold ${iconColors[index]} sm:px-3 sm:py-1`}>
                   {step.time}
                 </div>
               </div>
 
               {/* Content */}
-              <h3 className="mb-2 text-lg font-black text-black">
+              <h3 className="mb-1.5 text-sm font-black text-black sm:mb-2 sm:text-lg">
                 {step.title}
               </h3>
-              <p className="text-sm leading-relaxed text-gray-800">
+              <p className="text-xs leading-relaxed text-gray-800 sm:text-sm">
                 {step.description}
               </p>
             </div>

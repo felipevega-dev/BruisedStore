@@ -27,7 +27,7 @@ export default function RecentPaintingsSection({
           </h2>
         </div>
         
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {paintings.slice(0, maxDisplay).map((painting) => (
             <PaintingCard key={painting.id} painting={painting} />
           ))}

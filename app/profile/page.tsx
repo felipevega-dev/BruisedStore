@@ -120,20 +120,20 @@ export default function ProfilePage() {
 
   const getStatusBadge = (status: string) => {
     const statusConfig: Record<string, { bg: string; text: string; label: string }> = {
-      pending: { bg: "bg-terra-100", text: "text-terra-800", label: "Pendiente" },
-      confirmed: { bg: "bg-blue-100", text: "text-blue-800", label: "Confirmado" },
-      processing: { bg: "bg-purple-100", text: "text-purple-800", label: "Procesando" },
-      shipped: { bg: "bg-indigo-100", text: "text-indigo-800", label: "Enviado" },
-      delivered: { bg: "bg-green-100", text: "text-green-800", label: "Entregado" },
-      cancelled: { bg: "bg-moss-100", text: "text-moss-800", label: "Cancelado" },
-      "in-progress": { bg: "bg-blue-100", text: "text-blue-800", label: "En Progreso" },
-      completed: { bg: "bg-green-100", text: "text-green-800", label: "Completado" },
+      pending: { bg: "bg-yellow-100 border-2 border-yellow-600", text: "text-yellow-800", label: "Pendiente" },
+      confirmed: { bg: "bg-blue-100 border-2 border-blue-600", text: "text-blue-800", label: "Confirmado" },
+      processing: { bg: "bg-primary-100 border-2 border-primary-600", text: "text-primary-800", label: "Procesando" },
+      shipped: { bg: "bg-indigo-100 border-2 border-indigo-600", text: "text-indigo-800", label: "Enviado" },
+      delivered: { bg: "bg-green-100 border-2 border-green-600", text: "text-green-800", label: "Entregado" },
+      cancelled: { bg: "bg-slate-100 border-2 border-slate-600", text: "text-slate-800", label: "Cancelado" },
+      "in-progress": { bg: "bg-blue-100 border-2 border-blue-600", text: "text-blue-800", label: "En Progreso" },
+      completed: { bg: "bg-green-100 border-2 border-green-600", text: "text-green-800", label: "Completado" },
     };
 
     const config = statusConfig[status] || statusConfig.pending;
     return (
       <span
-        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold ${config.bg} ${config.text}`}
+        className={`inline-flex items-center rounded-lg px-2.5 py-1 text-xs font-black uppercase tracking-wide ${config.bg} ${config.text}`}
       >
         {config.label}
       </span>
@@ -158,55 +158,55 @@ export default function ProfilePage() {
   const totalSpent = orders.reduce((sum, order) => sum + order.total, 0);
 
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-slate-50 to-blue-50 py-6 sm:py-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex items-center gap-4">
+        <div className="mb-6 flex items-center gap-3 sm:mb-8">
           <Link
             href="/"
-            className="text-gray-700 transition-colors hover:text-moss-600"
+            className="rounded-lg border-2 border-black bg-white p-2 text-slate-700 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-50 hover:text-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
           >
-            <ArrowLeft className="h-6 w-6" />
+            <ArrowLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+          <h1 className="text-2xl font-black text-slate-900 sm:text-4xl">
             Mi Perfil
           </h1>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
           {/* Información del Usuario */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 space-y-6">
+            <div className="sticky top-24 space-y-4">
               {/* Card de perfil */}
-              <div className="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <div className="mb-6 flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-black bg-moss-500">
-                    <User className="h-8 w-8 text-white" />
+              <div className="rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-6">
+                <div className="mb-4 flex items-center gap-3 sm:mb-5">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-black bg-linear-to-br from-primary-500 to-blue-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:h-16 sm:w-16">
+                    <User className="h-7 w-7 text-white sm:h-8 sm:w-8" />
                   </div>
-                  <div className="flex-1">
-                    <h2 className="text-xl font-bold text-gray-900">
+                  <div className="flex-1 min-w-0">
+                    <h2 className="truncate text-lg font-black text-slate-900 sm:text-xl">
                       {user.displayName || "Usuario"}
                     </h2>
-                    <p className="text-sm text-gray-600">{user.email}</p>
+                    <p className="truncate text-xs text-slate-600 sm:text-sm">{user.email}</p>
                   </div>
                 </div>
 
                 {/* Botón Editar Perfil */}
                 <Link
                   href="/profile/edit"
-                  className="mb-4 flex w-full items-center justify-center gap-2 border-4 border-black bg-white px-4 py-3 font-bold text-black transition-all hover:bg-gray-100 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                  className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg border-4 border-black bg-primary-500 px-4 py-2.5 font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
                 >
                   <Edit className="h-4 w-4" />
                   Editar Perfil
                 </Link>
 
-                <div className="space-y-4 border-t-2 border-gray-200 pt-4">
-                  <div className="flex items-center gap-3 text-gray-700">
-                    <Mail className="h-5 w-5 text-moss-600" />
-                    <span className="text-sm">{user.email}</span>
+                <div className="space-y-3 border-t-4 border-black pt-4">
+                  <div className="flex items-center gap-2 rounded border-2 border-black bg-white p-2">
+                    <Mail className="h-4 w-4 text-primary-600" />
+                    <span className="truncate text-xs font-bold text-slate-700 sm:text-sm">{user.email}</span>
                   </div>
-                  <div className="flex items-center gap-3 text-gray-700">
-                    <Calendar className="h-5 w-5 text-moss-600" />
-                    <span className="text-sm">
+                  <div className="flex items-center gap-2 rounded border-2 border-black bg-blue-50 p-2">
+                    <Calendar className="h-4 w-4 text-primary-600" />
+                    <span className="text-xs font-bold text-slate-700 sm:text-sm">
                       Miembro desde{" "}
                       {user.metadata.creationTime
                         ? formatDate(new Date(user.metadata.creationTime))
@@ -217,30 +217,30 @@ export default function ProfilePage() {
               </div>
 
               {/* Estadísticas */}
-              <div className="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <h3 className="mb-4 text-lg font-bold text-gray-900">
+              <div className="rounded-lg border-4 border-black bg-linear-to-br from-slate-50 to-blue-50 p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-6">
+                <h3 className="mb-3 border-b-4 border-black pb-2 text-base font-black text-slate-900 sm:mb-4 sm:text-lg">
                   Estadísticas
                 </h3>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between rounded-lg border-4 border-black bg-white p-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                     <div className="flex items-center gap-2">
-                      <ShoppingBag className="h-5 w-5 text-moss-600" />
-                      <span className="text-sm font-medium text-gray-700">
+                      <ShoppingBag className="h-5 w-5 text-primary-600" />
+                      <span className="text-xs font-bold text-slate-700 sm:text-sm">
                         Total de pedidos
                       </span>
                     </div>
-                    <span className="text-xl font-bold text-gray-900">
+                    <span className="text-lg font-black text-primary-600 sm:text-xl">
                       {totalOrders}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between rounded-lg border-4 border-black bg-white p-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-5 w-5 text-moss-600" />
-                      <span className="text-sm font-medium text-gray-700">
+                      <DollarSign className="h-5 w-5 text-primary-600" />
+                      <span className="text-xs font-bold text-slate-700 sm:text-sm">
                         Total gastado
                       </span>
                     </div>
-                    <span className="text-xl font-bold text-gray-900">
+                    <span className="text-base font-black text-primary-600 sm:text-lg">
                       {formatPrice(totalSpent)}
                     </span>
                   </div>
@@ -251,33 +251,33 @@ export default function ProfilePage() {
 
           {/* Historial de Pedidos */}
           <div className="lg:col-span-2">
-            <div className="border-4 border-black bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div className="rounded-lg border-4 border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
               {/* Tabs */}
-              <div className="flex border-b-4 border-black">
+              <div className="grid grid-cols-2 border-b-4 border-black">
                 <button
                   onClick={() => setActiveTab("orders")}
-                  className={`flex-1 px-6 py-4 text-center font-bold transition-colors ${
+                  className={`px-3 py-3 text-center font-black transition-all sm:px-6 sm:py-4 ${
                     activeTab === "orders"
-                      ? "bg-moss-500 text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
+                      ? "bg-primary-500 text-white shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]"
+                      : "bg-white text-slate-700 hover:bg-blue-50"
                   }`}
                 >
-                  <div className="flex items-center justify-center gap-2">
-                    <ShoppingBag className="h-5 w-5" />
-                    <span>Compras ({orders.length})</span>
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                    <ShoppingBag className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="text-xs sm:text-base">Compras ({orders.length})</span>
                   </div>
                 </button>
                 <button
                   onClick={() => setActiveTab("custom")}
-                  className={`flex-1 px-6 py-4 text-center font-bold transition-colors ${
+                  className={`px-3 py-3 text-center font-black transition-all sm:px-6 sm:py-4 ${
                     activeTab === "custom"
-                      ? "bg-moss-500 text-white"
-                      : "bg-white text-gray-700 hover:bg-gray-50"
+                      ? "bg-primary-500 text-white shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]"
+                      : "bg-white text-slate-700 hover:bg-blue-50"
                   }`}
                 >
-                  <div className="flex items-center justify-center gap-2">
-                    <Package className="h-5 w-5" />
-                    <span>Obras a Pedido ({customOrders.length})</span>
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                    <Package className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="text-xs sm:text-base">Obras ({customOrders.length})</span>
                   </div>
                 </button>
               </div>
@@ -297,7 +297,7 @@ export default function ProfilePage() {
                         </p>
                         <Link
                           href="/"
-                          className="mt-6 inline-block rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                          className="mt-6 inline-block rounded-lg border-4 border-black bg-primary-500 px-6 py-3 font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
                         >
                           Ver Galería
                         </Link>
@@ -306,7 +306,7 @@ export default function ProfilePage() {
                       orders.map((order) => (
                         <div
                           key={order.id}
-                          className="rounded-lg border-2 border-gray-300 bg-gray-50 p-6 transition-all hover:border-black"
+                          className="rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 sm:p-5"
                         >
                           <div className="mb-4 flex items-start justify-between">
                             <div>
@@ -362,10 +362,10 @@ export default function ProfilePage() {
                             {order.publicAccessToken && (
                               <Link
                                 href={`/order-confirmation/${order.id}?token=${order.publicAccessToken}`}
-                                className="flex items-center justify-center gap-2 rounded-lg border-2 border-moss-500 bg-moss-500 px-4 py-2 text-sm font-bold text-white transition-all hover:bg-moss-600"
+                                className="flex items-center justify-center gap-2 rounded-lg border-4 border-black bg-primary-500 px-4 py-2.5 text-sm font-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
                               >
                                 <ShoppingBag className="h-4 w-4" />
-                                Ver Detalle del Pedido
+                                Ver Detalle
                               </Link>
                             )}
                           </div>
@@ -386,7 +386,7 @@ export default function ProfilePage() {
                         </p>
                         <Link
                           href="/obra-a-pedido"
-                          className="mt-6 inline-block rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                          className="mt-6 inline-block rounded-lg border-4 border-black bg-primary-500 px-6 py-3 font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
                         >
                           Solicitar Obra
                         </Link>
@@ -395,7 +395,7 @@ export default function ProfilePage() {
                       customOrders.map((order) => (
                         <div
                           key={order.id}
-                          className="rounded-lg border-2 border-gray-300 bg-gray-50 p-6 transition-all hover:border-black"
+                          className="rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 sm:p-5"
                         >
                           <div className="mb-4 flex items-start justify-between">
                             <div>
@@ -437,11 +437,11 @@ export default function ProfilePage() {
                           </div>
 
                           {/* Total */}
-                          <div className="mt-4 flex items-center justify-between border-t-2 border-gray-300 pt-4">
-                            <span className="font-bold text-gray-700">
+                          <div className="mt-4 flex items-center justify-between rounded-lg border-4 border-black bg-primary-500 px-4 py-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                            <span className="font-black text-white">
                               Total
                             </span>
-                            <span className="text-xl font-bold text-moss-600">
+                            <span className="text-xl font-black text-white">
                               {formatPrice(order.totalPrice)}
                             </span>
                           </div>

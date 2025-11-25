@@ -76,10 +76,10 @@ export default function PaintingDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
-        <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
-          <p className="mt-4 text-center font-semibold text-gray-900">Cargando obra...</p>
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-50 to-slate-50">
+        <div className="rounded-lg border-4 border-black bg-white p-6 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-8">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary-500" />
+          <p className="mt-4 text-center font-bold text-slate-900">Cargando obra...</p>
         </div>
       </div>
     );
@@ -87,14 +87,14 @@ export default function PaintingDetailPage() {
 
   if (!painting) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4">
-        <div className="border-4 border-black bg-white p-12 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <h1 className="mb-4 text-3xl font-black text-black">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-linear-to-br from-blue-50 to-slate-50 px-4">
+        <div className="rounded-lg border-4 border-black bg-white p-8 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-12">
+          <h1 className="mb-4 text-2xl font-black text-slate-900 sm:text-3xl">
             Obra no encontrada
           </h1>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 font-semibold text-moss-600 transition-colors hover:text-moss-700 hover:underline"
+            className="inline-flex items-center gap-2 font-bold text-primary-600 transition-colors hover:text-primary-700 hover:underline"
           >
             <ArrowLeft className="h-5 w-5" />
             Volver a la galería
@@ -105,7 +105,7 @@ export default function PaintingDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50 py-6 sm:py-10">
       {/* JSON-LD Schema */}
       <script
         type="application/ld+json"
@@ -117,9 +117,9 @@ export default function PaintingDetailPage() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <button
           onClick={() => router.back()}
-          className="group mb-6 flex items-center gap-2 font-semibold text-gray-700 transition-colors hover:text-moss-600"
+          className="group mb-6 flex items-center gap-2 rounded-lg border-2 border-black bg-white px-4 py-2 font-bold text-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-slate-50 hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
         >
-          <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
+          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
           <span>Volver</span>
         </button>
 
@@ -132,32 +132,32 @@ export default function PaintingDetailPage() {
 
           {/* Details */}
           <div className="flex flex-col">
-            <div className="border-4 border-black bg-white p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:p-8">
-              <h1 className="mb-4 text-3xl font-black text-black sm:text-4xl lg:text-5xl">
+            <div className="rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-5 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-7">
+              <h1 className="mb-3 text-2xl font-black text-slate-900 sm:text-3xl lg:text-4xl">
                 {painting.title}
               </h1>
 
               {painting.description && (
-                <p className="mb-6 text-lg text-gray-700 leading-relaxed">
+                <p className="mb-5 text-base leading-relaxed text-slate-700 sm:text-lg">
                   {painting.description}
                 </p>
               )}
 
-              <div className="mb-6 space-y-4 border-t-4 border-black pt-6 sm:pt-4">
-                <div className="flex items-center justify-between border-b-2 border-gray-200 pb-3">
-                  <span className="font-semibold text-gray-600">Dimensiones</span>
-                  <span className="font-bold text-black">
-                    {painting.dimensions.width} x {painting.dimensions.height} cm
+              <div className="mb-5 space-y-3 rounded-lg border-4 border-black bg-white p-4">
+                <div className="flex items-center justify-between border-b-2 border-slate-200 pb-2.5">
+                  <span className="text-sm font-bold text-slate-600 sm:text-base">Dimensiones</span>
+                  <span className="text-sm font-black text-slate-900 sm:text-base">
+                    {painting.dimensions.width} × {painting.dimensions.height} cm
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between border-b-2 border-gray-200 pb-3">
-                  <span className="font-semibold text-gray-600">Estado</span>
+                <div className="flex items-center justify-between border-b-2 border-slate-200 pb-2.5">
+                  <span className="text-sm font-bold text-slate-600 sm:text-base">Estado</span>
                   <span
-                    className={`font-bold ${
+                    className={`text-sm font-black sm:text-base ${
                       painting.available
                         ? "text-green-600"
-                        : "text-moss-600"
+                        : "text-orange-600"
                     }`}
                   >
                     {painting.available ? "Disponible" : "No disponible"}
@@ -165,26 +165,26 @@ export default function PaintingDetailPage() {
                 </div>
 
                 {painting.category && (
-                  <div className="flex items-center justify-between border-b-2 border-gray-200 pb-3">
-                    <span className="font-semibold text-gray-600">Categoría</span>
-                    <span className="font-bold text-black">
+                  <div className="flex items-center justify-between border-b-2 border-slate-200 pb-2.5">
+                    <span className="text-sm font-bold text-slate-600 sm:text-base">Categoría</span>
+                    <span className="text-sm font-black text-slate-900 sm:text-base">
                       {painting.category}
                     </span>
                   </div>
                 )}
 
                 {painting.orientation && (
-                  <div className="flex items-center justify-between border-b-2 border-gray-200 pb-3">
-                    <span className="font-semibold text-gray-600">Orientación</span>
-                    <span className="font-bold capitalize text-black">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-bold text-slate-600 sm:text-base">Orientación</span>
+                    <span className="text-sm font-black capitalize text-slate-900 sm:text-base">
                       {painting.orientation === "horizontal" ? "Horizontal" : "Vertical"}
                     </span>
                   </div>
                 )}
               </div>
 
-              <div className="mb-8 border-t-4 border-black pt-6">
-                <p className="text-5xl font-black text-moss-600">
+              <div className="mb-6 rounded-lg border-4 border-black bg-white p-4 text-center">
+                <p className="text-3xl font-black text-primary-600 sm:text-4xl">
                   {formatPrice(painting.price)}
                 </p>
               </div>
@@ -193,16 +193,16 @@ export default function PaintingDetailPage() {
                 <button
                   onClick={handleAddToCart}
                   disabled={addedToCart}
-                  className="group flex w-full items-center justify-center gap-3 border-4 border-black bg-moss-500 px-6 py-4 text-base sm:text-lg font-black text-white transition-all hover:bg-moss-600 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] disabled:bg-green-600 disabled:text-white"
+                  className="group flex w-full items-center justify-center gap-2.5 rounded-lg border-4 border-black bg-primary-500 px-6 py-3.5 text-base font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 disabled:bg-green-600 sm:text-lg"
                 >
                   {addedToCart ? (
                     <>
-                      <CheckCircle2 className="h-6 w-6" />
+                      <CheckCircle2 className="h-5 w-5 sm:h-6 sm:w-6" />
                       ¡Agregado al carrito!
                     </>
                   ) : (
                     <>
-                      <ShoppingCart className="h-6 w-6 transition-transform group-hover:scale-110" />
+                      <ShoppingCart className="h-5 w-5 transition-transform group-hover:scale-110 sm:h-6 sm:w-6" />
                       Agregar al carrito
                     </>
                   )}
@@ -210,8 +210,8 @@ export default function PaintingDetailPage() {
               )}
 
               {!painting.available && (
-                <div className="border-4 border-gray-400 bg-gray-100 p-6 text-center">
-                  <p className="text-lg font-bold text-gray-700">
+                <div className="rounded-lg border-4 border-black bg-orange-100 p-5 text-center">
+                  <p className="text-base font-black text-orange-700 sm:text-lg">
                     Esta obra ya no está disponible
                   </p>
                 </div>

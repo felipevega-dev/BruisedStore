@@ -11,19 +11,21 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-moss-50 via-white to-slate-50 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-50 via-slate-50 to-blue-50 px-4">
         <div className="text-center">
-          <div className="rounded-2xl border border-moss-200 bg-white/95 p-12 shadow-xl shadow-moss-900/10 backdrop-blur">
-            <ShoppingBag className="mx-auto mb-4 h-24 w-24 text-moss-600" />
-            <h2 className="mb-2 text-3xl font-semibold text-slate-900">
+          <div className="rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] sm:p-12">
+            <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full border-4 border-black bg-linear-to-br from-primary-500 to-blue-600 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <ShoppingBag className="h-12 w-12 text-white" />
+            </div>
+            <h2 className="mb-3 text-2xl font-black text-slate-900 sm:text-3xl">
               Tu carrito está vacío
             </h2>
-            <p className="mb-6 text-slate-600">
+            <p className="mb-6 text-sm text-slate-600 sm:text-base">
               Agrega algunas obras a tu carrito para continuar
             </p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-moss-500 via-moss-500 to-moss-500 px-6 py-3 font-semibold text-white shadow-lg shadow-moss-900/10 transition hover:shadow-xl"
+              className="inline-flex items-center gap-2 rounded-lg border-4 border-black bg-primary-500 px-6 py-3 font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
             >
               Ver Obras
             </Link>
@@ -34,85 +36,84 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-moss-50 via-white to-slate-50 py-8 sm:py-12">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-slate-50 to-blue-50 py-6 sm:py-10">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="mb-8 text-4xl font-semibold text-slate-900 sm:text-5xl">
+        <h1 className="mb-6 text-3xl font-black text-slate-900 sm:mb-8 sm:text-4xl">
           Carrito de Compras
         </h1>
 
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
           {/* Cart Items */}
           <div className="lg:col-span-2">
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {items.map((item) => (
                 <div
                   key={item.painting.id}
-                  className="flex gap-4 rounded-2xl border border-moss-200 bg-white/95 p-4 shadow-lg shadow-moss-900/10 backdrop-blur sm:gap-6"
+                  className="flex gap-3 rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 sm:gap-4 sm:p-4"
                 >
                   {/* Image */}
-                  <div className="relative h-36 w-28 shrink-0 overflow-hidden rounded-xl border border-moss-100 sm:h-40 sm:w-32">
+                  <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-lg border-4 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:h-32 sm:w-28">
                     <Image
                       src={item.painting.imageUrl}
                       alt={item.painting.title}
                       fill
                       className="object-cover"
-                      sizes="128px"
+                      sizes="112px"
                     />
                   </div>
 
                   {/* Details */}
                   <div className="flex flex-1 flex-col justify-between">
                     <div>
-                      <div className="flex items-start justify-between">
-                        <div>
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
                           <Link href={`/obra/${item.painting.id}`}>
-                            <h3 className="text-lg font-semibold text-slate-900 transition-colors hover:text-moss-600">
+                            <h3 className="truncate text-base font-black text-slate-900 transition-colors hover:text-primary-600 sm:text-lg">
                               {item.painting.title}
                             </h3>
                           </Link>
-                          <p className="mt-1 text-sm text-slate-500">
-                            {item.painting.dimensions.width} x{" "}
-                            {item.painting.dimensions.height} cm
+                          <p className="mt-0.5 text-xs font-bold text-slate-600 sm:text-sm">
+                            {item.painting.dimensions.width} × {item.painting.dimensions.height} cm
                           </p>
                         </div>
                         <button
                           onClick={() => removeFromCart(item.painting.id)}
-                          className="text-slate-400 transition-colors hover:text-moss-600"
+                          className="rounded-lg border-2 border-black bg-white p-1.5 text-slate-600 transition-all hover:bg-red-50 hover:text-red-600 hover:border-red-600 sm:p-2"
                           aria-label="Eliminar del carrito"
                         >
-                          <Trash2 className="h-5 w-5" />
+                          <Trash2 className="h-4 w-4 sm:h-5 sm:w-5" />
                         </button>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-2">
                       {/* Quantity Controls */}
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         <button
                           onClick={() =>
                             updateQuantity(item.painting.id, item.quantity - 1)
                           }
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-moss-200 bg-moss-100/60 text-moss-700 transition hover:border-moss-300 hover:bg-moss-100"
+                          className="flex h-7 w-7 items-center justify-center rounded border-2 border-black bg-white text-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-slate-50 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none sm:h-8 sm:w-8"
                           aria-label="Disminuir cantidad"
                         >
-                          <Minus className="h-4 w-4" />
+                          <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                         </button>
-                        <span className="w-8 text-center font-semibold text-slate-900">
+                        <span className="min-w-[2rem] text-center text-sm font-black text-slate-900 sm:text-base">
                           {item.quantity}
                         </span>
                         <button
                           onClick={() =>
                             updateQuantity(item.painting.id, item.quantity + 1)
                           }
-                          className="flex h-8 w-8 items-center justify-center rounded-lg border border-moss-200 bg-moss-100/60 text-moss-700 transition hover:border-moss-300 hover:bg-moss-100"
+                          className="flex h-7 w-7 items-center justify-center rounded border-2 border-black bg-white text-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-slate-50 active:translate-x-0.5 active:translate-y-0.5 active:shadow-none sm:h-8 sm:w-8"
                           aria-label="Aumentar cantidad"
                         >
-                          <Plus className="h-4 w-4" />
+                          <Plus className="h-3 w-3 sm:h-4 sm:w-4" />
                         </button>
                       </div>
 
                       {/* Price */}
-                        <p className="text-xl font-semibold text-moss-700">
+                        <p className="text-base font-black text-primary-600 sm:text-xl">
                         {formatPrice(item.painting.price * item.quantity)}
                       </p>
                     </div>
@@ -123,7 +124,7 @@ export default function CartPage() {
 
             <button
               onClick={clearCart}
-                className="mt-4 text-sm font-medium text-slate-500 transition-colors hover:text-moss-600 hover:underline"
+                className="mt-3 text-xs font-bold text-slate-600 transition-colors hover:text-red-600 hover:underline sm:mt-4 sm:text-sm"
             >
               Vaciar carrito
             </button>
@@ -131,41 +132,41 @@ export default function CartPage() {
 
           {/* Summary */}
           <div className="lg:col-span-1">
-              <div className="sticky top-24 rounded-2xl border border-moss-200 bg-white/95 p-6 shadow-xl shadow-moss-900/10 backdrop-blur">
-                <h2 className="mb-4 text-2xl font-semibold text-slate-900">
+              <div className="sticky top-24 rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-4 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-6">
+                <h2 className="mb-4 border-b-4 border-black pb-3 text-xl font-black text-slate-900 sm:text-2xl">
                 Resumen del Pedido
               </h2>
 
-                <div className="space-y-3 border-b border-slate-200/70 pb-4">
-                  <div className="flex justify-between text-slate-600">
-                  <span>Subtotal</span>
-                    <span className="font-semibold text-slate-900">{formatPrice(getTotal())}</span>
+                <div className="space-y-2.5 pb-4">
+                  <div className="flex justify-between rounded border-2 border-black bg-white p-2.5">
+                  <span className="text-sm font-bold text-slate-700">Subtotal</span>
+                    <span className="text-sm font-black text-slate-900">{formatPrice(getTotal())}</span>
                 </div>
-                  <div className="flex justify-between text-slate-600">
-                  <span>Envío</span>
-                    <span className="text-slate-500">A calcular</span>
+                  <div className="flex justify-between rounded border-2 border-black bg-blue-50 p-2.5">
+                  <span className="text-sm font-bold text-slate-700">Envío</span>
+                    <span className="text-sm font-bold text-slate-600">A calcular</span>
                 </div>
               </div>
 
-                <div className="mt-4 flex justify-between border-t border-moss-200 pt-4 text-xl font-semibold">
-                  <span className="text-slate-900">Total</span>
-                  <span className="text-moss-700">{formatPrice(getTotal())}</span>
+                <div className="mt-4 flex justify-between rounded-lg border-4 border-black bg-primary-500 px-4 py-3 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                  <span className="text-base font-black text-white sm:text-lg">Total</span>
+                  <span className="text-lg font-black text-white sm:text-xl">{formatPrice(getTotal())}</span>
               </div>
 
               <Link
                 href="/checkout"
-                  className="mt-6 block w-full rounded-xl bg-linear-to-r from-moss-500 via-moss-500 to-moss-500 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-moss-900/10 transition hover:shadow-xl text-center"
+                  className="mt-5 block w-full rounded-lg border-4 border-black bg-primary-500 px-6 py-3 text-center text-base font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 sm:mt-6"
               >
                 Proceder al Pago
               </Link>
 
-                <p className="mt-4 text-center text-xs text-slate-500">
+                <p className="mt-3 text-center text-xs text-slate-600 sm:mt-4">
                 El costo de envío se calculará durante el proceso de pago
               </p>
 
               <Link
                 href="/"
-                  className="mt-4 block text-center text-sm font-medium text-slate-500 transition-colors hover:text-moss-600 hover:underline"
+                  className="mt-3 block text-center text-sm font-bold text-slate-600 transition-colors hover:text-primary-600 hover:underline sm:mt-4"
               >
                 Continuar comprando
               </Link>
