@@ -112,22 +112,22 @@ export default function HomeContentSection({
 
   // Background style mapping
   const backgroundClasses = {
-    gray: "bg-linear-to-br from-gray-100 via-gray-200 to-gray-300",
-    book: "bg-linear-to-br from-amber-50 via-orange-100 to-amber-100",
-    dark: "bg-linear-to-br from-gray-900 via-gray-800 to-black",
-    light: "bg-linear-to-br from-white via-gray-50 to-gray-100",
+    gray: "bg-gradient-to-br from-blue-50 via-slate-100 to-blue-100",
+    book: "bg-gradient-to-br from-blue-100 via-indigo-100 to-blue-200",
+    dark: "bg-gradient-to-br from-slate-900 via-blue-900 to-black",
+    light: "bg-gradient-to-br from-white via-blue-50 to-slate-50",
   };
 
   const textColorClasses = {
-    gray: "text-gray-900",
-    book: "text-amber-900",
-    dark: "text-gray-100",
-    light: "text-gray-900",
+    gray: "text-slate-900",
+    book: "text-blue-900",
+    dark: "text-blue-50",
+    light: "text-slate-900",
   };
 
   const accentColorClasses = {
     gray: "bg-primary-500",
-    book: "bg-amber-600",
+    book: "bg-blue-600",
     dark: "bg-primary-500",
     light: "bg-primary-500",
   };
@@ -138,7 +138,7 @@ export default function HomeContentSection({
         <div className={`flex flex-col lg:flex-row gap-8 lg:gap-12 ${videoPosition === "left" ? "lg:flex-row" : "lg:flex-row-reverse"} lg:items-start`}>
           {/* Video - Always on side with fixed width */}
           {hasVideo && (
-            <div className={`flex-shrink-0 ${videoSizeClasses[videoSize]} lg:sticky lg:top-24`}>
+            <div className={`${videoSizeClasses[videoSize]} lg:sticky lg:top-24`}>
               {renderVideo()}
             </div>
           )}
@@ -184,6 +184,32 @@ export default function HomeContentSection({
               >
                 {content}
               </ReactMarkdown>
+            </div>
+
+            {/* Call to Action Section */}
+            <div className="mt-10 pt-8 border-t-4 border-black">
+              <div className="bg-white border-4 border-black rounded-lg p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+                <h3 className="text-2xl font-black text-gray-900 mb-3">
+                  ¿Tienes una idea en mente?
+                </h3>
+                <p className="text-gray-700 mb-6 text-lg">
+                  Convierte tu visión en una obra única. Solicita una pintura personalizada adaptada a tus deseos y estilo.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a
+                    href="/obra-a-pedido"
+                    className="inline-flex items-center justify-center px-8 py-4 text-lg font-black text-white bg-primary-500 border-4 border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-200"
+                  >
+                    Solicitar Obra a Pedido
+                  </a>
+                  <a
+                    href="/#gallery"
+                    className="inline-flex items-center justify-center px-8 py-4 text-lg font-black text-gray-900 bg-white border-4 border-black rounded-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all duration-200"
+                  >
+                    Ver Galería
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
