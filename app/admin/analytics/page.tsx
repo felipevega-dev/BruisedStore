@@ -241,7 +241,7 @@ export default function AnalyticsPage() {
             <div className="flex gap-2">
               <button
                 onClick={() => setDateRange("all")}
-                className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${dateRange === "all"
+                className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${dateRange === "all"
                     ? "bg-emerald-600 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-50"
                   }`}
@@ -250,7 +250,7 @@ export default function AnalyticsPage() {
               </button>
               <button
                 onClick={() => setDateRange("month")}
-                className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${dateRange === "month"
+                className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${dateRange === "month"
                     ? "bg-emerald-600 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-50"
                   }`}
@@ -259,7 +259,7 @@ export default function AnalyticsPage() {
               </button>
               <button
                 onClick={() => setDateRange("week")}
-                className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${dateRange === "week"
+                className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${dateRange === "week"
                     ? "bg-emerald-600 text-white"
                     : "bg-white text-gray-700 hover:bg-gray-50"
                   }`}

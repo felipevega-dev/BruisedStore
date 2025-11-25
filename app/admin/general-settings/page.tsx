@@ -130,7 +130,7 @@ export default function GeneralSettingsPage() {
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </Link>
-                <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl border-4 border-white bg-white">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl border-4 border-white bg-white">
                   <SettingsIcon className="h-7 w-7 text-cyan-600" />
                 </div>
                 <div>
@@ -146,7 +146,7 @@ export default function GeneralSettingsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="flex items-center gap-2 rounded-xl border-4 border-white bg-white px-6 py-3 font-bold text-cyan-600 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.5)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.5)] disabled:opacity-50"
+                className="flex items-center gap-2 rounded-xl border-4 border-white bg-white px-6 py-3 font-bold text-cyan-600 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.5)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.5)] disabled:opacity-50"
               >
                 {saving ? (
                   <>

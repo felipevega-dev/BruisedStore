@@ -261,7 +261,7 @@ export default function AdminReviewsPage() {
         <div className="mb-6 flex gap-2">
           <button
             onClick={() => setFilter("all")}
-            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
+            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
               filter === "all"
                 ? "bg-blue-500 text-white"
                 : "bg-white text-gray-700 hover:bg-gray-50"
@@ -271,7 +271,7 @@ export default function AdminReviewsPage() {
           </button>
           <button
             onClick={() => setFilter("pending")}
-            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
+            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
               filter === "pending"
                 ? "bg-orange-500 text-white"
                 : "bg-white text-gray-700 hover:bg-gray-50"
@@ -281,7 +281,7 @@ export default function AdminReviewsPage() {
           </button>
           <button
             onClick={() => setFilter("approved")}
-            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
+            className={`rounded-xl border-4 border-black px-4 py-2 font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] ${
               filter === "approved"
                 ? "bg-green-600 text-white"
                 : "bg-white text-gray-700 hover:bg-gray-50"
@@ -349,7 +349,7 @@ export default function AdminReviewsPage() {
                   {!review.approved && (
                     <button
                       onClick={() => handleApprove(review.id)}
-                      className="flex items-center gap-2 rounded-xl border-4 border-black bg-green-600 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      className="flex items-center gap-2 rounded-xl border-4 border-black bg-green-600 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                     >
                       <Check className="h-4 w-4" />
                       <span>Aprobar</span>
@@ -358,7 +358,7 @@ export default function AdminReviewsPage() {
                   {review.approved && (
                     <button
                       onClick={() => handleReject(review.id)}
-                      className="flex items-center gap-2 rounded-xl border-4 border-black bg-orange-500 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      className="flex items-center gap-2 rounded-xl border-4 border-black bg-orange-500 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                     >
                       <X className="h-4 w-4" />
                       <span>Ocultar</span>
@@ -366,7 +366,7 @@ export default function AdminReviewsPage() {
                   )}
                   <button
                     onClick={() => handleDelete(review.id)}
-                    className="flex items-center gap-2 rounded-xl border-4 border-black bg-red-500 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                    className="flex items-center gap-2 rounded-xl border-4 border-black bg-red-500 px-4 py-2 font-bold text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                   >
                     <Trash2 className="h-4 w-4" />
                     <span>Eliminar</span>

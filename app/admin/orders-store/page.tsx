@@ -496,7 +496,7 @@ export default function AdminStoreOrdersPage() {
                         key={item.painting.id}
                         className="flex gap-4 rounded-lg border-2 border-terra-900/30 bg-moss-900/20 p-3"
                       >
-                        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 border-terra-900/30">
+                        <div className="relative h-20 w-20 overflow-hidden rounded-md border-2 border-terra-900/30">
                           <Image
                             src={item.painting.imageUrl}
                             alt={item.painting.title}
@@ -562,7 +562,7 @@ export default function AdminStoreOrdersPage() {
                     </div>
                     <div className="flex flex-col gap-1 border-b border-terra-900/20 pb-2 sm:flex-row sm:justify-between">
                       <span className="text-gray-400">Dirección:</span>
-                      <span className="font-semibold text-terra-100 break-words sm:text-right sm:max-w-[60%]">
+                      <span className="font-semibold text-terra-100 sm:text-right sm:max-w-[60%]">
                         {selectedOrder.shippingInfo.address}
                       </span>
                     </div>
