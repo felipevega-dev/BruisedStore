@@ -94,9 +94,9 @@ export default function BlogPostPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white">
-        <div className="border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin text-moss-600" />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-50 via-slate-50 to-blue-50">
+        <div className="rounded-lg border-4 border-black bg-white p-8 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary-600" />
         </div>
       </div>
     );
@@ -104,14 +104,14 @@ export default function BlogPostPage() {
 
   if (error || !post) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white p-4">
-        <div className="max-w-md border-4 border-black bg-white p-8 text-center shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-          <h1 className="mb-4 text-2xl font-black text-gray-900">
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-blue-50 via-slate-50 to-blue-50 p-4">
+        <div className="max-w-md rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-6 text-center shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:p-8">
+          <h1 className="mb-4 text-xl font-black text-slate-900 sm:text-2xl">
             {error || "Post no encontrado"}
           </h1>
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 rounded-lg border-2 border-black bg-white px-4 py-2 font-bold transition-all hover:bg-gray-50"
+            className="inline-flex items-center gap-2 rounded-lg border-4 border-black bg-primary-500 px-4 py-2.5 font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
           >
             <ArrowLeft className="h-4 w-4" />
             Volver al Blog
@@ -148,7 +148,7 @@ export default function BlogPostPage() {
     : null;
 
   return (
-    <div className="min-h-screen bg-white py-8 sm:py-12">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-slate-50 to-blue-50 py-6 sm:py-10">
       {/* JSON-LD for SEO */}
       {jsonLd && (
         <script
@@ -169,17 +169,17 @@ export default function BlogPostPage() {
         {/* Back Button */}
         <Link
           href="/blog"
-          className="mb-6 inline-flex items-center gap-2 rounded-lg border-2 border-black bg-white px-4 py-2 font-bold transition-all hover:bg-gray-50 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+          className="mb-4 inline-flex items-center gap-2 rounded-lg border-4 border-black bg-white px-3 py-2 font-black text-slate-900 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-blue-50 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 sm:mb-6 sm:px-4 sm:py-2.5"
         >
           <ArrowLeft className="h-4 w-4" />
-          Volver al Blog
+          <span className="text-sm sm:text-base">Volver</span>
         </Link>
 
         {/* Post Content */}
         <article className="mx-auto max-w-4xl">
           {/* Cover Image */}
           {post.coverImage && (
-            <div className="mb-8 overflow-hidden rounded-lg border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <div className="mb-6 overflow-hidden rounded-lg border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:mb-8">
               <div className="relative aspect-[21/9] w-full">
                 <Image
                   src={post.coverImage}
@@ -193,11 +193,11 @@ export default function BlogPostPage() {
           )}
 
           {/* Header */}
-          <header className="mb-8">
+          <header className="mb-6 sm:mb-8">
             {/* Category */}
-            <div className="mb-4">
+            <div className="mb-3 sm:mb-4">
               <span
-                className={`inline-block rounded-full border-2 px-4 py-2 text-sm font-bold ${getCategoryColor(
+                className={`inline-block rounded-lg border-2 px-3 py-1.5 text-xs font-black sm:px-4 sm:py-2 sm:text-sm ${getCategoryColor(
                   post.category
                 )}`}
               >
@@ -206,29 +206,29 @@ export default function BlogPostPage() {
             </div>
 
             {/* Title */}
-            <h1 className="mb-4 text-4xl font-black text-gray-900 sm:text-5xl">
+            <h1 className="mb-3 text-3xl font-black text-slate-900 sm:mb-4 sm:text-5xl">
               {post.title}
             </h1>
 
             {/* Excerpt */}
-            <p className="mb-6 text-xl text-gray-600">{post.excerpt}</p>
+            <p className="mb-4 text-base text-slate-600 sm:mb-6 sm:text-xl">{post.excerpt}</p>
 
             {/* Meta */}
-            <div className="flex flex-wrap items-center gap-4 border-b-2 border-t-2 border-black py-4 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span className="font-bold">José Vega</span>
+            <div className="flex flex-wrap items-center gap-3 rounded-lg border-4 border-black bg-white px-3 py-2.5 text-xs text-slate-600 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:gap-4 sm:px-4 sm:py-3 sm:text-sm">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <User className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="font-black">José Vega</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>{formatDate(post.publishedAt)}</span>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Calendar className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="font-bold">{formatDate(post.publishedAt)}</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                <span>{estimateReadTime(post.content)}</span>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Clock className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="font-bold">{estimateReadTime(post.content)}</span>
               </div>
               {post.viewCount && (
-                <span className="ml-auto font-bold text-gray-500">
+                <span className="ml-auto font-black text-primary-600">
                   {post.viewCount} vistas
                 </span>
               )}
@@ -237,7 +237,7 @@ export default function BlogPostPage() {
 
           {/* Content */}
           <div
-            className="prose prose-lg max-w-none prose-headings:font-black prose-h2:text-3xl prose-h3:text-2xl prose-p:text-gray-700 prose-a:text-moss-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-img:rounded-lg prose-img:border-4 prose-img:border-black"
+            className="prose prose-sm max-w-none prose-headings:font-black prose-h2:text-2xl prose-h3:text-xl prose-p:text-slate-700 prose-a:font-bold prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline prose-strong:font-black prose-strong:text-slate-900 prose-img:rounded-lg prose-img:border-4 prose-img:border-black sm:prose-lg sm:prose-h2:text-3xl sm:prose-h3:text-2xl"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
 
@@ -252,16 +252,16 @@ export default function BlogPostPage() {
 
           {/* Tags */}
           {post.tags.length > 0 && (
-            <div className="mt-12 border-t-2 border-black pt-8">
-              <div className="flex items-center gap-2 mb-4">
-                <Tag className="h-5 w-5 text-gray-600" />
-                <h2 className="text-xl font-black text-gray-900">Tags</h2>
+            <div className="mt-8 rounded-lg border-4 border-black bg-linear-to-br from-blue-50 to-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] sm:mt-12 sm:p-6">
+              <div className="mb-3 flex items-center gap-2 sm:mb-4">
+                <Tag className="h-4 w-4 text-slate-600 sm:h-5 sm:w-5" />
+                <h2 className="text-lg font-black text-slate-900 sm:text-xl">Tags</h2>
               </div>
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="rounded-lg border-2 border-black bg-gray-50 px-4 py-2 font-bold text-gray-700 transition-all hover:bg-gray-100"
+                    className="rounded-lg border-2 border-black bg-white px-3 py-1.5 text-xs font-black text-slate-700 transition-all hover:bg-blue-50 sm:px-4 sm:py-2 sm:text-sm"
                   >
                     {tag}
                   </span>
@@ -271,10 +271,10 @@ export default function BlogPostPage() {
           )}
 
           {/* Back to Blog */}
-          <div className="mt-12 text-center">
+          <div className="mt-8 text-center sm:mt-12">
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 rounded-lg border-2 border-black bg-moss-500 px-6 py-3 font-bold text-white transition-all hover:bg-moss-600 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+              className="inline-flex items-center gap-2 rounded-lg border-4 border-black bg-primary-500 px-6 py-3 font-black text-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:bg-primary-600 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
             >
               <ArrowLeft className="h-4 w-4" />
               Ver Más Posts

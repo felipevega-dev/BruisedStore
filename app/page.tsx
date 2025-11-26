@@ -12,8 +12,11 @@ import RecentPaintingsSection from "@/components/RecentPaintingsSection";
 import CustomWorkCTA from "@/components/CustomWorkCTA";
 import GallerySection from "@/components/GallerySection";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/useToast";
+import { CART_ADD_EVENT, CART_ERROR_EVENT } from "@/contexts/CartContext";
 
 export default function Home() {
+  const { showToast, ToastContainer } = useToast();
   const [allPaintings, setAllPaintings] = useState<Painting[]>([]);
   const [filteredPaintings, setFilteredPaintings] = useState<Painting[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +28,29 @@ export default function Home() {
     maxPrice: 0,
     sortBy: "recent",
   });
+
+  // Listen for cart events
+  useEffect(() => {
+    const handleCartAdd = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { painting } = customEvent.detail;
+      showToast(`"${painting.title}" agregado al carrito 🛒`, "success");
+    };
+
+    const handleCartError = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      const { message } = customEvent.detail;
+      showToast(message, "error");
+    };
+
+    window.addEventListener(CART_ADD_EVENT, handleCartAdd);
+    window.addEventListener(CART_ERROR_EVENT, handleCartError);
+
+    return () => {
+      window.removeEventListener(CART_ADD_EVENT, handleCartAdd);
+      window.removeEventListener(CART_ERROR_EVENT, handleCartError);
+    };
+  }, [showToast]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -160,6 +186,8 @@ export default function Home() {
         onFilterChange={setFilters}
         totalResults={filteredPaintings.length}
       />
+      
+      <ToastContainer />
     </div>
   );
 }

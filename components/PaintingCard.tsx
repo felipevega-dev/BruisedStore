@@ -6,7 +6,6 @@ import { Painting } from "@/types";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { ShoppingCart, Heart, Images, AlertTriangle } from "lucide-react";
-import { useToast } from "@/hooks/useToast";
 import { formatPrice } from "@/lib/utils";
 
 interface PaintingCardProps {
@@ -16,7 +15,6 @@ interface PaintingCardProps {
 export default function PaintingCard({ painting }: PaintingCardProps) {
   const { addToCart } = useCart();
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlist();
-  const { showToast, ToastContainer } = useToast();
 
   const inWishlist = isInWishlist(painting.id);
 
@@ -26,10 +24,8 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
 
     if (inWishlist) {
       await removeFromWishlist(painting.id);
-      showToast("Quitado de favoritos", "info");
     } else {
       await addToWishlist(painting.id);
-      showToast("Agregado a favoritos ❤️", "success");
     }
   };
 
@@ -38,12 +34,10 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
 
     // Check stock availability
     if (painting.stock !== undefined && painting.stock <= 0) {
-      showToast("Esta obra ya no está disponible", "error");
       return;
     }
 
     addToCart(painting);
-    showToast(`"${painting.title}" agregado al carrito 🛒`, "success");
   };
 
   // Usar la primera imagen del array si existe, sino usar imageUrl
@@ -155,7 +149,6 @@ export default function PaintingCard({ painting }: PaintingCardProps) {
           </p>
         )}
       </div>
-      <ToastContainer />
     </div>
   );
 }

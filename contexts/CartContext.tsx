@@ -15,6 +15,10 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+// Custom event para notificar cuando se agrega al carrito
+export const CART_ADD_EVENT = "cart:item-added";
+export const CART_ERROR_EVENT = "cart:error";
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
 
@@ -32,10 +36,34 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items]);
 
   const addToCart = (painting: Painting) => {
+    // Check stock availability
+    if (painting.stock !== undefined && painting.stock <= 0) {
+      // Dispatch error event after state update
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent(CART_ERROR_EVENT, {
+            detail: { message: "Esta obra ya no está disponible" },
+          })
+        );
+      }, 0);
+      return;
+    }
+
     setItems((prevItems) => {
       const existingItem = prevItems.find(
         (item) => item.painting.id === painting.id
       );
+
+      const isNew = !existingItem;
+
+      // Dispatch event after state update
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent(CART_ADD_EVENT, {
+            detail: { painting, isNew },
+          })
+        );
+      }, 0);
 
       if (existingItem) {
         return prevItems.map((item) =>

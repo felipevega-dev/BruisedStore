@@ -327,7 +327,7 @@ export default function ProfilePage() {
                                 key={item.painting.id}
                                 className="flex gap-4"
                               >
-                                <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border-2 border-gray-300">
+                                <div className="relative h-16 w-16 overflow-hidden rounded-md border-2 border-gray-300">
                                   <Image
                                     src={item.painting.imageUrl}
                                     alt={item.painting.title}
