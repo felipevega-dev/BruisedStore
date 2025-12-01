@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { updateProfile, updateEmail, updatePassword } from "firebase/auth";
-import { User, Mail, Lock, ArrowLeft, Loader2, Save } from "lucide-react";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { User, Mail, Lock, ArrowLeft, Loader2, Save, Phone } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
 
@@ -17,6 +19,7 @@ export default function EditProfilePage() {
   const [formData, setFormData] = useState({
     displayName: "",
     email: "",
+    phoneNumber: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -27,11 +30,38 @@ export default function EditProfilePage() {
       router.push("/login");
     }
     if (user) {
-      setFormData((prev) => ({
-        ...prev,
-        displayName: user.displayName || "",
-        email: user.email || "",
-      }));
+      // Cargar datos del perfil desde Firestore
+      const loadUserProfile = async () => {
+        try {
+          const userDocRef = doc(db, "userProfiles", user.uid);
+          const userDoc = await getDoc(userDocRef);
+          
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setFormData((prev) => ({
+              ...prev,
+              displayName: user.displayName || "",
+              email: user.email || "",
+              phoneNumber: userData.phoneNumber || "",
+            }));
+          } else {
+            // Si no existe, usar solo datos de Auth
+            setFormData((prev) => ({
+              ...prev,
+              displayName: user.displayName || "",
+              email: user.email || "",
+            }));
+          }
+        } catch (error) {
+          console.error("Error loading user profile:", error);
+          setFormData((prev) => ({
+            ...prev,
+            displayName: user.displayName || "",
+            email: user.email || "",
+          }));
+        }
+      };
+      loadUserProfile();
     }
   }, [user, authLoading, router]);
 
@@ -55,6 +85,26 @@ export default function EditProfilePage() {
         await updateEmail(user, formData.email);
         updated = true;
       }
+
+      // Guardar/actualizar datos adicionales en Firestore (teléfono)
+      const userDocRef = doc(db, "userProfiles", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      
+      const profileData: any = {
+        uid: user.uid,
+        email: formData.email || user.email,
+        displayName: formData.displayName || user.displayName,
+        phoneNumber: formData.phoneNumber || "",
+        updatedAt: serverTimestamp(),
+      };
+
+      if (!userDoc.exists()) {
+        profileData.createdAt = serverTimestamp();
+        profileData.addresses = [];
+      }
+
+      await setDoc(userDocRef, profileData, { merge: true });
+      updated = true;
 
       // Actualizar contraseña
       if (formData.newPassword) {
@@ -170,6 +220,25 @@ export default function EditProfilePage() {
               <p className="mt-2 text-xs text-slate-600">
                 Si cambias tu email, es posible que tengas que volver a iniciar
                 sesión
+              </p>
+            </div>
+
+            {/* Phone Number */}
+            <div>
+              <label className="mb-2 block text-xs font-black uppercase tracking-wide text-slate-900 sm:text-sm">
+                <Phone className="mb-1 inline-block h-4 w-4" /> Teléfono
+              </label>
+              <input
+                type="tel"
+                value={formData.phoneNumber}
+                onChange={(e) =>
+                  setFormData({ ...formData, phoneNumber: e.target.value })
+                }
+                className="w-full rounded-lg border-4 border-black bg-white px-4 py-2.5 font-bold text-slate-900 transition-all placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20"
+                placeholder="+56 9 1234 5678"
+              />
+              <p className="mt-2 text-xs text-slate-600">
+                Este teléfono se usará para completar automáticamente tus pedidos
               </p>
             </div>
 

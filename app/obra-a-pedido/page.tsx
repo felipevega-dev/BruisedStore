@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -13,6 +13,7 @@ import {
   CUSTOM_ORDER_SIZES,
   BASE_CUSTOM_ORDER_PRICE,
   Orientation,
+  UserAddress,
 } from "@/types";
 import Image from "next/image";
 import { Upload, Loader2, CheckCircle2, Paintbrush, Crop, X, UserPlus } from "lucide-react";
@@ -32,7 +33,16 @@ export default function CustomOrderPage() {
     phone: "",
     selectedSizeIndex: 0,
     notes: "",
+    selectedAddressId: "" as string,
+    // Campos de dirección manual (cuando no hay dirección guardada)
+    street: "",
+    city: "",
+    region: "",
+    zipCode: "",
   });
+  const [userProfileLoaded, setUserProfileLoaded] = useState(false);
+  const [userAddresses, setUserAddresses] = useState<UserAddress[]>([]);
+  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [showCropper, setShowCropper] = useState(false);
@@ -82,6 +92,58 @@ export default function CustomOrderPage() {
   };
 
   const filteredSizes = getFilteredSizes(orientation);
+
+  // Cargar datos del perfil del usuario desde Firestore
+  useEffect(() => {
+    if (user && !userProfileLoaded) {
+      const loadUserProfile = async () => {
+        try {
+          const { doc, getDoc } = await import("firebase/firestore");
+          const userDoc = await getDoc(doc(db, "userProfiles", user.uid));
+          
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const addresses = userData.addresses || [];
+            setUserAddresses(addresses);
+            
+            // Buscar dirección predeterminada
+            const defaultAddress = addresses.find((addr: UserAddress) => addr.isDefault);
+            
+            setFormData((prev) => ({
+              ...prev,
+              customerName: userData.displayName || user.displayName || "",
+              email: user.email || "",
+              phone: userData.phoneNumber || "",
+              selectedAddressId: defaultAddress?.id || "",
+            }));
+          } else {
+            // Si no existe el documento en Firestore, usar datos de Auth
+            setFormData((prev) => ({
+              ...prev,
+              customerName: user.displayName || "",
+              email: user.email || "",
+            }));
+            setShowNewAddressForm(true); // Mostrar formulario de dirección si no hay direcciones
+          }
+          setUserProfileLoaded(true);
+        } catch (error) {
+          console.error("Error loading user profile:", error);
+          // Fallback a datos de Auth
+          setFormData((prev) => ({
+            ...prev,
+            customerName: user.displayName || "",
+            email: user.email || "",
+          }));
+          setUserProfileLoaded(true);
+          setShowNewAddressForm(true);
+        }
+      };
+      loadUserProfile();
+    } else if (!user) {
+      // Si no hay usuario logueado, mostrar formulario de dirección
+      setShowNewAddressForm(true);
+    }
+  }, [user, userProfileLoaded]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -212,6 +274,23 @@ export default function CustomOrderPage() {
       showToast("Por favor sube una imagen de referencia", "error");
     }
 
+    // Validate address
+    if (!formData.selectedAddressId && showNewAddressForm) {
+      // Validar campos de dirección manual
+      if (!formData.street.trim()) {
+        newErrors.street = "La calle es requerida";
+      }
+      if (!formData.city.trim()) {
+        newErrors.city = "La ciudad es requerida";
+      }
+      if (!formData.region.trim()) {
+        newErrors.region = "La región es requerida";
+      }
+    } else if (!formData.selectedAddressId && !showNewAddressForm && userAddresses.length === 0) {
+      newErrors.address = "Debes agregar una dirección de envío";
+      showToast("Por favor agrega una dirección de envío", "error");
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -247,6 +326,30 @@ export default function CustomOrderPage() {
       await uploadBytes(imageRef, fileToUpload);
       const imageUrl = await getDownloadURL(imageRef);
 
+      // Obtener datos de dirección
+      let shippingAddress: any = null;
+      if (formData.selectedAddressId) {
+        // Usar dirección guardada
+        const selectedAddr = userAddresses.find(addr => addr.id === formData.selectedAddressId);
+        if (selectedAddr) {
+          shippingAddress = {
+            name: selectedAddr.name,
+            street: selectedAddr.street,
+            city: selectedAddr.city,
+            region: selectedAddr.region,
+            zipCode: selectedAddr.zipCode,
+          };
+        }
+      } else if (showNewAddressForm) {
+        // Usar dirección manual
+        shippingAddress = {
+          street: formData.street,
+          city: formData.city,
+          region: formData.region,
+          zipCode: formData.zipCode,
+        };
+      }
+
       // Construir datos del pedido (omitir campos undefined)
       const orderData: any = {
         customerName: formData.customerName,
@@ -259,6 +362,11 @@ export default function CustomOrderPage() {
         status: "pending",
         createdAt: serverTimestamp(),
       };
+
+      // Agregar dirección de envío si existe
+      if (shippingAddress) {
+        orderData.shippingAddress = shippingAddress;
+      }
 
       // Agregar campos opcionales solo si tienen valor
       if (formData.notes && formData.notes.trim()) {
@@ -613,6 +721,28 @@ export default function CustomOrderPage() {
                   </div>
                 </div>
 
+                {/* Action buttons for desktop - only show when image is uploaded */}
+                {imagePreview && (
+                  <div className="mb-4 grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setShowCropper(true)}
+                      className="flex items-center justify-center gap-2 rounded-lg border-4 border-black bg-white px-4 py-3 text-sm font-bold text-black transition-all hover:bg-slate-50 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
+                    >
+                      <Crop className="h-4 w-4" />
+                      Ajustar Recorte
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="flex items-center justify-center gap-2 rounded-lg border-4 border-primary-500 bg-white px-4 py-3 text-sm font-bold text-primary-600 transition-all hover:bg-primary-50 hover:shadow-[4px_4px_0px_0px_rgba(59,130,246,1)] hover:-translate-x-0.5 hover:-translate-y-0.5"
+                    >
+                      <Upload className="h-4 w-4" />
+                      Cambiar Imagen
+                    </button>
+                  </div>
+                )}
+
                 {/* Info */}
                 <div className="space-y-0 rounded-lg border-4 border-black overflow-hidden shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
                   <div className="flex items-center justify-between border-b-4 border-black p-3 bg-white sm:p-4">
@@ -659,9 +789,12 @@ export default function CustomOrderPage() {
               >
                 {/* Image Upload */}
                 <div>
-                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
-                    Imagen de Referencia *
-                  </label>
+                  {/* Label solo visible cuando NO hay imagen */}
+                  {!imagePreview && (
+                    <label className="mb-3 block text-base font-black uppercase tracking-wide text-black sm:text-sm">
+                      Imagen de Referencia *
+                    </label>
+                  )}
 
                   {/* Mobile Canvas Preview - Full info card (only shows when image is uploaded) */}
                   {imagePreview && (
@@ -973,6 +1106,194 @@ export default function CustomOrderPage() {
                   {errors.phone && (
                     <p className="mt-2 text-sm font-bold text-red-600">
                       {errors.phone}
+                    </p>
+                  )}
+                </div>
+
+                {/* Shipping Address */}
+                <div>
+                  <label className="mb-3 block text-base font-black uppercase tracking-wide text-slate-900 sm:text-sm">
+                    Dirección de Envío *
+                  </label>
+                  
+                  {/* Si hay direcciones guardadas */}
+                  {userAddresses.length > 0 && !showNewAddressForm && (
+                    <div className="space-y-3">
+                      {userAddresses.map((address) => (
+                        <label
+                          key={address.id}
+                          className={`flex cursor-pointer items-start gap-3 rounded-lg border-4 p-4 transition-all ${
+                            formData.selectedAddressId === address.id
+                              ? "border-primary-500 bg-primary-50"
+                              : "border-black bg-white hover:bg-slate-50"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="address"
+                            value={address.id}
+                            checked={formData.selectedAddressId === address.id}
+                            onChange={(e) =>
+                              setFormData({ ...formData, selectedAddressId: e.target.value })
+                            }
+                            className="mt-1 h-4 w-4 accent-primary-500"
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-black text-slate-900">{address.name}</span>
+                              {address.isDefault && (
+                                <span className="rounded border border-primary-600 bg-primary-100 px-2 py-0.5 text-xs font-bold text-primary-700">
+                                  Predeterminada
+                                </span>
+                              )}
+                            </div>
+                            <p className="mt-1 text-sm font-semibold text-slate-700">
+                              {address.street}
+                            </p>
+                            <p className="text-sm text-slate-600">
+                              {address.city}, {address.region}
+                              {address.zipCode && ` - CP: ${address.zipCode}`}
+                            </p>
+                          </div>
+                        </label>
+                      ))}
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowNewAddressForm(true);
+                          setFormData({ ...formData, selectedAddressId: "" });
+                        }}
+                        className="w-full rounded-lg border-4 border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm font-bold text-slate-700 transition-all hover:border-primary-500 hover:bg-primary-50 hover:text-primary-600"
+                      >
+                        + Usar otra dirección
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Formulario de nueva dirección */}
+                  {showNewAddressForm && (
+                    <div className="space-y-3 rounded-lg border-4 border-black bg-blue-50 p-4">
+                      {userAddresses.length > 0 && (
+                        <div className="mb-3 flex items-center justify-between border-b-2 border-slate-300 pb-2">
+                          <span className="text-sm font-bold text-slate-700">Nueva Dirección</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setShowNewAddressForm(false);
+                              // Seleccionar dirección predeterminada si existe
+                              const defaultAddr = userAddresses.find(addr => addr.isDefault);
+                              if (defaultAddr) {
+                                setFormData({ ...formData, selectedAddressId: defaultAddr.id });
+                              }
+                            }}
+                            className="text-xs font-bold text-primary-600 hover:text-primary-700"
+                          >
+                            ← Volver a mis direcciones
+                          </button>
+                        </div>
+                      )}
+                      
+                      <div>
+                        <label className="mb-1 block text-sm font-bold text-slate-700">
+                          Calle y número *
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.street}
+                          onChange={(e) => {
+                            setFormData({ ...formData, street: e.target.value });
+                            if (errors.street) {
+                              setErrors({ ...errors, street: "" });
+                            }
+                          }}
+                          placeholder="Ej: Av. Principal 123, Depto 45"
+                          className={`w-full rounded-lg border-4 bg-white px-4 py-2.5 text-sm font-semibold transition-all placeholder:text-slate-400 focus:outline-none focus:ring-4 ${
+                            errors.street
+                              ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                              : "border-black focus:border-primary-500 focus:ring-primary-500/20"
+                          }`}
+                          required={showNewAddressForm && !formData.selectedAddressId}
+                        />
+                        {errors.street && (
+                          <p className="mt-1 text-xs font-bold text-red-600">{errors.street}</p>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="mb-1 block text-sm font-bold text-slate-700">
+                            Ciudad *
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.city}
+                            onChange={(e) => {
+                              setFormData({ ...formData, city: e.target.value });
+                              if (errors.city) {
+                                setErrors({ ...errors, city: "" });
+                              }
+                            }}
+                            placeholder="Santiago"
+                            className={`w-full rounded-lg border-4 bg-white px-4 py-2.5 text-sm font-semibold transition-all placeholder:text-slate-400 focus:outline-none focus:ring-4 ${
+                              errors.city
+                                ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                                : "border-black focus:border-primary-500 focus:ring-primary-500/20"
+                            }`}
+                            required={showNewAddressForm && !formData.selectedAddressId}
+                          />
+                          {errors.city && (
+                            <p className="mt-1 text-xs font-bold text-red-600">{errors.city}</p>
+                          )}
+                        </div>
+
+                        <div>
+                          <label className="mb-1 block text-sm font-bold text-slate-700">
+                            Región *
+                          </label>
+                          <input
+                            type="text"
+                            value={formData.region}
+                            onChange={(e) => {
+                              setFormData({ ...formData, region: e.target.value });
+                              if (errors.region) {
+                                setErrors({ ...errors, region: "" });
+                              }
+                            }}
+                            placeholder="Metropolitana"
+                            className={`w-full rounded-lg border-4 bg-white px-4 py-2.5 text-sm font-semibold transition-all placeholder:text-slate-400 focus:outline-none focus:ring-4 ${
+                              errors.region
+                                ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                                : "border-black focus:border-primary-500 focus:ring-primary-500/20"
+                            }`}
+                            required={showNewAddressForm && !formData.selectedAddressId}
+                          />
+                          {errors.region && (
+                            <p className="mt-1 text-xs font-bold text-red-600">{errors.region}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-bold text-slate-700">
+                          Código Postal (Opcional)
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.zipCode}
+                          onChange={(e) =>
+                            setFormData({ ...formData, zipCode: e.target.value })
+                          }
+                          placeholder="8320000"
+                          className="w-full rounded-lg border-4 border-black bg-white px-4 py-2.5 text-sm font-semibold transition-all placeholder:text-slate-400 focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500/20"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {errors.address && (
+                    <p className="mt-2 text-sm font-bold text-red-600">
+                      {errors.address}
                     </p>
                   )}
                 </div>

@@ -19,6 +19,26 @@ export interface Painting {
 
 export type Orientation = 'horizontal' | 'vertical' | 'cuadrado';
 
+export interface UserAddress {
+  id: string;
+  name: string; // Ej: "Casa", "Oficina", "Departamento"
+  street: string;
+  city: string;
+  region: string;
+  zipCode: string;
+  isDefault: boolean;
+}
+
+export interface UserProfile {
+  uid: string;
+  email: string;
+  displayName?: string;
+  phoneNumber?: string;
+  addresses: UserAddress[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export type PaintingCategory = 
   | 'abstracto'
   | 'retrato'
@@ -111,6 +131,13 @@ export interface CustomOrder {
   createdAt: Date;
   notes?: string;
   userId?: string; // ID del usuario si está registrado
+  shippingAddress?: {
+    name?: string;
+    street: string;
+    city: string;
+    region: string;
+    zipCode?: string;
+  };
 }
 
 // ========== REGULAR ORDERS (Compras de Pinturas) ==========

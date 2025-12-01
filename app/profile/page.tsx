@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, where, getDocs, orderBy, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Order, CustomOrder } from "@/types";
+import { Order, CustomOrder, UserAddress } from "@/types";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -19,14 +19,18 @@ import {
   DollarSign,
   Edit,
 } from "lucide-react";
+import AddressManager from "@/components/AddressManager";
+import { useToast } from "@/hooks/useToast";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
+  const { showToast, ToastContainer } = useToast();
   const [orders, setOrders] = useState<Order[]>([]);
   const [customOrders, setCustomOrders] = useState<CustomOrder[]>([]);
+  const [addresses, setAddresses] = useState<UserAddress[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"orders" | "custom">("orders");
+  const [activeTab, setActiveTab] = useState<"orders" | "custom" | "addresses">("orders");
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -37,8 +41,141 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user) {
       fetchUserOrders();
+      fetchUserAddresses();
     }
   }, [user]);
+
+  const fetchUserAddresses = async () => {
+    if (!user) return;
+
+    try {
+      const userDocRef = doc(db, "userProfiles", user.uid);
+      const userDoc = await getDoc(userDocRef);
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setAddresses(userData.addresses || []);
+      }
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    }
+  };
+
+  const handleAddAddress = async (address: Omit<UserAddress, "id">) => {
+    if (!user) return;
+
+    try {
+      const newAddress: UserAddress = {
+        ...address,
+        id: Date.now().toString(),
+      };
+
+      // Si es predeterminada, quitar predeterminado de las demás
+      let updatedAddresses = [...addresses];
+      if (newAddress.isDefault) {
+        updatedAddresses = updatedAddresses.map((addr) => ({
+          ...addr,
+          isDefault: false,
+        }));
+      }
+      updatedAddresses.push(newAddress);
+
+      const userDocRef = doc(db, "userProfiles", user.uid);
+      await setDoc(
+        userDocRef,
+        { addresses: updatedAddresses },
+        { merge: true }
+      );
+
+      setAddresses(updatedAddresses);
+      showToast("Dirección agregada exitosamente", "success");
+    } catch (error) {
+      console.error("Error adding address:", error);
+      showToast("Error al agregar dirección", "error");
+    }
+  };
+
+  const handleUpdateAddress = async (
+    addressId: string,
+    updates: Partial<UserAddress>
+  ) => {
+    if (!user) return;
+
+    try {
+      let updatedAddresses = addresses.map((addr) =>
+        addr.id === addressId ? { ...addr, ...updates } : addr
+      );
+
+      // Si la dirección actualizada es predeterminada, quitar predeterminado de las demás
+      if (updates.isDefault) {
+        updatedAddresses = updatedAddresses.map((addr) =>
+          addr.id === addressId
+            ? { ...addr, isDefault: true }
+            : { ...addr, isDefault: false }
+        );
+      }
+
+      const userDocRef = doc(db, "userProfiles", user.uid);
+      await setDoc(
+        userDocRef,
+        { addresses: updatedAddresses },
+        { merge: true }
+      );
+
+      setAddresses(updatedAddresses);
+      showToast("Dirección actualizada exitosamente", "success");
+    } catch (error) {
+      console.error("Error updating address:", error);
+      showToast("Error al actualizar dirección", "error");
+    }
+  };
+
+  const handleDeleteAddress = async (addressId: string) => {
+    if (!user) return;
+
+    try {
+      const updatedAddresses = addresses.filter(
+        (addr) => addr.id !== addressId
+      );
+
+      const userDocRef = doc(db, "userProfiles", user.uid);
+      await setDoc(
+        userDocRef,
+        { addresses: updatedAddresses },
+        { merge: true }
+      );
+
+      setAddresses(updatedAddresses);
+      showToast("Dirección eliminada exitosamente", "success");
+    } catch (error) {
+      console.error("Error deleting address:", error);
+      showToast("Error al eliminar dirección", "error");
+    }
+  };
+
+  const handleSetDefaultAddress = async (addressId: string) => {
+    if (!user) return;
+
+    try {
+      const updatedAddresses = addresses.map((addr) => ({
+        ...addr,
+        isDefault: addr.id === addressId,
+      }));
+
+      const userDocRef = doc(db, "userProfiles", user.uid);
+      await setDoc(
+        userDocRef,
+        { addresses: updatedAddresses },
+        { merge: true }
+      );
+
+      setAddresses(updatedAddresses);
+      showToast("Dirección predeterminada actualizada", "success");
+    } catch (error) {
+      console.error("Error setting default address:", error);
+      showToast("Error al establecer dirección predeterminada", "error");
+    }
+  };
 
   const fetchUserOrders = async () => {
     if (!user) return;
@@ -253,7 +390,7 @@ export default function ProfilePage() {
           <div className="lg:col-span-2">
             <div className="rounded-lg border-4 border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
               {/* Tabs */}
-              <div className="grid grid-cols-2 border-b-4 border-black">
+              <div className="grid grid-cols-3 border-b-4 border-black">
                 <button
                   onClick={() => setActiveTab("orders")}
                   className={`px-3 py-3 text-center font-black transition-all sm:px-6 sm:py-4 ${
@@ -278,6 +415,19 @@ export default function ProfilePage() {
                   <div className="flex items-center justify-center gap-1.5 sm:gap-2">
                     <Package className="h-4 w-4 sm:h-5 sm:w-5" />
                     <span className="text-xs sm:text-base">Obras ({customOrders.length})</span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setActiveTab("addresses")}
+                  className={`px-3 py-3 text-center font-black transition-all sm:px-6 sm:py-4 ${
+                    activeTab === "addresses"
+                      ? "bg-primary-500 text-white shadow-[0px_4px_0px_0px_rgba(0,0,0,1)]"
+                      : "bg-white text-slate-700 hover:bg-blue-50"
+                  }`}
+                >
+                  <div className="flex items-center justify-center gap-1.5 sm:gap-2">
+                    <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="text-xs sm:text-base">Direcciones ({addresses.length})</span>
                   </div>
                 </button>
               </div>
@@ -373,7 +523,7 @@ export default function ProfilePage() {
                       ))
                     )}
                   </div>
-                ) : (
+                ) : activeTab === "custom" ? (
                   <div className="space-y-4">
                     {customOrders.length === 0 ? (
                       <div className="py-12 text-center">
@@ -449,12 +599,21 @@ export default function ProfilePage() {
                       ))
                     )}
                   </div>
-                )}
+                ) : activeTab === "addresses" ? (
+                  <AddressManager
+                    addresses={addresses}
+                    onAddAddress={handleAddAddress}
+                    onUpdateAddress={handleUpdateAddress}
+                    onDeleteAddress={handleDeleteAddress}
+                    onSetDefault={handleSetDefaultAddress}
+                  />
+                ) : null}
               </div>
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
