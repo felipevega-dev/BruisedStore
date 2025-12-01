@@ -180,7 +180,7 @@ export default function BlogPostPage() {
           {/* Cover Image */}
           {post.coverImage && (
             <div className="mb-6 overflow-hidden rounded-lg border-4 border-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:mb-8">
-              <div className="relative aspect-[21/9] w-full">
+              <div className="relative w-full">
                 <Image
                   src={post.coverImage}
                   alt={post.title}

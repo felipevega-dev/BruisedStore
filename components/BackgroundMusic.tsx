@@ -26,6 +26,8 @@ export default function BackgroundMusic() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [autoPlayAttempted, setAutoPlayAttempted] = useState(false);
 
   // Calcular el volumen REAL del audio: userVolume * masterVolume (del admin)
   const getRealVolume = () => {
@@ -38,11 +40,33 @@ export default function BackgroundMusic() {
     setIsMounted(true);
   }, []);
 
+  // Detectar primera interacción del usuario para activar auto-play
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      setHasUserInteracted(true);
+      // Remover los listeners después de la primera interacción
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+    };
+
+    document.addEventListener('click', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+    document.addEventListener('touchstart', handleFirstInteraction);
+
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, []);
+
   // Cargar configuración de música y preferencia de mute del usuario
   useEffect(() => {
-    // Verificar si el usuario había muteado anteriormente
-    const savedMutePreference = localStorage.getItem("musicMuted");
-    if (savedMutePreference === "true") {
+    // Verificar si el usuario pausó la música en esta sesión
+    // Nota: Ya NO persistimos el estado de mute entre sesiones para permitir auto-play
+    const sessionMuted = sessionStorage.getItem("musicMuted");
+    if (sessionMuted === "true") {
       setUserHasMuted(true);
       setIsMuted(true);
     }
@@ -90,36 +114,33 @@ export default function BackgroundMusic() {
     return () => unsubscribe();
   }, []);
 
-  // Auto-play cuando se carga la configuración
+  // Auto-play cuando se carga la configuración Y el usuario ha interactuado (solo una vez)
   useEffect(() => {
     if (
       settings?.enabled &&
       settings.tracks.length > 0 &&
-      !userHasMuted &&
-      !isPlaying
+      !autoPlayAttempted &&
+      audioRef.current &&
+      hasUserInteracted
     ) {
-      setTimeout(() => {
-        handlePlay();
-      }, 1000);
+      // Intentar reproducir después de que el audio esté listo
+      const attemptAutoPlay = async () => {
+        try {
+          await audioRef.current?.play();
+          setIsPlaying(true);
+          setIsMuted(false);
+          setAutoPlayAttempted(true);
+        } catch (error) {
+          console.log("Auto-play bloqueado:", error);
+          setAutoPlayAttempted(true);
+        }
+      };
+
+      // Pequeño delay para asegurar que el audio esté cargado
+      const timer = setTimeout(attemptAutoPlay, 300);
+      return () => clearTimeout(timer);
     }
-  }, [settings, userHasMuted]);
-
-  // Actualizar tiempo actual
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration);
-
-    audio.addEventListener("timeupdate", updateTime);
-    audio.addEventListener("loadedmetadata", updateDuration);
-
-    return () => {
-      audio.removeEventListener("timeupdate", updateTime);
-      audio.removeEventListener("loadedmetadata", updateDuration);
-    };
-  }, [audioRef.current]);
+  }, [settings?.enabled, settings?.tracks.length, autoPlayAttempted, hasUserInteracted]);
 
   // Manejar reproducción
   const handlePlay = async () => {
@@ -130,7 +151,7 @@ export default function BackgroundMusic() {
       setIsPlaying(true);
       setIsMuted(false);
       setUserHasMuted(false);
-      localStorage.setItem("musicMuted", "false");
+      sessionStorage.setItem("musicMuted", "false");
     } catch (error) {
       console.log("Play prevented:", error);
     }
@@ -144,16 +165,18 @@ export default function BackgroundMusic() {
   };
 
   const handleToggleMute = () => {
+    if (!audioRef.current) return;
+    
     const newMutedState = !isMuted;
     setIsMuted(newMutedState);
-
+    
+    // Solo cambiar el volumen del audio, NO pausar
+    audioRef.current.muted = newMutedState;
+    
     if (newMutedState) {
-      setUserHasMuted(true);
-      localStorage.setItem("musicMuted", "true");
-      handlePause();
+      sessionStorage.setItem("musicMuted", "true");
     } else {
-      localStorage.setItem("musicMuted", "false");
-      handlePlay();
+      sessionStorage.setItem("musicMuted", "false");
     }
   };
 
@@ -163,6 +186,8 @@ export default function BackgroundMusic() {
       ? settings.tracks.length - 1
       : currentTrackIndex - 1;
     setCurrentTrackIndex(prevIndex);
+    setCurrentTime(0);
+    setDuration(0);
     if (isPlaying && audioRef.current) {
       setTimeout(() => audioRef.current?.play(), 100);
     }
@@ -172,6 +197,8 @@ export default function BackgroundMusic() {
     if (!settings) return;
     const nextIndex = (currentTrackIndex + 1) % settings.tracks.length;
     setCurrentTrackIndex(nextIndex);
+    setCurrentTime(0);
+    setDuration(0);
     if (isPlaying && audioRef.current) {
       setTimeout(() => audioRef.current?.play(), 100);
     }
@@ -292,12 +319,30 @@ export default function BackgroundMusic() {
         onEnded={handleTrackEnd}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
+        onTimeUpdate={() => {
+          if (audioRef.current) {
+            setCurrentTime(audioRef.current.currentTime);
+          }
+        }}
+        onLoadedMetadata={() => {
+          if (audioRef.current && !isNaN(audioRef.current.duration) && isFinite(audioRef.current.duration)) {
+            setDuration(audioRef.current.duration);
+          }
+        }}
+        onDurationChange={() => {
+          if (audioRef.current && !isNaN(audioRef.current.duration) && isFinite(audioRef.current.duration)) {
+            setDuration(audioRef.current.duration);
+          }
+        }}
         onLoadedData={() => {
           // Aplicar volumen cuando el audio se carga
           if (audioRef.current) {
             const realVolume = getRealVolume();
             audioRef.current.volume = realVolume;
-            console.log(`🎧 Audio cargado - Usuario: ${userVolume}% | Master: ${settings?.defaultVolume ?? 100}% | Real: ${(realVolume * 100).toFixed(1)}%`);
+            // Obtener duración
+            if (!isNaN(audioRef.current.duration) && isFinite(audioRef.current.duration)) {
+              setDuration(audioRef.current.duration);
+            }
           }
         }}
       />
@@ -354,7 +399,7 @@ export default function BackgroundMusic() {
 
           {/* Barra de progreso */}
           <div className="hidden items-center gap-2 sm:flex sm:flex-1">
-            <span className="text-xs text-slate-500">
+            <span className="text-xs font-medium text-slate-600">
               {formatTime(currentTime)}
             </span>
             <input
@@ -363,9 +408,12 @@ export default function BackgroundMusic() {
               max={duration || 0}
               value={currentTime}
               onChange={handleSeek}
-              className="h-1 flex-1 cursor-pointer appearance-none rounded-lg bg-primary-100 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary-500"
+              className="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-primary-200 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-primary-600 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:transition-all [&::-webkit-slider-thumb]:hover:scale-110 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-primary-600 [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:transition-all [&::-moz-range-thumb]:hover:scale-110"
+              style={{
+                background: `linear-gradient(to right, rgb(var(--color-primary-500) / 1) 0%, rgb(var(--color-primary-500) / 1) ${(currentTime / (duration || 1)) * 100}%, rgb(var(--color-primary-200) / 1) ${(currentTime / (duration || 1)) * 100}%, rgb(var(--color-primary-200) / 1) 100%)`
+              }}
             />
-            <span className="text-xs text-slate-500">
+            <span className="text-xs font-medium text-slate-600">
               {formatTime(duration)}
             </span>
           </div>
