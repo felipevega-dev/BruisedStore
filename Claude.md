@@ -14,6 +14,7 @@ This file provides guidance to Claude Code when working with this repository.
 ✅ Guest checkout + soft registration
 ✅ Advanced image cropper for custom orders
 ✅ Admin panel (CRUD, moderation, analytics)
+✅ User management (role assignment from admin panel)
 ✅ Email verification + WhatsApp integration
 ✅ Real-time notifications + toast system
 ✅ Fully responsive (mobile-first)
@@ -323,6 +324,8 @@ See [`types/index.ts`](types/index.ts) for full definitions. Key points:
 - **`/admin/general-settings`** - Site-wide settings (colors, contact, social media, PWA)
 - **`/admin/music`** - Background music configuration
 - **`/admin/blog`** - Create and manage blog posts
+- **`/admin/activity-logs`** - View admin action history
+- **`/admin/users`** - Manage user roles (grant/revoke admin access)
 
 ### Blog Pages
 - **`/blog`** - Blog listing page with all published articles
@@ -387,6 +390,26 @@ if (minPrice >= 0) filtered = filtered.filter(p => p.price >= minPrice);
 - Robots.txt at `/robots.txt` (`app/robots.ts`)
 
 ## Common Workflows
+
+### Managing User Roles
+
+**Via Admin Panel (Recommended):**
+1. Navigate to `/admin/users` in your browser
+2. Search for the user by email, name, or UID
+3. Click "Hacer Admin" to grant admin privileges
+4. Click "Revocar Admin" to remove admin privileges
+5. User must log out and log back in for changes to take effect
+
+**Via Command Line (Legacy):**
+```bash
+node set-admin-role.js user@example.com
+```
+
+**Important Notes:**
+- Admins cannot modify their own role
+- Changes require re-authentication to take effect
+- Admin actions are NOT currently logged to activity logs
+- All authenticated users can access the user management API endpoints
 
 ### Adding a New Firestore Collection
 

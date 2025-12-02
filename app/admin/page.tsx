@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { auth, db } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
-import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag, BarChart3, Home, BookOpen, Bell, Music, Settings, FileText } from "lucide-react";
+import { Palette, Package, Loader2, Shield, AlertCircle, MessageCircle, Tag, BarChart3, Home, BookOpen, Bell, Music, Settings, FileText, Users } from "lucide-react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 export default function AdminPage() {
@@ -482,6 +482,25 @@ export default function AdminPage() {
                 </h2>
                 <p className="font-semibold text-gray-800">
                   Historial de acciones de administradores
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            href="/admin/users"
+            className="group rounded-xl border-4 border-black bg-violet-50 p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
+          >
+            <div className="flex items-center gap-4">
+              <div className="rounded-full border-4 border-violet-500 bg-violet-100 p-4 transition group-hover:scale-105">
+                <Users className="h-8 w-8 text-violet-700" />
+              </div>
+              <div>
+                <h2 className="mb-2 text-xl font-black text-black">
+                  Gestión de Usuarios
+                </h2>
+                <p className="font-semibold text-gray-800">
+                  Administrar roles y permisos de usuarios
                 </p>
               </div>
             </div>

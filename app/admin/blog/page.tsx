@@ -398,7 +398,7 @@ export default function AdminBlogPage() {
             {!showForm && (
               <button
                 onClick={() => setShowForm(true)}
-                className="flex items-center gap-2 rounded-xl border-4 border-white bg-white px-6 py-3 font-bold text-pink-600 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.5)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.5)]"
+                className="flex items-center gap-2 rounded-xl border-4 border-white bg-white px-6 py-3 font-bold text-pink-600 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.5)] transition-all hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,0.5)]"
               >
                 <Plus className="h-5 w-5" />
                 Nuevo Post

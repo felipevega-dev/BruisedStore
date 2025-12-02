@@ -452,7 +452,8 @@ export type AdminAction =
   | 'blog_post_unpublished'
   | 'home_settings_updated'
   | 'music_settings_updated'
-  | 'general_settings_updated';
+  | 'general_settings_updated'
+  | 'user_role_changed';
 
 export interface AdminLog {
   id: string;
@@ -485,6 +486,12 @@ export interface AdminLog {
     postId?: string;
     postTitle?: string;
     postSlug?: string;
+    
+    // Para gestión de usuarios
+    targetUserEmail?: string;
+    targetUserId?: string;
+    newRole?: string;
+    action?: string; // granted, revoked
     
     // Información adicional
     description?: string;
